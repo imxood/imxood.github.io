@@ -6,27 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>GCC命令学习 | 分享知识</title>
+  <title>分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
+  <meta name="description" content="gcc简单教程GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
 
 一. CC编译程序有四个阶段
-预处理（Pre-Processing）编译（Compili">
+预处理（Pre-Processing）编译">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GCC命令学习">
+<meta property="og:title" content="分享知识">
 <meta property="og:url" content="http://yoursite.com/2017/03/17/C语言学习/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
+<meta property="og:description" content="gcc简单教程GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
 
 一. CC编译程序有四个阶段
-预处理（Pre-Processing）编译（Compili">
-<meta property="og:updated_time" content="2017-03-17T08:55:42.969Z">
+预处理（Pre-Processing）编译">
+<meta property="og:updated_time" content="2017-03-20T02:37:25.928Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GCC命令学习">
-<meta name="twitter:description" content="GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
+<meta name="twitter:title" content="分享知识">
+<meta name="twitter:description" content="gcc简单教程GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
 
 一. CC编译程序有四个阶段
-预处理（Pre-Processing）编译（Compili">
+预处理（Pre-Processing）编译">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -153,38 +153,25 @@
             <article id="post-C语言学习" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      GCC命令学习
-    </h1>
-  
-
-        
-        <a href="/2017/03/17/C语言学习/" class="archive-article-date">
-  	<time datetime="2017-03-17T01:20:28.976Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-17</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote><p>GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。</p>
+        <hr>
+<h2 id="gcc简单教程"><a href="#gcc简单教程" class="headerlink" title="gcc简单教程"></a>gcc简单教程</h2><blockquote><p>GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。</p>
 </blockquote>
 <h2 id="一-CC编译程序有四个阶段"><a href="#一-CC编译程序有四个阶段" class="headerlink" title="一. CC编译程序有四个阶段"></a>一. CC编译程序有四个阶段</h2><blockquote>
 <p>预处理（Pre-Processing）<br>编译（Compiling）<br>汇编（Assembling）<br>链接（Linking）</p>
 </blockquote>
-<p>1.1 预处理<br>    预处理用于将所有的#include头文件以及宏定义替换成其真正的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -E test.c 或 gcc -E test.c -o test.i</div></pre></td></tr></table></figure></p>
+<p>1.1 预处理<br>    预处理用于将所有的#include头文件以及宏定义替换成其真正的内容<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -<span class="keyword">E</span> <span class="keyword">test</span>.c 或 gcc -<span class="keyword">E</span> <span class="keyword">test</span>.c -o <span class="keyword">test</span>.<span class="built_in">i</span></div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>-E进行预处理后结束<br>-o用于指定输出(out)文件名</p>
 </blockquote>
-<p>1.2 编译为汇编代码<br>    编译过程完成后，将生成程序的汇编代码test.s<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -S test.i -o test.s</div></pre></td></tr></table></figure></p>
-<p>1.3 汇编<br>    这一步会为每一个源文件产生一个目标文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<p>1.4 链接<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<h2 id="二-静态库的制作与使用"><a href="#二-静态库的制作与使用" class="headerlink" title="二. 静态库的制作与使用"></a>二. 静态库的制作与使用</h2><p>1,将相关源文件编译为与位置无关的目标文件<br>gcc -c *.c</p>
+<p>1.2 编译为汇编代码<br>    编译过程完成后，将生成程序的汇编代码test.s<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -S <span class="keyword">test</span>.i -o <span class="keyword">test</span>.<span class="built_in">s</span></div></pre></td></tr></table></figure></p>
+<p>1.3 汇编<br>    这一步会为每一个源文件产生一个目标文件<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">gcc</span> <span class="selector-tag">-c</span> <span class="selector-tag">test</span><span class="selector-class">.c</span> –<span class="selector-tag">o</span> <span class="selector-tag">test</span><span class="selector-class">.o</span></div></pre></td></tr></table></figure></p>
+<p>1.4 链接<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">gcc</span> <span class="selector-tag">-c</span> <span class="selector-tag">test</span><span class="selector-class">.c</span> –<span class="selector-tag">o</span> <span class="selector-tag">test</span><span class="selector-class">.o</span></div></pre></td></tr></table></figure></p>
+<h2 id="二-静态库的制作与使用"><a href="#二-静态库的制作与使用" class="headerlink" title="二. 静态库的制作与使用"></a>二. 静态库的制作与使用</h2><p>1,将相关源文件编译为目标文件<br>gcc -c *.c</p>
 <p>2,将目标文件添加到静态库中<br>ar -r libmymath.a *.o</p>
 <p>3,使用静态库链接目标文件形成可执行程序<br>gcc test.o -Ltest_lib -lmymath</p>
+<p>test.o是main函数所在的文件,L是链接文件的路径,l是链接库的名字</p>
 <h2 id="三-动态库的制作与使用"><a href="#三-动态库的制作与使用" class="headerlink" title="三. 动态库的制作与使用"></a>三. 动态库的制作与使用</h2><p>动态库的命名: lib+库名.so<br>1,将相关源文件编译为与位置无关的目标文件<br>gcc -c -fPIC *c</p>
 <p>2,将目标文件添加到动态库中</p>
 <p>gcc -shared -o libmymath.so *.o</p>
@@ -294,6 +281,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2017/03/20/Unix C的一般处理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
   
     <a href="/2017/03/16/使用Hexo+Github部署个人博客/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">使用Hexo+Github部署个人博客</div>
@@ -310,7 +306,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="C语言学习" data-title="GCC命令学习" data-url="http://yoursite.com/2017/03/17/C语言学习/"></div>
+	<div class="ds-thread" data-thread-key="C语言学习" data-title="" data-url="http://yoursite.com/2017/03/17/C语言学习/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -139,41 +139,127 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-C语言学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-GDB调试器的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/17/C语言学习/">GCC命令学习</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/17/C语言学习/" class="archive-article-date">
-  	<time datetime="2017-03-17T01:20:28.976Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-17</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote><p>GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。</p>
+        <hr>
+<h2 id="GDB调试器的使用"><a href="#GDB调试器的使用" class="headerlink" title="GDB调试器的使用"></a>GDB调试器的使用</h2><p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
+<p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
+<p>第三步:<br>    执行相关调试指令</p>
+<pre><code>l
+列出程序代码(list)
+
+b 5
+为第5行设置断点(break)
+
+r
+运行可执行程序(运行到下一个断点前,比如上面的第五行,未执行第五行)(run)
+
+p a
+显示a变量的值(print)
+
+n
+执行下一条语句(next)
+
+s
+按步执行语句,有函数就进入函数内(step)
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/20/GDB调试器的使用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Unix C的一般处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="Unix-C的一般处理"><a href="#Unix-C的一般处理" class="headerlink" title="Unix C的一般处理"></a>Unix C的一般处理</h2><p>一, 程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
+<pre><code>如何根据错误编号获取错误信息?
+perror函数
+</code></pre><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//man 3 perror</span></div><div class="line"><span class="comment">//功能:打印一个系统错误信息</span></div><div class="line"><span class="comment">//参数:s 自定义的提示</span></div><div class="line"></div><div class="line"><span class="comment">//例子:</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[<span class="number">1</span>], <span class="string">"r"</span>);</div><div class="line">	<span class="keyword">if</span>(fp==<span class="literal">NULL</span>)&#123;<span class="comment">//发生错误时</span></div><div class="line">		perror(<span class="string">"fopen"</span>);<span class="comment">//输出错误信息到显示器</span></div><div class="line">		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"open file success!\n"</span>);</div><div class="line">	fclose(fp);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//shell终端:</span></div><div class="line">gcc test.c &amp;&amp; ./a.out abc.hello</div><div class="line"><span class="comment">//显示:</span></div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errnum)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//man 3 strerror</span></div><div class="line"><span class="comment">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回"Unknown "</span></div><div class="line"><span class="comment">//参数:errnum 错误编号</span></div><div class="line"></div><div class="line"><span class="comment">//例子:</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;//包含这个头文件,则存在int errno;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[<span class="number">1</span>], <span class="string">"r"</span>);</div><div class="line">	<span class="keyword">if</span>(fp==<span class="literal">NULL</span>)&#123;<span class="comment">//发生错误时</span></div><div class="line">		<span class="built_in">printf</span>(<span class="string">"errno: %d\n"</span>, errno);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, strerror(errno));</div><div class="line">		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"open file success...\n"</span>);</div><div class="line">	fclose(fp);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//shell:</span></div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line"><span class="comment">//输出:</span></div><div class="line">errno: <span class="number">2</span></div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
+<p>补充:<br>stdio    标准输入        键盘<br>stdout    标准输出        显示器<br>stderr    标准错误输出    显示器</p>
+<p>三, 进程映射</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/20/Unix C的一般处理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-C语言学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="gcc简单教程"><a href="#gcc简单教程" class="headerlink" title="gcc简单教程"></a>gcc简单教程</h2><blockquote><p>GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。</p>
 </blockquote>
 <h2 id="一-CC编译程序有四个阶段"><a href="#一-CC编译程序有四个阶段" class="headerlink" title="一. CC编译程序有四个阶段"></a>一. CC编译程序有四个阶段</h2><blockquote>
 <p>预处理（Pre-Processing）<br>编译（Compiling）<br>汇编（Assembling）<br>链接（Linking）</p>
 </blockquote>
-<p>1.1 预处理<br>    预处理用于将所有的#include头文件以及宏定义替换成其真正的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -E test.c 或 gcc -E test.c -o test.i</div></pre></td></tr></table></figure></p>
+<p>1.1 预处理<br>    预处理用于将所有的#include头文件以及宏定义替换成其真正的内容<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -<span class="keyword">E</span> <span class="keyword">test</span>.c 或 gcc -<span class="keyword">E</span> <span class="keyword">test</span>.c -o <span class="keyword">test</span>.<span class="built_in">i</span></div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>-E进行预处理后结束<br>-o用于指定输出(out)文件名</p>
 </blockquote>
-<p>1.2 编译为汇编代码<br>    编译过程完成后，将生成程序的汇编代码test.s<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -S test.i -o test.s</div></pre></td></tr></table></figure></p>
-<p>1.3 汇编<br>    这一步会为每一个源文件产生一个目标文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<p>1.4 链接<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<h2 id="二-静态库的制作与使用"><a href="#二-静态库的制作与使用" class="headerlink" title="二. 静态库的制作与使用"></a>二. 静态库的制作与使用</h2><p>1,将相关源文件编译为与位置无关的目标文件<br>gcc -c *.c</p>
+<p>1.2 编译为汇编代码<br>    编译过程完成后，将生成程序的汇编代码test.s<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -S <span class="keyword">test</span>.i -o <span class="keyword">test</span>.<span class="built_in">s</span></div></pre></td></tr></table></figure></p>
+<p>1.3 汇编<br>    这一步会为每一个源文件产生一个目标文件<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">gcc</span> <span class="selector-tag">-c</span> <span class="selector-tag">test</span><span class="selector-class">.c</span> –<span class="selector-tag">o</span> <span class="selector-tag">test</span><span class="selector-class">.o</span></div></pre></td></tr></table></figure></p>
+<p>1.4 链接<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">gcc</span> <span class="selector-tag">-c</span> <span class="selector-tag">test</span><span class="selector-class">.c</span> –<span class="selector-tag">o</span> <span class="selector-tag">test</span><span class="selector-class">.o</span></div></pre></td></tr></table></figure></p>
+<h2 id="二-静态库的制作与使用"><a href="#二-静态库的制作与使用" class="headerlink" title="二. 静态库的制作与使用"></a>二. 静态库的制作与使用</h2><p>1,将相关源文件编译为目标文件<br>gcc -c *.c</p>
 <p>2,将目标文件添加到静态库中<br>ar -r libmymath.a *.o</p>
 <p>3,使用静态库链接目标文件形成可执行程序<br>gcc test.o -Ltest_lib -lmymath</p>
+<p>test.o是main函数所在的文件,L是链接文件的路径,l是链接库的名字</p>
 <h2 id="三-动态库的制作与使用"><a href="#三-动态库的制作与使用" class="headerlink" title="三. 动态库的制作与使用"></a>三. 动态库的制作与使用</h2><p>动态库的命名: lib+库名.so<br>1,将相关源文件编译为与位置无关的目标文件<br>gcc -c -fPIC *c</p>
 <p>2,将目标文件添加到动态库中</p>
 <p>gcc -shared -o libmymath.so *.o</p>

@@ -6,27 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>分享知识</title>
+  <title>Unix C程序中的错误处理 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Unix C程序中的错误处理一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
+  <meta name="description" content="一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
 如何根据错误编号获取错误信息?
 perror函数
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;std">
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;stdio.h&amp;gt;void pe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分享知识">
+<meta property="og:title" content="Unix C程序中的错误处理">
 <meta property="og:url" content="http://yoursite.com/2017/03/20/Unix C的一般处理/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="Unix C程序中的错误处理一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
+<meta property="og:description" content="一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
 如何根据错误编号获取错误信息?
 perror函数
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;std">
-<meta property="og:updated_time" content="2017-03-20T09:16:06.684Z">
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;stdio.h&amp;gt;void pe">
+<meta property="og:updated_time" content="2017-03-21T01:29:05.200Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分享知识">
-<meta name="twitter:description" content="Unix C程序中的错误处理一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
+<meta name="twitter:title" content="Unix C程序中的错误处理">
+<meta name="twitter:description" content="一, Unix C程序中的错误处理    系统提供了一个全局变量 errno
 如何根据错误编号获取错误信息?
 perror函数
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;std">
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657#include &amp;lt;stdio.h&amp;gt;void pe">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -153,10 +153,24 @@ perror函数
             <article id="post-Unix C的一般处理" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Unix C程序中的错误处理
+    </h1>
+  
+
+        
+        <a href="/2017/03/20/Unix C的一般处理/" class="archive-article-date">
+  	<time datetime="2017-03-20T01:20:33.481Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h2 id="Unix-C程序中的错误处理"><a href="#Unix-C程序中的错误处理" class="headerlink" title="Unix C程序中的错误处理"></a>Unix C程序中的错误处理</h2><p>一, Unix C程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
+        <p>一, Unix C程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
 <pre><code>如何根据错误编号获取错误信息?
 perror函数
 </code></pre><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//man 3 perror</span></div><div class="line"><span class="comment">//功能:打印一个系统错误信息</span></div><div class="line"><span class="comment">//参数:s 自定义的提示</span></div><div class="line"></div><div class="line"><span class="comment">//例子:</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[<span class="number">1</span>], <span class="string">"r"</span>);</div><div class="line">	<span class="keyword">if</span>(fp==<span class="literal">NULL</span>)&#123;<span class="comment">//发生错误时</span></div><div class="line">		perror(<span class="string">"fopen"</span>);<span class="comment">//输出错误信息到显示器</span></div><div class="line">		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"open file success!\n"</span>);</div><div class="line">	fclose(fp);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//shell终端:</span></div><div class="line">root@kali:~/maxu<span class="meta"># gcc test.c &amp;&amp; ./a.out abc.hello</span></div><div class="line"><span class="comment">//显示:</span></div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errnum)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//man 3 strerror</span></div><div class="line"><span class="comment">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回"Unknown "</span></div><div class="line"><span class="comment">//参数:errnum 错误编号</span></div><div class="line"></div><div class="line"><span class="comment">//例子:</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;//这个头文件中存在声明:int errno;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[<span class="number">1</span>], <span class="string">"r"</span>);</div><div class="line">	<span class="keyword">if</span>(fp==<span class="literal">NULL</span>)&#123;<span class="comment">//发生错误时</span></div><div class="line">		<span class="built_in">printf</span>(<span class="string">"errno: %d\n"</span>, errno);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, strerror(errno));</div><div class="line">		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"open file success...\n"</span>);</div><div class="line">	fclose(fp);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//shell:</span></div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line"><span class="comment">//输出:</span></div><div class="line">errno: <span class="number">2</span></div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
@@ -265,14 +279,14 @@ perror函数
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          (no title)
+          GDB调试器的使用
         
       </div>
     </a>
   
   
     <a href="/2017/03/17/C语言学习/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">gcc简单教程</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -286,7 +300,7 @@ perror函数
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Unix C的一般处理" data-title="" data-url="http://yoursite.com/2017/03/20/Unix C的一般处理/"></div>
+	<div class="ds-thread" data-thread-key="Unix C的一般处理" data-title="Unix C程序中的错误处理" data-url="http://yoursite.com/2017/03/20/Unix C的一般处理/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -6,33 +6,42 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>分享知识</title>
+  <title>GDB调试器的使用 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="GDB调试器的使用第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
+  <meta name="description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
 1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
 第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
 第三步:    执行相关调试指令
 l
-列出程序代码(li">
+列出程序代码(list)
+
+b 5
+为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分享知识">
+<meta property="og:title" content="GDB调试器的使用">
 <meta property="og:url" content="http://yoursite.com/2017/03/20/GDB调试器的使用/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="GDB调试器的使用第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
+<meta property="og:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
 1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
 第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
 第三步:    执行相关调试指令
 l
-列出程序代码(li">
-<meta property="og:updated_time" content="2017-03-20T03:09:09.962Z">
+列出程序代码(list)
+
+b 5
+为">
+<meta property="og:updated_time" content="2017-03-21T01:29:07.514Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分享知识">
-<meta name="twitter:description" content="GDB调试器的使用第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
+<meta name="twitter:title" content="GDB调试器的使用">
+<meta name="twitter:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
 1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
 第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
 第三步:    执行相关调试指令
 l
-列出程序代码(li">
+列出程序代码(list)
+
+b 5
+为">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -159,10 +168,24 @@ l
             <article id="post-GDB调试器的使用" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      GDB调试器的使用
+    </h1>
+  
+
+        
+        <a href="/2017/03/20/GDB调试器的使用/" class="archive-article-date">
+  	<time datetime="2017-03-20T02:10:06.168Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<h2 id="GDB调试器的使用"><a href="#GDB调试器的使用" class="headerlink" title="GDB调试器的使用"></a>GDB调试器的使用</h2><p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
+        <p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
 <p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
 <p>第三步:<br>    执行相关调试指令</p>
@@ -284,9 +307,18 @@ q
   
 <nav id="article-nav">
   
+    <a href="/2017/03/21/linux启动ssh/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          linux启动ssh
+        
+      </div>
+    </a>
+  
   
     <a href="/2017/03/20/Unix C的一般处理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">Unix C程序中的错误处理</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -300,7 +332,7 @@ q
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="GDB调试器的使用" data-title="" data-url="http://yoursite.com/2017/03/20/GDB调试器的使用/"></div>
+	<div class="ds-thread" data-thread-key="GDB调试器的使用" data-title="GDB调试器的使用" data-url="http://yoursite.com/2017/03/20/GDB调试器的使用/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -6,15 +6,48 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Test | 分享知识</title>
+  <title>linux启动ssh | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Test">
-<meta property="og:url" content="http://yoursite.com/2017/03/16/Test/index.html">
+  <meta name="description" content="sudo apt-get install openssh-server 安装ssh
+
+ps -e |grep ssh 查看是否已启动
+
+systemctl is-enabled ssh 判断ssh是否是开机启动
+
+systemctl enable ssh 设置ssh开机启动
+
+systemctl status ssh 查看ssh状态
+
+1),如果报错:algorithm negotiation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux启动ssh">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/linux启动ssh/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:updated_time" content="2017-03-16T09:23:09.931Z">
+<meta property="og:description" content="sudo apt-get install openssh-server 安装ssh
+
+ps -e |grep ssh 查看是否已启动
+
+systemctl is-enabled ssh 判断ssh是否是开机启动
+
+systemctl enable ssh 设置ssh开机启动
+
+systemctl status ssh 查看ssh状态
+
+1),如果报错:algorithm negotiation">
+<meta property="og:updated_time" content="2017-03-21T01:29:10.661Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Test">
+<meta name="twitter:title" content="linux启动ssh">
+<meta name="twitter:description" content="sudo apt-get install openssh-server 安装ssh
+
+ps -e |grep ssh 查看是否已启动
+
+systemctl is-enabled ssh 判断ssh是否是开机启动
+
+systemctl enable ssh 设置ssh开机启动
+
+systemctl status ssh 查看ssh状态
+
+1),如果报错:algorithm negotiation">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -138,27 +171,47 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Test" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-linux启动ssh" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Test
+      linux启动ssh
     </h1>
   
 
         
-        <a href="/2017/03/16/Test/" class="archive-article-date">
-  	<time datetime="2017-03-16T09:23:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-16</time>
+        <a href="/2017/03/21/linux启动ssh/" class="archive-article-date">
+  	<time datetime="2017-03-21T01:11:28.553Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <ol>
+<li><p>sudo apt-get install openssh-server 安装ssh</p>
+</li>
+<li><p>ps -e |grep ssh 查看是否已启动</p>
+</li>
+<li><p>systemctl is-enabled ssh 判断ssh是否是开机启动</p>
+</li>
+<li><p>systemctl enable ssh 设置ssh开机启动</p>
+</li>
+<li><p>systemctl status ssh 查看ssh状态</p>
+</li>
+<li><p>1),如果报错:algorithm negotiation failed</p>
+<p> 解决方法:添加下面的内容到/etc/ssh/sshd_config末尾(3行):</p>
+<p> Ciphers aes128-cbc,aes192-cbc,aes256-cbc,aes128-ctr,aes192-ctr,aes256-ctr,3des-cbc,arcfour128,arcfour256,arcfour,blowfish-cbc,cast128-cbc</p>
+<p> MACs hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-sha1-96,hmac-md5-96</p>
+<p> KexAlgorithms diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group1-sha1,curve25519-sha256@libssh.org</p>
+<p> 2),使用root帐号,密码是对的,但是Permission denied,可能是因为:</p>
+<p> 默认禁用root帐号,修改/etc/ssh/sshd_config文件,设置PermitRootLogin:<br> PermitRootLogin yes</p>
+</li>
+</ol>
+
       
 
       
@@ -242,7 +295,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/16/Test/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/21/linux启动ssh/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -256,18 +309,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/16/使用Hexo+Github部署个人博客/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          使用Hexo+Github部署个人博客
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/16/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2017/03/20/GDB调试器的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">GDB调试器的使用</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -281,7 +325,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Test" data-title="Test" data-url="http://yoursite.com/2017/03/16/Test/"></div>
+	<div class="ds-thread" data-thread-key="linux启动ssh" data-title="linux启动ssh" data-url="http://yoursite.com/2017/03/21/linux启动ssh/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

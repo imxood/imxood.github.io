@@ -139,6 +139,176 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Linux c文件操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/Linux c文件操作/">Linux c文件操作</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/21/Linux c文件操作/" class="archive-article-date">
+  	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>open(2),close(2),read(2),write(2),lseek(2)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打开文件</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//返回值:-1,错误,重置errno</span></div></pre></td></tr></table></figure>
+<p>O_EXCL:        与O_CREAT一起指定.文件存在报错</p>
+<p>O_CREATE: 如果文件不存在,则创建文件,需要提供文件的权限.权限的有效性是提供的权限和umask的运算结果</p>
+<p>若是新的文件,则可以设置权限mode,文件最终的权限计算规则是:mode &amp; ~umask, mask是权限掩码(默认不要的权限)</p>
+<p>O_TRUNC: 文件存在就清空</p>
+<p>补充:<br>-rw-r–r– 1 root root   517 2月  24 21:09 02_25.cpp<br>第一个字符决定了文件的类型:<br>    ‘-‘表示普通文件,’d’表示目录文件,’b’块设备文件,’c’字符设备文件,’s’socket文件,l软链接文件,p管道文件</p>
+<pre><code>//打开文件,若存在,报错
+open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
+</code></pre><p>umask:777==&gt;111 111 111</p>
+<pre><code>110 100 100
+</code></pre><p>touch test.txt<br>———- 1 root root  367 3月  17 05:39 test_dynamic.c<br>权限:0000<br>                          110  100 100<br>umask:022==&gt;000 010 010   111 101  101<br>-rw-r–r– 1 root root 0 3月  21 03:09 c<br>权限:    </p>
+<p>文件描述符中:<br>STDIN_</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/21/Linux c文件操作/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-mmap函数引起的分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/mmap函数引起的分析/">mmap函数引起的分析</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/21/mmap函数引起的分析/" class="archive-article-date">
+  	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="external">http://www.cnblogs.com/huxiao-tee/p/4660352.html</a></p>
+<p><a href="http://blog.csdn.net/lixungogogo/article/details/52210750" target="_blank" rel="external">http://blog.csdn.net/lixungogogo/article/details/52210750</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/21/mmap函数引起的分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/进程/">进程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/21/进程/" class="archive-article-date">
+  	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一, 进程映射</p>
+<p>代码段: 字符串,常量<br>数据段: 全局变量,静态局部变量<br>堆: 使用malloc等一系列函数向系统申请的内存空间在堆里<br>栈: 自动局部变量和形参</p>
+<p>注意变量的生命周期和作用域</p>
+<p>二, 使用mmap将物理地址映射到进程的虚拟地址空间</p>
+<p>处理这个映射,需要使用mmap和munmap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//功能: 映射文件或设备到内存空间(虚拟地址空间)</span></div><div class="line"><span class="comment">//返回值: 若错误,返回MAP_FAILED, errno被设置, 若成功,返回映射区域的地址</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;	</div><div class="line"></div><div class="line"><span class="comment">//功能: 解除内存映射</span></div><div class="line"><span class="comment">//返回值: 0 成功, 1 失败</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/21/进程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-GDB调试器的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -317,7 +487,11 @@ perror函数
 <p>void <em>dlopen(const char </em>filename, int flags);</p>
 </blockquote>
 <p>Link with -ldl: 编译时需要加上</p>
-
+<p>补充:<br>    nm命令的使用<br>    nm  二进制文件名<br>    $ nm add.o<br>    00000000 T t_add<br>    0000000e T t_sub<br>    T  代表了add.o文件中包含了t_add和t_sub函数的实现代码。<br>    $ nm test.o<br>    00000000 T main<br>             U printf<br>             U t_add<br>             U t_div<br>             U t_mul<br>             U t_sub<br>    U 代表了在该文件中使用到了这个函数，但是没有这个函数的实现代码。</p>
+<pre><code>链接的过程，就是多个文件拼接成一个可执行文件的过程。
+目前的链接过程是发生在编译的时候，这个链接称为静态链接。
+动态链接是在代码加载到内存执行的时候发生的。
+</code></pre>
       
 
       

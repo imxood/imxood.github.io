@@ -20,7 +20,7 @@
 
 一. CC编译程序有四个阶段
 预处理（Pre-Processing）编译（Compili">
-<meta property="og:updated_time" content="2017-03-21T02:05:28.495Z">
+<meta property="og:updated_time" content="2017-03-21T02:57:25.882Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gcc简单教程">
 <meta name="twitter:description" content="GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。
@@ -197,7 +197,11 @@
 <p>void <em>dlopen(const char </em>filename, int flags);</p>
 </blockquote>
 <p>Link with -ldl: 编译时需要加上</p>
-
+<p>补充:<br>    nm命令的使用<br>    nm  二进制文件名<br>    $ nm add.o<br>    00000000 T t_add<br>    0000000e T t_sub<br>    T  代表了add.o文件中包含了t_add和t_sub函数的实现代码。<br>    $ nm test.o<br>    00000000 T main<br>             U printf<br>             U t_add<br>             U t_div<br>             U t_mul<br>             U t_sub<br>    U 代表了在该文件中使用到了这个函数，但是没有这个函数的实现代码。</p>
+<pre><code>链接的过程，就是多个文件拼接成一个可执行文件的过程。
+目前的链接过程是发生在编译的时候，这个链接称为静态链接。
+动态链接是在代码加载到内存执行的时候发生的。
+</code></pre>
       
 
       

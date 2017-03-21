@@ -172,11 +172,15 @@
 </li>
 <li><p>1),如果报错:algorithm negotiation failed</p>
 <p> 解决方法:添加下面的内容到/etc/ssh/sshd_config末尾(3行):</p>
-<p> Ciphers aes128-cbc,aes192-cbc,aes256-cbc,aes128-ctr,aes192-ctr,aes256-ctr,3des-cbc,arcfour128,arcfour256,arcfour,blowfish-cbc,cast128-cbc</p>
+<blockquote>
+<p>Ciphers aes128-cbc,aes192-cbc,aes256-cbc,aes128-ctr,aes192-ctr,aes256-ctr,3des-cbc,arcfour128,arcfour256,arcfour,blowfish-cbc,cast128-cbc</p>
+</blockquote>
 <p> MACs hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-sha1-96,hmac-md5-96</p>
 <p> KexAlgorithms diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group1-sha1,curve25519-sha256@libssh.org</p>
 <p> 2),使用root帐号,密码是对的,但是Permission denied,可能是因为:</p>
-<p> 默认禁用root帐号,修改/etc/ssh/sshd_config文件,设置PermitRootLogin:<br> PermitRootLogin yes</p>
+<blockquote>
+<p>默认禁用root帐号,修改/etc/ssh/sshd_config文件,设置PermitRootLogin:<br> PermitRootLogin yes</p>
+</blockquote>
 </li>
 </ol>
 

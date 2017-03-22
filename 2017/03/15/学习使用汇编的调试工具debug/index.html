@@ -6,33 +6,57 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>vim使用技巧 | 分享知识</title>
+  <title>学习使用汇编的调试工具debug | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1,查找指定字符:
-/第一个出现的字符串
-?最后一个出现的字符串
+  <meta name="description" content="R命令查看、改变CPU寄存器内容；
 
-eg:
-    :/abc    :?abc">
+D命令查看内存中的内容；
+ D [段地址:偏移地址]
+
+E命令修改内存中的内容；
+ E 段地址:起始偏移地址 数据1 数据2………
+
+U命令将内存中机器指令翻译成汇编指令；
+ 显示三个部分的内容: 左边为内存地址，其次为机器码  最右边机器码对应的汇编指令。
+
+T命令执行一条机器指令；
+
+A命令以汇编指令的格式在内存中写入一条机器指令；">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vim使用技巧">
-<meta property="og:url" content="http://yoursite.com/2017/03/16/vim使用技巧/index.html">
+<meta property="og:title" content="学习使用汇编的调试工具debug">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/学习使用汇编的调试工具debug/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="1,查找指定字符:
-/第一个出现的字符串
-?最后一个出现的字符串
+<meta property="og:description" content="R命令查看、改变CPU寄存器内容；
 
-eg:
-    :/abc    :?abc">
-<meta property="og:updated_time" content="2017-03-21T02:09:14.069Z">
+D命令查看内存中的内容；
+ D [段地址:偏移地址]
+
+E命令修改内存中的内容；
+ E 段地址:起始偏移地址 数据1 数据2………
+
+U命令将内存中机器指令翻译成汇编指令；
+ 显示三个部分的内容: 左边为内存地址，其次为机器码  最右边机器码对应的汇编指令。
+
+T命令执行一条机器指令；
+
+A命令以汇编指令的格式在内存中写入一条机器指令；">
+<meta property="og:updated_time" content="2017-03-21T12:08:16.913Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vim使用技巧">
-<meta name="twitter:description" content="1,查找指定字符:
-/第一个出现的字符串
-?最后一个出现的字符串
+<meta name="twitter:title" content="学习使用汇编的调试工具debug">
+<meta name="twitter:description" content="R命令查看、改变CPU寄存器内容；
 
-eg:
-    :/abc    :?abc">
+D命令查看内存中的内容；
+ D [段地址:偏移地址]
+
+E命令修改内存中的内容；
+ E 段地址:起始偏移地址 数据1 数据2………
+
+U命令将内存中机器指令翻译成汇编指令；
+ 显示三个部分的内容: 左边为内存地址，其次为机器码  最右边机器码对应的汇编指令。
+
+T命令执行一条机器指令；
+
+A命令以汇编指令的格式在内存中写入一条机器指令；">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -156,33 +180,44 @@ eg:
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-vim使用技巧" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-学习使用汇编的调试工具debug" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      vim使用技巧
+      学习使用汇编的调试工具debug
     </h1>
   
 
         
-        <a href="/2017/03/16/vim使用技巧/" class="archive-article-date">
-  	<time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-16</time>
+        <a href="/2017/03/15/学习使用汇编的调试工具debug/" class="archive-article-date">
+  	<time datetime="2017-03-14T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1,查找指定字符:</p>
-<pre><code>/第一个出现的字符串
-?最后一个出现的字符串
+        <ol>
+<li><p>R命令查看、改变CPU寄存器内容；</p>
+</li>
+<li><p>D命令查看内存中的内容；</p>
+<p> D [段地址:偏移地址]</p>
+</li>
+<li><p>E命令修改内存中的内容；</p>
+<p> E 段地址:起始偏移地址 数据1 数据2………</p>
+</li>
+<li><p>U命令将内存中机器指令翻译成汇编指令；</p>
+<p> 显示三个部分的内容: 左边为内存地址，其次为机器码  最右边机器码对应的汇编指令。</p>
+</li>
+<li><p>T命令执行一条机器指令；</p>
+</li>
+<li><p>A命令以汇编指令的格式在内存中写入一条机器指令；</p>
+</li>
+</ol>
 
-eg:
-    :/abc    :?abc
-</code></pre>
       
 
       
@@ -261,7 +296,7 @@ eg:
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/16/vim使用技巧/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/15/学习使用汇编的调试工具debug/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -275,18 +310,18 @@ eg:
   
 <nav id="article-nav">
   
-    <a href="/2017/03/16/使用Hexo+Github部署个人博客/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/03/16/vim使用技巧/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          使用Hexo+Github部署个人博客
+          vim使用技巧
         
       </div>
     </a>
   
   
-    <a href="/2017/03/15/学习使用汇编的调试工具debug/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">学习使用汇编的调试工具debug</div>
+    <a href="/2017/03/06/linux启动ssh/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">linux启动ssh</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -300,7 +335,7 @@ eg:
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="vim使用技巧" data-title="vim使用技巧" data-url="http://yoursite.com/2017/03/16/vim使用技巧/"></div>
+	<div class="ds-thread" data-thread-key="学习使用汇编的调试工具debug" data-title="学习使用汇编的调试工具debug" data-url="http://yoursite.com/2017/03/15/学习使用汇编的调试工具debug/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

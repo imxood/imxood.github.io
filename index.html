@@ -139,40 +139,30 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Linux c文件操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-8086汇编 转移指令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/Linux c文件操作/">Linux c文件操作</a>
+      <a class="article-title" href="/2017/03/22/8086汇编 转移指令/">8086汇编 转移指令</a>
     </h1>
   
 
         
-        <a href="/2017/03/21/Linux c文件操作/" class="archive-article-date">
-  	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
+        <a href="/2017/03/22/8086汇编 转移指令/" class="archive-article-date">
+  	<time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>open(2),close(2),read(2),write(2),lseek(2)</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打开文件</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//返回值:-1,错误,重置errno</span></div></pre></td></tr></table></figure>
-<p>O_EXCL:        与O_CREAT一起指定.文件存在报错</p>
-<p>O_CREATE: 如果文件不存在,则创建文件,需要提供文件的权限.权限的有效性是提供的权限和umask的运算结果</p>
-<p>若是新的文件,则可以设置权限mode,文件最终的权限计算规则是:mode &amp; ~umask, mask是权限掩码(默认不要的权限)</p>
-<p>O_TRUNC: 文件存在就清空</p>
-<p>补充:<br>-rw-r–r– 1 root root   517 2月  24 21:09 02_25.cpp<br>第一个字符决定了文件的类型:<br>    ‘-‘表示普通文件,’d’表示目录文件,’b’块设备文件,’c’字符设备文件,’s’socket文件,l软链接文件,p管道文件</p>
-<pre><code>//打开文件,若存在,报错
-open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
-</code></pre><p>umask:777==&gt;111 111 111</p>
-<pre><code>110 100 100
-</code></pre><p>touch test.txt<br>———- 1 root root  367 3月  17 05:39 test_dynamic.c<br>权限:0000<br>                          110  100 100<br>umask:022==&gt;000 010 010   111 101  101<br>-rw-r–r– 1 root root 0 3月  21 03:09 c<br>权限:    </p>
-<p>文件描述符中:<br>STDIN_</p>
-
+        <ol>
+<li>操作符offset: 取得标号的偏移地址</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
       
 
       
@@ -184,7 +174,62 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/21/Linux c文件操作/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/22/8086汇编 转移指令/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/进程/">进程</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/21/进程/" class="archive-article-date">
+  	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一, 进程映射</p>
+<p>代码段: 字符串,常量<br>数据段: 全局变量,静态局部变量<br>堆: 使用malloc等一系列函数向系统申请的内存空间在堆里<br>栈: 自动局部变量和形参</p>
+<p>注意变量的生命周期和作用域</p>
+<p>二, 使用mmap将物理地址映射到进程的虚拟地址空间</p>
+<p>处理这个映射,需要使用mmap和munmap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//功能: 映射文件或设备到内存空间(虚拟地址空间)</span></div><div class="line"><span class="comment">//返回值: 若错误,返回MAP_FAILED, errno被设置, 若成功,返回映射区域的地址</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;	</div><div class="line"></div><div class="line"><span class="comment">//功能: 解除内存映射</span></div><div class="line"><span class="comment">//返回值: 0 成功, 1 失败</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/21/进程/">展开全文 >></a>
         </p>
       
 
@@ -254,19 +299,19 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
 
 
   
-    <article id="post-进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Linux c文件操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/进程/">进程</a>
+      <a class="article-title" href="/2017/03/21/Linux c文件操作/">Linux c文件操作</a>
     </h1>
   
 
         
-        <a href="/2017/03/21/进程/" class="archive-article-date">
+        <a href="/2017/03/21/Linux c文件操作/" class="archive-article-date">
   	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
@@ -274,12 +319,20 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一, 进程映射</p>
-<p>代码段: 字符串,常量<br>数据段: 全局变量,静态局部变量<br>堆: 使用malloc等一系列函数向系统申请的内存空间在堆里<br>栈: 自动局部变量和形参</p>
-<p>注意变量的生命周期和作用域</p>
-<p>二, 使用mmap将物理地址映射到进程的虚拟地址空间</p>
-<p>处理这个映射,需要使用mmap和munmap</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//功能: 映射文件或设备到内存空间(虚拟地址空间)</span></div><div class="line"><span class="comment">//返回值: 若错误,返回MAP_FAILED, errno被设置, 若成功,返回映射区域的地址</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;	</div><div class="line"></div><div class="line"><span class="comment">//功能: 解除内存映射</span></div><div class="line"><span class="comment">//返回值: 0 成功, 1 失败</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</div></pre></td></tr></table></figure>
+        <p>open(2),close(2),read(2),write(2),lseek(2)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//打开文件</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flags, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//返回值:-1,错误,重置errno</span></div></pre></td></tr></table></figure>
+<p>O_EXCL:        与O_CREAT一起指定.文件存在报错</p>
+<p>O_CREATE: 如果文件不存在,则创建文件,需要提供文件的权限.权限的有效性是提供的权限和umask的运算结果</p>
+<p>若是新的文件,则可以设置权限mode,文件最终的权限计算规则是:mode &amp; ~umask, mask是权限掩码(默认不要的权限)</p>
+<p>O_TRUNC: 文件存在就清空</p>
+<p>补充:<br>-rw-r–r– 1 root root   517 2月  24 21:09 02_25.cpp<br>第一个字符决定了文件的类型:<br>    ‘-‘表示普通文件,’d’表示目录文件,’b’块设备文件,’c’字符设备文件,’s’socket文件,l软链接文件,p管道文件</p>
+<pre><code>//打开文件,若存在,报错
+open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
+</code></pre><p>umask:777==&gt;111 111 111</p>
+<pre><code>110 100 100
+</code></pre><p>touch test.txt<br>———- 1 root root  367 3月  17 05:39 test_dynamic.c<br>权限:0000<br>                          110  100 100<br>umask:022==&gt;000 010 010   111 101  101<br>-rw-r–r– 1 root root 0 3月  21 03:09 c<br>权限:    </p>
+<p>文件描述符中:<br>STDIN_</p>
+
       
 
       
@@ -291,7 +344,7 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/21/进程/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/21/Linux c文件操作/">展开全文 >></a>
         </p>
       
 
@@ -407,7 +460,7 @@ q
 <pre><code>如何根据错误编号获取错误信息?
 perror函数
 </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void perror(const char *s);</div><div class="line"></div><div class="line">//man 3 perror</div><div class="line">//功能:打印一个系统错误信息</div><div class="line">//参数:s 自定义的提示</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		perror(&quot;fopen&quot;);//输出错误信息到显示器</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success!\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell终端:</div><div class="line">root@kali:~/maxu# gcc test.c &amp;&amp; ./a.out abc.hello</div><div class="line">//显示:</div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line">#include &lt;string.h&gt;</div><div class="line">char *strerror(int errnum);</div><div class="line"></div><div class="line">//man 3 strerror</div><div class="line">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回&quot;Unknown &quot;</div><div class="line">//参数:errnum 错误编号</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;errno.h&gt;//这个头文件中存在声明:int errno;</div><div class="line"></div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		printf(&quot;errno: %d\n&quot;, errno);</div><div class="line">		printf(&quot;%s\n&quot;, strerror(errno));</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success...\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell:</div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line">//输出:</div><div class="line">errno: 2</div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
-<p>补充:<br>stdio    标准输入        键盘<br>stdout    标准输出        显示器<br>stderr    标准错误输出    显示器</p>
+<p>补充:<br>标准输入        键盘        0<br>标准输出        显示器        1<br>标准错误输出    显示器        2</p>
 <p>帮助的使用:<br>man 1 命令<br>man 2 系统调用函数的名字<br>man 3 库函数的名称</p>
 <p>三, 进程映射</p>
 
@@ -702,80 +755,10 @@ eg:
 
 
   
-    <article id="post-linux启动ssh" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/06/linux启动ssh/">linux启动ssh</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/06/linux启动ssh/" class="archive-article-date">
-  	<time datetime="2017-03-05T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>sudo apt-get install openssh-server 安装ssh</p>
-</li>
-<li><p>ps -e |grep ssh 查看是否已启动</p>
-</li>
-<li><p>systemctl is-enabled ssh 判断ssh是否是开机启动</p>
-</li>
-<li><p>systemctl enable ssh 设置ssh开机启动</p>
-</li>
-<li><p>systemctl status ssh 查看ssh状态</p>
-</li>
-<li><p>1),如果报错:algorithm negotiation failed</p>
-<p> 解决方法:添加下面的内容到/etc/ssh/sshd_config末尾(3行):</p>
-<blockquote>
-<p>Ciphers aes128-cbc,aes192-cbc,aes256-cbc,aes128-ctr,aes192-ctr,aes256-ctr,3des-cbc,arcfour128,arcfour256,arcfour,blowfish-cbc,cast128-cbc</p>
-<p>MACs hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-sha1-96,hmac-md5-96</p>
-<p>KexAlgorithms diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group1-sha1,curve25519-sha256@libssh.org</p>
-</blockquote>
-<p> 2),使用root帐号,密码是对的,但是Permission denied,可能是因为:</p>
-<blockquote>
-<p>默认禁用root帐号,修改/etc/ssh/sshd_config文件,设置PermitRootLogin:<br> PermitRootLogin yes</p>
-</blockquote>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/06/linux启动ssh/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 

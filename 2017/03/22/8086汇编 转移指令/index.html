@@ -6,42 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>GDB调试器的使用 | 分享知识</title>
+  <title>8086汇编 转移指令 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+  <meta name="description" content="操作符offset: 取得标号的偏移地址
 
-b 5
-为">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GDB调试器的使用">
-<meta property="og:url" content="http://yoursite.com/2017/03/20/GDB调试器的使用/index.html">
+<meta property="og:title" content="8086汇编 转移指令">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/8086汇编 转移指令/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+<meta property="og:description" content="操作符offset: 取得标号的偏移地址
 
-b 5
-为">
-<meta property="og:updated_time" content="2017-03-21T02:05:14.752Z">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
+<meta property="og:updated_time" content="2017-03-22T08:44:48.675Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GDB调试器的使用">
-<meta name="twitter:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+<meta name="twitter:title" content="8086汇编 转移指令">
+<meta name="twitter:description" content="操作符offset: 取得标号的偏移地址
 
-b 5
-为">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -165,51 +147,30 @@ b 5
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-GDB调试器的使用" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-8086汇编 转移指令" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      GDB调试器的使用
+      8086汇编 转移指令
     </h1>
   
 
         
-        <a href="/2017/03/20/GDB调试器的使用/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+        <a href="/2017/03/22/8086汇编 转移指令/" class="archive-article-date">
+  	<time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
-<p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
-<p>第三步:<br>    执行相关调试指令</p>
-<pre><code>l
-列出程序代码(list)
-
-b 5
-为第5行设置断点(break)
-
-r
-运行可执行程序(运行到下一个断点前,比如上面的第五行,未执行第五行)(run)
-
-p a
-显示a变量的值(print)
-
-n
-执行下一条语句(next)
-
-s
-按步执行语句,有函数就进入函数内(step)
-
-q
-离开gdb(quit)
-</code></pre>
+        <ol>
+<li>操作符offset: 取得标号的偏移地址</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
       
 
       
@@ -288,7 +249,7 @@ q
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/20/GDB调试器的使用/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/22/8086汇编 转移指令/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -302,18 +263,9 @@ q
   
 <nav id="article-nav">
   
-    <a href="/2017/03/21/Linux c文件操作/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Linux c文件操作
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/20/Unix C的一般处理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Unix C程序中的错误处理</div>
+    <a href="/2017/03/21/进程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">进程</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -327,7 +279,7 @@ q
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="GDB调试器的使用" data-title="GDB调试器的使用" data-url="http://yoursite.com/2017/03/20/GDB调试器的使用/"></div>
+	<div class="ds-thread" data-thread-key="8086汇编 转移指令" data-title="8086汇编 转移指令" data-url="http://yoursite.com/2017/03/22/8086汇编 转移指令/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

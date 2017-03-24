@@ -6,24 +6,36 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>8086汇编 转移指令 | 分享知识</title>
+  <title>X86汇编 转移指令 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="操作符offset: 取得标号的偏移地址
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
+
+“jmp short 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移
+
+“jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位">
 <meta property="og:type" content="article">
-<meta property="og:title" content="8086汇编 转移指令">
-<meta property="og:url" content="http://yoursite.com/2017/03/22/8086汇编 转移指令/index.html">
+<meta property="og:title" content="X86汇编 转移指令">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/X86汇编 转移指令/index.html">
 <meta property="og:site_name" content="分享知识">
 <meta property="og:description" content="操作符offset: 取得标号的偏移地址
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
-<meta property="og:updated_time" content="2017-03-22T08:44:48.675Z">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
+
+“jmp short 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移
+
+“jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位">
+<meta property="og:updated_time" content="2017-03-22T11:41:04.606Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="8086汇编 转移指令">
+<meta name="twitter:title" content="X86汇编 转移指令">
 <meta name="twitter:description" content="操作符offset: 取得标号的偏移地址
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3">
+1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
+
+“jmp short 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移
+
+“jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -147,19 +159,19 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-8086汇编 转移指令" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-X86汇编 转移指令" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      8086汇编 转移指令
+      X86汇编 转移指令
     </h1>
   
 
         
-        <a href="/2017/03/22/8086汇编 转移指令/" class="archive-article-date">
+        <a href="/2017/03/22/X86汇编 转移指令/" class="archive-article-date">
   	<time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
 </a>
         
@@ -171,6 +183,23 @@
 <li>操作符offset: 取得标号的偏移地址</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
+<ol>
+<li><p>“jmp short 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移</p>
+</li>
+<li><p>“jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移</p>
+</li>
+<li><p>“jmp far ptr 标号”: 段间转移(源转移)<br> (CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址<br> far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
+</li>
+<li><p>“jmp 16位reg”: (IP)=    (16位reg)</p>
+</li>
+<li><p>“jmp word ptr 内存单元地址(段内转移)”: 从内存单元地址处存放着一个字,是转移的目的偏移地址</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mov ax,0123h</div><div class="line">mov ds:[0],ax</div><div class="line">jmp word ptr ds:[0]		;执行后</div></pre></td></tr></table></figure>
+<ol>
+<li>“jmp dword ptr 内存单元地址(段间转移)”: 高地址处的字是目的段地址,低地址处的字是目的偏移地址<br> (CS)=(内存单元地址+2)        (IP)=(内存单元地址)</li>
+</ol>
+
       
 
       
@@ -249,7 +278,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/22/8086汇编 转移指令/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/22/X86汇编 转移指令/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -263,9 +292,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2017/03/24/Linux 程序与进程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Linux 程序与进程
+        
+      </div>
+    </a>
   
-    <a href="/2017/03/21/进程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">进程</div>
+  
+    <a href="/2017/03/21/mmap函数引起的分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mmap函数引起的分析</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -279,7 +317,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="8086汇编 转移指令" data-title="8086汇编 转移指令" data-url="http://yoursite.com/2017/03/22/8086汇编 转移指令/"></div>
+	<div class="ds-thread" data-thread-key="X86汇编 转移指令" data-title="X86汇编 转移指令" data-url="http://yoursite.com/2017/03/22/X86汇编 转移指令/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -6,42 +6,57 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>GDB调试器的使用 | 分享知识</title>
+  <title>信号 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+  <meta name="description" content="什么是信号?信号就是软中断
 
-b 5
-为">
+什么是软中断?软中断就是软件模拟的中断
+
+什么是中断中断服务程序
+
+
+信号是进程的异步通信机制.
+
+系统提供的信号如何查看kill -l
+
+一般来说,信号有64个信号kill -信号编号 pid
+信号产生,信号阻塞,信号未决,进程对信号的捕获,信号处理程序
+进程对信号的默认处理动作是终止进程用户可以根据自己的需求设置进程对信号的处理SIG_DFL        缺省">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GDB调试器的使用">
-<meta property="og:url" content="http://yoursite.com/2017/03/20/GDB调试器的使用/index.html">
+<meta property="og:title" content="信号">
+<meta property="og:url" content="http://yoursite.com/2017/03/26/信号/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+<meta property="og:description" content="什么是信号?信号就是软中断
 
-b 5
-为">
-<meta property="og:updated_time" content="2017-03-21T02:05:14.752Z">
+什么是软中断?软中断就是软件模拟的中断
+
+什么是中断中断服务程序
+
+
+信号是进程的异步通信机制.
+
+系统提供的信号如何查看kill -l
+
+一般来说,信号有64个信号kill -信号编号 pid
+信号产生,信号阻塞,信号未决,进程对信号的捕获,信号处理程序
+进程对信号的默认处理动作是终止进程用户可以根据自己的需求设置进程对信号的处理SIG_DFL        缺省">
+<meta property="og:updated_time" content="2017-03-26T07:31:46.793Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GDB调试器的使用">
-<meta name="twitter:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
+<meta name="twitter:title" content="信号">
+<meta name="twitter:description" content="什么是信号?信号就是软中断
 
-b 5
-为">
+什么是软中断?软中断就是软件模拟的中断
+
+什么是中断中断服务程序
+
+
+信号是进程的异步通信机制.
+
+系统提供的信号如何查看kill -l
+
+一般来说,信号有64个信号kill -信号编号 pid
+信号产生,信号阻塞,信号未决,进程对信号的捕获,信号处理程序
+进程对信号的默认处理动作是终止进程用户可以根据自己的需求设置进程对信号的处理SIG_DFL        缺省">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -165,51 +180,44 @@ b 5
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-GDB调试器的使用" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-信号" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      GDB调试器的使用
+      信号
     </h1>
   
 
         
-        <a href="/2017/03/20/GDB调试器的使用/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+        <a href="/2017/03/26/信号/" class="archive-article-date">
+  	<time datetime="2017-03-25T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
-<p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
-<p>第三步:<br>    执行相关调试指令</p>
-<pre><code>l
-列出程序代码(list)
+        <ol>
+<li><p>什么是信号?<br>信号就是软中断</p>
+</li>
+<li><p>什么是软中断?<br>软中断就是软件模拟的中断</p>
+</li>
+<li><p>什么是中断<br>中断服务程序</p>
+</li>
+</ol>
+<p>信号是进程的异步通信机制.</p>
+<ol>
+<li>系统提供的信号如何查看<br>kill -l</li>
+</ol>
+<p>一般来说,信号有64个信号<br>kill -信号编号 pid</p>
+<p>信号产生,信号阻塞,信号未决,进程对信号的捕获,信号处理程序</p>
+<p>进程对信号的默认处理动作是终止进程<br>用户可以根据自己的需求设置进程对信号的处理<br>SIG_DFL        缺省<br>SIG_IGN        忽略<br>用户自定义信号处理函数</p>
+<p>需要向进程注册一个函数,当信号到来的时候,使用这个注册的信号处理函数来处理信号到达.</p>
+<p>使用signal(2)注册信号处理函数</p>
 
-b 5
-为第5行设置断点(break)
-
-r
-运行可执行程序(运行到下一个断点前,比如上面的第五行,未执行第五行)(run)
-
-p a
-显示a变量的值(print)
-
-n
-执行下一条语句(next)
-
-s
-按步执行语句,有函数就进入函数内(step)
-
-q
-离开gdb(quit)
-</code></pre>
       
 
       
@@ -288,7 +296,7 @@ q
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/20/GDB调试器的使用/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/26/信号/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -302,18 +310,18 @@ q
   
 <nav id="article-nav">
   
-    <a href="/2017/03/20/Unix C的一般处理/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/03/30/vs2015环境编译openssl/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Unix C程序中的错误处理
+          (no title)
         
       </div>
     </a>
   
   
-    <a href="/2017/03/19/gcc简单教程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">gcc简单教程</div>
+    <a href="/2017/03/24/Linux 程序与进程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux 程序与进程</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -327,7 +335,7 @@ q
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="GDB调试器的使用" data-title="GDB调试器的使用" data-url="http://yoursite.com/2017/03/20/GDB调试器的使用/"></div>
+	<div class="ds-thread" data-thread-key="信号" data-title="信号" data-url="http://yoursite.com/2017/03/26/信号/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

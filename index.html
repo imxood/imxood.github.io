@@ -139,6 +139,124 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vs2015环境编译openssl" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title:vs2015��������libcurl</p>
+<h2 id="date-2017-03-30"><a href="#date-2017-03-30" class="headerlink" title="date:2017/03/30"></a>date:2017/03/30</h2><p>1, 1&gt; ��Ҫ���ص��ļ�:<br>    curl-7.53.1.zip, openssl-1.0.2j.tar.gz</p>
+<p>   2&gt; VS2015IDE, NASM������</p>
+<p>2, ʹ�û�����NASM����OpenSSL��:<br>    ��ѹopenssl-1.0.2j.tar.gz��D:\Develop\, cd D:\Develop\openssl-1.0.2j,����Ҫ���Ǿ�̬��,ִ��������������:<br>    perl Configure VC-WIN32 –prefix=openssl_lib<br>    nmake -f ms\nt.mak<br>    nmake -f ms\nt.mak install<br>    ���ŵȴ�ʮ����,�ڵ�ǰĿ¼�»���������Ҫ��openssl_lib�ļ���</p>
+<p>3, ����libcurl</p>
+<pre><code>��ѹcurl-7.53.1.zip��D:\Develop, cd D:\Develop\curl-7.53.1\winbuild,
+�鿴����: nmake /f Makefile.vc,
+��ʼ����: nmake /f Makefile.vc mode=static VC=14 WITH_DEVEL=D:\Develop\openssl-1.0.2j\openssl_lib WITH_SSL=static ENABLE_SSPI=no ENABLE_IPV6=no
+
+����ע�� mode=dll ����libcurlλ��̬���ӿ⣬����static ���ǰ�libcurl����λ��̬�� 
+VC=10 ����ʹ�õ���VC2010
+WITH_DEVEL=C:\openssl_lib ��ʾ�õ���������������Ŀ¼�����������Ѿ���openssl�����õĿ���������װ����Ŀ¼
+WITH_SSL=static ,����ʹ��libssl�� �Ǿ�̬��
+ENABLE_SSPI=no ENABLE_IPV6=no������SSPI��ipV6���ܣ�
+�Ե�Ƭ�̾ͱ����ɹ��ˡ�
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/30/vs2015环境编译openssl/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-信号" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/26/信号/">信号</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/26/信号/" class="archive-article-date">
+  	<time datetime="2017-03-25T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>什么是信号?<br>信号就是软中断</p>
+</li>
+<li><p>什么是软中断?<br>软中断就是软件模拟的中断</p>
+</li>
+<li><p>什么是中断<br>中断服务程序</p>
+</li>
+</ol>
+<p>信号是进程的异步通信机制.</p>
+<ol>
+<li>系统提供的信号如何查看<br>kill -l</li>
+</ol>
+<p>一般来说,信号有64个信号<br>kill -信号编号 pid</p>
+<p>信号产生,信号阻塞,信号未决,进程对信号的捕获,信号处理程序</p>
+<p>进程对信号的默认处理动作是终止进程<br>用户可以根据自己的需求设置进程对信号的处理<br>SIG_DFL        缺省<br>SIG_IGN        忽略<br>用户自定义信号处理函数</p>
+<p>需要向进程注册一个函数,当信号到来的时候,使用这个注册的信号处理函数来处理信号到达.</p>
+<p>使用signal(2)注册信号处理函数</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/26/信号/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-Linux 程序与进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -170,6 +288,8 @@
 </blockquote>
 </li>
 </ol>
+<p>多进程间的关系,fork?</p>
+<p>在进程空间里加载新的映像<br>exec</p>
 
       
 
@@ -270,19 +390,19 @@
 
 
   
-    <article id="post-mmap函数引起的分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/mmap函数引起的分析/">mmap函数引起的分析</a>
+      <a class="article-title" href="/2017/03/21/进程/">进程</a>
     </h1>
   
 
         
-        <a href="/2017/03/21/mmap函数引起的分析/" class="archive-article-date">
+        <a href="/2017/03/21/进程/" class="archive-article-date">
   	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
@@ -290,9 +410,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="external">http://www.cnblogs.com/huxiao-tee/p/4660352.html</a></p>
-<p><a href="http://blog.csdn.net/lixungogogo/article/details/52210750" target="_blank" rel="external">http://blog.csdn.net/lixungogogo/article/details/52210750</a></p>
-
+        <p>一, 进程映射</p>
+<p>代码段: 字符串,常量<br>数据段: 全局变量,静态局部变量<br>堆: 使用malloc等一系列函数向系统申请的内存空间在堆里<br>栈: 自动局部变量和形参</p>
+<p>注意变量的生命周期和作用域</p>
+<p>二, 使用mmap将物理地址映射到进程的虚拟地址空间</p>
+<p>处理这个映射,需要使用mmap和munmap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//功能: 映射文件或设备到内存空间(虚拟地址空间)</span></div><div class="line"><span class="comment">//返回值: 若错误,返回MAP_FAILED, errno被设置, 若成功,返回映射区域的地址</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;	</div><div class="line"></div><div class="line"><span class="comment">//功能: 解除内存映射</span></div><div class="line"><span class="comment">//返回值: 0 成功, 1 失败</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</div></pre></td></tr></table></figure>
       
 
       
@@ -304,7 +427,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/21/mmap函数引起的分析/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/21/进程/">展开全文 >></a>
         </p>
       
 
@@ -385,19 +508,19 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
 
 
   
-    <article id="post-进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-mmap函数引起的分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/进程/">进程</a>
+      <a class="article-title" href="/2017/03/21/mmap函数引起的分析/">mmap函数引起的分析</a>
     </h1>
   
 
         
-        <a href="/2017/03/21/进程/" class="archive-article-date">
+        <a href="/2017/03/21/mmap函数引起的分析/" class="archive-article-date">
   	<time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
@@ -405,12 +528,9 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一, 进程映射</p>
-<p>代码段: 字符串,常量<br>数据段: 全局变量,静态局部变量<br>堆: 使用malloc等一系列函数向系统申请的内存空间在堆里<br>栈: 自动局部变量和形参</p>
-<p>注意变量的生命周期和作用域</p>
-<p>二, 使用mmap将物理地址映射到进程的虚拟地址空间</p>
-<p>处理这个映射,需要使用mmap和munmap</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//功能: 映射文件或设备到内存空间(虚拟地址空间)</span></div><div class="line"><span class="comment">//返回值: 若错误,返回MAP_FAILED, errno被设置, 若成功,返回映射区域的地址</span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;	</div><div class="line"></div><div class="line"><span class="comment">//功能: 解除内存映射</span></div><div class="line"><span class="comment">//返回值: 0 成功, 1 失败</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length)</span></span>;</div></pre></td></tr></table></figure>
+        <p><a href="http://www.cnblogs.com/huxiao-tee/p/4660352.html" target="_blank" rel="external">http://www.cnblogs.com/huxiao-tee/p/4660352.html</a></p>
+<p><a href="http://blog.csdn.net/lixungogogo/article/details/52210750" target="_blank" rel="external">http://blog.csdn.net/lixungogogo/article/details/52210750</a></p>
+
       
 
       
@@ -422,7 +542,64 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/21/进程/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/21/mmap函数引起的分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Unix C的一般处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/20/Unix C的一般处理/">Unix C程序中的错误处理</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/20/Unix C的一般处理/" class="archive-article-date">
+  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一, Unix C程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
+<pre><code>如何根据错误编号获取错误信息?
+perror函数
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void perror(const char *s);</div><div class="line"></div><div class="line">//man 3 perror</div><div class="line">//功能:打印一个系统错误信息</div><div class="line">//参数:s 自定义的提示</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		perror(&quot;fopen&quot;);//输出错误信息到显示器</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success!\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell终端:</div><div class="line">root@kali:~/maxu# gcc test.c &amp;&amp; ./a.out abc.hello</div><div class="line">//显示:</div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line">#include &lt;string.h&gt;</div><div class="line">char *strerror(int errnum);</div><div class="line"></div><div class="line">//man 3 strerror</div><div class="line">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回&quot;Unknown &quot;</div><div class="line">//参数:errnum 错误编号</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;errno.h&gt;//这个头文件中存在声明:int errno;</div><div class="line"></div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		printf(&quot;errno: %d\n&quot;, errno);</div><div class="line">		printf(&quot;%s\n&quot;, strerror(errno));</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success...\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell:</div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line">//输出:</div><div class="line">errno: 2</div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
+<p>补充:<br>标准输入        键盘        0<br>标准输出        显示器        1<br>标准错误输出    显示器        2</p>
+<p>帮助的使用:<br>man 1 命令<br>man 2 系统调用函数的名字<br>man 3 库函数的名称</p>
+<p>三, 进程映射</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/20/Unix C的一般处理/">展开全文 >></a>
         </p>
       
 
@@ -514,63 +691,6 @@ q
 
 
   
-    <article id="post-Unix C的一般处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/20/Unix C的一般处理/">Unix C程序中的错误处理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/20/Unix C的一般处理/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一, Unix C程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
-<pre><code>如何根据错误编号获取错误信息?
-perror函数
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void perror(const char *s);</div><div class="line"></div><div class="line">//man 3 perror</div><div class="line">//功能:打印一个系统错误信息</div><div class="line">//参数:s 自定义的提示</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		perror(&quot;fopen&quot;);//输出错误信息到显示器</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success!\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell终端:</div><div class="line">root@kali:~/maxu# gcc test.c &amp;&amp; ./a.out abc.hello</div><div class="line">//显示:</div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line">#include &lt;string.h&gt;</div><div class="line">char *strerror(int errnum);</div><div class="line"></div><div class="line">//man 3 strerror</div><div class="line">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回&quot;Unknown &quot;</div><div class="line">//参数:errnum 错误编号</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;errno.h&gt;//这个头文件中存在声明:int errno;</div><div class="line"></div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		printf(&quot;errno: %d\n&quot;, errno);</div><div class="line">		printf(&quot;%s\n&quot;, strerror(errno));</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success...\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell:</div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line">//输出:</div><div class="line">errno: 2</div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
-<p>补充:<br>标准输入        键盘        0<br>标准输出        显示器        1<br>标准错误输出    显示器        2</p>
-<p>帮助的使用:<br>man 1 命令<br>man 2 系统调用函数的名字<br>man 3 库函数的名称</p>
-<p>三, 进程映射</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/20/Unix C的一般处理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
     <article id="post-gcc简单教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -635,120 +755,6 @@ perror函数
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/03/19/gcc简单教程/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-使用Hexo+Github部署个人博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/16/使用Hexo+Github部署个人博客/">使用Hexo+Github部署个人博客</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/16/使用Hexo+Github部署个人博客/" class="archive-article-date">
-  	<time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    选一个好一点的用户名来注册一个github帐号,这个用户名会成为你的静态网站的域名的一部分(userName.github.io),开通个人静态站点</p>
-<p>安装git,nodejs,安装完毕后,打开git-gui(就是因为git-gui好看点,也打开cmd),</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cd /e/Platform/Git</div><div class="line">npm install -g hexo-cli</div><div class="line">hexo init blog</div><div class="line">cd blog</div><div class="line">npm install</div></pre></td></tr></table></figure>
-<p>执行完后,你的目录是这样的:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── _config.yml</div><div class="line">├── package.json</div><div class="line">├── scaffolds</div><div class="line">├── source</div><div class="line">|   ├── _drafts</div><div class="line">|   └── _posts</div><div class="line">└── themes</div></pre></td></tr></table></figure>
-<p>然后,执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo server</div><div class="line"></div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
-<p>这时,在浏览器中打开 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> ,就可以访问你的本地站点了</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/16/使用Hexo+Github部署个人博客/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-vim使用技巧" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/16/vim使用技巧/">vim使用技巧</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/16/vim使用技巧/" class="archive-article-date">
-  	<time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1,查找指定字符:</p>
-<pre><code>/第一个出现的字符串
-?最后一个出现的字符串
-
-eg:
-    :/abc    :?abc
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/16/vim使用技巧/">展开全文 >></a>
         </p>
       
 

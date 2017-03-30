@@ -6,42 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>GDB调试器的使用 | 分享知识</title>
+  <title>分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
-
-b 5
-为">
+  <meta name="description" content="title:vs2015��������libcurl
+date:2017/03/301, 1&amp;gt; ��Ҫ���ص��ļ�:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+   2&amp;gt; VS2015IDE, NASM������
+2, ʹ�û�����NASM����OpenSSL��:    ��ѹopenssl-1.0.2j.tar.gz��D:">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GDB调试器的使用">
-<meta property="og:url" content="http://yoursite.com/2017/03/20/GDB调试器的使用/index.html">
+<meta property="og:title" content="分享知识">
+<meta property="og:url" content="http://yoursite.com/2017/03/30/vs2015环境编译openssl/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
-
-b 5
-为">
-<meta property="og:updated_time" content="2017-03-21T02:05:14.752Z">
+<meta property="og:description" content="title:vs2015��������libcurl
+date:2017/03/301, 1&amp;gt; ��Ҫ���ص��ļ�:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+   2&amp;gt; VS2015IDE, NASM������
+2, ʹ�û�����NASM����OpenSSL��:    ��ѹopenssl-1.0.2j.tar.gz��D:">
+<meta property="og:updated_time" content="2017-03-30T17:10:23.168Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GDB调试器的使用">
-<meta name="twitter:description" content="第一步:    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息
-1root@kali:~/maxu/test_lib# gcc -g *.c -o tt
-第二步:    使用gdb调试工具,调试带有调试信息的可执行文件1root@kali:~/maxu/test_lib# gdb tt
-第三步:    执行相关调试指令
-l
-列出程序代码(list)
-
-b 5
-为">
+<meta name="twitter:title" content="分享知识">
+<meta name="twitter:description" content="title:vs2015��������libcurl
+date:2017/03/301, 1&amp;gt; ��Ҫ���ص��ļ�:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+   2&amp;gt; VS2015IDE, NASM������
+2, ʹ�û�����NASM����OpenSSL��:    ��ѹopenssl-1.0.2j.tar.gz��D:">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -165,50 +150,27 @@ b 5
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-GDB调试器的使用" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-vs2015环境编译openssl" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      GDB调试器的使用
-    </h1>
-  
-
-        
-        <a href="/2017/03/20/GDB调试器的使用/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
-<p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
-<p>第三步:<br>    执行相关调试指令</p>
-<pre><code>l
-列出程序代码(list)
+        <hr>
+<p>title:vs2015��������libcurl</p>
+<h2 id="date-2017-03-30"><a href="#date-2017-03-30" class="headerlink" title="date:2017/03/30"></a>date:2017/03/30</h2><p>1, 1&gt; ��Ҫ���ص��ļ�:<br>    curl-7.53.1.zip, openssl-1.0.2j.tar.gz</p>
+<p>   2&gt; VS2015IDE, NASM������</p>
+<p>2, ʹ�û�����NASM����OpenSSL��:<br>    ��ѹopenssl-1.0.2j.tar.gz��D:\Develop\, cd D:\Develop\openssl-1.0.2j,����Ҫ���Ǿ�̬��,ִ��������������:<br>    perl Configure VC-WIN32 –prefix=openssl_lib<br>    nmake -f ms\nt.mak<br>    nmake -f ms\nt.mak install<br>    ���ŵȴ�ʮ����,�ڵ�ǰĿ¼�»���������Ҫ��openssl_lib�ļ���</p>
+<p>3, ����libcurl</p>
+<pre><code>��ѹcurl-7.53.1.zip��D:\Develop, cd D:\Develop\curl-7.53.1\winbuild,
+�鿴����: nmake /f Makefile.vc,
+��ʼ����: nmake /f Makefile.vc mode=static VC=14 WITH_DEVEL=D:\Develop\openssl-1.0.2j\openssl_lib WITH_SSL=static ENABLE_SSPI=no ENABLE_IPV6=no
 
-b 5
-为第5行设置断点(break)
-
-r
-运行可执行程序(运行到下一个断点前,比如上面的第五行,未执行第五行)(run)
-
-p a
-显示a变量的值(print)
-
-n
-执行下一条语句(next)
-
-s
-按步执行语句,有函数就进入函数内(step)
-
-q
-离开gdb(quit)
+����ע�� mode=dll ����libcurlλ��̬���ӿ⣬����static ���ǰ�libcurl����λ��̬�� 
+VC=10 ����ʹ�õ���VC2010
+WITH_DEVEL=C:\openssl_lib ��ʾ�õ���������������Ŀ¼�����������Ѿ���openssl�����õĿ���������װ����Ŀ¼
+WITH_SSL=static ,����ʹ��libssl�� �Ǿ�̬��
+ENABLE_SSPI=no ENABLE_IPV6=no������SSPI��ipV6���ܣ�
+�Ե�Ƭ�̾ͱ����ɹ��ˡ�
 </code></pre>
       
 
@@ -288,7 +250,7 @@ q
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/20/GDB调试器的使用/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/30/vs2015环境编译openssl/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -302,18 +264,9 @@ q
   
 <nav id="article-nav">
   
-    <a href="/2017/03/20/Unix C的一般处理/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Unix C程序中的错误处理
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/19/gcc简单教程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">gcc简单教程</div>
+    <a href="/2017/03/26/信号/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">信号</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -327,7 +280,7 @@ q
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="GDB调试器的使用" data-title="GDB调试器的使用" data-url="http://yoursite.com/2017/03/20/GDB调试器的使用/"></div>
+	<div class="ds-thread" data-thread-key="vs2015环境编译openssl" data-title="" data-url="http://yoursite.com/2017/03/30/vs2015环境编译openssl/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

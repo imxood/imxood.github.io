@@ -20,7 +20,7 @@ date:2017/03/301, 1&amp;gt; ��Ҫ���ص��ļ�:    curl-7.53.1.zip, 
 date:2017/03/301, 1&amp;gt; ��Ҫ���ص��ļ�:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
    2&amp;gt; VS2015IDE, NASM������
 2, ʹ�û�����NASM����OpenSSL��:    ��ѹopenssl-1.0.2j.tar.gz��D:">
-<meta property="og:updated_time" content="2017-03-30T17:10:23.168Z">
+<meta property="og:updated_time" content="2017-03-30T17:24:20.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分享知识">
 <meta name="twitter:description" content="title:vs2015��������libcurl
@@ -171,7 +171,12 @@ WITH_DEVEL=C:\openssl_lib ��ʾ�õ��������������
 WITH_SSL=static ,����ʹ��libssl�� �Ǿ�̬��
 ENABLE_SSPI=no ENABLE_IPV6=no������SSPI��ipV6���ܣ�
 �Ե�Ƭ�̾ͱ����ɹ��ˡ�
-</code></pre>
+</code></pre><p>����,�����ı�����û��������,���е�ʱ����������:<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_easy_cleanup<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_easy_getinfo<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_easy_setopt<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_slist_append<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_easy_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_global_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: �޷��������ⲿ���� <strong>imp</strong>curl_easy_perform</p>
+<pre><code>�����취��:
+    ����Ԥ����ѡ���Ŀ-&gt;����-&gt;c/c++ -&gt;Ԥ������-&gt;Ԥ������������һ��:BUILDING_LIBCURL
+</code></pre><p>�ܽ���:<br>    <a href="http://www.cnblogs.com/openiris/p/3812443.html" target="_blank" rel="external">http://www.cnblogs.com/openiris/p/3812443.html</a><br>    <a href="http://blog.csdn.net/varding/article/details/5329023" target="_blank" rel="external">http://blog.csdn.net/varding/article/details/5329023</a></p>
+<p>ѧϰ��һ����Ȥ.</p>
+
       
 
       

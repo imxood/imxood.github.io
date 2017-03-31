@@ -6,27 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>分享知识</title>
+  <title>vs2015环境编译libcurl | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title:vs2015环境编译libcurl
-date:2017/03/301, 1&amp;gt; 需要下载的文件:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
-   2&amp;gt; VS2015IDE, NASM汇编器
-2, 使用汇编器NASM编译OpenSSL库:    解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\De">
+  <meta name="description" content="1&amp;gt; 需要下载的文件: curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+2&amp;gt; VS2015IDE, NASM汇编器
+
+使用汇编器NASM编译OpenSSL库: 解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\Develop\openssl-1.0.2j,我需要的是静态库,执行下面三条命令: perl Configur">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分享知识">
+<meta property="og:title" content="vs2015环境编译libcurl">
 <meta property="og:url" content="http://yoursite.com/2017/03/30/vs2015环境编译openssl/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="title:vs2015环境编译libcurl
-date:2017/03/301, 1&amp;gt; 需要下载的文件:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
-   2&amp;gt; VS2015IDE, NASM汇编器
-2, 使用汇编器NASM编译OpenSSL库:    解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\De">
-<meta property="og:updated_time" content="2017-03-31T00:46:54.618Z">
+<meta property="og:description" content="1&amp;gt; 需要下载的文件: curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+2&amp;gt; VS2015IDE, NASM汇编器
+
+使用汇编器NASM编译OpenSSL库: 解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\Develop\openssl-1.0.2j,我需要的是静态库,执行下面三条命令: perl Configur">
+<meta property="og:updated_time" content="2017-03-31T08:49:40.329Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分享知识">
-<meta name="twitter:description" content="title:vs2015环境编译libcurl
-date:2017/03/301, 1&amp;gt; 需要下载的文件:    curl-7.53.1.zip, openssl-1.0.2j.tar.gz
-   2&amp;gt; VS2015IDE, NASM汇编器
-2, 使用汇编器NASM编译OpenSSL库:    解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\De">
+<meta name="twitter:title" content="vs2015环境编译libcurl">
+<meta name="twitter:description" content="1&amp;gt; 需要下载的文件: curl-7.53.1.zip, openssl-1.0.2j.tar.gz
+2&amp;gt; VS2015IDE, NASM汇编器
+
+使用汇编器NASM编译OpenSSL库: 解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\Develop\openssl-1.0.2j,我需要的是静态库,执行下面三条命令: perl Configur">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -153,25 +153,35 @@ date:2017/03/301, 1&amp;gt; 需要下载的文件:    curl-7.53.1.zip, openssl-1
             <article id="post-vs2015环境编译openssl" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vs2015环境编译libcurl
+    </h1>
+  
+
+        
+        <a href="/2017/03/30/vs2015环境编译openssl/" class="archive-article-date">
+  	<time datetime="2017-03-29T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>title:vs2015环境编译libcurl</p>
-<h2 id="date-2017-03-30"><a href="#date-2017-03-30" class="headerlink" title="date:2017/03/30"></a>date:2017/03/30</h2><p>1, 1&gt; 需要下载的文件:<br>    curl-7.53.1.zip, openssl-1.0.2j.tar.gz</p>
-<p>   2&gt; VS2015IDE, NASM汇编器</p>
-<p>2, 使用汇编器NASM编译OpenSSL库:<br>    解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\Develop\openssl-1.0.2j,我需要的是静态库,执行下面三条命令:<br>    perl Configure VC-WIN32 –prefix=openssl_lib<br>    nmake -f ms\nt.mak<br>    nmake -f ms\nt.mak install<br>    大概等待十分钟,在当前目录下会生成所需要的openssl_lib文件夹</p>
-<p>3, 编译libcurl</p>
-<pre><code>解压curl-7.53.1.zip到D:\Develop, cd D:\Develop\curl-7.53.1\winbuild,
-查看帮助: nmake /f Makefile.vc,
-开始编译: nmake /f Makefile.vc mode=static VC=14 WITH_DEVEL=D:\Develop\openssl-1.0.2j\openssl_lib WITH_SSL=static ENABLE_SSPI=no ENABLE_IPV6=no
-
-命令注释 mode=dll 编译libcurl位动态链接库，如果static 就是把libcurl编译位静态库 
-VC=10 代表使用的是VC2010
-WITH_DEVEL=C:\openssl_lib 表示用到第三方开发包的目录，本例上面已经将openssl编译好的开发包，安装到此目录
-WITH_SSL=static ,代表使用libssl库 是静态库
-ENABLE_SSPI=no ENABLE_IPV6=no（禁用SSPI，ipV6功能）
-稍等片刻就编译成功了。
-</code></pre><p>不过,上面的编译是没有问题的,运行的时候会有问题:<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_cleanup<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_getinfo<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_setopt<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_slist_append<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_global_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_perform</p>
+        <ol>
+<li><p>1&gt; 需要下载的文件:<br> curl-7.53.1.zip, openssl-1.0.2j.tar.gz</p>
+<p>2&gt; VS2015IDE, NASM汇编器</p>
+</li>
+<li><p>使用汇编器NASM编译OpenSSL库:<br> 解压openssl-1.0.2j.tar.gz到D:\Develop\, cd D:\Develop\openssl-1.0.2j,我需要的是静态库,执行下面三条命令:<br> perl Configure VC-WIN32 –prefix=openssl_lib<br> nmake -f ms\nt.mak<br> nmake -f ms\nt.mak install<br> 大概等待十分钟,在当前目录下会生成所需要的openssl_lib文件夹</p>
+</li>
+<li><p>编译libcurl</p>
+<p> 解压curl-7.53.1.zip到D:\Develop, cd D:\Develop\curl-7.53.1\winbuild,<br> 查看帮助: nmake /f Makefile.vc,<br> 开始编译: nmake /f Makefile.vc mode=static VC=14 WITH_DEVEL=D:\Develop\openssl-1.0.2j\openssl_lib WITH_SSL=static ENABLE_SSPI=no ENABLE_IPV6=no</p>
+<p> 命令注释 mode=dll 编译libcurl位动态链接库，如果static 就是把libcurl编译位静态库<br> VC=10 代表使用的是VC2010<br> WITH_DEVEL=C:\openssl_lib 表示用到第三方开发包的目录，本例上面已经将openssl编译好的开发包，安装到此目录<br> WITH_SSL=static ,代表使用libssl库 是静态库<br> ENABLE_SSPI=no ENABLE_IPV6=no（禁用SSPI，ipV6功能）<br> 稍等片刻就编译成功了。</p>
+</li>
+</ol>
+<p>不过,上面的编译是没有问题的,运行的时候会有问题:<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_cleanup<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_getinfo<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_setopt<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_slist_append<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_global_init<br>    1&gt;HttpWebRequest.obj : error LNK2001: 无法解析的外部符号 <strong>imp</strong>curl_easy_perform</p>
 <pre><code>解决办法是:
     加入预编译选项：项目-&gt;属性-&gt;c/c++ -&gt;预处理器-&gt;预处理器，添加一条:BUILDING_LIBCURL
 </code></pre><p>总结自:<br>    <a href="http://www.cnblogs.com/openiris/p/3812443.html" target="_blank" rel="external">http://www.cnblogs.com/openiris/p/3812443.html</a><br>    <a href="http://blog.csdn.net/varding/article/details/5329023" target="_blank" rel="external">http://blog.csdn.net/varding/article/details/5329023</a></p>
@@ -285,7 +295,7 @@ ENABLE_SSPI=no ENABLE_IPV6=no（禁用SSPI，ipV6功能）
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="vs2015环境编译openssl" data-title="" data-url="http://yoursite.com/2017/03/30/vs2015环境编译openssl/"></div>
+	<div class="ds-thread" data-thread-key="vs2015环境编译openssl" data-title="vs2015环境编译libcurl" data-url="http://yoursite.com/2017/03/30/vs2015环境编译openssl/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

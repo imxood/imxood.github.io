@@ -360,22 +360,23 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
 <ol>
-<li><p>“jmp short 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移</p>
+<li><p>根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移</p>
 </li>
-<li><p>“jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移</p>
+<li><p>根据位移进行转移:</p>
+<pre><code>&quot;jmp near ptr 标号&quot;: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移
+&quot;jmp far ptr 标号&quot;: 段间转移(源转移)
+</code></pre><p> (CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址<br> far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
 </li>
-<li><p>“jmp far ptr 标号”: 段间转移(源转移)<br> (CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址<br> far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
+<li><p>地址在寄存器中的转移: “jmp 16位reg”,(IP)=    (16位reg)</p>
 </li>
-<li><p>“jmp 16位reg”: (IP)=    (16位reg)</p>
-</li>
-<li><p>“jmp word ptr 内存单元地址(段内转移)”: 从内存单元地址处存放着一个字,是转移的目的偏移地址</p>
+<li><p>地址在内存地址中的转移: </p>
+<p> “jmp word ptr 内存单元地址(段内转移)”: 从内存单元地址处存放着一个字,是转移的目的偏移地址</p>
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mov ax,0123h</div><div class="line">mov ds:[0],ax</div><div class="line">jmp word ptr ds:[0]		;执行后</div></pre></td></tr></table></figure>
-<ol>
-<li>“jmp dword ptr 内存单元地址(段间转移)”: 高地址处的字是目的段地址,低地址处的字是目的偏移地址<br> (CS)=(内存单元地址+2)        (IP)=(内存单元地址)</li>
-</ol>
-
+<pre><code>&quot;jmp dword ptr 内存单元地址(段间转移)&quot;: 高地址处的字是目的段地址,低地址处的字是目的偏移地址
+(CS)=(内存单元地址+2)        (IP)=(内存单元地址)
+</code></pre>
       
 
       

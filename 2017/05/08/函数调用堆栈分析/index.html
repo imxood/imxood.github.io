@@ -6,30 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>X86汇编 转移指令 | 分享知识</title>
+  <title>分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="操作符offset: 取得标号的偏移地址
+  <meta name="description" content="函数调用堆栈分析
+代码:
+#include int f1(){    int temp = 3;    printf(“&amp;amp;temp:%p”, &amp;amp;temp);    printf(“ temp:%d”, temp);    return temp;}int main (void) {
+int a = f1();
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
+printf(&amp;quot;&amp;amp;a:%p&amp;quot;, &amp;amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="X86汇编 转移指令">
-<meta property="og:url" content="http://yoursite.com/2017/03/22/X86汇编 转移指令/index.html">
+<meta property="og:title" content="分享知识">
+<meta property="og:url" content="http://yoursite.com/2017/05/08/函数调用堆栈分析/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="操作符offset: 取得标号的偏移地址
+<meta property="og:description" content="函数调用堆栈分析
+代码:
+#include int f1(){    int temp = 3;    printf(“&amp;amp;temp:%p”, &amp;amp;temp);    printf(“ temp:%d”, temp);    return temp;}int main (void) {
+int a = f1();
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
-<meta property="og:updated_time" content="2017-04-11T11:35:52.510Z">
+printf(&amp;quot;&amp;amp;a:%p&amp;quot;, &amp;amp;">
+<meta property="og:updated_time" content="2017-05-08T03:29:00.234Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="X86汇编 转移指令">
-<meta name="twitter:description" content="操作符offset: 取得标号的偏移地址
+<meta name="twitter:title" content="分享知识">
+<meta name="twitter:description" content="函数调用堆栈分析
+代码:
+#include int f1(){    int temp = 3;    printf(“&amp;amp;temp:%p”, &amp;amp;temp);    printf(“ temp:%d”, temp);    return temp;}int main (void) {
+int a = f1();
 
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
+printf(&amp;quot;&amp;amp;a:%p&amp;quot;, &amp;amp;">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -153,43 +156,30 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-X86汇编 转移指令" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-函数调用堆栈分析" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      X86汇编 转移指令
-    </h1>
-  
-
-        
-        <a href="/2017/03/22/X86汇编 转移指令/" class="archive-article-date">
-  	<time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
-</a>
-        
-      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li>操作符offset: 取得标号的偏移地址</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
-<ol>
-<li><p>根据位移进行转移:<br> jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移<br> jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移<br> jmp far ptr 标号, 段间转移(源转移),(CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址,far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
-</li>
-<li><p>地址在寄存器中的转移: “jmp 16位reg”,(IP)=    (16位reg)</p>
-</li>
-<li><p>地址在内存地址中的转移: </p>
-<p> “jmp word ptr 内存单元地址(段内转移)”: 从内存单元地址处存放着一个字,是转移的目的偏移地址</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mov ax,0123h</div><div class="line">mov ds:[0],ax</div><div class="line">jmp word ptr ds:[0]		;执行后</div></pre></td></tr></table></figure>
-<pre><code>&quot;jmp dword ptr 内存单元地址(段间转移)&quot;, 高地址处的字是目的段地址,低地址处的字是目的偏移地址
-(CS)=(内存单元地址+2)        (IP)=(内存单元地址)
-</code></pre>
+        <p>函数调用堆栈分析</p>
+<p>代码:</p>
+<p>#include <stdio.h><br>int f1(){<br>    int temp = 3;<br>    printf(“&amp;temp:%p”, &amp;temp);<br>    printf(“ temp:%d”, temp);<br>    return temp;<br>}<br>int main (void) {</stdio.h></p>
+<pre><code>int a = f1();
+
+printf(&quot;&amp;a:%p&quot;, &amp;a);
+printf(&quot; a:%d&quot;, a);
+
+return 0;
+</code></pre><p>}</p>
+<p>下面我们来分析函数调用的堆栈:</p>
+<p>分析前要了解下什么是ebp,ebp是函数的栈底,也就是刚进入函数时的栈地址,当进入一个函数时,会执行<br>push ebp        ;保存前一个函数的ebp,便于当前函数执行完,恢复前一个函数的栈<br>mov ebp,esp;    ;设置当前函数的ebp</p>
+<p>C语言中的定义变量,在汇编中的表现形式是栈顶esp的移动:<br>比如:int a; –&gt; sub esp,4<br>赋值:a=1; –&gt; mov dword ptr [ebp-4],1<br>使用因为esp是随时改变的,所以通过栈底ebp-NUM的形式去访问地址</p>
+<p>先看看主函数:<br>11:   int main (void) {<br>00406F70   push        ebp                ;<br>00406F71   mov         ebp,esp<br>00406F73   sub         esp,44h<br>00406F76   push        ebx<br>00406F77   push        esi<br>00406F78   push        edi<br>00406F79   lea         edi,[ebp-44h]<br>00406F7C   mov         ecx,11h<br>00406F81   mov         eax,0CCCCCCCCh<br>00406F86   rep stos    dword ptr [edi]<br>12:<br>13:       int a = f1();<br>00406F88   call        @ILT+585(_f1) (0040124e)<br>00406F8D   mov         dword ptr [ebp-4],eax<br>14:<br>15:       printf(“&amp;a:%p”, &amp;a);<br>00406F90   lea         eax,[ebp-4]<br>00406F93   push        eax<br>00406F94   push        offset string “&amp;a:%p” (0046f094)<br>00406F99   call        printf (00422050)<br>00406F9E   add         esp,8<br>16:       printf(“ a:%d”, a);<br>00406FA1   mov         ecx,dword ptr [ebp-4]<br>00406FA4   push        ecx<br>00406FA5   push        offset string “ a:%d” (0046f08c)<br>00406FAA   call        printf (00422050)<br>00406FAF   add         esp,8<br>17:<br>18:       return 0;<br>00406FB2   xor         eax,eax<br>19:   }<br>00406FB4   pop         edi<br>00406FB5   pop         esi<br>00406FB6   pop         ebx<br>00406FB7   add         esp,44h<br>00406FBA   cmp         ebp,esp<br>00406FBC   call        __chkesp (00420c60)<br>00406FC1   mov         esp,ebp<br>00406FC3   pop         ebp<br>00406FC4   ret</p>
+<p>下面分析:<br>00406F73~00406F86:保存寄存器的状态,</p>
+<p>再是调用函数:<br>1:    #include <stdio.h><br>2:<br>3:    int f1(){<br>00406F00   push        ebp<br>00406F01   mov         ebp,esp<br>00406F03   sub         esp,44h<br>00406F06   push        ebx<br>00406F07   push        esi<br>00406F08   push        edi<br>00406F09   lea         edi,[ebp-44h]<br>00406F0C   mov         ecx,11h<br>00406F11   mov         eax,0CCCCCCCCh<br>00406F16   rep stos    dword ptr [edi]<br>4:        int temp = 3;<br>00406F18   mov         dword ptr [ebp-4],3<br>5:        printf(“&amp;temp:%p”, &amp;temp);<br>00406F1F   lea         eax,[ebp-4]<br>00406F22   push        eax<br>00406F23   push        offset string “&amp;temp:%p” (0046f080)<br>00406F28   call        printf (00422050)<br>00406F2D   add         esp,8<br>6:        printf(“ temp:%d”, temp);<br>00406F30   mov         ecx,dword ptr [ebp-4]<br>00406F33   push        ecx<br>00406F34   push        offset string “ temp:%d” (0046f074)<br>00406F39   call        printf (00422050)<br>00406F3E   add         esp,8<br>7:        return temp;<br>00406F41   mov         eax,dword ptr [ebp-4]<br>8:    }<br>00406F44   pop         edi<br>00406F45   pop         esi<br>00406F46   pop         ebx<br>00406F47   add         esp,44h<br>00406F4A   cmp         ebp,esp<br>00406F4C   call        __chkesp (00420c60)<br>00406F51   mov         esp,ebp<br>00406F53   pop         ebp<br>00406F54   ret</stdio.h></p>
+<p>这中间有个<strong>chkesp的调用:
+</strong>chkesp:<br>00420C60   jne         <strong>chkesp+3 (00420c63)<br>00420C62   ret<br>00420C63   push        ebp<br>00420C64   mov         ebp,esp<br>00420C66   sub         esp,0<br>00420C69   push        eax<br>00420C6A   push        edx<br>00420C6B   push        ebx<br>00420C6C   push        esi<br>00420C6D   push        edi<br>00420C6E   push        offset string “The value of ESP was not properl”… (0046f870)<br>00420C73   push        offset string “” (0046f19c)<br>00420C78   push        2Ah<br>00420C7A   push        offset string “i386\chkesp.c” (0046f860)<br>00420C7F   push        1<br>00420C81   call        _CrtDbgReport (00426550)<br>00420C86   add         esp,14h<br>00420C89   cmp         eax,1<br>00420C8C   jne         </strong>chkesp+2Fh (00420c8f)<br>00420C8E   int         3<br>00420C8F   pop         edi<br>00420C90   pop         esi<br>00420C91   pop         ebx<br>00420C92   pop         edx<br>00420C93   pop         eax<br>00420C94   mov         esp,ebp<br>00420C96   pop         ebp<br>00420C97   ret</p>
+
       
 
       
@@ -268,7 +258,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/22/X86汇编 转移指令/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/05/08/函数调用堆栈分析/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -282,18 +272,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/24/Linux 程序与进程/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Linux 程序与进程
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/21/进程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">进程</div>
+    <a href="/2017/04/12/Kali 201602编译linux0.11/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Kali 201602编译linux0.11</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -307,7 +288,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="X86汇编 转移指令" data-title="X86汇编 转移指令" data-url="http://yoursite.com/2017/03/22/X86汇编 转移指令/"></div>
+	<div class="ds-thread" data-thread-key="函数调用堆栈分析" data-title="" data-url="http://yoursite.com/2017/05/08/函数调用堆栈分析/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

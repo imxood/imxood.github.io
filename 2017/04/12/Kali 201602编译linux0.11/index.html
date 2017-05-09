@@ -6,30 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>X86汇编 转移指令 | 分享知识</title>
+  <title>Kali 201602编译linux0.11 | 分享知识</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="操作符offset: 取得标号的偏移地址
-
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
+  <meta name="description" content="卸载默认的gcc:    apt autoremove gcc
+安装gcc4.4:    换源,在sources.list文件中,先注释掉原来的源,添加ubuntu12.04的源,    apt-get clean &amp;amp; apt-get update,    apt-get install gcc-4.4    安装好了以后,发现gcc -v命令无效,于是,cd /usr/bin,看了下,存">
 <meta property="og:type" content="article">
-<meta property="og:title" content="X86汇编 转移指令">
-<meta property="og:url" content="http://yoursite.com/2017/03/22/X86汇编 转移指令/index.html">
+<meta property="og:title" content="Kali 201602编译linux0.11">
+<meta property="og:url" content="http://yoursite.com/2017/04/12/Kali 201602编译linux0.11/index.html">
 <meta property="og:site_name" content="分享知识">
-<meta property="og:description" content="操作符offset: 取得标号的偏移地址
-
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
-<meta property="og:updated_time" content="2017-04-11T11:35:52.510Z">
+<meta property="og:description" content="卸载默认的gcc:    apt autoremove gcc
+安装gcc4.4:    换源,在sources.list文件中,先注释掉原来的源,添加ubuntu12.04的源,    apt-get clean &amp;amp; apt-get update,    apt-get install gcc-4.4    安装好了以后,发现gcc -v命令无效,于是,cd /usr/bin,看了下,存">
+<meta property="og:updated_time" content="2017-04-12T04:41:35.592Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="X86汇编 转移指令">
-<meta name="twitter:description" content="操作符offset: 取得标号的偏移地址
-
-1234start:	mov ax,offset start		;相当于mov ax,0s:	mov ax,offset s			;相当于mov ax,3
-
-根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移 jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP">
+<meta name="twitter:title" content="Kali 201602编译linux0.11">
+<meta name="twitter:description" content="卸载默认的gcc:    apt autoremove gcc
+安装gcc4.4:    换源,在sources.list文件中,先注释掉原来的源,添加ubuntu12.04的源,    apt-get clean &amp;amp; apt-get update,    apt-get install gcc-4.4    安装好了以后,发现gcc -v命令无效,于是,cd /usr/bin,看了下,存">
   
     <link rel="alternative" href="/atom.xml" title="分享知识" type="application/atom+xml">
   
@@ -153,42 +144,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-X86汇编 转移指令" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Kali 201602编译linux0.11" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      X86汇编 转移指令
+      Kali 201602编译linux0.11
     </h1>
   
 
         
-        <a href="/2017/03/22/X86汇编 转移指令/" class="archive-article-date">
-  	<time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-22</time>
+        <a href="/2017/04/12/Kali 201602编译linux0.11/" class="archive-article-date">
+  	<time datetime="2017-04-11T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li>操作符offset: 取得标号的偏移地址</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
-<ol>
-<li><p>根据位移进行转移:<br> jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移<br> jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移<br> jmp far ptr 标号, 段间转移(源转移),(CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址,far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
-</li>
-<li><p>地址在寄存器中的转移: “jmp 16位reg”,(IP)=    (16位reg)</p>
-</li>
-<li><p>地址在内存地址中的转移: </p>
-<p> “jmp word ptr 内存单元地址(段内转移)”: 从内存单元地址处存放着一个字,是转移的目的偏移地址</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mov ax,0123h</div><div class="line">mov ds:[0],ax</div><div class="line">jmp word ptr ds:[0]		;执行后</div></pre></td></tr></table></figure>
-<pre><code>&quot;jmp dword ptr 内存单元地址(段间转移)&quot;, 高地址处的字是目的段地址,低地址处的字是目的偏移地址
-(CS)=(内存单元地址+2)        (IP)=(内存单元地址)
+        <p>卸载默认的gcc:<br>    apt autoremove gcc</p>
+<p>安装gcc4.4:<br>    换源,在sources.list文件中,先注释掉原来的源,添加ubuntu12.04的源,<br>    apt-get clean &amp; apt-get update,<br>    apt-get install gcc-4.4<br>    安装好了以后,发现gcc -v命令无效,于是,cd /usr/bin,看了下,存在gcc-4.4,执行gcc-4.4 -v,发现gcc4.4安装成功了,<br>    于是设置软连接:ln -s /usr/bin/gcc-4.4 /usr/bin/gcc<br>    再使用:gcc -v,就一切正常了</p>
+<pre><code>git clone https://github.com/imxood/linux-0.11.git
+cd linux-0.11
+
+make,报一下错误:    
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">gcc -I./include -traditional -c boot/head.s</div><div class="line">boot/head.s: Assembler messages:</div><div class="line">boot/head.s:45: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:49: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:61: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:63: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:138: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:139: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:140: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:141: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:142: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:153: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:154: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:155: 错误：invalid instruction suffix for `push&apos;</div><div class="line">...</div></pre></td></tr></table></figure>
+<pre><code>在head.s中,.text上一行添加一行:.code32
+make
+报错:
+eprecated. Use `-mtune=&apos; or &apos;-march=&apos; instead. init/main.c:1: error: CPU you selected does not support x86-64 instruction set
+替换linux-0.11文件夹下所有的mcpu为march,共8个
+
+make
+报错:
+CPU you selected does not support x86-64 instruction set
+
+在项目根路径下的Makefile中添加-m32,
+CC    =gcc -m32 ...
+
+include/unistd.h:207: warning: function return types not compatible due to ‘volatile’
+解决方法:
+修改 init/main.c 文件
+
+将 static inline _syscall0(int,fork) 修改为 inline _syscall0(int,fork)
+static inline _syscall0(int,pause) 修改为 inline _syscall0(int,pause)
+static inline _syscall1(int,setup,void *,BIOS) 修改为 inline _syscall1(int,setup,void *,BIOS)
+static inline _syscall0(int,sync) 修改为 inline _syscall0(int,sync)
+
+make
+报错:
+-r -o kernel.o sched.o system_call.o traps.o asm.o fork.o panic.o printk.o vsprintf.o sys.o exit.o signal.o mktime.o
+ld: 并不支持从格式 elf32-i386 (sched.o) 到格式 elf64-x86-64 (kernel.o) 的重寻址链结
+给ld命令添加
 </code></pre>
       
 
@@ -268,7 +277,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/03/22/X86汇编 转移指令/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/04/12/Kali 201602编译linux0.11/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -282,18 +291,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/24/Linux 程序与进程/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/05/08/函数调用堆栈分析/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Linux 程序与进程
+          (no title)
         
       </div>
     </a>
   
   
-    <a href="/2017/03/21/进程/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">进程</div>
+    <a href="/2017/04/12/我的docker学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">我的docker学习笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -307,7 +316,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="X86汇编 转移指令" data-title="X86汇编 转移指令" data-url="http://yoursite.com/2017/03/22/X86汇编 转移指令/"></div>
+	<div class="ds-thread" data-thread-key="Kali 201602编译linux0.11" data-title="Kali 201602编译linux0.11" data-url="http://yoursite.com/2017/04/12/Kali 201602编译linux0.11/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

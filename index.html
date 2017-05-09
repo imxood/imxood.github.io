@@ -139,6 +139,198 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-函数调用堆栈分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>函数调用堆栈分析</p>
+<p>代码:</p>
+<p>#include <stdio.h><br>int f1(){<br>    int temp = 3;<br>    printf(“&amp;temp:%p”, &amp;temp);<br>    printf(“ temp:%d”, temp);<br>    return temp;<br>}<br>int main (void) {</stdio.h></p>
+<pre><code>int a = f1();
+
+printf(&quot;&amp;a:%p&quot;, &amp;a);
+printf(&quot; a:%d&quot;, a);
+
+return 0;
+</code></pre><p>}</p>
+<p>下面我们来分析函数调用的堆栈:</p>
+<p>分析前要了解下什么是ebp,ebp是函数的栈底,也就是刚进入函数时的栈地址,当进入一个函数时,会执行<br>push ebp        ;保存前一个函数的ebp,便于当前函数执行完,恢复前一个函数的栈<br>mov ebp,esp;    ;设置当前函数的ebp</p>
+<p>C语言中的定义变量,在汇编中的表现形式是栈顶esp的移动:<br>比如:int a; –&gt; sub esp,4<br>赋值:a=1; –&gt; mov dword ptr [ebp-4],1<br>使用因为esp是随时改变的,所以通过栈底ebp-NUM的形式去访问地址</p>
+<p>先看看主函数:<br>11:   int main (void) {<br>00406F70   push        ebp                ;<br>00406F71   mov         ebp,esp<br>00406F73   sub         esp,44h<br>00406F76   push        ebx<br>00406F77   push        esi<br>00406F78   push        edi<br>00406F79   lea         edi,[ebp-44h]<br>00406F7C   mov         ecx,11h<br>00406F81   mov         eax,0CCCCCCCCh<br>00406F86   rep stos    dword ptr [edi]<br>12:<br>13:       int a = f1();<br>00406F88   call        @ILT+585(_f1) (0040124e)<br>00406F8D   mov         dword ptr [ebp-4],eax<br>14:<br>15:       printf(“&amp;a:%p”, &amp;a);<br>00406F90   lea         eax,[ebp-4]<br>00406F93   push        eax<br>00406F94   push        offset string “&amp;a:%p” (0046f094)<br>00406F99   call        printf (00422050)<br>00406F9E   add         esp,8<br>16:       printf(“ a:%d”, a);<br>00406FA1   mov         ecx,dword ptr [ebp-4]<br>00406FA4   push        ecx<br>00406FA5   push        offset string “ a:%d” (0046f08c)<br>00406FAA   call        printf (00422050)<br>00406FAF   add         esp,8<br>17:<br>18:       return 0;<br>00406FB2   xor         eax,eax<br>19:   }<br>00406FB4   pop         edi<br>00406FB5   pop         esi<br>00406FB6   pop         ebx<br>00406FB7   add         esp,44h<br>00406FBA   cmp         ebp,esp<br>00406FBC   call        __chkesp (00420c60)<br>00406FC1   mov         esp,ebp<br>00406FC3   pop         ebp<br>00406FC4   ret</p>
+<p>下面分析:<br>00406F73~00406F86:保存寄存器的状态,</p>
+<p>再是调用函数:<br>1:    #include <stdio.h><br>2:<br>3:    int f1(){<br>00406F00   push        ebp<br>00406F01   mov         ebp,esp<br>00406F03   sub         esp,44h<br>00406F06   push        ebx<br>00406F07   push        esi<br>00406F08   push        edi<br>00406F09   lea         edi,[ebp-44h]<br>00406F0C   mov         ecx,11h<br>00406F11   mov         eax,0CCCCCCCCh<br>00406F16   rep stos    dword ptr [edi]<br>4:        int temp = 3;<br>00406F18   mov         dword ptr [ebp-4],3<br>5:        printf(“&amp;temp:%p”, &amp;temp);<br>00406F1F   lea         eax,[ebp-4]<br>00406F22   push        eax<br>00406F23   push        offset string “&amp;temp:%p” (0046f080)<br>00406F28   call        printf (00422050)<br>00406F2D   add         esp,8<br>6:        printf(“ temp:%d”, temp);<br>00406F30   mov         ecx,dword ptr [ebp-4]<br>00406F33   push        ecx<br>00406F34   push        offset string “ temp:%d” (0046f074)<br>00406F39   call        printf (00422050)<br>00406F3E   add         esp,8<br>7:        return temp;<br>00406F41   mov         eax,dword ptr [ebp-4]<br>8:    }<br>00406F44   pop         edi<br>00406F45   pop         esi<br>00406F46   pop         ebx<br>00406F47   add         esp,44h<br>00406F4A   cmp         ebp,esp<br>00406F4C   call        __chkesp (00420c60)<br>00406F51   mov         esp,ebp<br>00406F53   pop         ebp<br>00406F54   ret</stdio.h></p>
+<p>这中间有个<strong>chkesp的调用:
+</strong>chkesp:<br>00420C60   jne         <strong>chkesp+3 (00420c63)<br>00420C62   ret<br>00420C63   push        ebp<br>00420C64   mov         ebp,esp<br>00420C66   sub         esp,0<br>00420C69   push        eax<br>00420C6A   push        edx<br>00420C6B   push        ebx<br>00420C6C   push        esi<br>00420C6D   push        edi<br>00420C6E   push        offset string “The value of ESP was not properl”… (0046f870)<br>00420C73   push        offset string “” (0046f19c)<br>00420C78   push        2Ah<br>00420C7A   push        offset string “i386\chkesp.c” (0046f860)<br>00420C7F   push        1<br>00420C81   call        _CrtDbgReport (00426550)<br>00420C86   add         esp,14h<br>00420C89   cmp         eax,1<br>00420C8C   jne         </strong>chkesp+2Fh (00420c8f)<br>00420C8E   int         3<br>00420C8F   pop         edi<br>00420C90   pop         esi<br>00420C91   pop         ebx<br>00420C92   pop         edx<br>00420C93   pop         eax<br>00420C94   mov         esp,ebp<br>00420C96   pop         ebp<br>00420C97   ret</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/08/函数调用堆栈分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-Kali 201602编译linux0.11" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/12/Kali 201602编译linux0.11/">Kali 201602编译linux0.11</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/12/Kali 201602编译linux0.11/" class="archive-article-date">
+  	<time datetime="2017-04-11T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>卸载默认的gcc:<br>    apt autoremove gcc</p>
+<p>安装gcc4.4:<br>    换源,在sources.list文件中,先注释掉原来的源,添加ubuntu12.04的源,<br>    apt-get clean &amp; apt-get update,<br>    apt-get install gcc-4.4<br>    安装好了以后,发现gcc -v命令无效,于是,cd /usr/bin,看了下,存在gcc-4.4,执行gcc-4.4 -v,发现gcc4.4安装成功了,<br>    于是设置软连接:ln -s /usr/bin/gcc-4.4 /usr/bin/gcc<br>    再使用:gcc -v,就一切正常了</p>
+<pre><code>git clone https://github.com/imxood/linux-0.11.git
+cd linux-0.11
+
+make,报一下错误:    
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">gcc -I./include -traditional -c boot/head.s</div><div class="line">boot/head.s: Assembler messages:</div><div class="line">boot/head.s:45: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:49: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:61: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:63: 错误：unsupported instruction `mov&apos;</div><div class="line">boot/head.s:138: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:139: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:140: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:141: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:142: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:153: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:154: 错误：invalid instruction suffix for `push&apos;</div><div class="line">boot/head.s:155: 错误：invalid instruction suffix for `push&apos;</div><div class="line">...</div></pre></td></tr></table></figure>
+<pre><code>在head.s中,.text上一行添加一行:.code32
+make
+报错:
+eprecated. Use `-mtune=&apos; or &apos;-march=&apos; instead. init/main.c:1: error: CPU you selected does not support x86-64 instruction set
+替换linux-0.11文件夹下所有的mcpu为march,共8个
+
+make
+报错:
+CPU you selected does not support x86-64 instruction set
+
+在项目根路径下的Makefile中添加-m32,
+CC    =gcc -m32 ...
+
+include/unistd.h:207: warning: function return types not compatible due to ‘volatile’
+解决方法:
+修改 init/main.c 文件
+
+将 static inline _syscall0(int,fork) 修改为 inline _syscall0(int,fork)
+static inline _syscall0(int,pause) 修改为 inline _syscall0(int,pause)
+static inline _syscall1(int,setup,void *,BIOS) 修改为 inline _syscall1(int,setup,void *,BIOS)
+static inline _syscall0(int,sync) 修改为 inline _syscall0(int,sync)
+
+make
+报错:
+-r -o kernel.o sched.o system_call.o traps.o asm.o fork.o panic.o printk.o vsprintf.o sys.o exit.o signal.o mktime.o
+ld: 并不支持从格式 elf32-i386 (sched.o) 到格式 elf64-x86-64 (kernel.o) 的重寻址链结
+给ld命令添加
+</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/12/Kali 201602编译linux0.11/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-我的docker学习笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/12/我的docker学习笔记/">我的docker学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/12/我的docker学习笔记/" class="archive-article-date">
+  	<time datetime="2017-04-11T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>查找指定container:</p>
+<p>我想用docker实现这样的功能:</p>
+<p>配置一个Linux 0.11的学习环境,VNCServer + noVNC,并在宿主机中建一个目录保存我的数据</p>
+<p>下面正文开始了,</p>
+<p>FROM ubuntu:trusty</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/12/我的docker学习笔记/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-vs2015环境编译openssl" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -360,10 +552,7 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start:</div><div class="line">	mov ax,offset start		;相当于mov ax,0</div><div class="line">s:</div><div class="line">	mov ax,offset s			;相当于mov ax,3</div></pre></td></tr></table></figure>
 <ol>
-<li><p>根据位移进行转移: jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移</p>
-</li>
-<li><p>根据位移进行转移:<br> “jmp near ptr 标号”: 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移<br> “jmp far ptr 标号”: 段间转移(源转移)</p>
-<p> (CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址<br> far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
+<li><p>根据位移进行转移:<br> jmp short 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+8位位移<br> jmp near ptr 标号, 转到标号处执行指令(段内短转移),(IP)=(IP)+16位位移<br> jmp far ptr 标号, 段间转移(源转移),(CS)=标号所在段的段地址, (IP)=标号在段中的偏移地址,far ptr 指明了指令用标号的段地址和偏移地址修改CS和IP</p>
 </li>
 <li><p>地址在寄存器中的转移: “jmp 16位reg”,(IP)=    (16位reg)</p>
 </li>
@@ -557,218 +746,6 @@ open(argv[1], O_RDWR | O_CREAT | O_EXCL, 0664);
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/03/21/mmap函数引起的分析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-Unix C的一般处理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/20/Unix C的一般处理/">Unix C程序中的错误处理</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/20/Unix C的一般处理/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一, Unix C程序中的错误处理<br>    系统提供了一个全局变量 errno</p>
-<pre><code>如何根据错误编号获取错误信息?
-perror函数
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void perror(const char *s);</div><div class="line"></div><div class="line">//man 3 perror</div><div class="line">//功能:打印一个系统错误信息</div><div class="line">//参数:s 自定义的提示</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		perror(&quot;fopen&quot;);//输出错误信息到显示器</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success!\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell终端:</div><div class="line">root@kali:~/maxu# gcc test.c &amp;&amp; ./a.out abc.hello</div><div class="line">//显示:</div><div class="line">fopen: No such file or directory</div><div class="line"></div><div class="line"></div><div class="line">#include &lt;string.h&gt;</div><div class="line">char *strerror(int errnum);</div><div class="line"></div><div class="line">//man 3 strerror</div><div class="line">//功能:根据errnum,返回描述errnum的错误信息,如果errnum找不到,返回&quot;Unknown &quot;</div><div class="line">//参数:errnum 错误编号</div><div class="line"></div><div class="line">//例子:</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;string.h&gt;</div><div class="line">#include &lt;errno.h&gt;//这个头文件中存在声明:int errno;</div><div class="line"></div><div class="line">int main(int argc, char *argv[])&#123;</div><div class="line">	FILE *fp;</div><div class="line">	fp=fopen(argv[1], &quot;r&quot;);</div><div class="line">	if(fp==NULL)&#123;//发生错误时</div><div class="line">		printf(&quot;errno: %d\n&quot;, errno);</div><div class="line">		printf(&quot;%s\n&quot;, strerror(errno));</div><div class="line">		return 1;</div><div class="line">	&#125;</div><div class="line">	printf(&quot;open file success...\n&quot;);</div><div class="line">	fclose(fp);</div><div class="line">	return 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//shell:</div><div class="line">root@kali:~/maxu# ./a.out a</div><div class="line">//输出:</div><div class="line">errno: 2</div><div class="line">No such file or directory</div></pre></td></tr></table></figure>
-<p>补充:<br>标准输入        键盘        0<br>标准输出        显示器        1<br>标准错误输出    显示器        2</p>
-<p>帮助的使用:<br>man 1 命令<br>man 2 系统调用函数的名字<br>man 3 库函数的名称</p>
-<p>三, 进程映射</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/20/Unix C的一般处理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-GDB调试器的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/20/GDB调试器的使用/">GDB调试器的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/20/GDB调试器的使用/" class="archive-article-date">
-  	<time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>第一步:<br>    在编译链接源文件成可执行文件的时候,加参数: -g, 生成的可执行文件带有调试信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gcc -g *.c -o tt</div></pre></td></tr></table></figure>
-<p>第二步:<br>    使用gdb调试工具,调试带有调试信息的可执行文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root@kali:~/maxu/test_lib# gdb tt</div></pre></td></tr></table></figure></p>
-<p>第三步:<br>    执行相关调试指令</p>
-<pre><code>l
-列出程序代码(list)
-
-b 5
-为第5行设置断点(break)
-
-r
-运行可执行程序(运行到下一个断点前,比如上面的第五行,未执行第五行)(run)
-
-p a
-显示a变量的值(print)
-
-n
-执行下一条语句(next)
-
-s
-按步执行语句,有函数就进入函数内(step)
-
-q
-离开gdb(quit)
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/20/GDB调试器的使用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-gcc简单教程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/19/gcc简单教程/">gcc简单教程</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/19/gcc简单教程/" class="archive-article-date">
-  	<time datetime="2017-03-18T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote><p>GCC(GNU Compiler Collection)是Linux下最常用的C语言编译器，是GNU项目中符合ANSI C标准的编译系统,能够编译用C、C++和Object C等语言编写的程序。同时它可以通过不同的前端模块来支持各种语言，如Java、Fortran、Pascal、Modula-3和Ada等。</p>
-</blockquote>
-<h2 id="一-CC编译程序有四个阶段"><a href="#一-CC编译程序有四个阶段" class="headerlink" title="一. CC编译程序有四个阶段"></a>一. CC编译程序有四个阶段</h2><blockquote>
-<p>预处理（Pre-Processing）<br>编译（Compiling）<br>汇编（Assembling）<br>链接（Linking）</p>
-</blockquote>
-<p>1.1 预处理<br>    预处理用于将所有的#include头文件以及宏定义替换成其真正的内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -E test.c 或 gcc -E test.c -o test.i</div></pre></td></tr></table></figure></p>
-<blockquote>
-<p>-E进行预处理后结束<br>-o用于指定输出(out)文件名</p>
-</blockquote>
-<p>1.2 编译为汇编代码<br>    编译过程完成后，将生成程序的汇编代码test.s<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -S test.i -o test.s</div></pre></td></tr></table></figure></p>
-<p>1.3 汇编<br>    这一步会为每一个源文件产生一个目标文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<p>1.4 链接<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -c test.c –o test.o</div></pre></td></tr></table></figure></p>
-<h2 id="二-静态库的制作与使用"><a href="#二-静态库的制作与使用" class="headerlink" title="二. 静态库的制作与使用"></a>二. 静态库的制作与使用</h2><p>1,将相关源文件编译为目标文件<br>gcc -c *.c</p>
-<p>2,将目标文件添加到静态库中<br>ar -r libmymath.a *.o</p>
-<p>3,使用静态库链接目标文件形成可执行程序<br>gcc test.o -Ltest_lib -lmymath</p>
-<p>test.o是main函数所在的文件,L是链接文件的路径,l是链接库的名字</p>
-<h2 id="三-动态库的制作与使用"><a href="#三-动态库的制作与使用" class="headerlink" title="三. 动态库的制作与使用"></a>三. 动态库的制作与使用</h2><p>动态库的命名: lib+库名.so<br>1,将相关源文件编译为与位置无关的目标文件<br>gcc -c -fPIC *c</p>
-<p>2,将目标文件添加到动态库中</p>
-<p>gcc -shared -o libmymath.so *.o</p>
-<p>3,将动态库链接到目标文件中<br>gcc test.c -Ltest_lib -lmymath -o tt -std=c99</p>
-<p>./tt: error while loading shared libraries: libmymath.so: cannot open shared object file: No such file or directory</p>
-<p>ldd tt//使用ldd命令查看可执行依赖的动态库文件<br>告诉加载器动态库文件的路径,两种方式:<br>使用环境变量LD_LIBRARY_PATH指定加载器的寻找路径.<br>LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./test_lib</p>
-<h2 id="四-动态加载动态库函数"><a href="#四-动态加载动态库函数" class="headerlink" title="四. 动态加载动态库函数"></a>四. 动态加载动态库函数</h2><p>按需加载动态库中的一个或多个函数.<br>需要使用系统提供的以下函数:</p>
-<blockquote>
-<p>void <em>dlopen(const char </em>filename, int flags);</p>
-</blockquote>
-<p>Link with -ldl: 编译时需要加上</p>
-<p>补充:<br>    nm命令的使用<br>    nm  二进制文件名<br>    $ nm add.o<br>    00000000 T t_add<br>    0000000e T t_sub<br>    T  代表了add.o文件中包含了t_add和t_sub函数的实现代码。<br>    $ nm test.o<br>    00000000 T main<br>             U printf<br>             U t_add<br>             U t_div<br>             U t_mul<br>             U t_sub<br>    U 代表了在该文件中使用到了这个函数，但是没有这个函数的实现代码。</p>
-<pre><code>链接的过程，就是多个文件拼接成一个可执行文件的过程。
-目前的链接过程是发生在编译的时候，这个链接称为静态链接。
-动态链接是在代码加载到内存执行的时候发生的。
-</code></pre>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/19/gcc简单教程/">展开全文 >></a>
         </p>
       
 

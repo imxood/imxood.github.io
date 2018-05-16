@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body * {
+            box-sizing: border-box;
+        }
+
+        .speech-animate {
+            background-color: rgba(44, 37, 37, 0.6);
+        }
+
+        .speech-animate>.colors {
+            display: inline-block;
+            width: 140px;
+            height: 80px;
+            border: 0px solid blue;
+            background-color: rgb(228, 228, 228);
+            position: relative;
+        }
+
+        .speech-animate .color-blk {
+            width: 25px;
+            height: 60px;
+            position: absolute;
+        }
+
+        .speech-animate .red {
+            background-color: #ff6565;
+            left: 20px;
+        }
+
+        .speech-animate .orange {
+            background-color: orange;
+            left: 50px;
+        }
+
+        .speech-animate .blue {
+            background-color: rgb(74, 198, 255);
+            left: 80px;
+        }
+
+        .common_animate {
+            animation-duration: 1s;
+            /*动画时间*/
+            animation-fill-mode: both;
+            /*播放后的状态*/
+            animation-name: buzz-out;
+            animation-iteration-count: infinite;
+            /*动作循环的次数：infinite 无限循环*/
+            transform-origin: center bottom;
+            /*设置动画旋转元素的基点为：居中靠下*/
+            cursor: pointer;
+
+        }
+
+        @keyframes buzz-out {
+            0%,
+            100%,
+            20%,
+            50%,
+            80% {
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                /*贝塞尔曲线 ： X1 Y1 X2 Y2*/
+                transform: translate3d(0, 0, 0);
+                /*设置只在Z轴上移动*/
+            }
+            40%,
+            43% {
+                transition-timing-function: cubic-bezier(0.755, 0.50, 0.855, 0.060);
+                transform: translate3d(0, -30px, 0);
+            }
+            70% {
+                transition-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+                transform: translate3d(0, -15px, 0);
+            }
+            90% {
+                transform: translate3d(0, -4px, 0);
+            }
+        }
+
+        .demo {
+            width: 100px;
+            height: 100px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="speech-animate">
+        <div class="colors">
+            <div class="color-blk red"></div>
+            <div class="color-blk orange"></div>
+            <div class="color-blk blue"></div>
+        </div>
+    </div>
+
+    <div class="demo"></div>
+    <button>sss</button>
+
+    <script src="res/jquery/jquery-3.3.1.js"></script>
+    <script>
+        function speechAnimate(ele) {
+            ele.animate(
+                {
+                    topValue: "-10"
+                },
+                {
+                    step: function (now, fx) {
+                        console.log(now);
+                        ele.css({ "top": now + "px" })
+                    },
+                    duration: 200,
+                    specialEasing: {
+                        topValue: "linear"
+                    },
+                    complete: function () {
+                        console.log("ok");
+                    }
+                }
+            ).animate(
+                {
+                    topValue: "0"
+                },
+                {
+                    step: function (now, fx) {
+                        console.log(now);
+                        ele.css({ "top": now + "px" })
+                    },
+                    duration: 300,
+                    complete: function () {
+                        console.log("ok");
+                    }
+                }
+            ).animate(
+                {
+                    topValue: "10"
+                },
+                {
+                    step: function (now, fx) {
+                        console.log(now);
+                        ele.css({ "top": now + "px" })
+                    },
+                    duration: 300,
+                    complete: function () {
+                        console.log("ok");
+                    }
+                }
+            ).animate(
+                {
+                    topValue: "0"
+                },
+                {
+                    step: function (now, fx) {
+                        console.log(now);
+                        ele.css({ "top": now + "px" })
+                    },
+                    duration: 300,
+                    complete: function () {
+                        console.log("ok");
+                    }
+                }
+            );
+        }
+        $(function () {
+            $(".speech-animate .color-blk").click(function (e) {
+                speechAnimate($(this));
+            })
+        });
+    </script>
+</body>
+
+</html>

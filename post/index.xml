@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>My New Hugo Site</title>
-    <link>http://example.org/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <title>Posts on My New Hugo Site</title>
+    <link>http://example.org/post/</link>
+    <description>Recent content in Posts on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Feb 2019 21:00:45 +0800</lastBuildDate>
     
-	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://example.org/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,24 +18,6 @@
       
       <guid>http://example.org/post/sencond/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>about</title>
-      <link>http://example.org/about/</link>
-      <pubDate>Wed, 20 Feb 2019 20:32:02 +0800</pubDate>
-      
-      <guid>http://example.org/about/</guid>
-      <description>this is about</description>
-    </item>
-    
-    <item>
-      <title>test</title>
-      <link>http://example.org/test/</link>
-      <pubDate>Wed, 20 Feb 2019 20:30:29 +0800</pubDate>
-      
-      <guid>http://example.org/test/</guid>
-      <description>this is a test</description>
     </item>
     
     <item>

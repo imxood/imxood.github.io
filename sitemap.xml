@@ -3,83 +3,83 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/post/sencond/</loc>
+    <loc>http://imxood.github.io/post/sencond/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/about/</loc>
+    <loc>http://imxood.github.io/about/</loc>
     <lastmod>2019-02-20T20:32:02+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/test/</loc>
+    <loc>http://imxood.github.io/test/</loc>
     <lastmod>2019-02-20T20:30:29+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</loc>
+    <loc>http://imxood.github.io/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2019-02-20T19:25:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/post/first/</loc>
+    <loc>http://imxood.github.io/post/first/</loc>
     <lastmod>2019-02-20T19:25:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/post/hugo_usa.1/</loc>
+    <loc>http://imxood.github.io/post/hugo_usa.1/</loc>
     <lastmod>2019-02-20T19:25:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/post/hugo_usa/</loc>
+    <loc>http://imxood.github.io/post/hugo_usa/</loc>
     <lastmod>2019-02-20T19:25:43+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>http://imxood.github.io/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/tags/development/</loc>
+    <loc>http://imxood.github.io/tags/development/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/categories/development/</loc>
+    <loc>http://imxood.github.io/categories/development/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/tags/golang/</loc>
+    <loc>http://imxood.github.io/tags/golang/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/categories/golang/</loc>
+    <loc>http://imxood.github.io/categories/golang/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>http://imxood.github.io/post/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/post/</loc>
+    <loc>http://imxood.github.io/tags/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>http://imxood.github.io/</loc>
     <lastmod>2019-02-20T21:00:45+08:00</lastmod>
     <priority>0</priority>
   </url>

@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on My New Hugo Site</title>
-    <link>http://example.org/post/</link>
-    <description>Recent content in Posts on My New Hugo Site</description>
+    <title>Posts on 分享生活,分享感动</title>
+    <link>http://imxood.github.io/post/</link>
+    <description>Recent content in Posts on 分享生活,分享感动</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Feb 2019 21:00:45 +0800</lastBuildDate>
     
-	<atom:link href="http://example.org/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://imxood.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>second</title>
-      <link>http://example.org/post/sencond/</link>
+      <link>http://imxood.github.io/post/sencond/</link>
       <pubDate>Wed, 20 Feb 2019 21:00:45 +0800</pubDate>
       
-      <guid>http://example.org/post/sencond/</guid>
+      <guid>http://imxood.github.io/post/sencond/</guid>
       <description></description>
     </item>
     
     <item>
       <title># hugo简明教程</title>
-      <link>http://example.org/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
+      <link>http://imxood.github.io/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
       <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
       
-      <guid>http://example.org/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
+      <guid>http://imxood.github.io/post/hugo%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
       <description>hugo简明教程  安装hugo
 sudo apt install hugo  创建新站点
 hugo new site www, ps: 子命令： new 新的, 创建类型:site, 创建目标路径: ./www  写文章:
@@ -37,28 +37,28 @@ vim config.toml 它的基本内容是: baseurl = &amp;quot;http://replace-this-w
     
     <item>
       <title>first</title>
-      <link>http://example.org/post/first/</link>
+      <link>http://imxood.github.io/post/first/</link>
       <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
       
-      <guid>http://example.org/post/first/</guid>
+      <guid>http://imxood.github.io/post/first/</guid>
       <description>Hello, the world12</description>
     </item>
     
     <item>
       <title>first</title>
-      <link>http://example.org/post/hugo_usa.1/</link>
+      <link>http://imxood.github.io/post/hugo_usa.1/</link>
       <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
       
-      <guid>http://example.org/post/hugo_usa.1/</guid>
+      <guid>http://imxood.github.io/post/hugo_usa.1/</guid>
       <description>Hello, the world12a</description>
     </item>
     
     <item>
       <title>first</title>
-      <link>http://example.org/post/hugo_usa/</link>
+      <link>http://imxood.github.io/post/hugo_usa/</link>
       <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
       
-      <guid>http://example.org/post/hugo_usa/</guid>
+      <guid>http://imxood.github.io/post/hugo_usa/</guid>
       <description>Hello, the world12a</description>
     </item>
     

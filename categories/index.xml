@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on My New Hugo Site</title>
-    <link>http://example.org/categories/</link>
-    <description>Recent content in Categories on My New Hugo Site</description>
+    <title>Categories on 分享生活,分享感动</title>
+    <link>http://imxood.github.io/categories/</link>
+    <description>Recent content in Categories on 分享生活,分享感动</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="http://example.org/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://imxood.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Development</title>
-      <link>http://example.org/categories/development/</link>
+      <link>http://imxood.github.io/categories/development/</link>
       <pubDate>Wed, 20 Feb 2019 21:00:45 +0800</pubDate>
       
-      <guid>http://example.org/categories/development/</guid>
+      <guid>http://imxood.github.io/categories/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Golang</title>
-      <link>http://example.org/categories/golang/</link>
+      <link>http://imxood.github.io/categories/golang/</link>
       <pubDate>Wed, 20 Feb 2019 21:00:45 +0800</pubDate>
       
-      <guid>http://example.org/categories/golang/</guid>
+      <guid>http://imxood.github.io/categories/golang/</guid>
       <description></description>
     </item>
     

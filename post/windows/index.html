@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> windows &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/windows/">windows</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<h2 id="根据网络端口查看当前进程">根据网络端口查看当前进程</h2>
+
+<pre><code>netstat -ano | findstr &quot;8080&quot;
+</code></pre>
+
+<h2 id="windows-10-挂载esp分区到z盘-u盘似乎不能挂载">windows 10 挂载esp分区到Z盘(U盘似乎不能挂载)</h2>
+
+<pre><code># diskpart
+# list disk
+# sel disk 0
+# list vol
+# select vol 0
+# assign letter=z
+</code></pre>
+
+<h2 id="添加右键菜单-注册表脚本">添加右键菜单 注册表脚本</h2>
+
+<pre><code>Windows Registry Editor Version 5.00
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\bash]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\bash\command]
+@=&quot;D:\\programs\\MinGW\\msys\\1.0\\bin\\bash.exe \&quot;%V\&quot;&quot;
+</code></pre>
+
+<h2 id="删除右键菜单-注册表脚本">删除右键菜单 注册表脚本</h2>
+
+<pre><code>[Version]
+Signature=&quot;$Windows NT$&quot;
+[DefaultInstall]
+DELREG=Edit with Custom Menu
+[Edit with SciTE]
+hkcr,&quot;*\\shell\\Edit with SciTE&quot;
+</code></pre>
+
+<h2 id="工具msys2">工具msys2</h2>
+
+<p><a href="https://blog.csdn.net/qiuzhiqian1990/article/details/56671839">https://blog.csdn.net/qiuzhiqian1990/article/details/56671839</a></p>
+
+<h2 id="解决无法禁用输入法ctrl-space快捷键的问题">解决无法禁用输入法ctrl space快捷键的问题</h2>
+
+<ol>
+<li><p>regedit, 打开注册表-&gt;找到&rdquo;计算机\HKEY_USERS.DEFAULT\Control Panel\Input Method\Hot Keys\00000010&rdquo;-&gt;修改key modifiers 和 vitrual key</p></li>
+
+<li><p>tip:如果禁用[输入法/非输入法切换] ,就把key modifiers 和 vitrual key 的第一位都修改成00</p></li>
+
+<li><p>tip:如果有将要修改的目标热键,比如我希望把[输入法/非输入法切换] 改成ctrl+&rdquo;~&ldquo;,就把key modifiers的第一位修改成02,vitrual key的第一位修改成C0.</p></li>
+
+<li><p>说明:①Key Modifiers(修改键)：第一位是Ctrl，Alt，Shift三个，Ctrl为02，Alt为01，Shift为04，要组合键的话直接相加；第二位是用左侧还是右侧，左侧80，右侧40，组合起来就是8+4=12=c0。②Virtual Key(虚拟键)：设置组合键以外的热键，把第一位设置为对应的二进制数据即可。例如想设置A为热键，其二进制数据为41，则把Virtual Key改成41 00 00 00,更多键值Virtual-Key Codes.</p></li>
+</ol>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/web/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/android/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

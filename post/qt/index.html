@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> QT &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/qt/">QT</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<h2 id="qt环境配置">qt环境配置:</h2>
+
+<pre><code>sudo vim /usr/lib/x86_64-linux-gnu/qt-default/qtchooser/default.conf:
+    /home/maxu/programs/Qt/5.9.1/gcc_64/bin
+    /home/maxu/programs/Qt/5.9.1/gcc_64
+vim ~/.bashrc:
+    QTDIR=/home/maxu/programs/Qt/5.9.3/gcc_64
+    PATH=$QTDIR/bin:$PATH
+    LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+    export QTDIR PATH LD_LIBRARY_PATH
+
+sudo add-apt-repository ppa:beineri/opt-qt593-xenial
+sudo apt-get update
+sudo apt-get install -y qt59-meta-full qt59creator
+</code></pre>
+
+<h2 id="qt环境变量">qt环境变量</h2>
+
+<pre><code>export QTDIR=$HOME/programs/Qt/5.11.1/gcc_64
+export PATH=$QTDIR/bin:$PATH
+export MANPATH=$QTDIR/man:$MANPATH
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH
+</code></pre>
+
+<h2 id="中文无法输入">中文无法输入:</h2>
+
+<pre><code>sudo apt-get install fcitx-libs-qt fcitx-libs-qt5
+cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so \
+    /home/peak/programs/Qt5.9.1/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts
+chmod +x /home/peak/programs/Qt5.9.1/Tools/QtCreator/lib/Qt/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so
+</code></pre>
+
+<p>qt creator 5.9 中文输入:
+    git clone <a href="http://github.com/fcitx/fcitx-qt5.git">http://github.com/fcitx/fcitx-qt5.git</a></p>
+
+<pre><code>cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so /home/peak/programs/Qt/5.9.3/gcc_64/plugins/platforminputcontexts/
+chmod +x /home/peak/programs/Qt/5.9.3/gcc_64/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so
+</code></pre>
+
+<p>PYTHON_CONFIGURE_OPTS=&ldquo;&ndash;enable-shared&rdquo; pyenv install 3.6.3</p>
+
+<p>QT5源码编译:
+    <a href="https://wiki.qt.io/Building_Qt_5_from_Git/zh">https://wiki.qt.io/Building_Qt_5_from_Git/zh</a></p>
+
+<h2 id="deepin-screenshot编译">deepin-screenshot编译</h2>
+
+<pre><code>sudo apt install debhelper pkg-config libudev-dev  qtmultimedia5-dev libqt5x11extras5-dev libxext-dev qttools5-dev-tools  x11proto-xext-dev libxcb-util0-dev libstartup-notification0-dev libmtdev-dev qtbase5-private-dev libegl1-mesa-dev libudev-dev libfontconfig1-dev libfreetype6-dev libglib2.0-dev libxrender-dev libgsettings-qt-dev librsvg2-dev  libqt5svg5-dev
+
+cp /usr/include/x86_64-linux-gnu/qt5/QGSettings ./5.6/gcc_64/include/ -r
+
+https://github.com/linuxdeepin/dtkcore
+https://github.com/linuxdeepin/dde-qt-dbus-factory.git
+https://github.com/linuxdeepin/dtkwidget
+https://github.com/linuxdeepin/deepin-screenshot
+
+https://github.com/linuxdeepin/dtkwm
+
+mkdir build &amp;&amp; cd build &amp;&amp; qmake .. &amp;&amp; make -j4
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination"> 
+          <a class="btn next " href="http://imxood.github.io/post/stm32/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

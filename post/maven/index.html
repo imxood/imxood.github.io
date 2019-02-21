@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> maven基本使用 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/maven/">maven基本使用</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            <pre><code>mvn clean install -e -U
+-e详细异常，-U强制更新
+
+for /r %i in (*.lastUpdated)do del %i
+删掉扩展为.lastupdate的文件，这些文件都是maven在下载过程中下载失败了且在本地存在的jar文件，但是其存在影响你下载这些jar文件的时候，造成无法去中央仓库下载的干扰。
+
+mvn install:install-file -Dfile=jar包的位置 -DgroupId=上面的groupId -DartifactId=上面的artifactId -Dversion=上面的version -Dpackaging=jar
+手动添加本地jar
+
+导出Project依赖的jar包
+mvn dependency:copy-dependencies -DoutputDirectory=lib
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/mysql/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

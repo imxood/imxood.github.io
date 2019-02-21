@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> opencv笔记 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/opencv/">opencv笔记</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            <pre><code>
+void Learn_Mat_Definiton() //测试一下step[]的各个维度大小
+{
+
+    //////////////////Demo1(3维矩阵)///////////////////////////////////////////
+    printf(&quot;//////////////////////Demo1(3维矩阵)////////////////////////\n&quot;);
+    //最后面的两个数：(行，列),确定了一个面
+    //是一个依次降维的过程
+    //8,10组成了面，5个面，组成了立方体
+    int matSize[] = {5, 8, 10}; //每一维元素的个数：8：行，10：列
+    Mat mat1(3, matSize, CV_16UC3, Scalar::all(0));
+
+    //求step[i]的大小:每一维元素的大小(单位字节)
+    printf(&quot;\n///////step[i]的大小//////////\n&quot;);
+    printf(&quot;step[0]:%d\n&quot;, mat1.step[0]); //480：面的大小(第一维)
+    printf(&quot;step[1]:%d\n&quot;, mat1.step[1]); //60：线的大小(第二维)
+    printf(&quot;step[2]:%d\n&quot;, mat1.step[2]); //6：点的大小(第三维)
+
+    //求size[i]：每一维元素的个数
+    printf(&quot;\n///////size[i]的大小///////\n&quot;);
+    printf(&quot;size[0]:%d\n&quot;, mat1.size[0]); //5：面
+    printf(&quot;size[1]:%d\n&quot;, mat1.size[1]); //8：线
+    printf(&quot;size[2]:%d\n&quot;, mat1.size[2]); //10：点
+
+    //求step1(i)：每一维元素的通道数
+    printf(&quot;\n///////step1(i)的大小///////\n&quot;);
+    printf(&quot;step1(0):%d\n&quot;, mat1.step1(0)); //240:面
+    printf(&quot;step1(1):%d\n&quot;, mat1.step1(1)); //30:线
+    printf(&quot;step1(2):%d\n&quot;, mat1.step1(2)); //3:点
+
+    //求elemSize：每个元素的大小(单位字节)
+    printf(&quot;\n///////elemSize的大小///////\n&quot;);
+    printf(&quot;elemSize:%d\n&quot;, mat1.elemSize()); //6：每个元素的大小
+
+    //求elemSize1：每个通道的大小(单位字节)
+    printf(&quot;\n///////elemSize1的大小///////\n&quot;);
+    printf(&quot;elemSize1:%d\n&quot;, mat1.elemSize1()); //2：每个通道的大小
+}
+
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/mysql/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/platformio/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> python笔记 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/python/">python笔记</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<h3 id="python默认使用ascii编码-处理文件时可能报错">python默认使用ascii编码,处理文件时可能报错:</h3>
+
+<pre><code>os.environ                          环境变量
+
+os.getenv(&quot;PATH&quot;, &quot;&quot;)               获取环境变量
+os.environ['PATH']
+
+from shutil import copyfile
+from os import getcwd, makedirs
+from os.path import abspath, basename, expanduser, isdir, isfile, join, relpath
+
+expanduser('~')
+
+os.path.join('a/b', 'c')            拼凑路径: a/b/c
+os.path.dirname('a/b/c')            获取目录名称: a/b
+os.path.abspath('a/b/c')            获取绝对路径: 以当前路径与a/b/c拼凑
+os.path.relpath(path，start)        获取相对start的路径
+
+os.stat('/tmp')                     查看文件权限，掩码，用户组,时间等信息
+os.symlink                          创键链接文件
+os.getpid                           获取进程id
+
+platform.architecture()             ('64bit', '')
+sys.platform                        获取系统名称:linux
+sys.path
+sys.stderr.write
+
+subprocess.Popen
+
+socket.gethostname
+</code></pre>
+
+<h3 id="修改pip源-设置清华源">修改pip源,设置清华源</h3>
+
+<pre><code>linux下，修改 ~/.pip/pip.conf (没有就创建一个)， 修改 index-url至tuna，内容如下:
+    [global]
+    index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+
+windows下，直接在user目录中创建一个pip目录，如：C:\Users\xx\pip，新建文件pip.ini，内容如下:
+    [global]
+    index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+
+<h3 id="安装offlinedoc">安装OfflineDoc</h3>
+
+<pre><code>https://github.com/ichuan/OfflineDoc
+</code></pre>
+
+<h3 id="pyqt5-环境配置">pyqt5 环境配置:</h3>
+
+<pre><code>sudo apt-get install qt4-designer(命令:designer-qt4)
+</code></pre>
+
+<h3 id="python升级3-6">python升级3.6:</h3>
+
+<pre><code>sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:jonathonf/python-3.6
+sudo apt-get update
+sudo apt-get install python3.6
+</code></pre>
+
+<h3 id="安装pyenv">安装pyenv</h3>
+
+<pre><code>curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+vim ~/.bashrc:
+    export PATH=&quot;/home/maxu/.pyenv/bin:$PATH&quot;
+    eval &quot;$(pyenv init -)&quot;
+    eval &quot;$(pyenv virtualenv-init -)&quot;
+
+常用命令:
+    pyenv install --list
+    pyenv versions
+    pyenv version
+
+~/.pyenv/cache
+
+PYTHON_CONFIGURE_OPTS=&quot;--enable-shared&quot; pyenv install 3.6.3
+</code></pre>
+
+<h1 id="conda">conda</h1>
+
+<h3 id="设置conda源">设置conda源:</h3>
+
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/
+
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+</code></pre>
+
+<h3 id="启用conda的参数自动补全">启用conda的参数自动补全：</h3>
+
+<pre><code>conda install argcomplete
+eval &quot;$(register-python-argcomplete conda)&quot;
+</code></pre>
+
+<h3 id="常用命令">常用命令：</h3>
+
+<pre><code>conda config --show
+
+conda install anaconda-client
+
+anaconda -h
+
+conda --version
+conda info --envs
+
+source activate snowflakes
+activate snowflakes
+
+conda update conda
+
+conda create --name python=3.5 snowflakes biopython
+conda create --name flowers --clone snowflakes
+
+conda remove --name flowers --all
+conda remove --name bunnies iopro
+
+conda search --full-name python
+
+conda list
+
+conda install --name bunnies beautifulsoup4
+</code></pre>
+
+<h3 id="安装pyside2">安装pyside2</h3>
+
+<pre><code>apt-get install python-pyside2  # for Python 2.7.x
+apt-get install python3-pyside2  # for Python 3.5.x
+</code></pre>
+
+<h3 id="编译python3-6">编译python3.6</h3>
+
+<pre><code>wget https://www.python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
+tar -xvf Python-3.6.3.tar.xz &amp;&amp; cd Python-3.6.3
+</code></pre>
+
+<h3 id="安装pip">安装pip:</h3>
+
+<pre><code>sudo apt-get install python-pip
+</code></pre>
+
+<h3 id="python-ascii-codec-can-t-encode-characters-in-position-unicodedecodeerror-ascii-codec-can-t-decode-byte-0x">Python:&lsquo;ascii’ codec can’t encode characters in position,,,,,,,UnicodeDecodeError: &lsquo;ascii&rsquo; codec can&rsquo;t decode byte 0x</h3>
+
+<pre><code>解决方法:
+    在python的Lib\site-packages文件夹下,比如我的是:/usr/lib/python2.7/,编辑sitecustomize.py(若不存在就新建)，添加内容：
+    # encoding=utf8
+    import sys
+
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+</code></pre>
+
+<h3 id="python串口模拟">python串口模拟:</h3>
+
+<h3 id="setup-py-构建包的卸载">setup.py 构建包的卸载</h3>
+
+<pre><code>python setup.py install --record files.txt
+cat files.txt | xargs rm -rf
+</code></pre>
+
+<h3 id="python-web-server">python web server</h3>
+
+<pre><code>nohup python -m SimpleHTTPServer 8000 &amp;
+</code></pre>
+
+<h3 id="可执行文件当前所在目录">可执行文件当前所在目录</h3>
+
+<p>bin_dir = os.path.split(os.path.realpath(<strong>file</strong>))[0]</p>
+
+<h3 id="解决unicodeencodeerror-ascii-codec-can-t-encode-characters-in-position-0-3-ordinal-not-in-range-128">解决UnicodeEncodeError: &lsquo;ascii&rsquo; codec can&rsquo;t encode characters in position 0-3: ordinal not in range(128)</h3>
+
+<p>import sys
+reload(sys)
+sys.setdefaultencoding(&lsquo;utf-8&rsquo;)</p>
+
+<p>在Lib\site-packages文件夹, 比如在/usr/lib/python2.7目录下:
+编辑sitecustomize.py(若不存在则新建),添加内容</p>
+
+<h1 id="encoding-utf8">encoding=utf8</h1>
+
+<p>import sys
+reload(sys)
+sys.setdefaultencoding(&lsquo;utf8&rsquo;)</p>
+
+<p>添加私有模块至PYTHONPATH:
+PYTHONPATH=$PYTHONPATH:/home/imxood/develop/sources/platformio-core/build/lib.linux-x86_64-2.7
+就OK了:
+&gt;&gt;&gt; import platformio</p>
+
+<p>查看模块路径:
+&gt;&gt;&gt; import platformio
+&gt;&gt;&gt; platformio.<strong>file</strong>
+&lsquo;/home/imxood/develop/sources/platformio-core/build/lib.linux-x86_64-2.7/platformio/<strong>init</strong>.pyc&rsquo;</p>
+
+<p>pip &ndash;version 报错:
+    ImportError: No module named packaging.version
+    解决:
+        wget <a href="https://bootstrap.pypa.io/get-pip.py">https://bootstrap.pypa.io/get-pip.py</a>
+        sudo python get-pip.py</p>
+
+<p>&ldquo;env&rdquo;: {&ldquo;PYTHONIOENCODING&rdquo;: &ldquo;GBK&rdquo;}</p>
+
+<h2 id="flask-gzip">flask gzip</h2>
+
+<pre><code>sudo pip2 install flask flask-compress
+
+使用:
+from flask import Flask
+from flask.ext.compress import Compress
+
+app = Flask(__name__)
+Compress(app)
+</code></pre>
+
+<h2 id="常用路径">常用路径</h2>
+
+<pre><code>显示模块路径
+python -c 'import enum; print(enum.__file__)'
+
+显示用户包目录
+python -m site --user-site
+
+用户基础目录
+python -m site --user-base
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/platformio/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/ros/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

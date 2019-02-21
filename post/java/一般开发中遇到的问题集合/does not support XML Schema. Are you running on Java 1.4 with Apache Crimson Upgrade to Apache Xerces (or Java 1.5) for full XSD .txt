@@ -1,0 +1,1 @@
+使用了freechart：jar包冲突，移除jfreechart中的gnujaxp.jar

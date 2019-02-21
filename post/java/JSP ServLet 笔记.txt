@@ -1,0 +1,6348 @@
+
+
+1. JAVA EE 三大组件： JSP、Servlet、EJB
+
+2. 开源网站： www.sourceforge.net
+
+3. 修改MyEclipse中新建程序的模板： 进入 MyEclipse 安装目录下，进入 plugins 目录，找 文件名中带 wizards 的目录(com.genuitec.eclipse.wizards_xxxx.jar)
+	，进去之后进入template目录找到需要修改的模板进行修改
+
+
+
+4. HTTP 协议:
+	
+	HTTP请求：客户端连接上服务器之后，向服务器请求某个web资源，称为客户端向服务器端发送了一个HTTP请求，一个完整的HTTP请求包括：
+		一个请求行， 多个消息头，以及实体内容，消息头和实体内容之间用空行隔开
+
+		·HTTP请求中的消息头Referer说明客户机是通过哪个资源来访问服务器的，该消息头可以用来防盗链，可以取得Referer的内容，
+		     然后判断Referer是不是以指定内容(自己网站的主机名)开头，如果不是 则表示客户机不是通过本网站的正规路径访问的
+			本页面(判断Referer 是否为null以及 request.getHeader("referer").srartWith("http://192.168.0.0.1"))
+	
+     	HTTP响应：一个HTTP响应代表服务器向客户端回送的数据，一个HTTP响应包括：一个状态行，多个消息头，一个空行以及实体内容
+
+
+
+5. Linux  MySQL  PHP  Apache 
+
+
+
+6.  密码明文转换：MessageDigest类
+public static String test(String message){
+	MessageDigest md = MessageDigest.getInstance("md5") ;	//使用 md5 算法,有异常 需try{} catch() 处理
+	byte[] md5 = md.digest(message.getBytes()) ;
+	BASE64Encoder encoder = new BASE64Encoder() ;
+	return encoder.encode(md5) ;
+
+}
+
+
+7.  汉字Unicode码表范围 \u4e00 - \u9fa5
+
+8.  正则验证邮箱：^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$ 
+
+9.  切记!：webapp中不论是jsp还是Servlet，只要涉及到了中文，就要解决乱码，例如：在表单验证时，如果要求用户输入的内容必须是中文，则在得到用户输入之前
+         首先要 request.setCharacterEncoding("charset") ;  , 否则验证不成功
+
+
+10.  为网站添加一个全局消息显示页面，服务器出错、注册成功等需要跳转显示信息的页面都由该页面来处理，跳转前通过setAttribute() 来传递显示信息
+
+
+
+11. 
+	。WEB 开发的标准目录结构：WEBROOT ： WEB-INF、jsp、js、css、images、index.jsp
+					     WEB-INF ： web.xml、lib、classes、tags
+
+	各个文件夹功能：
+			classes：保存所有的JavaBean，如果不存在，则需要手工创建
+			lib： 保存所有的第三方 jar 文件
+			tags： 保存所有的标签文件
+			jsp： 保存 *.jsp 文件，一般根据功能再建立子文件夹
+			js： 保存 *.js 文件
+			css： 保存 *.css 文件
+			images： 存放所有需要的图片
+
+
+
+
+
+
+
+     ******************************************************************************************************************************************************
+     *									   J S P									  *
+     ******************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+》》--》》JSP 程序，执行的时候一定要有 WEB 容器的支持，所以必须启动 Tomcat，之后通过浏览器访问
+
+	。【配置 Tomcat所需的环境变量】：
+
+			1. (必须)配置 JAVA_HOME，即为java的安装目录: E:\Program Files (x86)\Java\jdk1.7.0_15(在本机下为该目录)【注意 结尾不能有分号】
+			     这个环境变量必须配(如果不在计算机里的环境变量里配，那也可以在 《%CATA_LINA%\bin\startup.bat》 中配， 编辑 startup.bat
+				, 在 第 25行 加上 set java_home=E:\Program Files (x86)\Java\jdk1.7.0_15)
+
+			2. (可选)配置 CATALINA_HOME，即为 Tomcat的安装目录: E:\tomcat (本机下为该目录)【注意 结尾不能有分号】 ,该路径表示启动哪个 tomcat，
+				可以不配这个环境变量
+
+		》》 以上必须的环境变量配置好之后 Tomcat 才可以启动， 启动 Tomcat： 双击安装目录下的 bin文件中的 startup.bat
+			.bat 为 windows下的批处理文件， .sh 为 Linux/Unix 下的批处理文件
+
+		》》 Tomcat的默认端口为8080，如果此端口与别的应用程序有冲突，则需要在 server.xml 中修改端口值
+
+		》》 在 Tomcat 安装文件下： conf 文件夹中存放 Tomcat服务器的各种配置文件， 
+					    lib 文件夹中存放的是 Tomcat 服务器支持的 jar 包
+					    logs 文件夹中存放的是 Tomcat 的日志文件
+					    temp 文件夹中存放的是 Tomcat 运行时的临时文件
+					    webapps 文件夹中存放的是 web 应用所在的目录，即 外界访问的 web资源的 存放目录
+					    work 文件夹中存放的是 Tomcat 的工作目录，即为 jsp 被访问后生成的对应的 servlet 文件(.class 文件
+						和 .java 文件)
+
+
+
+
+	。【配置 Tomcat服务器】： 1. 改变端口号： 在 conf 文件夹下的 server.xml 文件是配置的核心文件， 将 server.xml 
+					中的 Connector 的端口号改为别的端口号就可以(port="8080")
+
+				  2. 配置虚拟目录：WEBROOT：一般虚拟目录配置到此文件夹中，配置的虚拟目录里必须有以下的目录结构
+
+		   WEB-INF： 在虚拟目录下必须有此文件夹
+		      web.xml:  要放在 WEB-INF 文件夹下，配置文件，有格式要求，如果不知道文件的格式要求，则可以在
+				Tomcat 安装目录下 找到 webapps文件夹下的ROOT文件夹，里边有 WEB-INF 文件夹， 打开之后
+				有 web.xml 文件， 可以将此 xml文件中的内容复制到自己的虚拟目录下，但是要修改里边的内容
+				把 该 xml 文件中的注释删除即可
+
+	注：》》1.在新建好自己的虚拟目录之后，服务器并不知道该虚拟目录位于哪里，所以要在 server.xml 文件中进行配置，在
+		配置时注意文件的编写要求【必须将配置代码放在</host>之上】 ， 配置完成后需要重新启动 服务器
+
+	    假设该虚拟目录(WEB-INF)位于 D:\kingowe 文件中 则配置代码如下：
+
+	<Context path="/test" docBase="D:\kingowe" />     docBase的值为 WEB-INF 文件所在的路径，注意书写与大小写
+
+		》》 path： 表示浏览器中的输入路径(在本例中为:http://localhost/test)  必须有 /
+		》》 docBase： 表示此路径对应的硬盘上的真实路径，以后可以直接通过 http://localhost:8080/test 找到硬盘上
+			的 d:\kingowe 文件夹中的内容了
+
+
+	!*!*! 经过以上操作 将虚拟目录配置好之后， 在浏览器运行虚拟目录会出现 404 错误提示，这是因为 Tomcat 将目录的列表功能
+		关闭了，所以如果想要查看一个目录中的全部内容，则需要修改 conf文件夹下的 web.xml 配置文件 具体修改如下：
+ <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>	【将此处的 false 改为 true 即可，改完之后记得重新启动服务器】
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+ </servlet>
+
+
+
+
+
+
+	   》》2. 建好虚拟目录之后，还可以在《CATALINA_HOME/conf/[enginename]/[hostname]/xxx.xml》中配置：
+
+<Context docBase="d:\kingowe"/>
+
+	       配置完成之后  配置文件 xxx.xml 的文件名xxx 即为 在浏览器中访问webapps的虚拟路径名， 此种配置 不需要重启服务器
+
+
+
+
+
+
+	。【Tomcat 执行流程】：
+
+		第一次执行： 客户端通过电脑连接服务器，因为请求是动态的，所以所有的请求都交给 web容器 处理，
+				 在容器中找到需要执行的 *.jsp 文件， 将该jsp文件 转换为 .java 文件，转换后的
+				 .java 文件 通过编译成为 .class 文件，最终服务器执行该 .class 文件。
+
+		经过第一次执行后的第n次执行： 由于已经存在了 .class 文件，所以会直接执行。
+
+		源文件经过修改后的执行与第一次执行一样，因为第一次执行要经过很多步骤， 所以执行时间会慢，执行时产生的
+			.class  .java  文件都放在 Tomcat 安装目录下的 work 文件夹下（work/Catalina）
+
+
+
+
+	。【配置自己的主机名(www.xxx.com)】：
+
+
+	1.在 《%CATA_LINA%\conf\server.xml 》 中新加一个 <Host> :
+
+      <Host name="www.xxx.com"  appBase="E:\JSP">
+	<Context path="/test" docBase="E:\JSP" reloadable="true"/>
+      </Host>
+
+	2. 修改 《C:\Windows\System32\Drivers\etc\hosts》 文件：
+127.0.0.1       localhost
+127.0.0.1       www.xxx.com
+
+	完成之后，即可使用 http://www.xxx.com:8080 代替 http://localhost/127.0.0.1:8080
+
+
+
+
+
+
+	。【配置一个webapp的默认首页】：	
+
+	 配置 webapp下的WEB-INF 下的 web.xml ， 在 <web-app></web-app> 之间配置： 
+<welcome-file-list>
+    <welcome-file>fileName.html</welcome-file>
+</welcome-file-list>
+
+
+
+
+
+
+
+》》--》》 WEB 基础知识：
+
+	。 URL 统一资源定位符， 格式： http://IP地址(主机名):端口号/目录名称/网页文件名称
+				示例： http://www.fkjava.org:80/facejava/index.jsp
+
+
+	。网页出现的错误编号含义：
+					1xx：信息，请求收到，继续处理
+			       	2xx：成功，行为被成功地接受、理解和采纳
+			       	3xx：重定向，为了完成请求，必须进一步执行的动作
+			       	4xx：客户端错误，请求包含语法错误或者请求无法实现
+			       	5xx：服务器错误，服务器不能实现一种明显无效的请求
+
+            每个响应码及其含义：
+				100 继续      	101 分组交换协
+      			200 OK	      	201 被创建      202 被采纳    	203 非授权信息 	  204 无内容    205 重置内容
+      			206 部分内容    
+				300 多选项      301 永久地传送 	302 找到	303 参见其他      304 未改动    305 使用代理
+				307 暂时重定向  400 错误请求    401 未授权      402 要求付费      403 禁止      404 未找到      405 不允许的方法
+				406 不被采纳    407 要求代理授权		408 请求超时      409 冲突      410 过期的      411 要求的长度
+				412 前提不成立  413 请求实例太大		414 请求URI太大   415 不支持的媒体类型		416 无法满足的请求范围
+				417 失败的预期  500 内部服务器错误		501 未被使用      502 网关错误			503 不可用的服务
+				504 网关超时    505 HTTP版本未被支持
+
+
+
+	。 http://localhost:8080/jsppro/jsptest1.jsp		// 全部地址为 URL， jsppro/jsptest1.jsp 为uri(web名称/资源名称)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ================================================================================================================================================================
+   
+      目录：
+   
+     	1. JSP中的注释		2. 三种Scriptlet标签		3.  第一个JSP程序		4.第一个JSP HTML 交互程序
+   	5. page include forward 指令 MIME类型设置		6.  JSP中的内置对象列表		7.四种属性范围(pageContext reqeust session application)
+    	8. request内置对象	9. response内置对象		10. session内置对象		11.application 内置对象
+   	12. pageContext内置对象					13. JavaBean			14. DAO设计模式
+	15. 文件上传		16.图形验证码
+   
+    ================================================================================================================================================================
+
+
+
+
+
+
+
+  【【1】】. JSP 中的注释
+
+	。<!---->   这个注释 客户端可以看见(查看源代码时)
+	。<%----%>  这个注释，客户端无法看见， java 的注释 如： //  /* */   客户端也无法看见， 
+	。 如果要使用 java类型的注释， 必须写在 Scriptlet标签中
+
+
+
+
+
+
+
+  【【2】】. Scriptlet (脚本小程序)
+
+
+
+	。所有嵌入在 HTML 中的 java 程序都必须使用 Scriptlet 标签 标记出来，三种 Scriptlet 代码：
+
+		【一】： <% %> 在此 Scriptlet 中可以 定义局部变量、编写语句，注意：所有的 html 标签 </> 都不可以写在 <%%> 中
+			对于局部变量，浏览器每次刷新，该变量都会被 重新加载 初始化
+
+<%
+	int i = 7 ;
+	String str = "kingowe" ;
+	out.println("x = "+ x +"\n" + "str = " + str) ;
+%>
+
+
+
+
+		【二】： <%! %> 在此 Scriptlet 中可以定义 全局变量、方法、类， 但是 一般使用它都是用来声明全局常量，
+			而不会用来定义 方法或类
+			对于全局变量，浏览器每次刷新时不会重复声明， 假设有： <%! int x = 7; %>  <% out.println(x++) %>
+				每次浏览器刷新 都会有不同的值， x 都会不断递增
+
+<%!
+	public static final String name = "kingowe" ;
+%>
+<%!
+	public int add(int x, int y){
+		return x + y ;
+	}
+%>
+
+<%!
+	class Person{
+		private String name ;
+		private int age ;
+		public Person(String name, int age){
+			this.name = name ;
+			this.age = age ;
+		}
+		public String toString(){
+			return "name:" + this.name + ", age: " + this.age ;
+		}
+	}
+%>
+<%
+	out.println("<h3>"+name+"</h3>") ;
+	out.println("<h3>"+"3 + 5 = "+ add(3, 5) +"</h3>") ;
+	out.println("<h3>"+new Person("kongchao", 20)+"</h3>") ;
+%>
+
+
+
+
+
+
+
+		【三】： <%= %> 用于输出一个变量或者具体内容， 在开发中基本都是使用这种方式输出，而不使用 out.println() ;
+
+<%
+	String name = "孔超" ;
+	int age = 20 ; 
+%>
+<h3> name = <%=name%> </h3>
+<h3> age = <%=age%> </h3>
+<h3> string = <%="test test"%> </h3>
+
+
+
+
+
+
+
+  【【3】】. 第一个 JSP 程序
+
+
+实例代码：
+
+<%@ page contentType="text/html; charset=gb2312" language="java" import="java.sql.*" errorPage="" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+</head>
+
+<body>
+	<%
+		String str = "CAO" ;
+		int num = 7777777 ;
+		out.println("str = "+str + "，num =" + num) ;
+	%>
+	<h3>str = <%= str%></h3>
+	<h3>num = <%= num%></h3>
+</body>
+</html>
+
+
+运行结果：
+
+str = CAO，num =7777777
+str = CAO
+
+num = 7777777
+
+
+	。所有的 JSP程序 在执行时都变成 HTML 风格
+
+
+
+
+  【【4】】.  第一个简单的 JSP HTML 交互程序
+
+
+connect1.html
+
+<form method="post" action="connect1.jsp">		// 将表单内容提交至 connect1.jsp
+	输入信息： <input type="text" name="info"/></br>
+	<input type="submit" value="显示" />
+</form>
+
+
+
+connect1.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+
+<%
+	String info = request.getParameter("info") ;	// request.getParameter("name");  根据指定name接收表单提交内容	
+	out.println("<h3>"+info+"</h3>") ;		// 这种方式输出和 <h3>info:<%=info%></h3> 这种方式输出，如果接收的参数内容是中文，都会出现乱码，
+							//首行设置的 pageEncoding 只是设置的当前页面的显示，而没有为服务设置 ,
+							// 具体原因在《【【8】】. request 内置对象 》中解释
+%>								
+
+
+
+
+
+
+
+  【【5】】. 指令  MIME 类型设置
+
+
+	MIME(Multipurpose Internet Mail Extensions)：多用途互联网邮件扩展类型，就是设定某种扩展名的文件用一种应用程序来打开的方式类型，
+		当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。
+
+
+
+   【【5.0】】 page 指令
+
+
+	。语法：<%@page 属性="内容"%>
+		 page指令的属性：
+				import:	 此JSP页面需要导入的操作包  如:import="java.util.*" ; 
+
+				contentType:   定义JSP字符的编码和页面响应的MIME类型，如果是中文的话，则为
+							contentType="text/html;charset=GBK" ;
+
+				session:   值为 true 或 false，指定所在页面是否参与HTTP会话，默认值为true， 如：session="false" ;
+
+				pageEncoding:   JSP 页面的字符编码，默认值为 pageEncoding="ISO-8859-1" ; 如果是中文 则可以设置为：
+						   pageEncoding="GBK" ;		
+						在 JSP 中，如果 pageEncoding存在，则使用 pageEncoding 指定的编码，如果不存在 则使用
+						     contentType 中的 charset 指定的编码，都不存在，则使用默认的 ISO 8859-1
+
+				errorPage: 在当前的 JSP 页面中出现了错误之后的处理(跳转到处理页面)
+
+
+
+	》》 contentType 属性
+
+
+在未设置 MIME 类型的情况下 以下代码
+
+<h2>孔超 Kingowe</h2>
+
+中的文字在浏览器中将以西欧语言(ISO8859-1)显示, 所以需要设置 MIME 进行正确的文字显示
+
+<%@page contentType="text/html;charset=GBK"%>		// <%@ page %> 对 page进行设置  这里也可以为:
+							    //  <%@page contentType="text/html" pageEncoding="GBK"%>	
+<h2>孔超 Kingowe</h2>
+
+以上的 MIME 类型就表示整个页面按照 HTML 的风格显示，字符集是 GBK
+
+
+	。可以使用 MIME 类型 将一个页面显示成任意类型，显示成别的类型之后，可以使用以下代码 改变该文件的名字(以word文档举例)
+<%
+    response.setHeader("Context-Disposition", "attachement;filename=xxx.doc") ;
+%>
+
+
+
+如：将一个JSP页面显示成 Word 文档 在JSP第一行加上:
+	<%@page contentType="application/msword"%>	
+
+对于Word文档显示的MIME类型的定义：
+    <mime-mapping>
+        <extension>doc</extension>
+        <mime-type>application/msword</mime-type>
+    </mime-mapping>
+
+	。对于各种显示的MIME类型，可以在 Tomcat 安装目录下的conf 文件夹下的 web.xml 中查看，均包含在 <mime-mapping> </mime-mapping> 中
+	
+
+
+
+	》》 import 属性
+
+
+	。import: 此JSP页面需要导入的操作包  如:import="java.util.*" ; 	page指令中只有 import 属性可以多次使用，别的属性只可以使用一次
+
+<%@page import="java.util.*"%>
+<%@page import="java.sql.*"%>
+
+
+	。使用 import 指令，导入 java.sql.*  即可对 数据库进行操作
+
+   连接数据库操作之前，需要先将所需的数据库驱动复制到 Tomcat 安装目录下的 lib文件夹中，并且重新启动服务器
+
+实例代码(JSP 连接数据库)：
+sql1.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.sql.*"%>
+<%!
+	public static final String DRIVER = "com.microsoft.jdbc.sqlserver.SQLServerDriver" ;
+	public static final String URL = "jdbc:microsoft:sqlserver://localhost:1483" ;
+	public static final String USER = "sa" ;
+	public static final String PASS = "admin" ;
+%>
+<%
+ 	Connection con = null;		// 不要忘了初始化
+	PreparedStatement pstmt = null ;	// 不要忘了初始化
+	ResultSet rs = null ;		// 不要忘了初始化
+%>
+
+<center>
+<table width="80%" border="1">
+<tr>
+	<td>教师姓名</td>
+	<td>教师编号</td>
+	<td>教师工资</td>
+</tr>
+
+<%
+	try{
+		Class.forName(DRIVER) ;
+		con = DriverManager.getConnection(URL,USER, PASS) ;
+		String sql = "select tname, tid, tsalary from dbo.teacher" ;
+		pstmt = con.prepareStatement(sql) ;
+		rs = pstmt.executeQuery() ;
+		while(rs.next()){
+			String name = rs.getString(1) ;
+
+
+			int id = rs.getInt(2) ;
+			float salary = rs.getFloat(3) ;
+%>
+
+<tr>
+	<td><%=name%></td>
+	<td><%=id%></td>
+	<td><%=salary%></td>
+</tr>
+
+<%
+		}
+		
+	}catch(Exception e){System.out.println(e);}
+	finally{
+		rs.close() ;
+		pstmt.close() ;		// 注意关闭顺序， 如果 pstmt.close() 在 con.close() 之后 则会出错，连接 con 最后关闭
+		con.close() ;		
+	}
+%>
+</table>
+</center>
+
+
+
+
+ 
+
+
+
+	》》 errorPage 属性
+
+	
+	使用：<%@ page errorPage="error.jsp"%>	// 指定出错后跳转的页面， 在 error.jsp 中需要 <%@ page isErrorPage="true"%>
+
+示例代码：
+
+  pageError1.jsp
+<%@ page errorPage="pageError01.jsp"%>		// 设置出错后的跳转页面
+<%
+	int x = 10/0 ;	    // 出错地方
+%>
+
+  pageError01.jsp
+<%@ page contentType="text/html" pageEncoding="GBK" isErrorPage="true"%>
+<center><h3>程序出现错误</h3></center>
+
+
+	。经过以上的设置，程序出错后基本上都可以正常的跳转，但是有时候也会出现无法跳转的现象，所以最好在当前页面出错后
+		跳转后的页面(pageError01.jsp) 中加上：
+<%
+	response.setStatus(200) ; 
+%>
+	为出错后需要显示的页面添加一个状态码(即为网页信息的响应吗，200表示OK)，便可以完成
+
+
+	。以上出错后的跳转属于服务器端跳转(地址栏不改变)
+
+	。除了使用以上的错误处理方式之外，还可以通过修改 当前虚拟目录下的配置文件 web.xml 来实现错误的统一处理：
+	 	在 web.xml 中的 <web-app></web-app> 之间添加代码（这种方式不常用），之后重新启动服务器
+  <error-page>
+     <error-code>500</error-code>	// 程序出现错误的编码
+     <location>/pageError01.jsp</location>	// 出现错误后跳转的页面，注意文件名前边要写 “/” 否则服务器无法启动
+  </error-page>
+  <error-page>
+     <exception-type>java.lang.NullPointerException</exception-type>	// 程序出现错误的异常
+     <location>/pageError01.jsp</location>	// 出现异常后跳转的页面，注意文件名前边要写 “/” 否则服务器无法启动
+  </error-page>
+
+
+
+
+
+
+  【【5.1】】 include 指令
+
+
+    【一】、 @include ： 该指令属于静态包含，可以包含任意的文件，只是把文件的内容包含进来
+
+  test1.html
+<h2>孔超</h2>
+  test2.txt
+<h2>kingowe</h2>
+  test3.xxx
+<h2>任意内容</h2>
+
+   在 test.jsp 中包含以上三个文件的内容：
+  test.jsp
+<h1>这里是 test.jsp 自己的内容<h1>
+<%@include file="test1.html"%>
+<%@include file="test2.txt"%>
+<%@include file="test3.xxx"%>	
+
+
+
+
+    【二】、 <jsp:include> ： 该指令属于动态包含，如果被包含的页面是 .jsp 文件，则先将文件处理之后 再将结果包含进来，
+			     如果包含的是 非.jsp 文件，则直接将文件的内容 静态的包含进来(与@include效果一样)
+
+
+
+	。语法一： <jsp:include page="包含的文件路径 | <%=表达式%>" flush="true|false"/>
+    使用该语法包含上面的三个 test文件：
+test.jsp
+<h1>这里是 test.jsp 自己的内容<h1>
+<jsp:include page="test1.html">
+<jsp:include page="test2.txt">
+<jsp:include page="test3.xxx">
+
+
+	。语法二： <jsp:include page="包含的文件路径 | <%=表达式%>" flush="true|false">		
+			<jsp:param name="参数名称" value="值"/>
+			// .....   可以有多行			
+		   </jsp:include>
+
+
+	使用语法二 除了可以包含之外，还可以向里面传递参数
+	
+
+测试程序：
+
+	content.jsp
+<%@page contentType="text/html;charset=GBK"%>
+<h2>接收的参数1：<%=request.getParameter("ref1")%></h2>
+<h2>接收的参数2：<%=request.getParameter("ref2")%></h2>
+<h2>接收的参数3：<%=request.getParameter("ref3")%></h2>
+
+	pagetest1.jsp
+<%@page contentType="text/html;charset=GBK"%>
+<%!
+	public static final String str = "www.mldn.cn" ;
+%>
+<jsp:include page="content.jsp">
+	<jsp:param name="ref1" value="kingowe"/>
+	<jsp:param name="ref2" value="str"/>		// 对于上边定义的 final String str 如果这样传，传递的值是 "str"
+	<jsp:param name="ref3" value="<%=str%>"/>	// 如果传递的参数为变量,则要使用 <%=变量名%> 这种方式，
+							    // 注意格式：value="<%=str%>"  而不是 value=<%=str%>
+</jsp:include>
+
+
+浏览器结果：
+接收的参数1：kingowe
+
+接收的参数2：str
+
+接收的参数3：www.mldn.cn
+
+
+
+
+	。对于静态包含与动态包含，如果在包含文件与被包含文件中存在着同名变量，使用静态包含会出错，因此要使用动态包含，
+	     因为动态包含是先处理 再包含，静态包含是编译时包含，他包含的所有的jsp会编译成一个Servlet，动态包含属于运行时包含，他包含的
+		所有jsp会编译成各自的Servlet，静态包含的效率高
+
+
+
+
+
+
+
+
+
+  【【5.2】】 forward 指令(页面跳转指令)	登陆系统
+
+
+	。语法一： <jsp:forward page="页面"/>
+
+测试程序：
+
+forwardtest1.jsp
+<%@ page contentType="text/html; charset=GBK"%>
+<jsp:forward page="forwardtest2.jsp"/>
+
+forwardtest2.jsp
+<%@ page contentType="text/html; charset=GBK"%>
+<h1>跳转后的页面</h1>
+
+
+	这种跳转属于服务器端跳转，跳转后的网址并不会改变，还是原来的网址
+
+
+	。语法二： <jsp:forward page="页面">		
+			<jsp:param name="参数名称" value="值"/>
+			// .....   可以有多行			
+		   </jsp:forward>
+
+
+
+
+登录系统实例代码：
+
+  login.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<center>
+<h2>欢迎使用登录窗口</h2>
+<form action="login_check.jsp" method="post">
+<table width="37%" border="2">
+	<tr>
+		<td>
+			用户名：<input type="text" name="user"/>
+		</td>
+		<td>
+			密  码：<input type="password" name="pass"/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" valign="middle">
+			<center>
+				<input type="submit" value="提交"/>&nbsp;&nbsp;&nbsp;<input type="reset" value="重置"/>
+			</center>
+		</td>
+	</tr>
+</table>
+</form>
+</center>
+
+
+  login_check.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.sql.*"%>
+<%!
+	public static final String DRIVER = "com.microsoft.jdbc.sqlserver.SQLServerDriver" ;
+	public static final String URL = "jdbc:microsoft:sqlserver://localhost:1483" ;
+	public static final String USER = "sa" ;
+	public static final String PASS = "admin" ;
+%>
+<%
+	Connection con = null ;
+	PreparedStatement pstmt = null ;
+	ResultSet rs = null ;
+	boolean flag = false ;
+	String uname = null ;
+	String upass = null ;
+	String name = request.getParameter("user") ;
+	String pass = request.getParameter("pass") ;
+%>
+<%
+	try{
+		Class.forName(DRIVER) ;
+		con = DriverManager.getConnection(URL, USER, PASS) ;
+		String sql = "select username,password from login where username=? and password=?" ;
+		pstmt = con.prepareStatement(sql) ;
+		pstmt.setString(1, request.getParameter("user")) ;	// 注意！ 这里是 getParameter() 不是 getAttribute()
+		pstmt.setString(2, request.getParameter("pass")) ;	// 注意！ 这里是 getParameter() 不是 getAttribute()
+		rs = pstmt.executeQuery() ;
+		if(rs.next()){
+			flag = true ;
+			uname = rs.getString(1) ;
+			upass = rs.getString(2) ;
+		}
+	}catch(Exception e){
+		System.out.println(e) ;
+	}finally{
+		rs.close() ;
+		pstmt.close() ;
+		con.close() ;
+	}
+	if(flag){
+%>
+		<jsp:forward page="login_success.jsp">
+			<jsp:param name="user" value="<%=uname%>"/>	// 注意这里的格式！！value="<%=uname%>" 双引号不可少	
+			<jsp:param name="pass" value="<%=upass%>"/>	// 注意这里的格式！！value="<%=upass%>" 双引号不可少	
+		</jsp:forward>
+<%
+	}else {
+%>
+		<jsp:forward page="login_fail.jsp">
+			<jsp:param name="user" value="<%=name%>"/>	// 注意这里的格式！！value="<%=name%>" 双引号不可少	
+			<jsp:param name="pass" value="<%=pass%>"/>	// 注意这里的格式！！value="<%=name%>" 双引号不可少
+		</jsp:forward>
+<%
+	}
+%>
+
+
+  login_success.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+
+欢迎<%=request.getParameter("user")%>回来！！
+
+
+  login_fail.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+
+用户名:<%=request.getParameter("user")%>
+密码:<%=request.getParameter("pass")%>
+输入有误！！
+
+<h3>
+	点击<a href="login.jsp"><h2>此处</h2></a>重新登陆
+</h3>
+
+
+
+
+
+
+
+
+
+
+
+  【【6】】. JSP中的内置对象列表
+
+
+	》》 pageContext 所属类(接口)(Java EE) javax.servlet.jsp.PageContext
+
+
+	》》 request 所属类(接口)(Java EE) javax.servlet.http.HttpServletRequest
+
+	
+	》》 response  所属类(接口)(Java EE)  javax.servlet.http.HttpServletResponse   
+
+
+	》》 session 所属类(接口)(Java EE)   javax.servlet.http.HttpSession
+
+
+	》》 application  所属类(接口)(Java EE)   javax.servlet.ServletContext
+
+
+	》》 config   所属类(接口)(Java EE)	javax.servlet.ServletConfig
+
+
+	> > out	所属类(接口)(Java EE)  javax.servlet.jsp.JspWriter
+
+
+	> > page  所属类(接口)   java.lang.Object
+
+
+	> > exception  所属类(接口)   java.lang.Throwable
+
+
+
+
+
+
+  【【7】】. 四种属性范围(针对于Attribute)
+
+
+
+	
+	一、 当前页： 属性只能在一个页面中取得，跳转到其他页面无法取得
+
+	二、 一次服务器请求范围： 一个页面中设置的属性，经过了服务器跳转，跳转之后的页面可以继续取得
+
+	三、 一次会话： 一个用户设置的内容，只要与此用户相关的页面都可以取得
+
+	四、 上下文中： 在整个服务器上设置的属性，所有人都可以访问
+
+
+
+  》》属性的操作方法(四种属性范围中都包含以下属性的操作方法)
+
+	。设置属性：
+		public void setAttribute(String attName, Object attValue)   
+
+	。取得属性：
+		public Object getAttribute(String attName)
+
+	。删除属性：
+		public void removeAttribute(String name)
+
+
+
+
+  》》属性范围
+
+
+  	【一】、pageContext 属性范围（习惯称为page属性范围）：在一个页面设置的属性 跳转到其他页面无法访问，习惯上将页面范围的属性称为page范围，
+							   实际上操作的时候是使用 pageContext 内置对象来完成的
+
+
+>> 测试代码1：
+
+attributeTest1.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	pageContext.setAttribute("name", "孔超") ;
+	pageContext.setAttribute("date", new Date()) ;
+%>
+<%
+	String name = (String)pageContext.getAttribute("name") ;	// 根据属性名取得的属性全是 Object 类型，所以要强制类型转换
+	Date date = (Date)pageContext.getAttribute("date") ;		// 同上 要强制类型转换
+%>
+<h2>姓名: <%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+浏览器显示结果：
+姓名: 孔超
+
+日期：Sun Jun 08 12:13:24 CST 2014
+
+	pageContext范围：在同一个页面中可以取得设置的属性
+
+
+
+>> 测试代码2：
+
+attributeTest2.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	pageContext.setAttribute("name", "孔超") ;
+	pageContext.setAttribute("date", new Date()) ;
+%>
+<%
+	String name = (String)pageContext.getAttribute("name") ;
+	Date date = (Date)pageContext.getAttribute("date") ;	// 使用到 Date 类 所以要在上边 import java.util.* ;
+%>
+<jsp:forward page="attributeForward2.jsp"/>		// 注意这里 如果不是<%%> 格式 则必须为 </> 或者 <></> 结束标签不可少
+
+
+attributeForward2.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>
+<%
+	String name = (String)pageContext.getAttribute("name") ;
+	Date date = (Date)pageContext.getAttribute("date") ;	// 使用到 Date 类 所以要在上边 import java.util.* ;
+%>
+<h2>姓名：<%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+浏览器显示结果：
+姓名：null
+
+日期：null
+
+	pageContext 范围： 跳转后的页面无法取得跳转前页面所设置的属性值
+
+
+
+
+
+	【二】、 request 属性范围： 在一个页面设置的属性，页面经过服务器端跳转，跳转后的页面(无论跳转多少次)都可以访问该属性
+					如果是经过的客户端跳转(地址栏地址改变，使用超链接<a href=""/> 跳转)，则跳转后的页面
+					无法取得该属性
+
+
+
+>> 测试代码1.
+
+attributeTest3.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	request.setAttribute("name", "kingowe") ;
+	request.setAttribute("date", new Date()) ;
+%>
+<%
+	String name = (String)request.getAttribute("name") ;
+	Date date = (Date)request.getAttribute("date") ;
+%>
+<jsp:forward page="attributeForward3.jsp"/>
+
+
+attributeForward3.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>
+<%
+	String name = (String)request.getAttribute("name") ;
+	Date date = (Date)request.getAttribute("date") ;
+%>
+<h2>姓名：<%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+浏览器显示结果：
+姓名：kingowe
+
+日期：Sun Jun 08 12:42:46 CST 2014
+
+
+	。request 属性范围： 经过 服务器端 跳转后的页面可以取得跳转前设置的属性
+
+
+
+>> 测试代码2.
+
+attributeTest4.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	request.setAttribute("name", "kingowe") ;
+	request.setAttribute("date", new Date()) ;
+%>
+<a href="attributeForward4.jsp">attributeForward4.jsp</a>
+
+
+attributeForward4.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	String name = (String)request.getAttribute("name") ;
+	Date date = (Date)request.getAttribute("date") ;
+%>
+<h2>姓名：<%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+
+浏览器显示结果：
+姓名：null
+
+日期：null
+
+
+	。request 属性范围： 经过 客户端 跳转后的页面无法取得跳转前的页面设置的属性值
+
+
+
+
+	【三】、session 属性范围： 无论经过 服务器端跳转 还是经过 客户端跳转， 跳转后的页面都可以取得跳转前页面设置的属性
+				       如果页面都处于同一个浏览器中，则处于同一个浏览器中的这些页面即使没有经过跳转，也可以直接
+					    取得这些session属性，但是如果新开浏览器，则无法取得
+
+	session.setAttribute("name", "孔超") ;
+	String name = (String)session.getAttribute("name") ;
+
+	
+测试代码：
+
+attributeTest5.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	session.setAttribute("name", "kingowe") ;
+	session.setAttribute("date", new Date()) ;
+%>
+<%
+	Thread.sleep(3000) ;		// 浏览器经过 3 秒之后开始加载
+%>
+<a href="attributeForward4.jsp">attributeForward4.jsp</a>
+
+
+attributeForward5.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	String name = (String)session.getAttribute("name") ;
+	Date date = (Date)session.getAttribute("date") ;
+%>
+<h2>姓名：<%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+
+浏览器显示结果：
+姓名：kingowe
+
+日期：Sun Jun 08 13:16:58 CST 2014
+
+
+
+
+
+	【四】、application 属性范围：在服务器上设置的属性， 只要服务器没有关，则所有的页面都可以取得
+
+
+测试代码:
+
+attributeTest6.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	application.setAttribute("name", "孔超") ;
+	application.setAttribute("date", new Date()) ;
+%>
+
+
+attributeForward6.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%@ page import="java.util.*"%>	
+<%
+	String name = (String)application.getAttribute("name") ;
+	Date date = (Date)application.getAttribute("date") ;
+%>
+<h2>姓名：<%=name%></h2>
+<h2>日期：<%=date%></h2>
+
+
+浏览器显示结果：
+姓名：孔超
+
+日期：Sun Jun 08 13:25:42 CST 2014
+
+
+	。只要启动了 attributeTest6.jsp 进行了属性设置，则 任意打开一个页面都可以取得该属性，
+	
+	。对于 application 属性，是在服务器上设置的属性，如果设置过多 会影响服务器性能,  服务器关闭 属性消失
+
+
+
+
+
+	【五】、 pageContext 属性范围扩展
+
+	Java EE API 文档中 PageContext(内置对象：pageContext) 类的 static int 属性： 
+		
+		。static int APPLICATION_SCOPE  对应 application 属性范围
+
+		。static int PAGE_SCOPE  	对应 pageContext 属性范围
+
+		。static int REQUEST_SCOPE  	对应 request 属性范围
+
+		。static int SESSION_SCOPE  	对应 session 属性范围
+
+	
+	除了这些属性之外，还提供了获得其他对象的getXxx() 方法，来获取其他的几个对象，例如：获取page对象 pageContext.getPage(); 
+	   获取 application对象 pageContext.getServletContext() ;
+
+
+
+pageContext 的所属类 PageContext 实现了父类 JspContext 中的两个方法：
+
+1. abstract void setAttribute(String name, Object value) 
+
+2. abstract public void setAttribute(String name, Object value, int scope)
+
+对于第二个方法中的 int scope 参数，对应上边的 四个 static int 常量，所以可以使用 PageContext.***_SCOPE 设置四种属性范围
+
+例如 设置 request 属性范围： 
+	pageContext.setAttribute("date", new Date(), PageContext.REQUEST_SCOPE) ;
+
+这样便设置 date 属性 为 request属性范围， 要在request范围内取得该属性 使用 request.getAttribute("date") ;  即可取得该 date 属性
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  【【8】】. request 内置对象
+
+
+
+	。request 是 HttpServletRequest接口 的一个实例化对象， HttpServletRequest 接口的父接口是 ServletRequest
+
+	！* ！* ！ 注意与 request属性范围的区别： 四个属性范围是针对于设置的属性，参数的接收与属性范围没有关系，只要传递了参数，
+			且参数传递有效，那么在接收参数的页面就可以使用 request.getParameter("paraname"); 方法来接收
+
+
+
+	》》 使用 request 接收参数值【重点】
+
+
+测试代码1.：
+
+test1.html
+
+<form method="post" action="requestTest1.jsp">		
+	<input type="text" name="str"/>
+	<input type="submit" value="显示"/>
+</form>
+
+	【form 属性 method 的值 post 与 get 的区别：】：
+		。get  提交：会在地址栏中显示提交的内容，地址栏中最大能放 2K 的内容，如果提交内容过大则无法提交
+		。post 提交：不会在地址栏中显示提交的内容， 本身不受长度的限制，理论上可以是任意长度，但是如果内容
+				过多，则会超过 HTTP 超时时间的限制
+
+		。默认提交方式为 get
+
+requestTest1.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%
+	String param = request.getParameter("str") ;
+%>
+<h2>参数内容：<%=param%></h2>
+
+
+
+	。通过以上代码 可以简单的完成通过request接收参数的功能，如果输入的是英文，则会正常显示输入的内容，如果
+		输入的是中文，则会出现乱码，原因： 所有的 静态WEB 执行流程：先从服务器上取得一个页面，通过此页面
+		把内容提交给服务器，之后服务器再将提交的内容返回给客户端进行显示，如果客户端使用的编码与服务器一致，
+		则不会出现乱码，但是由于客户端使用的编码是 中文 GBK，服务器端使用的编码是 ISO8859-1，因此出现了乱码
+		
+	。解决方法一：直接将输入的内容变为服务器端的编码(ISO8859-1)， 如果想要完成转码操作，需要将字符串内容变为 byte 数组:
+
+转码操作(对 requestTest1.jsp进行修改)：
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%
+	String param = request.getParameter("str") ;
+	param = new String(param.getBytes("ISO8859-1")) ;	//  byte[] getBytes(String charsetName) 
+%>
+<h2>参数内容：<%=param%></h2>
+
+
+
+	【【【【【这里留下的问题：对于session application pageContext 编码的设置，它们中有的并无 setCharacterEncoding() 方法】】】】】
+		暂时答案： 在 session application pageContext 中并没有接收参数的方法 getParameter() 方法，传递的参数只有 request 可以接收
+
+
+	。解决方法二：设置一个统一的编码，之后的数据按此编码进行接收， 在 ServletRequest 接口中定义了一个 setCharacterEncoding()
+			  方法，通过此方法可以进行统一编码的设置：
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;		// 这里 如果使用的是此种方式来解决乱码， 则form的属性 method 的值要为 post
+								// 如果为 get(默认不写也为get) 则还会出现乱码
+	String param = request.getParameter("str") ;
+%>
+<h2>参数内容：<%=param%></h2>	
+
+
+
+
+
+	。如果需要接收的参数是多个同名参数(如 复选框的参数)， 则需要使用 request.getParameterValues(String name), 此方法
+		返回一个 String[] 
+
+
+复习 checkbox ：
+
+<form action="receive.jsp" method="post">
+	<input type="checkbox" name="interest" value="编程" /> 编程
+	<input type="checkbox" name="interest" value="听音乐" /> 听音乐
+	<input type="checkbox" name="interest" value="没爱好" /> 没爱好
+	<br/>
+	<input type="submit" value="显示"/>
+</form> 
+
+
+receive.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	String[] values = request.getParameterValues("interest") ;
+%>
+<h3>兴趣: &nbsp;		// 注意从这里开始的格式
+<%
+	for(int i=0; i<values.length; i++){	// 在for循环之前最好加一个 if(values != null) 的判断，因为如果用户没有选择任何值
+							// 则 values[] 为 null, 使用 values.length 将会有 NullPointerException
+%>
+	<%=values[i]+"、"%>
+<%
+	}
+%>
+</h3>
+
+
+
+	。还可以使用 URL 重写的方式完成参数传递  地址栏输入格式：动态页面地址?参数名称1=参数值&参数名称2=参数值&....
+
+  requestURL.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	String name = request.getParameter("name") ;
+	String age = request.getParameter("age") ;
+%>
+<h3>name:<%=name%></h3>
+<h3>age:<%=age%></h3>
+
+在地址栏中输入：http://localhost:8080/test/requestURL.jsp?name=kingowe&age=21  完成以上页面的参数传递
+
+
+
+	。使用get方式提交(<a> 地址栏重写)，出现的乱码使用 request.setCharacterEncoding("") ; 无法解决， 要使用：
+		String param = request.getParameter("name") ;  String value = new String(param.getBytes("iso8859-1"),"gbk") ;
+
+
+
+
+
+	》》 使用 request 取得所有参数名
+
+
+		。使用 request.getParameterNames() ; 可以取得所有定义的参数名， 然后可以根据参数名取得参数值，
+			该方法返回一个 Enumeration
+
+测试代码：
+
+test4.html
+
+<form action="requestTest4.jsp" method="post">
+	姓名：<input type="text" name="name"/><br>
+	爱好：
+	<input type="checkbox" name="**interest" value="编程" /> 编程		// 为了方便对参数的操作，对 参数名相同 且有多个值的参数名
+											// 可以使用特殊的标记名称来区分 例如 checkbox
+	<input type="checkbox" name="**interest" value="听音乐" /> 听音乐
+	<input type="checkbox" name="**interest" value="没爱好" /> 没爱好
+	<br/>
+	<input type="submit" value="显示"/>
+</form> 
+
+
+requestTest4.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+
+<%@ page import="java.util.*"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	Enumeration enu =  request.getParameterNames() ; 	// 【在JSP中不可以使用 enum 作为自定义变量名】，
+
+	while(enu.hasMoreElements()){		// hasMoreElements() 方法 判断是否有下一个元素
+		String name = (String)enu.nextElement() ;	// nextElement() 取得下一个元素， 对于取出来的元素 要进行 cast
+%>
+
+		<h2><%=name%>
+		-->
+
+<%
+		if(name.startsWith("**")){
+			String[] temp = request.getParameterValues(name) ;
+			for(int i=0; i<temp.length; i++){
+%>
+
+				<%=temp[i]+"、"%>	
+
+<%
+			}
+		}else{
+%>
+
+			<%=request.getParameter(name)%>
+
+<%
+		}
+%>
+	</h2>
+<%
+	}
+%>
+
+
+
+
+
+	。只要使用 request 接收参数，那么就需要进行 setCharacterEncoding()
+
+
+
+
+
+
+	》》 URL 重写
+
+
+	。除了使用 表单传递参数的方法之外，还可以使用 地址重写 的方法传递参数 格式：
+		xxx.jsp?参数名称=参数值&参数名称=参数值 	// 可以传递多个参数
+
+示例代码：
+
+test2.html
+
+<h2><a href="requestTest2.jsp?param1=孔超&param2=kingowe">requestTest2</a></h2>
+
+
+requestTest2.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>
+<%
+	//request.setCharacterEncoding("GBK") ;
+	String name1 = request.getParameter("param1") ;
+	name1 = new String(name1.getBytes("ISO8859-1")) ;
+	String name2 = request.getParameter("param2") ;
+%>
+<h2>参数内容：<%=name1%></h2>
+<h2>参数内容：<%=name2%></h2>
+
+
+
+
+	》》 request 对象的其他操作【重点】
+
+	
+	取得客户端的 IP 地址   request.getRemoteAddr() ;
+
+
+用法示例：
+
+  requestURL.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	String ip = request.getRemoteAddr() ;
+	String method = request.getMethod() ;
+	String path = request.getServletPath() ;
+	String contextPath = request.getContextPath() ;
+%>
+<h3>ip地址:<%=ip%></h3>
+<h3>请求方式：<%=method%></h3>
+<h3>访问路径：<%=path%></h3>
+<h3>上下文名称：<%=contextPath%></h3>
+
+结果：
+ip地址:0:0:0:0:0:0:0:1
+
+请求方式：GET
+
+访问路径：/requestURL.jsp
+
+上下文名称：/test
+
+
+
+
+
+
+
+  【【9】】. response 内置对象
+
+	
+	。response 表示服务器端对客户的回应， response 是 HttpServletResponse接口 的一个实例化对象， HttpServletResponse 是
+		ServletResponse 的 子接口
+
+
+	。response 的主要作用： 设置头信息， 设置状态码，  页面跳转，  Cookie,  设置页面缓存     (response是设置  request 是取得)
+
+	。response 中的主要方法： 
+	
+		· void setHeader(String name, String value)   设置头信息的 name 和 value
+					
+		· void sendRedirect(String location)throws IOException    由一个页面跳转到另一个页面 与response.setHeader("location", "uri") ;类似
+
+		· void addCookie(Cookie cookie)   向客户端加入 Cookie
+
+		· void setContentType(String type)  	设置的内容的返回类型
+
+
+
+
+	》》 头信息
+
+	。头信息就是随着具体的内容一起提交到服务器端，或者从服务器端随着内容一起发送到客户端上来的
+
+	。取得全部头信息的 name：  Enumeration getHeaderNames() 
+
+	。取得每一个头信息的内容：  String getHeader(String name) 
+
+	。设置自动刷新页面：
+
+<%@ page contentType="text/html; charset=GBK"%>
+ <%!
+ 	int temp = 0 ;
+ %>
+ <%
+ 	response.setHeader("refresh","1.0") ;	   // 设置页面 每隔 1秒 刷新一次，一般刷新的频率是 2 秒
+ %>
+ <%=temp++%>	
+	
+
+
+
+	。让一个页面经过指定时间跳转到其他页面：
+
+【跳转方式一】、
+
+test1.jsp
+
+<%@ page contentType="text/html; charset=GBK"%>		// 此跳转为客户端跳转
+ <%
+ 	response.setHeader("refresh","5.0;test3.html") ;	
+ %>
+ <h3>5 秒钟后自动跳转到 test3.html</h3>
+ <h3>如果没有自动跳转 请点击<a href="test3.html">这里</a></h3>
+
+	。该方式的跳转有时候无法完成跳转功能(经过跳转后的页面 点击后退回到跳转前的页面，刷新此页面，无法完成跳转)
+
+
+【跳转方式二】、
+
+test1.html
+
+<meta http-equiv="refresh" content="5; test3.html">
+ <h3>5 秒钟后自动跳转到 test3.html</h3>
+ <h3>如果没有自动跳转 请点击<a href="test3.html">这里</a></h3>
+
+
+【跳转方式三】、
+
+<%
+	Thread.sleep(5000) ;
+	response.sendRedirect("test3.html") ;	// 客户端跳转
+%>
+
+	。对于使用 response.sendRedirect(URL) ; 这种方式的跳转，可以给跳转后的页面传递参数
+
+<%
+	Thread.sleep(3000) ;
+	response.sendRedirect("response3.jsp?name=kingowe") ;	// 客户端跳转， 传递参数
+%>
+
+跳转后的页面接收参数：
+<h2><%=request.getParameter("name")%></h2>
+
+
+【跳转方式四】、
+
+	response.setStatus(302) ;  // 状态码含义：请求重定向
+	response.setHeader("location", "uri") ;
+
+
+
+	> >  两种跳转的区别：
+
+	。服务器端跳转： <jsp:forward page="">
+
+	。客户端跳转： response.sendRedirect("")     response.setHeader("","")
+
+	· response 跳转的特点：所有页面执行完之后再进行跳转，但是不能传递 request 范围内的属性，因为response跳转是客户端跳转，
+		跳转后的页面只能接收 session application 这两个范围的属性
+
+	· forward 属于无条件的跳转，只要执行到此语句 立刻进行跳转，但是可以传递 request 范围的属性，因为 Forward 跳转属于服务
+		器端跳转，可以接收除 page 范围之外的属性
+
+总结：如果一个页面使用了JDBC， 则要在 forward 跳转之前关闭数据库连接， 如果使用的是 response 跳转，则可以在任意位置关闭	
+
+
+
+
+
+	》》 request.setCharacterEncoding() 与 response.setCharacterEncoding() 与 response.setContentType() 方法比较：
+
+	· request.setCharacterEncoding()是你设置获得数据的编码方式。是设置动态文字（参数，数据库）
+	· response.setCharacterEncoding()是你响应时设置的编码。 设置页面静态文字
+	· response.setContentType()是设置你响应时的MIME及编码，其中也可以不设置编码，由response.setCharacterEncoding()设置，
+	     即 response.setContentType(text/html; charset=utf-8)可以写成 response.setCharacterEncoding("utf-8")和response.setContentType("text/html")
+
+
+
+
+
+
+
+
+
+	》》 Cookie 
+
+
+
+Cookie百度解释：
+
+	Cookie是由服务器端生成，发送给User-Agent（一般是浏览器），浏览器会将Cookie的key/value保存到某个目录下的文本文件内，
+	   下次请求同一网站时就发送该Cookie给服务器（前提是浏览器设置为启用cookie）。Cookie名称和值可以由服务器端开发自己定义，
+		对于JSP而言也可以直接写入jsessionid，这样服务器可以知道该用户是否合法用户以及是否需要重新登录等，服务器可以设置或
+		     读取Cookies中包含信息，借此维护用户跟服务器会话中的状态。
+
+
+        >> Cookie中的常用方法：
+
+	· void setValue(String newValue) 		Assigns a new value to a cookie after the cookie is created
+	       使用cookie.setValue() 对当前的cookie的value进行设置之后，还需要进行 response.addCookie(cookie) 操作
+		   没有此操作，无法给cookie赋值
+
+	· String getValue() 			        Returns the value of the cookie. 
+
+	· String getName()           			Returns the name of the cookie. 
+	
+	· void setMaxAge(int expiry)           	Sets the maximum age of the cookie in seconds. 
+		如果要删除一个cookie，可以： cookie.setMaxAge(0) ; 同样 在这句话之后同样需要 response.addCookie(cookie) ;
+
+	· setPath("/path") ; 此处的路径用于浏览器，对cookie执行setPath("/path")方法，表示 访问属于该path路径下的页面都会带着该cookie
+	
+
+
+
+	。Cookie 是服务器端保存在客户端的一组数据，由于保存在了客户端，所以安全性较差， Cookie 属于一个单独类，保存在
+		javax.servlet.http.Cookie; 中
+
+	。Cookie 构造方法： public Cookie(String name, String value)	只有一个构造方法
+				一个name 加上 一个value 即为 一个cookie	
+
+		 普通方法：  public String getName() 	 取得 Cookie 的名字, Cookie 重名，新的会替换掉旧的
+			      public void setValue(String newValue)	修改内容
+			      pubic void setMaxAge(int expiry)	   设置 Cookie 最大保存时间 （秒）
+				对于 setMaxAge(int miao) 方法的使用应该放在 response.addCookie() 之前，否则设置无效
+				对于 Cookie 的获取：request.getCookies()， 该方法返回一个 Cookie[]
+
+
+对 Cookie 的操作：
+
+  cookietest1.jsp
+<%@ page contentType="text/html; charset=GBK"%>	
+ <%
+ 	Cookie c1 = new Cookie("kongchao","admin") ;
+	Cookie c2 = new Cookie("kingowe","admin") ;
+	c1.setMaxAge(300) ;		// 设置 c1 的保存时间为 300s，在300s之内(无论是否关闭过浏览器)，可以使用设置该Cookie的浏览器取得该Cookie，
+						//没有给c2设置保存时间，默认为浏览器关闭一段时间后，c2消失
+ 	response.addCookie(c1) ;
+	response.addCookie(c2) ;
+ %>
+
+
+  cookietest001.jsp
+<%
+	Cookie[] c = request.getCookies() ;
+	for(int i=0; i<c.length; i++){
+%>
+	<h3><%=c[i].getName()%> ---> <%=c[i].getValue()%></h3>		// 错误写法：<h3> <%=c[i].getName() ---> c[i].getValue()%> </h3>
+<%
+	}
+%>
+
+  浏览器未关闭结果：
+JSESSIONID ---> 130D46B34E15AB3456533E192DDF11A5	// session对象的 session id
+
+kongchao ---> admin
+
+kingowe ---> admin
+
+
+  浏览器关闭重新打开结果：
+kongchao ---> admin
+
+
+
+
+
+	！* ！* ！注意问题： 1. 在 jsp 中，非html格式的注释只能出现在 <% %> 之间，否则将会出错
+
+			     2. 一个 webapp 的cookie保存在一个文件中
+
+			     3. 对于一个Cookie，如果在创建Cookie时，调用了 setMaxAge()方法，那么该Cookie就会以文件的方式保存，生命周期即为该
+				  方法的参数，而且此种Cookie在当前浏览器关闭之后，新开一个该浏览器，只要在生命周期内，就可以取得此Cookie，
+   				      如果没有调用 setMaxAge() 方法，那么此种Cookie只是保存在当前浏览器窗口，除了当前窗口和其子窗口之外的浏览器
+					  无法取得该Cookie
+
+			     4. 创建Cookie时，如果name或者value有中文，则会出错：
+
+
+测试代码：
+《E:\Servlet\WEB-INF\classes\CreateCookie.java》
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class CreateCookie extends HttpServlet
+{
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		response.setContentType("text/html") ;
+		response.setCharacterEncoding("GBK") ;
+//		request.setCharacterEncoding("GBK") ;
+		Cookie cookie1 = new Cookie("name", "孔超") ;		// 这里value为中文
+		Cookie cookie2 = new Cookie("company", "kingowe") ;
+		cookie1.setMaxAge(1200) ;
+		cookie2.setMaxAge(1200) ;
+		response.addCookie(cookie1) ;
+		response.addCookie(cookie2) ;
+		response.getWriter().println("OK创建完成！！") ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			 throws IOException, ServletException {
+		this.doGet(request, response) ;
+	}
+}
+			
+
+浏览器运行：http://localhost:8080/servlet/CreateCookie  结果：
+
+HTTP Status 500 - Control character in cookie value or attribute.
+
+type Exception report
+
+message Control character in cookie value or attribute.
+
+description The server encountered an internal error that prevented it from fulfilling this request.
+
+exception
+
+java.lang.IllegalArgumentException: Control character in cookie value or attribute.
+	org.apache.tomcat.util.http.CookieSupport.isHttpSeparator(CookieSupport.java:193)
+	org.apache.tomcat.util.http.CookieSupport.isHttpToken(CookieSupport.java:217)
+	org.apache.tomcat.util.http.ServerCookie.appendCookieValue(ServerCookie.java:186)
+	org.apache.catalina.connector.Response.generateCookieString(Response.java:1030)
+	org.apache.catalina.connector.Response.addCookie(Response.java:972)
+	org.apache.catalina.connector.ResponseFacade.addCookie(ResponseFacade.java:380)
+	com.kingowe.servlet.CreateCookie.doGet(CreateCookie.java:18)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:620)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:727)
+note The full stack trace of the root cause is available in the Apache Tomcat/7.0.52 logs.
+
+
+
+
+
+	。 解决： 使用 java.net.URLEncoder.encode(String s, String enc) 方法，用指定的编码(enc)将中文(s)转换成 base64 码，
+			这里的 编码(enc) 推荐使用 utf-8
+
+将上例中代码修改：
+
+		String value = java.net.URLEncoder.encode("孔超", "utf-8") ;
+		Cookie cookie1 = new Cookie("name", value) ;
+
+便可以解决问题
+
+	· base64编码的原理：每三个字节变成四个字节，三个字节一共24位，将24位二进制码每6位分成一份，一共分成4份之后 在每份前边加00，这样得到
+		的数据最大是63(00111111)，然后根据base64码表查找该数据对应的字符(从0-63对应的字符)
+
+
+
+
+
+
+	。如果要获取经过编码的中文，要使用 java.net.URLDecoder.decode(String s, String enc) 方法：
+
+代码：
+package com.kingowe.servlet ;
+
+import java.io.* ;
+//import java.net.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ReadCookie extends HttpServlet
+{
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		response.setContentType("text/html") ;
+		response.setCharacterEncoding("GBK") ;
+		request.setCharacterEncoding("GBK") ;
+		PrintWriter out = response.getWriter() ;
+
+		Cookie[] cookies = request.getCookies() ;
+		if(cookies != null){
+			for(int i=0; i<cookies.length; i++){
+				String name = (String)cookies[i].getName() ;
+				String value = (String)cookies[i].getValue() ;
+				if(name.equals("name")){
+					String value1 = java.net.URLDecoder.decode(value, "utf-8") ;
+					out.println("解码：<h3>"+name+"--->"+value1+"</h3>") ;
+				}
+				out.println("<h3>"+name+"--->"+value+"</h3>") ;
+			}			
+		}
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			 throws IOException, ServletException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+浏览器结果：
+解码：
+name--->孔超
+
+name--->%E5%AD%94%E8%B6%85
+
+company--->kingowe
+
+
+
+
+	>> 显示用户上次访问网站的时间
+
+Cookie[] cookies = request.getCookies() ;
+if(cookies != null){
+   for(int i=0; i<cookies.length; i++){
+      if(cookies[i].getName().equals("lastAccessTime")){
+	 String date = cookies[i].getValue() ;
+	 response.getWriter().write("上次访问时间：" + date) ;
+      }
+   }
+}
+
+Cookie cookie = new Cookie("lastAccessTime", new SimpleDateFormat("yyyy-MM-dd HH:ss").format(new Date())) ;
+cookie.setMaxAge(1*30*24*60*3600) ;	// 设置保存一个月
+cookie.setPath("/day07") ;	// 访问 day07 工程下的所有页面，都会带着该cookie
+response.addCookie(cookie) ;
+
+
+
+	>> 清除cookie： 如果要清除一个cookie， 可以新建一个相同名称的cookie，覆盖掉原来的cookie，对该cookie执行setMaxAge(0)
+		注意：替换的cookie与被替换的cookie要有相同的设置，例如 被替换的cookie有setPath("/path")，替换的cookie也要有相同的设置，
+		   而且设置的值要一样
+
+
+
+
+
+
+	》》 设置页面缓存
+
+设置缓存时间：
+	response.setDateHeader("expires", System.currentTimeMillis()+1000*3600) ;   // 设置缓存时间为1小时，这里设置的时间是从1970年开始
+			// 的毫秒值，所以要为：当前时间 System.currentTimeMillis()+设置时间的毫秒值
+
+
+设置不缓存：
+		response.setDateHeader("Expires", -1) ;
+		response.setHeader("Pragma", "no-cache") ;
+		response.setHeader("Cache-Control", "no-cache") ;
+
+
+
+
+
+
+
+
+
+
+
+	10.【【session 内置对象】】
+
+
+
+	。session 对象是 javax.severlet.http.HttpSession 的一个实例
+
+	
+	HttpSession接口中的方法(session对象的方法)：
+					public String getId() ;  取得session的id
+					public long getCreationTime() ;	取得session的创建时间
+					public long getLastAccessedTime() ; 	取得session最后一次操作时间
+					public boolean isNew() ;	判断是否是新的 session(新用户)
+					public void invalidate() ; 	让session失效
+					public Enumeration getAttributeNames() ;	取得全部属性的name
+					public Object getAttribute(String name) ;	根据name取得属性
+					public void setAttribute(String name, Object value)   设置属性
+
+
+
+
+
+	》》 session id
+
+	。对于每一个用户而言，实际上都表示一个session，每一个通过浏览器连接到服务器上的用户都会由服务器分配一个不会重复的
+		编号，即为 session id，通过不同的浏览器访问会有不同的 session id ，服务器就是靠这些 id 来区分每个用户
+			使用 session.getId() ;  即可得到当前浏览器用户的 id，<%=session.getId().length()%>  显示结果： 32
+				<%=session.getId()%>   显示结果：6270C5A74DE93DFF4D7EDE3586E4A00B
+
+	。 如果服务器关闭之后重新启动，则 session id 需要重新分配，如果需要保留该 session id， 则需要使用 对象序列化机制
+		对于session的序列化需要对配置文件 server.xml 进行修改，本机上是在 <Context path="/test" docBase="E:\JSP" > </Context>
+			之间完成：
+
+<Context path="/test" docBase="E:\JSP" >
+	<Manager className="org.apache.catalina.session.PersistentManager">
+		debug=0 savaOnRestart="true" maxActiveSession="-1" minIdleSwap="-1"
+		maxIdleSwap="-1" maxIdleBackup="-1"
+		<Store className="org.apache.catalina.session.FileStore" directory="e:\temp"/>	// session id 会保存在 e:\temp 文件夹中
+	</Manager>
+</Context>  
+
+
+
+
+
+
+	》》 使用 session 实现登录系统验证【常用】
+
+实例代码：
+
+  sessionlogin.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<form method="post" action="sessionlogin.jsp">	    <!-- 将内容提交给自身页面,并在自身页面完成登录验证-->
+	用户名：<input type="text" name="user"/>
+	<br/>
+	密  码:<input type="password" name="password"/>
+	<br/>
+	<input type="submit" value="登陆"/>
+	
+	<input type="reset" value="重置"/>
+</form>
+<%
+	String name = request.getParameter("user") ;
+	String pass = request.getParameter("password") ;
+	if(!(name==null || pass==null || name.equals("") || pass.equals(""))){		// 一般最好进行 null 的验证
+		if(name.equals("kongchao") && pass.equals("kingowe")){
+			/*Thread.sleep(2000) ;
+			response.sendRedirect("sessionloginsuccess.jsp?user=name") ;*/		// 这里使用这种方式无法完成传参功能
+					// 所以使用下边的 session.setAttribute() ; 方法，在登陆成功页面接收属性值，完成同样的效果
+			session.setAttribute("user", name) ;
+			response.setHeader("refresh", "2;sessionloginsuccess.jsp") ;
+%>
+			<h3>登陆成功，两秒钟后跳转到欢迎页</h3>
+			<h3>如无法跳转，请点击<a href="sessionloginsuccess.jsp">这里</a></h3>
+<%
+		}else{
+			response.sendRedirect("sessionloginfail.jsp") ;
+		}
+	}
+%>
+
+
+  sessionloginsuccess.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	String name = (String)session.getAttribute("user") ;		// 注意 request 的 getAttribute()  与 getParameter() 方法的区别
+	// System.out.println("=========="+name+"==============") ;   此为测试代码
+	if(name!=null && name.equals("kongchao"))
+	{
+%>
+		<h2><%=name%>您好!欢迎使用本系统</h2>
+		<h2><a href="sessionloginout.jsp">注销</a></h2>
+<%
+	}else{
+		response.setHeader("refresh", "3;sessionlogin.jsp") ;
+%>
+		<h3>您尚未登陆，三秒钟后自动跳转到登陆界面</h3>
+		<h3>如无法跳转，请点击<a href="sessionlogin.jsp"><font color="#FF0033" size="+3">这里</font></a></h3>
+<%
+	}
+%>
+
+  
+  sessionloginfail.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<h3>登录失败，用户名或密码错误</h3>
+<h3>五秒钟后将自动跳转到登陆页面</h3>
+<%
+	response.setHeader("refresh","5,sessionlogin.jsp");
+%>
+<h3>如无法跳转，请点击<a href="sessionlogin.jsp">这里</a></h3>
+
+
+  sessionloginout.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	response.setHeader("refresh", "3;sessionlogin.jsp") ;
+	session.invalidate() ;
+%>
+<h3>您已成功退出本系统！</h3>
+<h3>三秒钟后自动跳转到登录页面</h3>
+<h3>如无法跳转，请点击<a href="sessionlogin.jsp">这里</a></h3>
+
+
+
+	。 以上session的登录验证为会话跟踪技术，会话跟踪技术一共有以下四种：
+		一、 通过session提供的方法保存（上例，使用最多）
+		二、 通过 cookie 保存
+		三、 通过表单的隐藏域 hidden 完成
+		四、 通过地址重写 
+
+
+
+
+
+	》》 使用 session 判断是否新用户
+
+	session.isNew() ;
+
+	
+
+
+
+	》》 session 生命周期
+
+    session 的生命周期可以通过 以下三种方式设置：
+
+1.  修改 《%VATA_LINA%\conf\web.xml》
+
+   <session-config>
+        <session-timeout>30</session-timeout>	// 此处的值即为 session 的保存时间， 单位为 minutes，此处的周期适用于所有web应用下的session
+    </session-config>	
+
+
+2.  修改对应webapps下的 web.xml , 在 <web-app></web-app> 之间添加
+
+<session-config>
+        <session-timeout>30</session-timeout>	// 单位为 minutes ，在单个 webapp 中设置的session周期，适用于该应用下的所有session
+</session-config>	
+
+
+3.  使用 session 中提供的方法
+
+session.setMaxInactiveInterval() ;	// 此处的session周期对应单个session， 时间可以精确到秒
+
+
+
+
+
+
+
+	》》 session 失效
+
+1.重启 tomcat，  2. reload webapp ，   3. session生命周期已到     4. 使用了方法 session.invalidate()  该方法是让session中的所有属性失效
+ 	session.removeAttribute(String name)  是让session中的指定属性失效
+
+
+
+	》》 浏览器 与 session
+
+	
+	。 一个浏览器独占一个session， 使用一个浏览器创建的session，另一个浏览器无法取得该session
+
+	。问题？：在一个浏览器中设置一个session，怎样做才可以做到 关闭该浏览器之后，重新启动一个浏览器 还可以取得该session的属性
+
+   把该session id 保存在一个 Cookie对象cookie中，设置该 cookie 的生命周期：cookie.setMaxAge(time) ;  只要是在 time 之内，关闭浏览器之后 重新开
+一个浏览器，也可以取得该session
+
+Cookie cookie = new Cookie("JSESSIONID", session.getId()) ;   //【注意：此处的cookieName必须要按照 http协议 中的内容来写，session id 在http请求中
+								// 是根据 JSESSIONID 来读取的，所以这里必须为 JSESSIONID，否则无法读取】
+cookie.setMaxAge(60*30) ;	// 设置保存时间为 30分钟
+response.addCookie(cookie) ;
+
+
+	。当浏览器禁用 cookie 之后， session也将无法正常使用，解决方法：URL重写
+    response对象中的encodeURL方法会自动为URL添加session id
+示例代码：
+request.getSession() ;   //  为访问该页面的用户创建一个session
+String url1 = response.encodeURL("/day07/servlet/SessionDemo1") ;
+String url2 = response.encodeURL("/day07/servlet/SessionDemo2") ;
+out.print("<a href='"+url1+"'>购买</a>") ;
+out.print("<a href='"+url2+"'>结账</a>") ;
+	
+
+
+
+	》》 session 与 cookie 比较
+
+
+	>> session 生命周期 与 Cookie生命周期的比较
+
+   · session 的生命周期是发呆时间，例如：对session的生命周期设置为 10s，如果在10s内 该session对象被访问过，则从被访问时间 重新计时10s，依次。。。
+	如果该 session对象不停地被访问，即使设置了生命周期，也不会失效，session的生命周期是从该session对象最后一次被访问的时间开始算起
+
+   · Cookie 的生命周期是累计时间，比如设置为 1分钟， 则从设置开始计时， 1分钟过后，不管之间是否访问， 都会失效	
+
+
+
+	>>  存在位置的比较
+
+  · cookie 保存在客户端的临时文件夹中
+  · session 保存在服务器端的内存中，一个session域对象为一个浏览器服务
+
+
+
+	>> 安全性比较
+
+  · 因为cookie存在于客户端，而且是以明文的方式保存的，相对不安全
+  · session相对安全
+
+
+	>> 网络传输
+
+  · cookie会传递信息给服务器
+  · session的属性值不会给客户端
+
+ 
+
+
+
+
+
+
+
+	11. 【【application 内置对象】】
+
+
+	。application 是 javax.servlet.ServletContext 接口的实例化对象
+
+
+	ServletContext 接口中的常用方法：
+					String getRealPath(String path) ; 	获得虚拟目录对应的绝对路径
+					public Enumeration getAttributeNames() ; 	得到所有属性的名称
+					public String getContextPath() ;	取得当前的虚拟路径名称
+
+
+
+	》》 getRealPath(String path) 与 getContextPath() 的区别【重点】
+
+对于JSP项目在 %CATALINA_HOME%\config\server.xml 中的配置：<Context path="/jsp" docBase="E:\JSP" reloadable="true"/>
+
+		<h3><%=super.getServletContext().getContextPath()%></h3>	// 输出： /jsp
+		<h3><%=super.getServletContext().getRealPath("/")%></h3>	// 输出：E:\JSP\
+
+	项目中的跳转 在Servlet中可以使用：response.sendRedirect(super.getServletContext().getContextPath()+"/fileName") ;
+			在jsp中可以使用： <form action='${pageContext.request.contextPath}/servlettest1' method='post'>
+ 					   <a href="${pageContext.request.contextPath}/ServletName">注册</a>
+
+
+在JSP中，取得虚拟路径(ContextPath 即 项目工程名)： ${pageContext.request.contextPath}
+
+
+
+
+
+	》》 application 取得绝对路径【重点】
+
+  applicationtest1.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	String path1 = application.getRealPath("/") ;		// 表示取得当前文件根目录的绝对路径
+	String path2 = getServletContext().getRealPath("/") ;	// 同上
+	String path3 = this.getServletContext().getRealPath("/") ;	// path2 的全写【重点使用】
+%>
+<h3>path1: <%=path1%></h3>
+<h3>path2: <%=path2%></h3>
+<h3>path3: <%=path3%></h3>
+
+浏览器结果：
+path1: E:\JSP\
+
+path2: E:\JSP\
+
+path3: E:\JSP\		
+
+
+	。 tomcat服务器的虚拟目录配置：<Context path="/test" docBase="E:\JSP" /> 
+
+
+
+  	application使用 (在网页中输入文件名，文件内容，在本地硬盘创建相对应的文件)
+
+	applicationtest2.html
+<form action="applicationtest2.jsp" method="post">
+	请输入文件名：<input type="text" name="filename"/>
+	<br/>
+	请输入文件内容：<textarea name="content" rows="5" cols="20">
+	</textarea>
+	<br />
+	<input type="submit" value="确定"/>
+</form>
+
+	applicationtest2.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.io.*"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	String filename = request.getParameter("filename") ;
+	String content = request.getParameter("content") ;
+	String path = this.getServletContext().getRealPath("/")+"applicationtest"+ File.separator + filename ;
+	File file = new File(path) ;
+	if(!file.getParentFile().exists()){
+		file.getParentFile().mkdir() ;
+	}
+
+	FileOutputStream fos = new FileOutputStream(file) ;
+	PrintStream ps = new PrintStream(fos) ;
+	ps.println(content) ;
+	ps.close() ;
+%>
+
+
+
+
+
+	》》 初始化参数配置问题
+
+
+  在 web.xml 中 进行初始化参数配置
+
+1. 
+<servlet>
+<init-param>
+  <param-name>name</param-name>
+  <param-value>value</param-value>
+</init-param>
+</servlet>
+
+这种配置，只对该Servlet 起作用, 接收时 使用 getServletConfig().getInitParameter("name") ;
+
+ 
+
+2.
+
+<context-param>
+  <param-name>name</param-name>
+  <param-value>value</param-value>
+</context-param>
+
+这种配置，对所有的 Servlet 都起作用, 接收时 使用 getServletContext().getInitParameter("name") ;
+
+
+
+
+
+
+
+	》》  页面跳转
+
+this.getServletContext().getRequestDispatcher("URI").forward(request, response) ;
+
+该跳转的作用与 request.getRequestDispatcher("URI").forward(request, response) ;  一样 , 两者的区别 两种方法传递参数 是通过各自对应的域进行传递(setAttribute())
+
+
+
+
+	》》 读取 *.properties 配置文件
+
+文件位于 WEB_INF 目录下《WEB_INF\info.properties》
+name = kongchao
+age = 21	
+
+读取：
+
+InputStream is = this.getServletContext().getResourceAsStream("info.properties") ;
+Properties p = new Properties() ;
+p.load(is) ;
+p.getProperty("name") ;
+
+
+ 	。如果 *.properties 文件位于别的目录(如：src目录下), 或者读取配置文件的程序不是Servlet程序 ，则需要 1).使用类加载器来读取
+InputStream is = ClassName.class.getClassLoader().getResourceAsStream("info.properties") ;// 如果文件在包下，还需要带完整包名(com/kingowe/xx.properties)
+
+		2). 当该webapp发布之后，会将src文件夹中的内容复制到 《WEB-INF\classes》 目录下，所以也可以：
+this.getServletContext().getResourceAsStream("/WEB-INF/classes/info.properties") ;  	// 如果文件在包下，还需要带完整包名(com/kingowe/xx.properties)
+
+		如果 *.propertities 文件直接位于WEBROOT目录下，则直接写 /xxx.propertities 	
+
+
+	。读取配置文件还可以通过 String path = this.getServletContext().getRealPath("") ;   FileInputStream in = new FileInputStream(path) ;
+		new Properties().load(in) ;  读取，  这种读取的好处 可以取得配置文件的名称：String fileName = spath.substring( path.lastIndexOf("\\")+1 ) ;
+		
+
+
+
+
+
+
+
+
+
+
+	12.【【pageContext 内置对象】】
+
+	。pageContext 内置对象是 javax.servlet.jsp.PageContext 接口的一个实例化对象
+
+	
+	主要方法：
+		public abstract void forward(String relativeURLPath) throws ServletException,IOException
+			
+		public void include(String relativeURLPath) throws ServletException,IOException
+
+		public ServletConfig getServletConfig() ;
+
+		public ServletContext getServletContext() ;
+
+		public ServletRequest getRequest() ;
+
+		public ServletResponse getResponse() ;
+
+		public HttpSession getSession() ;
+
+
+
+	》》 使用 pageContext 几乎可以操作任何内置对象
+
+	使用 pageContext 完成页面跳转
+
+
+
+
+
+
+
+
+	13.【【 JavaBean 】】
+
+
+
+
+	。WEB 开发的标准目录结构：WEBROOT ： WEB-INF、jsp、js、css、images、index.jsp
+					     WEB-INF ： web.xml、lib、classes、tags
+
+	各个文件夹功能：
+			classes：保存所有的JavaBean，如果不存在，则需要手工创建
+			lib： 保存所有的第三方 jar 文件
+			tags： 保存所有的标签文件
+			jsp： 保存 *.jsp 文件，一般根据功能再建立子文件夹
+			js： 保存 *.js 文件
+			css： 保存 *.css 文件
+			images： 存放所有需要的图片
+
+	
+	。JavaBean 本身是一个类，在JSP中如果要应用JSP提供的JavaBean标签来操作简单类，则此类必须满足一下要求：
+		1. 所有的类都应该放在包中，在 web 中没有包的类是不存在的
+		2. 所有的类都必须声明为 pubic ，
+		3. 类中的所有的属性都必须封装（使用 private 修饰），而且要为封装后的属性编写对应的 setter getter 方法
+		4. 一个 JavaBean 中 至少存在一个无参数的构造方法
+
+
+
+	。在虚拟目录下的 WEB-INF 中的classes文件夹和lib文件夹就相当于一个默认的classpath，当 tomcat 启动之后， classese
+		和 lib 文件夹都会自动配置到classpath路径中
+
+
+
+
+
+JavaBean 使用：
+
+	PersonBean.java(存放于classes文件夹下)
+package com.javabean ;
+public class PersonBean
+{
+	private String name ;
+	private int age ;
+	
+	public PersonBean(){
+	
+	    System.out.println("PersonBean 无参数构造方法被调用") ;
+	}
+	
+	public void setName(String name){
+		this.name = name ;
+	}
+	public String getName(){
+		return this.name ;
+	}
+	public void setAge(int age){
+		this.age = age ;
+	}
+	public int getAge(){
+		return this.age ;
+	}
+}
+
+
+	。以上JavaBean源文件经过编译后有一个PersonBean.class 文件，可以有以下两种方式使用 JavaBean:
+
+		【用法 1】.因为 WEB-INF/classes 就是一个classpath，所以可以直接使用 page指令 导入所需要的JavaBean
+
+示例代码：
+
+	javaBeantest1.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="com.javabean.*"%>
+<%
+	PersonBean person = new PersonBean() ;
+	person.setName("孔超") ;
+	person.setAge(21) ;
+%>
+<h3>姓名：<%=person.getName()%></h3>
+<h3>年龄：<%=person.getAge()%></h3>
+
+
+
+		【用法 2】.使用 JSP提供的 <jsp:useBean> 指令完成，利用了java中的反射
+
+	语法： <jsp:useBean id="实例化对象名称" scope="保存范围" class="包.类名称"/>	// scope 范围：page request session application
+
+
+示例代码：
+
+	javaBeantest2.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<jsp:useBean id="person" class="com.javabean.PersonBean" scope="page"/>
+<%
+	person.setName("孔超") ;
+	person.setAge(21) ;
+%>
+<h3>姓名：<%=person.getName()%></h3>
+<h3>年龄：<%=person.getAge()%></h3>
+
+
+
+	。JavaBean注意：1. 使用 <jsp:useBean> 标签会自动调用所需JavaBean文件中的无参数构造方法，所以在JavaBean中必须存在一个无参数的构造方法
+ 
+			2. 当JavaBean源文件修改之后(要重新编译)需要重新启动服务器，或者对配置文件 server.xml进行配置：
+				<Context path="/test" docBase="E:\JSP" reloadable="true"/>，将 Context 的属性 reloadable的值设置为 true
+				当进行了以上的配置之后tomcat服务器会自动检测，当发现 JavaBean文件被修改，会自动重新加载
+
+			>> 经过以上配置，当JavaBean修改编译后 tomcat 会有提示：INFO: Reloading Context with name [/test] is completed
+
+			>> 使用 reloadable配置还需要注意两点：
+					1. 由于reloadable一直处于监视状态，所以服务器真正运行项目的时候，要将
+							reloadable的值改为false，否则会造成性能下降
+					2. 每次重新加载完成之后，之前所设置的全部session范围内的属性全部消失		
+
+
+
+
+
+
+
+	》》JavaBean与表单
+
+	。通过用户输入的内容为 JavaBean 设置属性值（使用PersonBean.class）
+
+	javabeantest3.html
+<form action="javabeantest3.jsp" method="post">
+	姓名：<input type="text" name="name"/><br/>
+	年龄：<input type="text" name="age"/><br/>
+	<input type="submit" value="提交" />
+	<input type="reset" value="重置" />
+</form>
+
+
+	javabeantest3.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="com.javabean.*"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	PersonBean person = new PersonBean() ;
+	person.setName(request.getParameter("name")) ;
+	person.setAge(Integer.parseInt(request.getParameter("age"))) ;
+%>
+<h3>姓名：<%=person.getName()%></h3>
+<h3>年龄：<%=person.getAge()%></h3>
+
+
+
+	。通过标签完成对JavaBean属性的值的设置（使用PersonBean.class）, 通过使用 <jsp:setProperty> 标签可以完成所有请求参数的
+		自动设置，而且可以自动将输入的 String 类型parse为 int 类型， 
+	  <jsp:setProperty> 表示操作指定JavaBean中的属性，
+	  <jsp:setProperty> 中的属性：
+		name：实例化对象名称，使用 useBean 中 id 的定义，
+		property： 设置JavaBean里面的属性内容，如果为 * 表示自动匹配，与表单匹配		
+	
+示例代码：
+
+	javabeantest4.html
+<form action="javabeantest4.jsp" method="post">
+	姓名：<input type="text" name="name"/><br/>
+	年龄：<input type="text" name="age"/><br/>
+	<input type="submit" value="提交" />
+	<input type="reset" value="重置" />
+</form>
+
+	
+	javabeantest4.jsp
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+%>
+<jsp:useBean id="person" class="com.javabean.PersonBean" scope="page"/>
+<jsp:setProperty name="person" property="*"/>
+<h3>姓名：<%=person.getName()%></h3>
+<h3>年龄：<%=person.getAge()%></h3>
+
+
+	
+	。如果想要让表单的参数自动设置到JavaBean中，则需要表单的name属性值与JavaBean中的属性值对应，使用这种操作实际上最终调用
+	      的是 JavaBean 中的 setter getter 方法，所以对JavaBean类的要求中有：《3. 类中的所有的属性都必须封装（使用 private 修饰），
+		 而且要为封装后的属性编写对应的 setter getter 方法， 》
+	
+
+
+
+
+
+
+	》》 设置和取得属性
+
+
+【1.设置属性】 <jsp:setProperty>, 一共有四种方法：
+
+	。自动匹配： <jsp:setProperty name="实例化对象名称(id)" property="*"/>
+
+	。指定属性： <jsp:setProperty name="实例化对象名称(id)" property="属性名称"/>
+
+<jsp:setProperty name="person" property="name" />   	//  只为 name 设置属性
+
+
+		
+	。指定参数： <jsp:setProperty name="实例化对象名称(id)" property="属性名称" param="参数名称"/>
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+%>
+<jsp:useBean id="person" class="com.javabean.PersonBean" scope="page"/>
+<jsp:setProperty name="person" property="name" param="age"/>	// 将age的值赋给name 
+<jsp:setProperty name="person" property="age" param="name"/>	// 将name的值赋给age
+<h3>姓名：<%=person.getName()%></h3>
+<h3>年龄：<%=person.getAge()%></h3>
+
+
+
+	。指定内容： <jsp:setProperty name="实例化对象名称(id)" property="属性名称" value="内容"/>
+
+<jsp:setProperty name="person" property="name" value="kingowe"/>
+
+
+
+
+
+
+【2.取得属性】<jsp:getProperty> 
+	
+	。使用 <jsp:getProperty> 标签会自动调用JavaBean中的 getter 方法，使用该标签取得属性只有一种方法：
+		<jsp:getProperty name="实例化对象名(id)" property="属性名称"/>
+
+
+<jsp:setProperty name="person" property="age" value="27"/>
+<h2>取得的属性：<jsp:getProperty name="person" property="age"/></h2>
+
+
+	。小知识： 只要标签上出现了 id 属性，则基本上都表示一个实例化对象，如果标签上出现了一个 name 属性，则找的是属性范围中的内容，
+		就是 id 指定的，如果有了 property，则表示的是类中的一个属性
+
+
+
+
+
+
+
+	》》 JavaBean的保存范围
+
+	<jsp:useBean> 标签中的 scope 属性表示的是一个JavaBean的保存范围， 保存范围一共是四种：
+		1. page
+		2. request
+		3. session
+		4. application
+	 与对应的属性范围相同
+ 
+
+	
+	》》 JavaBean 的删除
+	
+	。如果一个JavaBean不再使用，则可以使用四种属性范围的 removeAttribute() 方法进行删除：
+
+		1. 删除 page 范围的 JavaBean： pageContext.removeAttribute("JavaBean名称") ;
+
+		2. 删除 request 范围的 JavaBean： request.removeAttribute("JavaBean名称") ;
+
+		3. 删除 session 范围的 JavaBean： session.removeAttribute("JavaBean名称") ;
+
+		4. 删除 application 范围的 JavaBean： application.removeAttribute("JavaBean名称") ;
+
+
+示例：
+<% session.removeAttribute("person") %>
+
+
+
+
+
+
+
+
+
+
+	【14.DAO 设计模式】
+
+
+
+java中的vo 、dto 、dao
+
+VO是跟数据库里表的映射，一个表对应一个VO 
+DAO是用VO来访问真实的表，对数据库的操作都在DAO中完成 
+BO是业务层，做逻辑处理的
+VO ， PO ， BO ， QO, DAO ,POJO,
+ 
+O/R Mapping 是 Object Relational Mapping （对象关系映射）的缩写。通俗点讲，就是将对象与关系数据库绑定，用对象来表示关系数据。
+在 O/R Mapping 的世界里，有两个基本的也是重要的东东需要了解，即 VO ， PO 。
+VO ，值对象 (Value Object) ，
+PO ，持久对象 (Persisent Object) ，它们是由一组属性和属性的 get 和 set 方法组成。从结构上看，它们并没有什么不同的地方。但从其意义和本质上来看是完全不同的。 
+１． VO 是用 new 关键字创建，由 GC 回收的。 
+　　 PO 则是向数据库中添加新数据时创建，删除数据库中数据时削除的。并且它只能存活在一个数据库连接中，断开连接即被销毁。 
+２． VO 是值对象，精确点讲它是业务对象，是存活在业务层的，是业务逻辑使用的，它存活的目的就是为数据提供一个生存的地方。 
+　　 PO 则是有状态的，每个属性代表其当前的状态。它是物理数据的对象表示。使用它，可以使我们的程序与物理数据解耦，并且可以简化对象数据与物理数据之间的转换。 
+３． VO 的属性是根据当前业务的不同而不同的，也就是说，它的每一个属性都一一对应当前业务逻辑所需要的数据的名称。 
+PO 的属性是跟数据库表的字段一一对应的。 
+PO 对象需要实现序列化接口。 
+-------------------------------------------------
+java 的 (PO,VO,TO,BO,DAO,POJO) 解释 
+PO(persistant object) 持久对象 
+在 o/r 映射的时候出现的概念，如果没有 o/r 映射，没有这个概念存在了。通常对应数据模型 ( 数据库 ), 本身还有部分业务逻辑的处理。可以看成是与数据库中的表相映射的 java 对象。最简单的 PO 就是对应数据库中某个表中的一条记录，多个记录可以用 PO 的集合。 PO 中应该不包含任何对数据库的操作。 
+VO(value object) 值对象 
+通常用于业务层之间的数据传递，和 PO 一样也是仅仅包含数据而已。但应是抽象出的业务对象 , 可以和表对应 , 也可以不 , 这根据业务的需要 . 个人觉得同 DTO( 数据传输对象 ), 在 web 上传递。 
+TO(Transfer Object) ，数据传输对象 
+在应用程序不同 tie( 关系 ) 之间传输的对象 
+BO(business object) 业务对象 
+从业务模型的角度看 , 见 UML 元件领域模型中的领域对象。封装业务逻辑的 java 对象 , 通过调用 DAO 方法 , 结合 PO,VO 进行业务操作。 
+business object: 业务对象 
+主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。 
+比如一个简历，有教育经历、工作经历、社会关系等等。 
+我们可以把教育经历对应一个 PO ，工作经历对应一个 PO ，社会关系对应一个 PO 。 
+建立一个对应简历的 BO 对象处理简历，每个 BO 包含这些 PO 。 
+这样处理业务逻辑时，我们就可以针对 BO 去处理。 
+QO ：查询对象 
+POJO(plain ordinary java object) 简单无规则 java 对象 
+纯的传统意义的 java 对象。就是说在一些 Object/Relation 
+Mapping 工具中，能够做到维护数据库表记录的 persisent 
+object 完全是一个符合 Java Bean 规范的纯 Java 对象，没有增加别的属性和方法。我的理解就是最基本的 Java Bean ，只有属性字段及 setter 和 getter 方法！。 
+DAO(data access object) 数据访问对象 
+是一个 sun 的一个标准 j2ee 设计模式， 这个模式中有个接口就是 DAO ，它负持久层的操作。为业务层提供接口。此对象用于访问数据库。通常和 PO 结合使用， DAO 中包含了各种数据库的操作方法。通过它的方法 , 结合 PO 对数据库进行相关的操作。夹在业务逻辑与数据库资源中间。配合 VO, 
+提供数据库的 CRUD 操作 ...
+ 
+ 
+DTO ： 
+Data Transfer Object 数据传输对象 
+主要用于远程调用等需要大量传输对象的地方。 
+比如我们一张表有 100 个字段，那么对应的 PO 就有 100 个属性。 
+但是我们界面上只要显示 10 个字段， 
+客户端用 WEB service 来获取数据，没有必要把整个 PO 对象传递到客户端， 
+这时我们就可以用只有这 10 个属性的 DTO 来传递结果到客户端，这样也不会暴露服务端表结构 . 到达客户端以后，如果用这个对象来对应界面显示，那此时它的身份就转为 VO
+ 
+
+DAO ：数据访问对象 —— 同时还有 DAO 模式 
+DTO ：数据传输对象 —— 同时还有 DTO 模式
+
+
+
+	
+	。 DAO (Data Access Object 数据访问对象)，在整个 DAO 中实际上都是以接口的操作为标准的，即：客户端依靠DAO实现的接口进行操作，
+		而服务端要将接口进行具体的实现，
+
+企业分层架构：
+
+	1. 客户层： 因为现在都采用了B/S 开发架构，所以一般都使用浏览器进行访问
+
+	2. 显示层： 使用 JSP/Servlet 进行页面效果的显示 
+
+	3. 业务层： BusinessObject 业务对象，整个项目的核心，会将多个原子性的DAO操作进行组合，形成一个完整的业务逻辑
+
+	4. 数据层： DAO，提供多个原子性的DAO操作，例如 增 删 改 查 操作 都属于原子性操作
+
+	5. 资源层： DataBase，主要是数据库的操作层,可以进行数据的操作，但是数据的操作肯定需要依靠SQL语句，如果在一个程序中
+			出现了过多的 SQL语句，则JSP 页面变得相当复杂，而且程序的移植性 可重用性差，所以需要一个专门的数据库的
+			操作组件完成，这个就是 数据层 的功能
+
+
+
+
+	java有几种对象(PO,VO,DAO,BO,POJO)   
+        	一、PO:persistant object 持久对象,可以看成是与数据库中的表相映射的java对象。使用Hibernate来生成PO是不错的选择。 
+     
+		二、VO:value object值对象。通常用于业务层之间的数据传递，和PO一样也是仅仅包含数据而已。但应是抽象出的业务对象,
+			可以和表对应,也可以不,这根据业务的需要.PO只能用在数据层，VO用在商业逻辑层和表示层。各层操作属于该层自己
+			的数据对象，这样就可以降低各层之间的耦合，便于以后系统的维护和扩展。
+
+
+
+【DAO的组成】：
+	
+	1. DataBaseConnection： 专门负责数据库的打开(取得连接)与关闭的操作类，【数据库的驱动程序可以通过 CLASSPATH 配置】
+	
+	2. VO： 主要由属性、setter、getter 方法组成，VO中的属性与表中的字段相对应，每一个VO类的对象都表示表中的一条记录，
+	
+	3. DAO： 主要定义操作的接口，定义一系列的数据库原子操作：增 删 改 查 等
+
+	4. Impl： DAO 接口的真实实现类，完成具体的数据库操作，但不负责数据库的打开和关闭
+
+	5. Proxy： 代理实现类，主要完成数据库的打开和关闭并且调用真实实现类(Impl)对象的操作
+
+	6. Factory： 工厂类，通过工厂类取得一个DAO的实例化对象(Proxy的对象)
+
+
+
+【完整的DAO模式代码】： 	注：本例所有.java源文件 放在 E:\JSP\WEB-INF\classes 下, .class 文件 放在 该文件夹下的对应包中
+
+	【1】. DataBaseConnection.java   【对于连接数据库所需的驱动程序的 *.jar 文件 放在 %CATA_LINA%\lib 文件夹下】
+
+package com.kingowe.dbc;	// 1. DataBaseConnection： 专门负责数据库的连接与关闭的操作类
+import java.sql.* ;
+
+public class DataBaseConnection {
+	private static final String DRIVER = "com.microsoft.jdbc.sqlserver.SQLServerDriver" ;
+	private static final String URL = "jdbc:microsoft:sqlserver://localhost:1483" ;
+	private static final String USER = "sa" ;
+	private static final String PASSWORD = "admin" ;
+	private Connection con ;
+	
+	public DataBaseConnection() throws Exception {
+		Class.forName(DRIVER) ;
+		con = DriverManager.getConnection(URL,USER, PASSWORD) ;
+	}
+	public Connection getConnection(){
+		return this.con ;
+	}
+	public void close() throws SQLException{
+		if(con != null){
+			con.close() ;
+		}
+	}
+}
+
+
+	【2】. Teacher.java
+
+package com.kingowe.vo;		// 2. VO： 主要由属性、setter、getter 方法组成，VO中的属性与表中的字段相对应，每一个VO类的对象都表示表中的一条记录，
+
+import java.util.Date;
+
+public class Teacher {
+	private int tid ;
+	private String tname ;
+	private String tjob ;
+	private Date thiredate ;
+	private float tsalary ;
+		
+	public int getTid() {
+		return tid;
+	}
+	public void setTid(int tid) {
+		this.tid = tid;
+	}
+	public String getTname() {
+		return tname;
+	}
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
+	public String getTjob() {
+		return tjob;
+	}
+	public void setTjob(String tjob) {
+		this.tjob = tjob;
+	}
+	public Date getThiredate() {
+		return thiredate;
+	}
+	public void setThiredate(Date thiredate) {
+		this.thiredate = thiredate;
+	}
+	public float getTsalary() {
+		return tsalary;
+	}
+	public void setTsalary(float tsalary) {
+		this.tsalary = tsalary;
+	}
+	@Override
+	public String toString() {
+		return "Teacher [tid=" + tid + ", tname=" + tname + ", tjob=" + tjob
+				+ ", thiredate=" + thiredate + ", tsalary=" + tsalary + "]";
+	}
+}
+
+
+
+	【3】.ITeacherDAO.java 	
+
+package com.kingowe.dao;	// 3. DAO： 主要定义操作的接口，定义一系列的数据库原子操作：增 删 改 查 等
+
+import java.util.List;
+import com.kingowe.vo.Teacher;
+
+public interface ITeacherDAO {		// 接口名前加 I ，用以区分类与接口
+	public boolean doCreate(Teacher t) throws Exception;
+	public List<Teacher> findAll(String keywords) throws Exception;
+	public Teacher findById(int tid) throws Exception;
+}
+
+/*
+ * 接口中的命名规范：
+ * 	 1.数据库的更新操作： doXxx() ;
+ *   	 2.查询操作： findXxx() ;	getXxx() ; 
+ */
+
+
+
+
+
+
+	【4】. TeacherDAOImpl.java
+
+package com.kingowe.dao.impl;		// 4. Impl： DAO 接口的真实实现类，完成具体的数据库操作，但不负责数据库的打开和关闭
+
+import java.sql.*;
+import java.util.List;
+import java.util.ArrayList; 
+
+import com.kingowe.dao.ITeacherDAO;
+import com.kingowe.vo.Teacher;
+
+public class TeacherDAOImpl implements ITeacherDAO {
+	private Connection con = null;
+	private PreparedStatement pstmt = null ;
+	
+	public TeacherDAOImpl(Connection con){
+		this.con = con ;
+	}
+	@Override
+	public boolean doCreate(Teacher t) throws Exception {
+		boolean flag = false ;
+		String sql = "insert into teacher(tname, tid, tsalary, thiredate, tjob) values(?,?,?,?,?)" ;
+		pstmt = con.prepareStatement(sql) ;
+		pstmt.setString(1, t.getTname());
+		pstmt.setInt(2, t.getTid());
+		pstmt.setFloat(3, t.getTsalary());
+		pstmt.setDate(4, new java.sql.Date(t.getThiredate().getTime()));
+		pstmt.setString(5, t.getTjob());
+		
+		if(pstmt.executeUpdate() > 0){
+			flag = true ;
+		}
+		this.pstmt.close() ;
+		return flag;
+	}
+
+	@Override
+	public List<Teacher> findAll(String keywords) throws Exception {
+		
+		List<Teacher> list = new ArrayList<Teacher>() ;
+		String sql = "select tname,tid,tsalary,thiredate,tjob from teacher where tname like ? or tjob like ?" ;
+		pstmt = con.prepareStatement(sql) ;
+		pstmt.setString(1, "%"+keywords+"%");	// 注意 like 的语法
+		pstmt.setString(2, "%"+keywords+"%");	// 注意 like 的语法
+		/*  
+		 *   % 表示零个或者多个字符的任意序列
+  		 *   _ 表示任意单个字符
+		 */
+		ResultSet rs = pstmt.executeQuery() ;
+		Teacher t = null ;
+		while(rs.next()){
+			t = new Teacher() ;	// 这条语句放在while循环上边，list里边最后只会加入一个Teacher对象，
+			t.setTname(rs.getString(1));
+			t.setTid(rs.getInt(2));
+			t.setTsalary(rs.getFloat(3));
+			t.setThiredate(rs.getDate(4));
+			t.setTjob(rs.getString(5));
+			list.add(t) ;
+		}
+		pstmt.close();
+		return list;
+	}
+
+	@Override
+	public Teacher findById(int tid) throws Exception {
+		Teacher temp = null ;
+		String sql = "select tname,tid,tsalary,thiredate,tjob from teacher where tid=?" ;
+		pstmt = con.prepareStatement(sql) ;
+		pstmt.setInt(1, tid);
+		ResultSet rs = pstmt.executeQuery()  ;
+		if(rs.next()){
+			temp = new Teacher() ;
+			temp.setTname(rs.getString(1));
+			temp.setTid(rs.getInt(2));
+			temp.setTsalary(rs.getFloat(3));
+			temp.setThiredate(rs.getDate(4));
+			temp.setTjob(rs.getString(5));
+		}
+		this.pstmt.close() ;
+		return temp;
+	}
+
+}
+
+
+
+	【5】.TeacherDAOProxy.java
+
+package com.kingowe.dao.proxy;		// 5. Proxy： 代理实现类，主要完成数据库的打开和关闭并且调用真实实现类(Impl)对象的操作
+
+import java.util.*;
+import java.util.List;
+import com.kingowe.dao.ITeacherDAO;
+import com.kingowe.dao.impl.TeacherDAOImpl;
+import com.kingowe.dbc.DataBaseConnection;
+import com.kingowe.vo.Teacher;
+
+public class TeacherDAOProxy implements ITeacherDAO {
+	DataBaseConnection dbc = null ;
+	ITeacherDAO dao = null ;
+	
+	public TeacherDAOProxy() throws Exception{
+		dbc = new DataBaseConnection() ;
+		dao = new TeacherDAOImpl(this.dbc.getConnection()) ;
+	}
+	@Override
+	public boolean doCreate(Teacher t) throws Exception {
+		boolean flag = false ;
+		try{
+			if(this.dao.findById(t.getTid()) == null){	// 调用真实的 实现类(Impl) 操作
+				flag = this.dao.doCreate(t) ;
+			}
+		}catch(Exception e){
+			System.out.println("操作失败！") ;
+			e.printStackTrace();
+		}finally{
+			this.dbc.close();	// 完成数据库的关闭操作
+		}
+		return flag;
+	}
+	@Override
+	public List<Teacher> findAll(String keywords) throws Exception {
+		List<Teacher> list = new ArrayList<Teacher>() ;
+		try{
+			list = this.dao.findAll(keywords) ;	// 调用真实的 实现类(Impl) 操作
+		}catch(Exception e){
+			System.out.println("操作失败！");
+		}finally{
+			this.dbc.close();	// 完成数据库的关闭操作
+		}
+		return list;
+	}
+	@Override
+	public Teacher findById(int tid) throws Exception {
+		Teacher t = null ;
+		try{
+			t = this.dao.findById(tid) ;		// 调用真实的 实现类(Impl) 操作
+		}catch(Exception e){
+			System.out.println("操作失败！") ;
+		}finally{
+			this.dbc.close();	// 完成数据库的关闭操作
+		}
+		return t ;
+	}
+
+}
+
+
+
+
+	【6】. DAOFactory.java
+
+/*
+ * Factory： 工厂类，通过工厂类取得一个DAO的实例化对象(TeacherDAOProxy)
+ */
+package com.kingowe.factory;		// 6. Factory： 工厂类，通过工厂类取得一个DAO的实例化对象(代理类的实例化对象)
+
+import com.kingowe.dao.ITeacherDAO;
+import com.kingowe.dao.proxy.TeacherDAOProxy;
+
+public class DAOFactory {
+	public static ITeacherDAO getITeacherDAOInstance() throws Exception{
+		return new TeacherDAOProxy() ;
+	}
+}
+
+
+
+
+	。 以上为 DAO 模式的 .java 源文件， 使用 DAO 设计模式，可以极大地提高代码的可重用性，例如：以上文件 可以与java
+		图形界面相结合使用， 可以与JSP相结合使用
+
+【以下为上例的DAO模式与 JSP 相结合】
+
+	DAO1.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+
+<form method="post" action="DAO1Receive.jsp" target="_blank">
+    <br/><br/><br/>
+	姓名：<input type="text" name="tname"/><br/>
+	&nbsp;ID: &nbsp;<input type="text" name="tid"/><br/>
+	工资：<input type="text" name="tsalary"/><br/>
+	日期：<input type="text" name="thiredate"/><br/>
+	工作：<input type="text" name="tjob"/><br/>
+	<input type="submit" value="提交"/> &nbsp; &nbsp;
+	<input type="reset" value="重置"/>
+</form>
+
+
+	DAO1Receive.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="com.kingowe.factory.*, com.kingowe.vo.*"%>
+<%@ page import="java.text.*"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+	Teacher t = new Teacher() ;
+	t.setTname(request.getParameter("tname")) ;
+	t.setTid(Integer.parseInt( request.getParameter("tid") )) ;
+	t.setTsalary(Float.parseFloat( request.getParameter("tsalary") )) ;
+	t.setThiredate(new SimpleDateFormat("yyyy-MM-dd").parse( request.getParameter("thiredate") )) ;
+	try{
+		if(DAOFactory.getITeacherDAOInstance().doCreate(t)){
+%>
+			<h3>添加成功！</h3>
+<%			
+		}
+		else{
+%>
+			<h3>添加失败！</h3>
+<%
+		}
+	}catch(Exception e){
+		e.printStackTrace() ;
+	}
+%>
+
+
+	。 以上两个 jsp 程序 完成的是通过用户在浏览器输入，完成对数据库的数据插入功能
+
+
+
+	DAO2.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="com.kingowe.factory.*, com.kingowe.vo.*"%>
+<%@ page import="java.util.*"%>
+
+<%
+	request.setCharacterEncoding("GBK") ;
+	String keyword = request.getParameter("keywords") ;
+	if(keyword == null){
+		keyword = "" ;
+	}
+	List<Teacher> list = DAOFactory.getITeacherDAOInstance().findAll(keyword) ;
+	Iterator<Teacher> it = list.iterator() ;
+%>
+<center>
+<form action="DAO2.jsp" method="post">	  	<!--【如果这里使用 get 输入中文还会出现乱码】-->
+	请输入查询的关键字：<input type="text" name="keywords" value="<%=keyword%>"> 	// 添加 value="<%=keyword%>"， 是为了保留用户的输入
+	<br>
+	<input type="submit" value="确定"/> &nbsp;
+	<input type="reset" value="重置"/>
+</form>
+<table width="70%" border="1">
+	<tr>
+		<td>姓名</td>
+		<td>ID</td>
+		<td>工资</td>
+		<td>日期</td>
+		<td>工作</td>
+	</tr>
+<%
+	while(it.hasNext()){
+		Teacher t = it.next() ;
+%>
+		<tr>
+			<td><%=t.getTname()%></td>
+			<td><%=t.getTid()%></td>
+			<td><%=t.getTsalary()%></td>
+			<td><%=t.getThiredate()%></td>
+			<td><%=t.getTjob()%></td>
+		</tr>
+<%
+	}
+%>
+</table>
+</center>
+
+
+
+
+
+
+	。 在一个 JSP 页面中绝对不允许导入 sql 包，如果有可能，最好一个都不导入， 如果jsp程序代码没问题，运行不出正确结果，可以
+		重启服务器试试
+
+
+
+
+
+
+
+
+	【15.文件上传】
+
+
+
+【一】、 SmartUpload
+
+	
+	。首先下载 smartupload.jar文件 并将其放在 tomcat安装目录下的lib文件夹中，记住重启tomcat服务器，tomcat安装目录下的
+		文件经过修改 就需要重启tomcat
+	
+	。使用SmartUpload 上传组件进行文件上传必须按照以下步骤进行：
+		1. 实例化 SmartUpload 对象
+		2. 初始化上传的操作
+		3. 准备上传
+		4. 保存文件
+		 
+
+实例代码：
+
+	smarttest1.html
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<form action="smarttest1.jsp" method="post" enctype="multipart/form-data">
+<!-- 
+	// 由于现在要上传文件，则表单必须进行封装，因为传递的不是普通的文本数据，所以需要使用 form的属性
+		// enctype 来进行封装
+-->
+	<input type="file" name="pic">
+	<input type="submit" value="上传"/>	
+</form>
+</body>
+</html>
+
+
+	smarttest1.jsp
+
+<%@ page import="com.kingowe.smart.*"%>
+<%
+	SmartUpload su = new SmartUpload() ;	// 实例化 SmartUpload 对象
+	su.initialize(pageContext) ;	// 初始化上传操作
+	su.upload() ;		// 上传准备
+	su.save("upload") ;	//文件保存,将上传的文件保存在虚拟目录下的 upload 文件夹中
+%>
+
+
+
+
+
+	。当要上传的内容使用了 enctype 进行封装之后，就无法使用 request.getParameter() ;  来取得参数了
+	      因为表单被封装了，所有的数据不再是文本，而是二进制byte流， 此时 要想接收参数，则必须使用
+		 SmartUpload 中提供的方法来完成 （getRequest()  getParameter()）
+
+
+实例代码：
+	
+	smarttest1.html
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<form action="smarttest1.jsp" method="post" enctype="multipart/form-data">
+	姓名：<input type="text" name="name"/><br/>
+	头像：<input type="file" name="pic"/><br/>
+	<input type="submit" value="提交"/>	
+	<input type="reset" value="重置"/>
+</form>
+</body>
+</html>
+
+
+
+	smarttest1.jsp
+
+<%@ page contentType="text/html" pageEncoding="GBK" import="com.kingowe.smart.*"%>
+
+<%
+	request.setCharacterEncoding("GBK") ;
+	SmartUpload su = new SmartUpload() ;	// 实例化 SmartUpload 对象
+	su.initialize(pageContext) ;	// 初始化上传操作
+	su.upload() ;		// 上传准备
+	su.save("upload") ;	//文件保存
+	String name1 = request.getParameter("name") ;	// 使用这种方式无法接收参数
+	String name2 = su.getRequest().getParameter("name") ;
+%>
+<h3>requset接收的参数：<%=name1%></h3>
+<h3>smart的方法接收的参数：<%=name2%></h3>	
+
+
+
+浏览器结果：
+
+requset接收的参数：null
+
+smart的方法接收的参数：孔超
+
+
+
+
+
+	》》 为上传的文件重命名
+
+	。如果上传的文件 文件名一样，则新文件会覆盖旧文件，旧文件无法保存，所以需要为上传的文件重命名，如果想要让文件不重名
+		则一般需要使用 时间，随机数， 然后通过 smart.save() 方法保存
+
+	。在 smart 中，一系列的上传文件都通过 files 数组保存， 比如 只上传了一个文件，则通过 smart.getFiles().getFile(0).getFileExt()
+		来获得上传文件的扩展名
+
+
+
+
+
+
+
+
+【二】、 FileUpload
+
+	
+	。下载 FileUpload 所需组件：fileload 和 io（http://commons.apache.org/），解压后 将 commons-fileupload-x.x.x.jar 文件 和 commons-io-x.x.jar
+		文件放在 tomcat安装目录下的 lib 文件夹
+
+
+	。FileUpload 上传文件的步骤：
+		1. 创建磁盘工厂： DiskFileItemFactory factory = new DiskFileItemFactory() ;
+		2. 创建处理工具： ServletFileUpload upload = new ServletFileUpload(factory) ;
+		3. 设置上传文件大小： upload.setFileSizeMax(3*1024*1024) ;	// 3M 
+		4. 接收全部内容： List<FileItem> item = upload.parseRequest(request) ;
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	【16. 图形验证码】
+
+
+《浏览器端：http://localhost:8080/tool/YanZhengMa》
+《YanZhengMa.java》
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Random;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+public class YanZhengMa extends HttpServlet {
+
+	private static final long serialVersionUID = 123123123L;
+	
+	public static int WIDTH = 120 ;
+	public static int HEIGHT = 30 ;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		/*
+		 * 使用的类：BufferedImage  ImageIO  Graphics  Graphics2D
+		 */
+		BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB) ;
+		Graphics g = img.getGraphics() ;
+		
+		// 画图形
+		drawRect(g) ;
+		// 画干扰线
+		drawLine(g) ;
+		// 写随机字
+		writeRandomCharacter((Graphics2D)g) ;
+		// 设置响应头，让浏览器不要缓存验证码图片，否则 点击地址栏 按回车键 将会使用缓存里的验证码图片,为了浏览器兼容，三个缓存设置都设置为不缓存
+		response.setDateHeader("Expires", -1) ;
+		response.setHeader("Pragma", "no-cache") ;
+		response.setHeader("Cache-Control", "no-cache") ;
+		//将图形写到浏览器页面
+		response.setContentType("image/jpeg") ;
+		ImageIO.write(img, "jpg", response.getOutputStream()) ;
+		/* 测试代码 验证随机数返回值是否为网页验证码上的字
+		String[] temp = writeRandomCharacter(g) ;
+		for(int i=0; i<temp.length; i++){
+			System.out.println(temp[i]);
+		}
+		 */
+	}
+	
+	private void drawRect(Graphics g) {
+		// 画黄色背景的矩形
+		g.setColor(Color.YELLOW) ;
+		g.fillRect(0, 0, WIDTH, HEIGHT) ;
+		// 添加边框线
+		g.setColor(Color.black) ;
+		g.drawRect(0, 0, WIDTH-1, HEIGHT-1) ;
+	}
+	private void drawLine(Graphics g) {
+		g.setColor(Color.RED) ;
+		for(int i=0; i<7; i++){
+			int x1 = new Random().nextInt(WIDTH) ;
+			int y1 = new Random().nextInt(HEIGHT) ;
+			int x2 = new Random().nextInt(WIDTH) ;
+			int y2 = new Random().nextInt(HEIGHT) ;
+			g.drawLine(x1, y1, x2, y2) ;
+		}
+	}
+	public String[] writeRandomCharacter(Graphics2D g) {
+		g.setColor(Color.BLUE) ;
+		g.setFont(new Font("宋体", Font.BOLD, 18)) ;
+		int num = 3 ;
+		String[] str = new String[num] ;
+		String base ="\u7684\u4e00\u4e86\u662f\u6211\u4e0d\u5728\u4eba\u4eec\u6709\u6765\u4ed6\u8fd9\u4e0a\u7740\u4e2a\u5730\u5230\u5927\u91cc\u8bf4\u5c31\u53bb\u5b50\u5f97\u4e5f\u548c\u90a3\u8981\u4e0b\u770b\u5929\u65f6\u8fc7\u51fa\u5c0f\u4e48\u8d77\u4f60\u90fd\u628a\u597d\u8fd8\u591a\u6ca1\u4e3a\u53c8\u53ef\u5bb6\u5b66\u53ea\u4ee5\u4e3b\u4f1a\u6837\u5e74\u60f3\u751f\u540c\u8001\u4e2d\u5341\u4ece\u81ea\u9762\u524d\u5934\u9053\u5b83\u540e\u7136\u8d70\u5f88\u50cf\u89c1\u4e24\u7528\u5979\u56fd\u52a8\u8fdb\u6210\u56de\u4ec0\u8fb9\u4f5c\u5bf9\u5f00\u800c\u5df1\u4e9b\u73b0\u5c71\u6c11\u5019\u7ecf\u53d1\u5de5\u5411\u4e8b\u547d\u7ed9\u957f\u6c34\u51e0\u4e49\u4e09\u58f0\u4e8e\u9ad8\u624b\u77e5\u7406\u773c\u5fd7\u70b9\u5fc3\u6218\u4e8c\u95ee\u4f46\u8eab\u65b9\u5b9e\u5403\u505a\u53eb\u5f53\u4f4f\u542c\u9769\u6253\u5462\u771f\u5168\u624d\u56db\u5df2\u6240\u654c\u4e4b\u6700\u5149\u4ea7\u60c5\u8def\u5206\u603b\u6761\u767d\u8bdd\u4e1c\u5e2d\u6b21\u4eb2\u5982\u88ab\u82b1\u53e3\u653e\u513f\u5e38\u6c14\u4e94\u7b2c\u4f7f\u5199\u519b\u5427\u6587\u8fd0\u518d\u679c\u600e\u5b9a\u8bb8\u5feb\u660e\u884c\u56e0\u522b\u98de\u5916\u6811\u7269\u6d3b\u90e8\u95e8\u65e0\u5f80\u8239\u671b\u65b0\u5e26\u961f\u5148\u529b\u5b8c\u5374\u7ad9\u4ee3\u5458\u673a\u66f4\u4e5d\u60a8\u6bcf\u98ce\u7ea7\u8ddf\u7b11\u554a\u5b69\u4e07\u5c11\u76f4\u610f\u591c\u6bd4\u9636\u8fde\u8f66\u91cd\u4fbf\u6597\u9a6c\u54ea\u5316\u592a\u6307\u53d8\u793e\u4f3c\u58eb\u8005\u5e72\u77f3\u6ee1\u65e5\u51b3\u767e\u539f\u62ff\u7fa4\u7a76\u5404\u516d\u672c\u601d\u89e3\u7acb\u6cb3\u6751\u516b\u96be\u65e9\u8bba\u5417\u6839\u5171\u8ba9\u76f8\u7814\u4eca\u5176\u4e66\u5750\u63a5\u5e94\u5173\u4fe1\u89c9\u6b65\u53cd\u5904\u8bb0\u5c06\u5343\u627e\u4e89\u9886\u6216\u5e08\u7ed3\u5757\u8dd1\u8c01\u8349\u8d8a\u5b57\u52a0\u811a\u7d27\u7231\u7b49\u4e60\u9635\u6015\u6708\u9752\u534a\u706b\u6cd5\u9898\u5efa\u8d76\u4f4d\u5531\u6d77\u4e03\u5973\u4efb\u4ef6\u611f\u51c6\u5f20\u56e2\u5c4b\u79bb\u8272\u8138\u7247\u79d1\u5012\u775b\u5229\u4e16\u521a\u4e14\u7531\u9001\u5207\u661f\u5bfc\u665a\u8868\u591f\u6574\u8ba4\u54cd\u96ea\u6d41\u672a\u573a\u8be5\u5e76\u5e95\u6df1\u523b\u5e73\u4f1f\u5fd9\u63d0\u786e\u8fd1\u4eae\u8f7b\u8bb2\u519c\u53e4\u9ed1\u544a\u754c\u62c9\u540d\u5440\u571f\u6e05\u9633\u7167\u529e\u53f2\u6539\u5386\u8f6c\u753b\u9020\u5634\u6b64\u6cbb\u5317\u5fc5\u670d\u96e8\u7a7f\u5185\u8bc6\u9a8c\u4f20\u4e1a\u83dc\u722c\u7761\u5174\u5f62\u91cf\u54b1\u89c2\u82e6\u4f53\u4f17\u901a\u51b2\u5408\u7834\u53cb\u5ea6\u672f\u996d\u516c\u65c1\u623f\u6781\u5357\u67aa\u8bfb\u6c99\u5c81\u7ebf\u91ce\u575a\u7a7a\u6536\u7b97\u81f3\u653f\u57ce\u52b3\u843d\u94b1\u7279\u56f4\u5f1f\u80dc\u6559\u70ed\u5c55\u5305\u6b4c\u7c7b\u6e10\u5f3a\u6570\u4e61\u547c\u6027\u97f3\u7b54\u54e5\u9645\u65e7\u795e\u5ea7\u7ae0\u5e2e\u5566\u53d7\u7cfb\u4ee4\u8df3\u975e\u4f55\u725b\u53d6\u5165\u5cb8\u6562\u6389\u5ffd\u79cd\u88c5\u9876\u6025\u6797\u505c\u606f\u53e5\u533a\u8863\u822c\u62a5\u53f6\u538b\u6162\u53d4\u80cc\u7ec6";
+		int x = 22 ;
+		int y = 19 ;
+		for(int i=0; i<num; i++){
+			String ch = base.charAt(new Random().nextInt(base.length()))+"";
+			str[i] = ch ;
+			int degree = new Random().nextInt(60)-30 ;   // 生成 -30 - 30 之间的随机数，也可以new Random().nextInt()%30 ;
+			g.rotate(degree*Math.PI/180, x, y) ;	// 设置旋转角度
+			g.drawString(ch, x, y) ;
+			g.rotate(-degree*Math.PI/180, x, y) ;  // 经过上边的旋转 还需要将旋转清除，否则下次循环将会以上边的旋转角度为基础
+			x += 30 ;
+		} 
+		return str ;
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response) ;
+	}
+
+}
+
+
+
+《YanZhengMa.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK" %>
+用户名：<input type='text' name='user' />
+<br/>
+密　码：<input type="password" name='passwd' />
+<br/>
+验证码：<input type='text' name='user' size="7" />
+<input id='img' type="image" src="/tool/YanZhengMa" onClICk='this.src=this.src+"?"+4354'/>  <!--【必须加"?" 后边必须加数字或者什么都不加，添加 id 是为了<a>标签】-->
+<a href='#' onclick='img.src=img.src+"?" '>刷新</a>  <!--【在 <a>中 更换图片 不能使用this 所以为image添加id属性】-->
+
+
+
+
+
+
+
+
+
+
+    	       ===============================================================================================================================
+   
+      目录：
+   
+     	1. JSP中的注释		2. 三种Scriptlet标签		3.  第一个JSP程序		4.第一个JSP HTML 交互程序
+   	5. page include forward 指令 MIME类型设置		6.  JSP中的内置对象列表		7.四种属性范围(pageContext reqeust session application)
+    	8. request内置对象	9. response内置对象		10. session内置对象		11.application 内置对象
+   	12. pageContext内置对象					13. JavaBean			14. DAO设计模式
+	15. 文件上传		16.图形验证码
+   
+    		================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     ******************************************************************************************************************************************************
+     *									 Servlet									  *
+     ******************************************************************************************************************************************************
+
+
+
+
+    	 ==================================================================================================================================
+
+     目录：
+
+	1. Servlet处理流程  第一个Servlet程序以及解释		2. Servlet与表单	3. Servlet生命周期		4. 取得初始化配置信息
+	5. 取得其他内置对象		6. Servlet 跳转		7. WEB 开发模式 Mode I   Mode II			8. 过滤器
+	9. 监听器			10.表达式语言		11.tomcat 数据源					12. JSP 标签编程
+	13.JSP标准标签库
+
+  	======================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+【有关Servlet的配置】：
+
+
+
+    基本配置：
+
+	1. 将 %CATA_LINA%\lib\servlet-api.jar  加入CLASSPATH (本机 CLASSPATH = .;E:\tomcat\lib\servlet-api.jar;)
+
+	2. 在 【%CATA_LINA%\webapps】 下创建一个文件夹(即为：Servlet Project， 本机创建的文件夹名 servletproject，以servletproject为例)，
+	      在 【servletproject】 下创建文件夹 【WEB-INF】, 在 【WEB-INF】 文件夹下创建文件夹 【classes 和 lib， 以及 web.xml 配置文件】，
+		 将 servlet 程序的 .java 编译后的 .class 文件放在 classes 文件夹下，
+
+
+
+    web.xml 配置:
+
+	1. <web-app>: 顶层的标签，所有的 web.xml 都必须有这个标签， 该标签主要描述了当前的 Servlet 版本以及其他的一些文档的声明
+			所有的配置 都在 <web-app></web-app> 之间完成
+
+	2. <servlet>: 用于定义和 Servlet相关的信息，该标签含有四个子标签：
+			<servlet-class>: 用来定义 Servlet 和哪一个具体的类对应，(必须要是已经编译完的 .class 文件)
+			<servlet-name>: 用于定义 Servlet 的唯一标识，<servlet> 标签可以有多个，但是每个<servlet>标签的子标签<servlet-name>
+				的内容不能相同，否则 tomcat 服务器启动时会出错
+			<description>: 用于描述Servlet的文本信息
+			<display-name>: 提供了一些 GUI工具可能用于显示Servlet的文本信息
+
+	3. <servlet-mapping>: 这个标签一般和<servlet>标签成对出现，用于将Servlet映射成用户可以访问的 Web 路径，其中 <url-pattern> 定义了
+	      可访问的web路径，【但是注意 这个路径必须以 “/” 开头 或者是 “*.扩展名”的方式】，多个 <servlet-mapping> 可以对应一个
+		  <servlet>子标签 <servlet-name> 要与 <servlet> 的子标签 <servlet-name> 一致，【且不能少】
+
+	4. <webcome-file-list>: 系统会自动访问该标签中 <webcome-file> 所定义的文件或者 web路径，<webcome-file> 所定义的路径只能是相对于当前
+		web工程的相对路径，不能是绝对路径，而且前面不能加 “/” ， 一个 <webcome-file-list> 标签可以有多个 <webcome-file>子标签
+		  (只输入URL时 设置的自动访问页面 例如：index.html)
+
+	示例：【配置一个webapp的默认首页】	
+
+	 配置 webapp下的WEB-INF 下的 web.xml ， 在 <web-app></web-app> 之间配置： 
+<welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+</welcome-file-list>
+
+
+
+	。 每一个 Servlet 程序 都需要经过 web.xml 的配置
+
+
+
+示例代码（配置演示）：
+
+【ServletTest1.java】
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.*;
+import java.util.Date;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ServletTest1 extends HttpServlet {
+	
+	private static final long serialVersionUID = 123321123321L;
+
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setCharacterEncoding("GBK") ;
+		response.setContentType("text/html") ;
+		PrintWriter out = response.getWriter() ;
+		String time = new SimpleDateFormat("yyyy年MM月dd日 hh:ss").format(new Date()) ;
+		out.println("当前时间：" + time) ;
+		out.close() ;
+	}
+}
+
+
+
+【以 ServletTest1.java 为例 对 web.xml 进行配置】
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true">
+
+<servlet>
+	<servlet-name>ServletTest</servlet-name> //【1】
+	<servlet-class>ServletTest1</servlet-class>	// 如果运行的 .class 文件有包，则在此处需要写完整的包名
+</servlet>
+<servlet-mapping>
+	<servlet-name>ServletTest</servlet-name> // 要与【1】处的 name 相同	
+	<url-pattern>/servlet</url-pattern>	// 此处为ServletTest1的虚拟名(也可以为《/servlet.php》《/kingowe/*》的格式)，在地址栏中 使用虚拟名
+</servlet-mapping>					//  servlet 代替 ServletTest1，在地址栏中输入：《http://localhost:端口号/项目名称/虚拟名》 
+								// 即可运行被代替的文件 【 注意 “/” 不可少 】
+	
+</web-app> 
+
+
+	。 配置完成之后 启动tomcat 在浏览器地址栏输入：http://localhost:8080/servletproject/servlet 即可运行 ServletTest1.class
+		浏览器运行结果：当前时间：2014年07月04日 06:15
+
+
+
+
+
+  【ServletTest2.java】
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ServletTest2 extends HttpServlet
+{
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException{
+	//	response.setContentType("GBK") ; 	// 使用 setContentType() 无法解决乱码  【错,应为：setContentType("text/html")
+		response.setCharacterEncoding("GBK") ;	    // 而不是 setContentType("GBK"), request对象也有setCharacterEncoding() 方法
+								 //但是并不能解决当前页面的乱码，response.setCharacterEncoding("GBK") 可以 】
+		PrintWriter out = response.getWriter() ;
+		out.println("<html>") ;
+		out.println("<head><title>Second Servlet Program</title></head>") ;
+		out.println("<body>") ;
+		out.println("<h1>第二个Servlet程序，自己配置<h1>") ;
+		out.println("</body>") ;
+		out.println("</html>") ;
+		
+	}
+}
+
+
+【web.xml 的配置】
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true">
+
+<!--
+=========【ServletTest2.java】 的配置=================
+-->
+
+<servlet>
+	<servlet-name>ServletTest2</servlet-name>	// 这里的 <servlet-name>  的值是给 <servlet-mapping> 看的
+	<servlet-class>com.kingowe.servlet.ServletTest2</servlet-class>		// 完整的 包.类名称 (必须要是已经编译完的 .class 文件)
+</servlet>
+<servlet-mapping>
+	<servlet-name>ServletTest2</servlet-name>
+	<url-pattern>/ServletTest2.class</url-pattern> <!--【注意：如果是这种方式 则路径前的 “/” 不可少，如果为 *.扩展名 的方式，则不需要 “/”
+						比如：<url-pattern>*.class</url-pattern> 则访问的时候可以使用 xxx.class 来访问】-->	
+</servlet-mapping>
+
+</web-app>
+
+
+
+
+
+
+	。对于Servlet程序： response.setContentType("text/html") ;是设置当前页面的显示类型， response.setCharacterEncoding("GBK") ; 是解决当前页面的乱码，
+		request.setCharacterEncoding("GBK") ;  是解决接收参数时的乱码
+ 
+	。servlet程序在调用 doXxx() 方法时 会先调用 service() 方法，通过service() 方法再根据method调用对应的方法,如果service()方法被重写，如果没有手工
+		添加调用 doXxx() 方法的代码，则 doXxx()方法不会被调用
+
+
+	。对于response 和 request 对象， request是获得客户端发送给服务器的请求， response对象是往客户端写内容(比如获得输出流，向浏览器页面写内容，
+		Cookie是保存在客户端，所以添加 cookie也要使用response)，
+
+
+
+	。【webapps下Servlet程序的web.xml配置注意：】
+
+		在Java EE 体系下的webapps，在浏览器端访问的URL(浏览器向服务器发请求) 无论是 xxx.html 还是 xxx.jsp 或者是别的内容，都是先要查找Servlet，
+		    如果客户端请求的URL(URI)在Servlet中有对应的映射，则会执行对应的Servlet，如果没有对应的URL映射，那么将会访问 默认的Servlet(或者
+			由默认的Servlet进行查找对应的uri，如果查找到了 则显示对应的内容，如果没有找到 再显示默认的Servlet映射的内容(客户端显示404错误))，
+		          以下为默认的 Servlet 的web.xml(《CATALINA_HOME\conf\web.xml》)的配置：
+ 
+    <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>true</param-value>		
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+                           <url-pattern>/<url-pattern> 就表示默认的Servlet，如果在webapp下为Servlet程序配置了：
+  			       <servlet-mapping> <url-pattern>/</url-pattern>  </servlet-mapping> ， 那么以后 在浏览器中所有请求的URL如果有对应的Servlet，
+				  则访问对应的Servlet，如果没有 那么会直接访问该webapp下 <servlet-mapping> <url-pattern>/</url-pattern></servlet-mapping> 
+                                     这个配置对应的Servlet，而不会去找对应的uri
+
+例如：
+     在浏览器中访问 http://localhost:8080/day05/xxx.html ,  会先找对应的Servlet，没有找到相应的Servlet，则会根据默认的Servlet做出处理，如果在webapp下的
+     	Servlet程序中配置了 <servlet-mapping> <url-pattern>/</url-pattern>  </servlet-mapping>，该配置会覆盖《CATALINA_HOME\conf\web.xml》中的默认Servlet
+          的配置，因此不会再去查找xxx.html，而是直接访问webapp中默认Servlet对应的内容， 如果在webapp中没有配置默认的Servlet，那么会使用
+            《CATALINA_HOME\conf\web.xml》中默认Servlet的配置，于是会在对应的webapp下查找名称为xxx.html 的文件，如果有 则显示，如果没有 则执行默认的Servlet
+	
+	如果对webapp下的Servlet配置了 <url-pattern>/</url-pattern> ，那么客户端请求的非Servlet内容将统一执行该配置映射的Servlet程序，即：无法访问xxx.html
+	   xxx.jsp 等，因此 不要对webapp下的Servlet配置<url-pattern>/</url-pattern>映射
+
+
+
+
+
+
+
+【程序中地址(资源路径)的写法】
+
+
+	原则：地址大部分都以 / 开头， 然后看地址是给谁用的，如果是给浏览器用的，则 / 代表网站(网站下有多个webapp)， 如果是给服务器用的， 则 / 代表当前webapp，
+           (MyEclipse的webapp目录结构：project下有src和WebRoot ，src下是java源文件， WebRoot下有 META-INF、WEB-INF、*.jsp、*.html 等文件， 所有的路径都是以
+		WebRoot文件夹开始的，即：如果路径代表网站 则 / 表示 /webappName/Webroot/ 的第一个 /, 如果路径代表服务器 则 / 表示 /dangqianwebappName/Webroot/
+		  的第二个 /)
+
+示例：
+	·request.getRequestDispatcher("/path").forward(request,response) 中的 路径 是给服务器用的，所以/代表当前webapp， path代表当前webapp下(WebRoot下)的文件
+		，假设在WebRoot下有 META-INF、WEB-INF、xxx2.jsp、xxx1.html 这些文件，如果要跳转到 xxx1.html 则path为：xxx1.html，路径为 /xxx1.html
+
+	·this.getServletContext().getRealPath("/path"); 中的路径是给服务器用的
+
+	·this.getServletContext().getResourceAsStream("/path"); 中的路径是给服务器用的，如果有文件 WebRoot/public/xxx3.txt, 则路径为：/public/xxx3.txt
+
+	·response.sendRedirect("/path"); 中的路径是给浏览器用的，所以 / 表示网站， path 表示 webapptName/fileName.xxx
+
+	·<a href='/path'>点点</a> 中的路径是给浏览器用的
+
+	.<form action='/path'></form> 中的路径是给浏览器用的
+
+	。一个路径用于浏览器和用于服务器的区别在于：如果是用于浏览器 则该文件的路径要以 /webappName 开头，在JSP中 如果要地址使用到 /webappName，
+ 	    一般要用 ${pageContext.request.contextPath}  来代替 /webappName , 因为项目在部署的时候可能项目名称会改变，所以不能将 /webappName 写死，
+		要通过 ${pgeContext.request.contextPath} 获取当前的项目名称，它的返回值为 /webappName, 所以在 $ 前不需要加 / (示例：
+		     <a href="${pageContext.request.contextPath}/ServletName">注册</a>   )
+
+
+
+
+
+
+
+
+
+
+
+
+【1.Servlet处理流程  第一个Servlet程序以及解释】
+
+	
+	。Servlet 处理流程：
+		1. 客户端(一般是Web浏览器)通过 HTTP 提出请求
+
+		2. WEB服务器接收该请求，然后把接收到的http请求封装成Request对象，作为service()的参数传入，并将其发给 Servlet，如果这个Servlet
+			还没有被加载，则web服务器将把它加载到 JVM，并执行它
+
+		3. Servlet程序将接收该 HTTP请求，并执行某种处理
+
+		4. Servlet 会将处理后的结果向web服务器返回应答
+
+		5. web 服务器将从Servlet接收到的应答返回给客户端
+
+
+
+	。一般而言 当需要使用 HTTP协议操作时 用户自定义的Servlet类都要继承 HttpServlet 类，
+		继承图：自定义类 extends HttpServlet,  HttpServlet extends GenericServlet，  GenericServlet implements Servlet
+		    在自定义的 Servlet 类中 还要重写 HttpServlet 类中的 doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException 方法，
+
+
+
+
+
+
+
+【2.Servlet 与 表单】
+
+
+实例代码：
+
+【servletform.html】 位于:《 E:\tomcat\webapps\servletproject\temp1 》 文件夹下
+
+<form action="ServletForm" method="get">	//【对于action属性值原为: http://localhost:8080/servletproject/ServletForm ,因为显示页面
+						  // 当前这个 servletform.html 和 提交页面 ServletForm.class 在同一个project下，所以可以写相对路径
+						      //ServletForm(相对路径不是Servlet文件名，而是该Servlet文件在 web.xml中配置的 <url-pattern> 的值)】
+						     
+	<input type="text" name="info"/>
+	<br/>
+	<input type="submit" value="提交"/>
+</form>
+
+
+【ServletForm.java】 位于:《E:\tomcat\webapps\servletproject\WEB-INF\classes》 文件夹下
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ServletForm extends HttpServlet
+{
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException{
+
+		response.setCharacterEncoding("GBK") ;
+		PrintWriter out = response.getWriter() ;
+		String info = request.getParameter("info") ;
+		out.println("<html>") ;
+		out.println("<head><title>Second Servlet Program</title></head>") ;
+		out.println("<body>") ;
+		out.println("<h1>接收的参数："+info+"<h1>") ;
+		out.println("</body>") ;
+		out.println("</html>") ;			
+	}
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException{	
+		this.doGet(request, response) ;		// 对于以 get 方式 和 post 方式提交的参数 都使用同一种方法处理
+	}
+}
+
+
+【ServletForm.java 的 web.xml 的配置】 （主要配置代码段）
+
+<!--
+=========【ServletForm.java】 的配置=================
+-->
+
+<servlet>
+	<servlet-name>form</servlet-name>
+	<servlet-class>com.kingowe.servlet.ServletForm</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>form</servlet-name>	
+	<url-pattern>/ServletForm</url-pattern>
+</servlet-mapping>
+
+
+
+	。使用以上的配置，在浏览器输入：http://localhost:8080/servletproject/temp1/servletform.html， 提交后 会出现
+		HTTP Status 404 - /servletproject/temp1/ServletForm
+
+	    。原因： servletform.html 位于 /servletproject/temp1 文件夹下，提交给的文件：action="ServletForm" ，因为是相对路径，所以提交时
+		  会在  temp1 文件夹下找 ServletForm 文件，因为 ServletForm 文件位于/servletproject，于是便会出错，
+
+	    。 解决办法：
+
+1. 修改 ServletForm 的配置文件： 将 <servlet-mapping> 修改为：
+  <servlet-mapping>
+	<servlet-name>form</servlet-name>	
+	<url-pattern>/temp1/ServletForm</url-pattern>	// 直接将虚拟目录放在 提交数据的.html 所在的文件夹下，二者位于同一文件夹下，
+							    // 便可以完成提交功能
+  </servlet-mapping>
+
+
+2. 修改表单提交路径： 将 <form action="ServletForm" method="get"> 修改为：
+  <form action="../ServletForm" method="get">
+
+
+
+	。对于 ServletForm.java 中的 doPost(HttpServletRequest request, HttpServletResponse response) 方法的解释：
+		对于 doGet(...) 方法，只可以完成 提交方式为 get 的参数的接收， 使用 doGet(...) 方法接收以 post 方式 提交的参数
+		   将会出现 400 错误，反之一样， 所以需要使用 doPost(...) 来接收 以post方式提交的参数
+
+
+
+
+
+
+
+
+
+【3.Servlet生命周期】
+
+	
+	。Servlet程序是运行在服务器端的一个java程序，他的生命周期受到WEB容器的控制，生命周期包括五个部分：
+		加载程序， 初始化， 服务， 销毁， 卸载
+
+
+	。Servlet生命周期对应的方法：
+
+		1. public void init() throws ServletException 	  
+			// Servlet 初始化的时候调用
+
+		2. public void init(ServletConfig config) throws ServletException
+			// Servlet 初始化时调用，可以通过 ServletConfig 读取配置信息
+	
+		3. public abstract void service(ServletRequest request, ServletResponse response)
+					throws ServletException, IOException
+			// servlet 服务，一般不会直接覆盖此方法，而是使用 doGet() 或 doPost() 方法
+
+		4. public void destroy()
+			// servlet 销毁时调用
+
+
+
+示例代码：
+
+	ServletLife.java
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ServletLife extends HttpServlet
+{
+	public void init() throws ServletException {
+		System.out.println("**********init() 方法********") ;
+	}
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		System.out.println("**********doGet() 方法********") ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		System.out.println("**********doPost() 方法********") ;
+	}
+//	public void service(ServletRequest request, ServletResponse response) // 如果使用了 service 方法，doXxx 方法 就会失效    
+//				throws ServletException, IOException {
+//		System.out.println("**********service() 方法********") ;		
+//	}
+	public void destroy() {
+		System.out.println("**********destroy() 方法*******") ;
+		try{
+			Thread.sleep(7000) ;	// 加上延时，便于观察 destroy 方法 的调用， 输出之后再 sleep()
+		}catch(Exception e){}
+	}
+}
+
+
+
+
+
+浏览器运行后，按下 5 次刷新按钮，在 tomcat 服务器端的输出结果如下：
+
+**********init() 方法********
+**********doGet() 方法********	// 浏览器加载时调用一次
+**********doGet() 方法********
+**********doGet() 方法********
+**********doGet() 方法********
+**********doGet() 方法********
+**********doGet() 方法********
+
+	。浏览器一开始运行Servlet程序时会先调用一次 init()方法 和 doGet() 方法，之后每按下一次刷新按钮，就会调用一次 doGet() 方法，
+	     init() 方法 只有在浏览器运行Servlet程序时调用一次，重启浏览器，再运行该 Servlet 程序，也不会再调用 init() 方法(可见这是单例
+		设计模式，线程不安全)
+
+
+关闭服务器(Ctrl+C)时 服务器端的输出结果：
+
+信息: Stopping service Catalina
+*********destroy() 方法*******
+
+	。 服务器关闭，会调用 destroy() 方法
+
+	。 关于销毁有以下几种情况：
+		1. 容器(tomcat服务器)关闭，Servlet程序销毁
+		2. 一个 Servlet 程序长时间不使用，该Servlet程序销毁
+		3. 在开发中 执行了 reload 操作
+
+
+	。 正常情况下，init() 方法 是在 Servlet程序第一次运行的时候才会调用，如果希望容器在启动的时候 Servlet 就可以直接
+		进行初始化操作，则 可以在 web.xml (Servlet程序所在的目录中的 web.xml,而不是 tomcat安装目录下的 web.xml)中增加一个相应的配置：
+
+<servlet>
+	<servlet-name>life</servlet-name>
+	<servlet-class>com.kingowe.servlet.ServletLife</servlet-class>
+	<load-on-startup>1</load-on-startup>	// 增加的配置，其余未变
+</servlet>
+
+表示 当容器启动的时候就进行加载， 经过配置之后 在启动 tomcat 时就会进行初始化操作( 调用 init() 方法， 在tomcat中有以下信息：
+			信息: Deploying web application directory E:\tomcat\webapps\servletproject
+					**********init() 方法********		)
+
+
+
+
+
+
+
+【4. 取得初始化配置信息】
+
+
+	。要想传入初始化参数，必须要在 web.xml 中进行配置，在<servlet>中增加 <init-param>
+
+
+实例代码：
+
+	InitParam.java
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class InitParam extends HttpServlet
+{
+	private String param ;
+
+	public void init() throws ServletException {
+		System.out.println("********init()*********") ;
+	}
+	public void init(ServletConfig config) throws ServletException {
+		this.param = config.getInitParameter("info") ;
+		System.out.println("#########init(config)########") ;
+		System.out.println("接收的参数(init(config))：" + this.param) ;
+	}
+	public void doGet(HttpServletRequest request, HttpServletResponse response) 
+				throws ServletException,IOException {
+		System.out.println("接收的参数(doGet())：" + this.param) ;
+	}
+	public void diPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}	
+
+
+
+	web.xml 中的配置
+
+<!--
+=========【InitParam.java】 的配置=================
+-->
+
+<servlet>
+	<servlet-name>initparam</servlet-name>
+	<servlet-class>com.kingowe.servlet.InitParam</servlet-class>
+	<init-param>		// 传入初始化参数
+		<param-name>info</param-name>	// 初始化参数名
+		<param-value>Kongchao 孔超</param-value>	// 初始化参数值
+	</init-param>
+	<load-on-startup>1</load-on-startup>	// 服务器启动时执行初始化操作
+</servlet>
+<servlet-mapping>
+	<servlet-name>initparam</servlet-name>	
+	<url-pattern>/InitParam</url-pattern>
+</servlet-mapping>
+
+
+
+	。传入的参数 如果是中文，在接收的时候会出现乱码， 如果同时有 init() 方法 和 init(ServletConfig config) 方法
+		则 只有 带参数的 init(ServletConfig config) 方法起作用
+
+
+	。获得ServletConfig对象还可以直接在doGet() doPost() 方法中直接使用this.getServletConfig() 方法获得ServletConfig对象，而不需要
+	    使用 init(ServletConfig config) 方法
+	
+
+
+
+
+
+
+
+【5. 取得其他内置对象】
+
+
+
+》》 取得 session 对象
+
+	。在 Servlet程序中 要想取得一个 session对象，可以通过 HttpServletRequest 接口中的方法完成：
+		public HttpSession getSession() ;	// 一般使用这个
+		public HttpSession getSession(boolean create) ;	// 返回当前的 session， 如果没有则创建一个
+
+	。 Servlet 本身只提供了 request 和 response 两个对象，想要取得 session 对象，只能依靠 request 对象
+		因为 session 属于 HTTP 协议范畴， 而且每次发送请求的时候 服务器都会为客户端自动设置一个 cookie，
+		    session 中使用到了 cookie 机制，但是 cookie 只能通过 request 取得，所以 session 也是由request取得
+
+
+
+
+示例代码：
+
+	GetSession.java
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class GetSession extends HttpServlet
+{
+	private HttpSession session ;
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		session = request.getSession() ;
+		System.out.println("SESSION ID:" + session.getId()) ;
+		session.setAttribute("name", "kongchao") ;
+		System.out.println("设置的属性 name：" + session.getAttribute("name")) ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+ 正常配置 web.xml 后，在浏览器端运行 GetSession 后， tomcat 的输出：
+SESSION ID:E363434F5CBAB97B2D82CD862F6E5FDB
+设置的属性 name：kongchao
+
+
+
+
+
+
+  》》 取得 application 对象
+
+	。在 HttpServlet 的 父类GenericServlet 中定义了取得application 对象的方法： getServletContext(),所以可以直接使用
+	     super.getServletContext() ;  来取得 application 对象， 也可以通过 ServletConfig对象来获得ServletContext对象：
+		this.getServletConfig().getServletContext() ;
+
+
+
+实例代码：
+
+	GetApplication.java
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class GetApplication extends HttpServlet
+{
+	private ServletContext application ;
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		application = super.getServletContext() ;
+		System.out.println("真实路径：" + application.getRealPath("/")) ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+
+   tomcat输出结果：
+真实路径：E:\tomcat\webapps\servletproject\
+
+
+
+
+
+
+
+
+
+
+【6. Servlet跳转】
+
+
+  》》 客户端跳转
+
+
+	。之前的客户端跳转是通过 response.sendRedirect() 方法完成， 在 Servlet中提供了 response 对象， 所以可以直接使用提供的
+		对象完成
+
+
+实例代码：
+
+	ClientForward.java
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ClientForward extends HttpServlet
+{
+	private HttpSession session ;
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		session = request.getSession() ;
+		session.setAttribute("name", "孔超") ;
+		request.setAttribute("company", "kingowe") ;
+		response.sendRedirect("clientforward.jsp") ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+
+	clientforward.jsp 【路径：E:\tomcat\webapps\servletproject\temp1\clientforward.jsp】
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%
+	request.setCharacterEncoding("GBK") ;
+%>
+<h3>session 属性：<%=session.getAttribute("name") %></h3>
+<h3>request 属性：<%=request.getAttribute("company")%></h3>
+
+
+【 因为 clientforward 位于\servletproject\temp1\，所以为了方便 web.xml 配置：<url-pattern>/temp1/ClientForward</url-pattern> 】 
+
+
+浏览器输入： http://localhost:8080/servletproject/temp1/ClientForward
+结果：
+session 属性：孔超
+
+request 属性：null
+
+
+
+
+
+  》》 服务器端跳转
+
+	。在 Servlet 中没有像 JSP 中 <jsp:forward> 的指令，所以 要想完成服务器端跳转，就必须依靠 RequestDispatcher 接口中
+		的方法：
+	    		1. public void forward(ServletRequest request, ServletResponse response)
+					throws ServletException,IOException
+
+			2. public void include(ServletRequest request, ServletResponse response)
+					throws ServletException,IOException
+
+		使用 forward() 方法就可以完成跳转功能， 此外 还需要使用 ServletRequest 接口中的 方法
+			getRequestDispatcher(String path) 获得一个 RequestDispatcher 接口的实例化对象， 参数 path 表示
+				要跳转的路径
+
+
+
+实例代码：
+
+	ServerForward.java
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class ServerForward extends HttpServlet
+{
+	private HttpSession session ;
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		session = request.getSession() ;
+		session.setAttribute("name", "孔超") ;
+		request.setAttribute("company", "kingowe") ;
+		RequestDispatcher rd = request.getRequestDispatcher("clientforward.jsp") ;	// 取得 RequestDispatcher 以及跳转路径
+		rd.forward(request, response) ;
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+	web.xml 的配置与ClientForward.java 的配置一致
+
+
+在浏览器输入：http://localhost:8080/servletproject/temp1/ServerForward   运行结果：
+session 属性：孔超
+
+
+request 属性：kingowe
+
+
+
+
+	。注意问题： 在Servlet程序中的跳转语句后最好加 return ; ，因为如果跳转语句后还有跳转语句，将会抛出异常:java.IllegalStateException, 如果在
+		forward语句跳转之前有输出流的关闭操作，也会抛出该异常， 执行了forward 跳转，将会清空response中的内容， 也就是：
+String date = "aaaaaa" ;
+response.getWriter().write(date) ;
+request.getRequestDispatcher("xxxx.jsp").forward(request,response) ;  
+跳转之后的页面并不会输出date的内容 aaaaaa
+
+
+
+
+
+
+
+【7. WEB 开发模式 Mode I（了解）   Mode II（【重点】）】
+
+
+
+
+  》》 Mode I 是指 在开发中将 显示层、控制层、 数据层 的操作统一交给 JSP 或者 JavaBean 来处理 
+
+
+
+  》》 Mode II： Model-View-Controller（即 MVC 设计模式）
+	
+	。在 Mode II 中，所有的开发都是以Servlet为主体展开的，由 Servlet 接收所有的客户端请求，之后根据请求调用相应的JavaBean，
+		并将所有的显示结果交给 JSP 来完成，
+
+	。 MVC 设计模式：DAO负责数据层的操作【M】，JSP只负责页面的显示【V】， Servlet 连接 DAO 和 JSP，并根据 JavaBean的操作结果进行跳转【C】(业务逻辑)
+		其中 M 包括 业务层，DAO层，持久层，一个程序中的M 可以三者都有，也可以只有一种	
+
+
+
+
+ 【MVC设计模式实例代码 系统登录】：
+
+    。 程序结构：
+		1. 对于登陆的用户，使用DAO设计模式
+			程序包括：User.java   IUserDAO.java   UserDAOImpl.java   UserDAOProxy.java   UserDAOFactory.java
+				以及数据库的连接和关闭： DataBaseConnection.java
+
+		2. Servlet程序 负责连接 DAO 和 JSP
+
+		3. 登陆界面的 JSP程序 login.jsp 以及成功登陆后的页面 success.jsp
+
+【完整实例代码：】
+
+【数据库:《E:\tomcat\webapps\loginsystem\WEB-INF\classes\DataBaseConnection.java》】
+
+package com.kingowe.login.dbc;	// 1. DataBaseConnection： 专门负责数据库的打开与关闭的操作类
+import java.sql.* ;
+
+public class DataBaseConnection {
+	private static final String DRIVER = "com.microsoft.jdbc.sqlserver.SQLServerDriver" ;
+	private static final String URL = "jdbc:microsoft:sqlserver://localhost:1483" ;
+	private static final String USER = "sa" ;
+	private static final String PASSWORD = "admin" ;
+	private Connection con ;
+	
+	public DataBaseConnection() throws SQLException, Exception {
+		Class.forName(DRIVER) ;
+		con = DriverManager.getConnection(URL,USER, PASSWORD) ;
+	}
+	public Connection getConnection(){
+		return this.con ;
+	}
+	public void close() throws SQLException{
+		if(con != null){
+			con.close() ;
+		}
+	}
+}
+
+
+			
+【JavaBean：User《E:\tomcat\webapps\loginsystem\WEB-INF\classes\User.java》】
+
+package com.kingowe.login.vo ;
+
+public class User
+{
+	private String name ;
+	private String password ;
+
+	public User(){}
+	public User(String name, String password){
+		this.name = name ;
+		this.password = password ;
+	}
+
+	public void setName(String name){
+		this.name = name ;
+	}
+	public String getName(){
+		return this.name ;
+	}
+	public void setPassword(String password){
+		this.password = password ;
+	}
+	public String getPassword(){
+		return this.password ;
+	}
+}
+
+
+【接口：IUserDAO《E:\tomcat\webapps\loginsystem\WEB-INF\classes\IUserDAO.java》】
+
+package com.kingowe.login.dao ;
+
+import java.sql.* ;
+import java.util.* ;
+import com.kingowe.login.vo.* ;
+
+public interface IUserDAO
+{
+	public boolean check(User user) throws SQLException, Exception ;	// 实现验证操作
+	public List<String> getInfo() ;		// 收集用户输入的错误信息(用户名 密码的错误信息)
+}
+
+
+
+【IUserDAO实现类UserDAOImpl：《E:\tomcat\webapps\loginsystem\WEB-INF\classes\UserDAOImpl.java》】
+
+package com.kingowe.login.dao.impl ;
+
+import java.util.* ;
+import java.sql.* ;
+import com.kingowe.login.dao.* ;
+import com.kingowe.login.vo.* ;
+
+public class UserDAOImpl implements IUserDAO
+{
+	private Connection con = null;
+	private PreparedStatement pstmt = null ;
+	private PreparedStatement pstmt1 = null ;
+	private PreparedStatement pstmt2 = null ;
+	private List<String> info ;
+
+	public UserDAOImpl(Connection con){
+		this.con = con ;
+		info = new ArrayList<String>() ;
+	}
+
+	public boolean check(User user) throws SQLException, Exception{
+		boolean flag = false ;
+		if(user.getName()==null || user.getName()==""){
+			info.add("用户名不能为空！") ;
+			return flag ;
+		}
+		if(user.getPassword()==null || user.getPassword()==""){
+			info.add("还未输入密码!") ;
+			return flag ;
+		}
+		
+		String sql = "select * from login where username=? and password=?" ;
+		pstmt = con.prepareStatement(sql) ;
+		pstmt.setString(1, user.getName()) ;
+		pstmt.setString(2, user.getPassword()) ;
+		ResultSet rs = pstmt.executeQuery() ;
+		if(rs.next()){
+			flag = true ;
+			return flag ;
+		}
+
+		String sql1 = "select * from login where username=?" ;
+		pstmt1 = con.prepareStatement(sql1) ;
+		pstmt1.setString(1, user.getName()) ;
+
+		String sql2 = "select * from login where password=?" ;		// 这块可以不要,下边的 else if() 改为 else，因为执行到下边的 if(!isRightName) 
+		pstmt2 = con.prepareStatement(sql2) ;			// 如果if 条件成立，则用户名不存在，如果不成立，说明用户名正确，肯定为密码错误，
+		pstmt2.setString(1, user.getPassword()) ;	//执行 else，因为如果用户名 密码 都正确，则不会执行到这里，在上边就已经返回
+		
+		ResultSet rs1 = pstmt1.executeQuery() ;
+		ResultSet rs2 = pstmt2.executeQuery() ;
+		boolean isRightName = rs1.next() ;
+		boolean isRightPassword = rs2.next() ;
+		if(!isRightName){
+			info.add("用户名不存在！") ;
+		} else if(!isRightPassword){	// 执行到这里 说明用户名正确
+			info.add("密码错误，用户名与密码不匹配！") ;
+		}
+		
+		return flag ;
+	}
+
+	public List<String> getInfo(){
+		return this.info ;
+	}
+}
+
+
+
+【IUserDAO代理类 UserDAOProxy：《E:\tomcat\webapps\loginsystem\WEB-INF\classes\UserDAOProxy.java》】
+
+package com.kingowe.login.dao.proxy ;
+
+import java.util.* ;
+import java.sql.* ;
+import com.kingowe.login.dao.* ;
+import com.kingowe.login.dbc.* ;
+import com.kingowe.login.vo.* ;
+import com.kingowe.login.dao.impl.* ;
+
+public class UserDAOProxy implements IUserDAO 
+{
+	DataBaseConnection dbc = null ;
+	UserDAOImpl impl = null ;
+
+	public UserDAOProxy() throws SQLException, Exception{
+		dbc = new DataBaseConnection() ;
+		impl = new UserDAOImpl(this.dbc.getConnection()) ;
+	}
+
+
+	public boolean check(User user){
+		boolean flag = false ;
+		try{
+			if( impl.check(user) ){
+				flag = true ;
+			}
+		} catch(SQLException sqle){
+			System.out.println("数据库异常") ;
+			sqle.printStackTrace() ;
+		} catch(Exception e){
+			e.printStackTrace() ;
+		} finally{
+			if(this.dbc != null){
+				try{
+					this.dbc.close() ;
+				}catch(SQLException e){
+					e.printStackTrace() ;
+				}
+			}
+		}
+		return flag ;
+	}
+	public List<String> getInfo(){
+		return impl.getInfo() ;
+	}
+}
+
+
+
+【工厂类UserDAOFactory：《E:\tomcat\webapps\loginsystem\WEB-INF\classes\UserDAOFactory.java》】
+
+package com.kingowe.login.factory ;
+
+import com.kingowe.login.dao.* ;
+import com.kingowe.login.dao.proxy.* ;
+
+public class UserDAOFactory
+{
+	private UserDAOFactory(){}
+
+	public static IUserDAO getIUserDAOInstance() throws Exception{
+		return new UserDAOProxy() ;
+	}
+}
+
+****************以上为DAO**************************
+
+【Servlet部分 ：《E:\tomcat\webapps\loginsystem\WEB-INF\classes\LoginServlet.java》】
+
+package com.kingowe.login.servlet ;
+
+import java.util.* ;
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+import com.kingowe.login.vo.* ;
+import com.kingowe.login.dao.* ;
+import com.kingowe.login.factory.* ;
+
+public class LoginServlet extends HttpServlet
+{
+	private User user ;
+	IUserDAO userDAO ;
+	RequestDispatcher rd ;
+	List<String> info ;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		request.setCharacterEncoding("GBK") ;
+		user = new User() ;
+
+		String name = request.getParameter("username") ;
+		String password = request.getParameter("password") ;
+		user.setName(name) ;
+		user.setPassword(password) ;
+		try{
+			userDAO = UserDAOFactory.getIUserDAOInstance() ;
+			if( userDAO.check(user) ) {
+				// 登陆成功页面
+				System.out.println("*******"+name+"登陆成功************") ;	// 测试代码
+				rd = request.getRequestDispatcher("success.jsp") ;
+				//rd.forward(request, response) ;		//【注意这里， 如果在这里跳转，则无法执行之后的语句】
+				request.setAttribute("name", name) ;
+				rd.forward(request, response) ;  // 【要在最后跳转】
+			} else{
+				// 登陆失败页面
+				info = userDAO.getInfo() ;
+				request.setAttribute("info", info) ;
+				rd = request.getRequestDispatcher("login.jsp") ;
+				request.setAttribute("name", name) ;
+				request.setAttribute("password", password) ;
+				rd.forward(request, response) ;  // 【最后执行跳转】
+			}
+		}catch(Exception e){
+			e.printStackTrace() ;
+		}
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+【Servlet 部分 web.xml 的配置：《E:\tomcat\webapps\loginsystem\WEB-INF\web.xml》】
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true">
+
+
+<!--
+=========【通用配置】================
+-->
+
+<servlet>
+	<servlet-name>login</servlet-name>
+	<servlet-class>com.kingowe.login.servlet.LoginServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>login</servlet-name>	
+	<url-pattern>/LoginServlet</url-pattern>
+</servlet-mapping>
+
+</web-app>
+
+
+
+
+
+*************以下为 JSP 显示页面***************
+
+【登陆页面：《E:\tomcat\webapps\loginsystem\login.jsp》】
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+
+<%
+	request.setCharacterEncoding("GBK") ;
+	String name = (String)request.getAttribute("name");	
+	String password = (String)request.getAttribute("password") ;
+	if(name == null){
+		name = "" ;
+	}
+	if(password == null){
+		password = "" ;
+	}
+	List<String> info = (List<String>)request.getAttribute("info") ;
+	if(info != null){
+		Iterator<String> it = info.iterator() ;
+		while(it.hasNext()){
+%>
+			<h4><%=it.next()%></h4>
+<%
+		}
+	}
+%>
+
+<form action="LoginServlet" method="post">	
+   <%//此处的action属性值为 LoginServlet.java 在 web.xml 中的配置<url-pattern>的值 %>
+	用户名：<input type="text" name="username" value="<%=name%>"/>	// 设置 value 属性值，保存用户上次输入的信息，便于修改
+	<br/>
+	密&nbsp;&nbsp;码：
+	<input type="password" name="password" value="<%=password%>"/>  // 设置 value 属性值，保存用户上次输入的信息，便于修改
+	<br/>
+	<input type="submit" value="登陆"/>
+	&nbsp;&nbsp;&nbsp;
+	<input type="reset" value="重置"/>
+</form>
+
+
+
+
+
+【登陆成功页面：《E:\tomcat\webapps\loginsystem\success.jsp》】
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+
+<%
+	String name = (String)request.getAttribute("name") ;	// 注意要强制类型转换
+%>
+<h3><%=name%>您好，欢迎回来！</h3>
+
+
+
+
+
+
+	！* ！* ！ 以上即为一个完整的登录的程序， 在程序的设计中 对用户输入的信息的验证操作 以及 出错信息的保存 放在了 IUserDAO 
+			的实现类 UserDAOImpl中， 这样可以有更完善的提示信息（比如：可以提示用户名是否存在，在用户登录失败时 可以知道是
+			    用户名出错 还是 密码出错，方便用户） ，  在 MLDN 中的设计是 将这些验证操作 以及 错误信息(List) 在 Servlet 中完
+				成， UserDAOImpl中只是在数据库中进行查找，判断用户输入是否正确， 这样设计 在 IUserDAO 中 就只需要一个 check(user)
+				    方法 即可，然后 错误信息的集合 List 在 Servlet中定义
+
+			还可以将错误信息添加到一个map集合中，键 对应input框，值 对应出错信息，然后可以分别在用户名和密码框之后给出对应的错误信息，
+			   而不是在顶部统一给出
+
+
+
+
+
+
+
+
+
+
+
+【8.过滤器】
+
+	
+	。Servlet 一共分为三种： 
+				1. 简单 Servlet，程序开发所必须的结构
+				2. 过滤 Servlet，以组件的形式出现，不是程序所必须
+				3. 监听 Servlet，以组件的形式出现，不是程序所必须
+
+	。简单的 Servlet 程序 是 extends HttpServlet， 过滤器 是 implements javax.servlet.Filter, 在 javax.servlet 包下 是完成公共协议的
+		在 javax.servlet.http 包下 是完成 HTTP 协议的， 所以 Filter 是完成公共协议的
+
+	。当需要限制用户访问某些资源 或者 处理请求时提前处理某些资源 的时候就可以使用过滤器，
+
+
+
+
+实例代码：
+
+【FirstFilter.java 《E:\tomcat\webapps\servletproject\WEB-INF\classes\FirstFilter.java》】
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class FirstFilter implements Filter
+{
+	public void init(FilterConfig filterConfig) throws ServletException {
+		/*  与简单Servlet 的区别
+		 *	public void doGet(HttpServletRequest request, HttpServletResponse response)
+		 *			throws ServletException, IOException
+		 *	public void service(ServletRequest request, ServletResponse response)
+		 *			throws ServletException, IOException 	
+		 */
+
+		String initParameter = filterConfig.getInitParameter("initparam") ;
+		System.out.println("\n接收的初始化参数：" + initParameter + "\n") ;
+		
+	}
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+					throws IOException, ServletException {
+		System.out.println("\n=========doFilter()方法执行=============\n") ;
+	}
+	public void destroy(){
+		System.out.println("\n=========destroy()方法执行=============\n") ;
+		try{
+			Thread.sleep(5000) ;
+		}catch(Exception e){}
+	}
+}
+
+
+
+【FirstFilter.java 的 web.xml的配置 《E:\tomcat\webapps\servletproject\WEB-INF\web.xml》】
+
+<filter>
+	<filter-name>filter</filter-name>
+	<filter-class>com.kingowe.servlet.FirstFilter</filter-class>
+	<init-param>
+		<param-name>initparam</param-name>
+		<param-value>Kongchao 孔超</param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>filter</filter-name>	
+	<url-pattern>/*</url-pattern>	
+</filter-mapping>
+
+	。如果配置中既有简单Servlet配置，又有Filter配置，一般先写Filter配置
+
+	【
+	  Filter配置中的 url-pattern 并不是虚拟路径，而是过滤路径  /* 表示过滤所有文件， 没有使用过滤器之前 在浏览器输入：http://localhost:8080/servletproject/
+     	     可以看见该目录下的所有文件， 当启动了过滤器，并且 url-pattern 为 /* , 再次在浏览器输入：http://localhost:8080/servletproject/ 以前显示
+		的文件都被隐藏，只有一个空白页	，  一个过滤器可以配置多个 <filter-mapping>, 对多个路径下的文件进行过滤(格式： /jsp/admin/*)
+	】
+
+
+
+	。对于 Filter 的初始化 是在服务器启动时自动完成的，对于简单 Servlet，要想在服务器启动的时候进行初始化，需要在配置文件中加上
+		<load-on-startup>1</load-on-startup> ，但是 过滤器 不需要， 在 http://localhost:8080/servletproject/ 目录下，每按一次
+		    刷新按钮 ，doFilter() 方法会被执行一次， 在 tomcat服务器端输出一次：=========doFilter()方法执行=============， 当 Ctrl+C
+			关闭服务器后 destroy() 方法被调用
+
+	。Filter的生命周期与简单Servlet基本类似
+
+
+
+
+
+  》》 使用过滤器过滤编码(省去每次接收参数前的 request.setCharacterEncoding(charset))
+
+
+实例代码：
+
+	CharsetEncoding.java
+
+package com.kingowe.servlet ;
+
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+
+public class CharsetFilter implements Filter
+{
+	String charset ;
+	public void init(FilterConfig filterConfig) throws ServletException {
+		charset = filterConfig.getInitParameter("charset") ;
+		System.out.println("过滤器初始化") ;	// 测试代码
+	}
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+					throws IOException, ServletException {
+		request.setCharacterEncoding(this.charset) ;
+		chain.doFilter(request, response) ;  	// 这个方法必须有
+	}
+	public void destroy(){  }
+}
+
+
+
+
+<!--【CharsetFilter.java 的配置】-->
+<filter>
+	<filter-name>encoding</filter-name>
+	<filter-class>com.kingowe.servlet.CharsetFilter</filter-class>
+	<init-param>
+		<param-name>charset</param-name>
+		<param-value>GBK</param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>encoding</filter-name>	
+	<url-pattern>/*</url-pattern>	
+</filter-mapping>
+
+
+	。经过以上的配置， 以后 服务器启动时 自动执行过滤器的 init() 方法，完成 request.setCharacterEncoding(charset) ;方法
+
+
+
+
+
+
+
+
+【9.监听器】
+
+
+在 %CATA_LINA%\config 中的 web.xml 的配置：
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+是用来设置 session 范围的属性的超时时间，可以把这个配置放在自己工程下的 web.xml 中，修改超时时间
+
+
+
+
+
+
+
+
+
+【10.表达式语言（EL）】
+
+
+	
+	
+	。在 JSP 中一共提供了 四种 标志位： page(pageContext)  request  session  application ,使用表达式语言可以方便的
+		访问标志位，这样就可以避免掉许多 Scriptlet 代码
+
+	。 表达式语言的语法： ${属性名称} 
+
+简单示例：
+
+<%
+	request.setAttribute("info", "kingowe") ;
+//	request.setAttribute("name", "fengqi") ;
+%>
+<h3>${info}<h3>
+<h3>${name}<h3>		// name 属性被注释，所以无法取得属性值
+
+浏览器显示结果：
+kingowe
+
+
+	。使用表达式语言输出可以很好地控制null的问题， 如果不是使用表达式语言，而是以前的<%=属性名%> 这种格式输出， 对于
+	      上例中的name属性，因为没有设置属性值，所以会在页面中输出 NULL ， 使用表达式语言 如果属性值为null， 则会使用
+		  "" 来代替，在页面中并不会输出 NULL,
+
+
+
+
+
+
+
+  》》 表达式语言的内置对象
+
+
+  表达式语言的内置对象列表：
+
+	1. pageContext：	表示 javax.servlet.jsp.PageContext 对象
+	2. pageScope:		表示从 page 属性范围查找输出属性
+	3. requestScope:	表示从 request 属性范围查找输出属性
+	4. sessionScope:	表示从 session 属性范围查找输出属性
+	5. applicationScope:	表示从 application 属性范围查找输出属性
+	6. param：		接收传递到本页面的参数
+	7. paramValues:		接收传递到本页面的一组参数
+	8. header：		取得一个头信息数据
+	9. headerValues:	取得一组头信息数据
+	10.cookie:		取得cookie中的数据
+	11.initParam：		取得配置的初始化参数
+
+
+
+
+	。如果使用EL所接收的属性 属性名相同，属性范围不同， 则 ${attributeName} 接收属性时的查找范围是 page->request->session->application
+
+示例代码：
+
+<%
+	application.setAttribute("info", "application范围") ;
+	session.setAttribute("info", "session范围") ;
+	request.setAttribute("info", "request范围") ;
+//	pageContext.setAttribute("info", "page范围") ;
+%>
+<h3>${info}</h3>
+<h3>${info}</h3>
+
+
+浏览器结果：
+
+request范围
+
+request范围
+
+
+
+
+	。 取出对应范围中的属性：
+
+		1. ${pageScope.属性名}		取出page范围内的属性
+		2. ${requestScope.属性名}	取出request范围内的属性
+		3. ${sessionScope.属性名}	取出session范围内的属性
+		4. ${applicationScope.属性名}	取出application范围内的属性
+
+
+
+示例代码：
+
+<%
+	application.setAttribute("info", "application范围") ;
+	session.setAttribute("info", "session范围") ;
+	request.setAttribute("info", "request范围") ;
+	pageContext.setAttribute("info", "page范围") ;
+%>
+<h3>page范围:${pageScope.info}</h3>
+<h3>request范围：${requestScope.info}</h3>
+<h3>session范围：${sessionScope.info}</h3>
+<h3>application范围：${applicationScope.info}</h3>
+
+浏览器结果：
+page范围:page范围
+
+request范围：request范围
+
+session范围：session范围
+
+application范围：application范围
+
+
+
+
+
+	。 pageContext 对象
+
+<h3>IP地址：${pageContext.request.remoteAddr}</h3>
+<h3>SESSION ID：${pageContext.session.id}</h3>
+<h3>当前web应用名称：${pageContext.request.contextPath} </h3>
+
+
+	。使用 param 接收参数（表单传参或者URL重写）
+
+	接收单个参数：	<h3>参数： ${param.ref} </h3>
+
+	接收一组参数：	<h3>第一个参数： ${paramValues.info[0]} </h3>	// 通过数组的形式
+			<h3>第二个参数： ${paramValues.info[1]} </h3>
+			<h3>第三个参数： ${paramValues.info[2]} </h3>
+
+
+
+
+
+
+  》》集合操作
+
+
+实例代码(list集合)：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%
+	List list = new ArrayList(); 
+	list.add("孔超") ;
+	list.add("kingowe") ;
+	list.add("kongchao") ;
+	request.setAttribute("info", list) ;
+%>
+<h3>第一个：${info[0]}</h3>	// 使用数组的形式接收属性
+<h3>第二个：${info[1]}</h3>
+<h3>第三个：${info[2]}</h3>
+
+浏览器结果：
+第一个：孔超
+
+第二个：kingowe
+
+第三个：kongchao
+
+
+实例代码(Map集合)：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%
+	Map map = new HashMap(); 
+	map.put("姓名","孔超") ;
+	map.put("company","kingowe") ;
+	map.put("name","kongchao") ;
+	request.setAttribute("info", map) ;
+%>
+<h3>姓名：${info["姓名"]}</h3>
+<h3>company：${info["company"]}</h3>
+<h3>name：${info["name"]}</h3>
+
+
+浏览器结果：
+姓名：孔超
+
+company：kingowe
+
+name：kongchao
+
+
+
+
+
+   》》 EL 在 MVC 中的使用
+
+
+实例代码：
+
+《E:\tomcat\webapps\servletproject\WEB-INF\classes\ELvo.java》
+
+package com.kingowe.el.vo ;
+import java.util.* ;
+
+public class ELvo
+{
+	private String name ;
+	private int age ;
+	private Date birthday ;
+	
+	public ELvo(){}
+	
+	public void setName(String name){
+		this.name = name ;
+	}
+	public String getName(){
+		return this.name ;
+	}
+	public void setAge(int age){
+		this.age = age ;
+	}
+	public int getAge(){
+		return this.age ;
+	}
+	public void setBirthday(Date birthday){
+		this.birthday = birthday ;
+	}
+	public Date getBirthday(){
+		return this.birthday ;
+	}
+}
+
+
+
+
+《E:\tomcat\webapps\servletproject\WEB-INF\classes\ELServlet.java》
+
+package com.kingowe.el.servlet ;
+
+import java.util.* ;
+import java.text.* ;
+import java.io.* ;
+import javax.servlet.* ;
+import javax.servlet.http.* ;
+import com.kingowe.el.vo.* ;
+
+public class ELServlet extends HttpServlet
+{
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		try{
+			ELvo person = null ;
+			List<ELvo> list = new ArrayList<ELvo>() ;	// 泛型对JSP页面并没有作用，JSP不看泛型，此处使用泛型是去掉编译时候的警告
+			person = new ELvo() ;
+			person.setName("孔超") ;
+			person.setAge(20) ;
+			person.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse("1994-03-20")) ;
+			list.add(person) ;
+
+			person = new ELvo() ;
+			person.setName("kingowe") ;
+			person.setAge(27) ;
+			person.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse("2013-07-07")) ;
+			list.add(person) ;
+			
+			request.setAttribute("info" ,list) ;
+			request.getRequestDispatcher("ELMVC.jsp").forward(request,response) ;
+		}catch(Exception e){e.printStackTrace();}
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+		this.doGet(request, response) ;
+	}
+}
+
+
+
+《E:\tomcat\webapps\servletproject\ELMVC.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%
+	List list = (List)request.getAttribute("info") ;
+	if(list != null){
+		Iterator it = list.iterator() ;
+%>
+	<table border=1 width=50%>
+		<tr>
+			<td>姓名</td>
+			<td>年龄</td>
+			<td>生日</td>
+		</tr>
+	<%
+		while(it.hasNext()){
+			pageContext.setAttribute("person", it.next()) ;	// 【将取出来的元素设置为page范围的属性，然后不需要导入 vo 包，就可以取得
+										// 对应的属性】
+	%>
+		<tr>
+			<td>${person.name}</td>		// 【此处 EL 使用的反射机制，并没有使用 getter 方法，也可以取得对应的属性值】
+			<td>${person.age}</td>
+			<td>${person.birthday}</td>
+		</tr>
+<%
+		}
+	}
+%>
+</table>
+
+
+浏览器输出(表格形式)：
+姓名	年龄	生日
+孔超	20	Sun Mar 20 00:00:00 CST 1994
+kingowe	27	Sun Jul 07 00:00:00 CST 2013
+
+
+
+
+
+  》》 表达式的运算符
+
+【+ - * / 运算】
+
+<%@page contentType="text/html" pageEncoding="GBK"%>
+<%
+	request.setAttribute("num1", 7) ;
+	request.setAttribute("num2", 21) ;
+%>
+<h3>加 ${num1 + num2}</h3>
+<h3>减 ${num1 - num2}</h3>
+<h3>乘 ${num1 * num2}</h3>
+<h3>除 ${num1 / num2}</h3>
+
+
+
+【关系运算： == >= <= != > <】
+
+${num1 > num2}</h3>	// 结果 false
+
+
+
+【逻辑运算： && || !】
+
+<h3>除 ${true || false}</h3>
+
+
+【其他运算符： empty  ?:  ()】
+
+<h3> ${empty num1}</h3>   // false
+<h3> ${empty xxx}</h3>	 // true
+<h3> ${num1>num2 ? "大于" : "小于"}</h3>
+
+
+
+ \\		       //
+  \\		      //
+   \\		     //
+    \\		    //
+     \\ 	   //
+      \\    ||	  //
+       \\   ||	 //
+	\\  ||  //
+	 \\ || //
+	  \\||//
+-----------\\//-------------
+-----------//\\-------------
+	  //  \\
+	 //    \\
+	//      \\
+       //	 \\
+      //	  \\
+     //		   \\
+    //		    \\
+   //		     \\
+  //		      \\
+ //		       \\
+//			\\
+
+
+
+
+
+
+
+
+
+
+
+
+【11. tomcat 数据源】
+
+
+	。传统 JDBC的操作可以分成4个步骤：
+
+		1. 加载数据库驱动程序
+		2. 通过DriverManager 取得数据库的链接对象
+		3. 通过 Connection 实例化 PreparedStatement ，执行 sql
+		4. 关闭数据库
+	     对于不同的用户， 只有 第3步 的操作不同，但是对于 1 2 4 操作都相同，为了提高性能，可以使用 tomcat 提供的 数据库连接池
+		数据库的连接池需要在tomcat上完成配置
+
+具体配置：
+	配置的标签 <Resource> 放在 %CATA_LINA%\conf\server.xml 中的配置的虚拟目录<Context>中:
+
+<Context path="/test" docBase="E:\JSP" reloadable="true">
+     <Resource name="jdbc/servlet" auth="Container"
+          type="javax.sql.DataSource"
+          maxActive="100"
+	  minIdle="30"
+	  maxWait="10000"
+	  username="sa"
+	  password="admin"
+	  driverClassName="com.microsoft.jdbc.sqlserver.SQLServerDriver"
+	  url="jdbc:microsoft:sqlserver://localhost:1483"/>
+</Context> 
+
+【Oracle的driverClassName：oracle.jdbc.driver.OracleDriver , url： jdbc:oracle:thin:@localhost:1521:ORCL】
+
+	配置文件解释：
+		· name 表示数据源名称，也就是要查找的名称
+		· auth 表示由容器负责资源的连接，对于连接的授权有两种：Container  Application ，一般使用 Container
+		· type 表示对象，数据源上每一个绑定的都是 DataSource
+		· maxActive 表示最大连接数	
+		· minIdle 表示最小维持的数量
+		· maxWait 表示最大等待时间(毫秒)
+
+
+	。经过以上配置之后 还需要配置自己的 WEBProject 目录下的 WEB-INF 文件夹中的 web.xml ， 配置如下(该配置放在 <web-app>中)：
+
+<resource-ref>
+	<res-ref-name>jdbc/servlet</res-ref-name>		// 数据源名称，要查找的名字
+	<res-type>javax.sql.DataSource</res-type>
+	<res-auth>Container</res-auth>
+</resource-ref>
+
+
+
+
+	。 在 WEB 容器中，数据库的连接池都是通过数据源(javax.sql.DataSource)访问的，即：可以通过数据源获得一个 Connection 对象，如果想要得到
+	     DataSource对象，需要使用 JNDI 进行查找， JNDI 属于命名以及目录查找接口，主要功能是用于进行查找的，经过以上配置之后，便可以通过
+		以下步骤取得数据库连接：
+
+		1. 初始化名称 查找上下文：javax.naming.Context ctx = new javax.naming.InitialContext() ;
+		2. 通过名称查找 DataSource 对象： DataSource ds = (DataSource)ctx.lookup(JNDI名称) ;
+		3. 通过 DataSource 取得一个数据库连接： Connection con = ds.getConnection() ;
+
+
+
+【实例代码】：
+
+【
+	这里是自己新建的WEB工程，虚拟目录 《E:\Servlet》 ， 对于此工程的【 %CATA_LINA%\conf\server.xml 的配置】如下：
+		<Context path="/servlet" docBase="E:\Servlet" reloadable="true">	// <Context> 虚拟目录的配置
+			 <Resource name="jdbc/servlet" auth="Container"		// <Resource> 数据源的配置
+			  type="javax.sql.DataSource"
+			  maxActive="100"
+			  minIdle="30"
+			  maxWait="10000"
+			  username="sa"
+			  password="admin"
+			  driverClassName="com.microsoft.jdbc.sqlserver.SQLServerDriver"
+			  url="jdbc:microsoft:sqlserver://localhost:1483"/>
+		</Context> 
+
+	【本工程 WEB-INF\web.xml 的配置】
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true">
+
+<servlet>
+	<servlet-name>ds</servlet-name>
+	<servlet-class>DataSourceTest</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>ds</servlet-name>	
+	<url-pattern>/DataSourceTest</url-pattern>
+</servlet-mapping>
+
+<resource-ref>		<!--【对数据源的配置】-->
+	<res-ref-name>jdbc/servlet</res-ref-name>
+	<res-type>javax.sql.DataSource</res-type>
+	<res-auth>Container</res-auth>
+</resource-ref>
+
+</web-app>
+
+】
+
+配置完成之后：
+
+《E:\Servlet\datasource.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="javax.sql.*"%>
+<%@ page import="javax.naming.*"%>
+<%
+	String name = "jdbc/servlet" ;	// 要查找的name
+	Context ctx = new InitialContext() ;
+	DataSource ds = (DataSource)ctx.lookup(name) ;	// 根据name取得DataSource
+	Connection con = ds.getConnection() ;
+%>
+<h3><%=con%></h3>
+
+  在浏览器中执行后会出现异常：
+	javax.servlet.ServletException: javax.naming.NameNotFoundException: 
+		Name [jdbc/servlet] is not bound in this Context. Unable to find [jdbc].
+
+  出现该异常的原因：对于这种资源的操作 本身需要一个环境属性的支持：java:comp/env  , tomcat本身没有提供对这种属性的支持，
+	所以 要想访问 tomcat 中的名称服务的话，需要在前边加上此属性(在配置文件中加没用)，即：现在的名称为："java:comp/env/jdbc/servlet"
+
+  修改名称后：	String name = "java:comp/env/jdbc/servlet" ;      在浏览器中正常运行
+
+
+
+
+	》》 使用数据源 修改 DAO 模式中的数据连接 的 java 代码：
+
+import java.sql.* ;
+import javax.sql.* ;
+import javax.naming.* ;
+
+public class DataSourceTest {
+	private static final String name = "java:comp/env/jdbc/servlet" ;
+	private Connection con ;
+	
+	public DataSourceTest() throws SQLException, Exception {
+		Context ctx = new InitialContext() ;
+		DataSource ds = (DataSource)ctx.lookup(name) ;
+		con = ds.getConnection() ;
+	}
+	public Connection getConnection(){
+		return this.con ;
+	}
+	public void close() throws SQLException{
+		if(con != null){
+			con.close() ;
+		}
+	}
+}
+
+
+
+
+
+【12. JSP 标签编程(了解)】
+
+
+
+	。要想实现一个标签，可以直接继承 javax.servlet.jsp.tagext.TagSupport 类即可，如果要定义的标签内没有标签体，则 直接重写
+		TagSupport 类中的 public int doStartTag() throws JspException 方法即可
+	
+
+实例代码：
+
+【编写程序之前，需要现将程序运行所需要的包 《%CATA_LINA%\lib\jsp-api.jar》《%CATA_LINA%\lib\servlet-api》 
+	复制到 %JAVA_HOME%\jre\lib\ext\  下， 运行 jsp servlet 所需要的包 都需要从 %CATA_LINA%\lib\  复制到  %JAVA_HOME%\jre\lib\ext\  】
+
+《E:\tomcat\webapps\servletproject\WEB-INF\classes\HelloTag.java》
+
+package com.kingowe.tagdemo ;
+
+import javax.servlet.jsp.* ;
+import javax.servlet.jsp.tagext.* ;
+
+public class HelloTag extends TagSupport
+{
+	public int doStartTag() throws JspException{
+		try{
+			JspWriter out = super.pageContext.getOut() ;
+			out.println("<h1>Hello World!!!</h1>") ;
+		}catch(Exception e){e.printStackTrace();}
+			return TagSupport.SKIP_BODY ;
+	}
+}
+
+
+《标签的描述文件(*.tld) E:\tomcat\webapps\servletproject\WEB-INF\classes\hellotab.tld》
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0" >
+	<tlib-version>1.0</tlib-version>
+	<short-name>firsttag</short-name>	<!--标签库在TLD中的描述名称-->
+	<tag>
+		<name>hello</name>		<!--标签在JSP中的使用名称-->
+		<tag-class>
+			com.kingowe.tagdemo.HelloTag	<!--标签所指向的class文件-->
+		</tag-class>
+		<body-content>empty</body-content>		<!--表示标签体内容为空-->
+	</tag>
+
+ </taglib>
+
+
+《jsp 测试文件E:\tomcat\webapps\servletproject\hellotag.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="mytag" uri="/WEB-INF/hellotag.tld"%>
+<%//【定义的 prefix="mytag" 的属性值 就类似于之前的 jsp:forward 中的jsp
+	// 在标签的描述文件 hellotag.tld 中定义的<tag>标签下的 <name>hello</name>
+	//  这个 hello 就类似于 jsp:forward 中的 forward ，所以自定义标签的使用:<mytag:hello/>】
+%>
+<mytag:hello/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+【13. JSP 标准标签库（JSTL）】
+
+
+
+  》》 JSTL 主要的标签分类：
+
+	   JSTL			标记名称		标签配置文件		描述
+	·核心标签库		c			c.tld			定义了属性管理、迭代、判断、输出
+	·SQL标签库		sql			sql.tld			定义了查询数据库的操作
+	·XML标签库		xml			x.tld			用于操作XML数据
+	·函数标签库		fn			fn.tld			提供了一些常用的操作函数，如：字符串函数
+	·I18N格式标签库	fmt			fmt.tld			格式化数据	
+
+
+	。下载下来的 JSTL 是以jar 包的形式存在的，直接将此 jar 包保存在 %CATALINA_HOME%\lib 文件夹之中打开此jar包，将里面的 META-INF 文件夹
+		中的几个主要标签配置文件：c.tld  fmt.tld  fn.tld  sql.tld  x.tld  复制到 项目的WEB-INF 文件夹之中
+
+	
+经过以上配置后《E:\tomcat\webapps\servletproject\jstltest1.jsp》：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="WEB-INF/c.tld"%>		// 使用 核心标签库c标签
+<h3><c:out value="kingowe!!!"/></h3>
+
+
+	。对于标签库的 uri 可以在当前项目下的 web.xml 中进行配置， 配置代码放在 <web-app>之间
+
+  <jsp-config>
+	<taglib>
+		<taglib-uri>www.kingowe.org/jstl/core</taglib-uri>
+		<taglib-location>/WEB-INF/c.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>www.kingowe.org/jstl/xml</taglib-uri>
+		<taglib-location>/WEB-INF/x.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>www.kingowe.org/jstl/fmt</taglib-uri>
+		<taglib-location>/WEB-INF/fmt.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>www.kingowe.org/jstl/fn</taglib-uri>
+		<taglib-location>/WEB-INF/fn.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>www.kingowe.org/jstl/sql</taglib-uri>
+		<taglib-location>/WEB-INF/sql.tld</taglib-location>
+	</taglib>
+  </jsp-config>
+
+
+在 web.xml 中配置完成之后：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>		// 这里直接使用配置文件中的 <taglib-uri> 的值即可
+<h3><c:out value="kingowe!!!"/></h3>
+
+
+
+
+
+  》》 核心标签库
+
+	
+  >>标签：
+	。基本标签：
+		<c:out>		输出属性内容
+		<c:set>		设置属性内容
+		<c:remove>	删除指定属性
+		<c:catch>	异常处理
+
+	。流程控制标签：
+		<c:if>		条件判断
+		<c:choose>	多条件判断，可以设置 <c:when> 和 <c:otherwise>
+	
+	。迭代标签：
+		<c:forEach>	输出数组 集合
+		<c:forTokens>	字符串拆分以及输出操作
+
+	。包含标签：
+		<c:import> 	将一个指定的路径包含到当前页面进行显示
+
+	。生成 URL 标签：
+		<c:url>		根据路径和参数生成一个新的 URL
+
+	。客户端跳转：
+		<c:redirect>	客户端跳转
+	
+
+
+
+
+  >>标签详解：
+
+	
+
+	1. <c:out>	语法：  1). <c:out value="要输出的内容" [escapeXml="true|false"] [default="默认值"]/>
+				2). <c:out value="要输出的内容" [escapeXml="true|false"]> 默认值 </c:out>
+
+			value：	设置要显示的内容
+			escapeXml： 是否转换字符串，如：将 > 转换 &gt; , 默认值为true
+			default：如果要显示的 value值为 null, 则显示 default 的内容
+
+示例代码：
+
+<%
+    pageContext.setAttribute("info", "<www.kingowe.org>") ;
+%>
+<c:out value="${info}"/>
+
+
+
+	2. <c:set>	语法：
+		     
+		     设置属性：	1). <c:set var="属性名称" value="属性内容" [scope="page|request|session|application"]/>
+				2). <c:set var="属性名称" [scope="page|request|session|application"]> 属性内容 </c:set>
+
+		     设置对象： 1). <c:set value="属性内容" target="属性名称" property="属性名称"/>
+				2). <c:set target="属性名称" property="属性名称"> 属性内容 </c:set>
+
+
+
+示例代码：
+【编写代码之前需要先将 《%CATA_LINA%\lib\el-api.jar》 复制到 《%JAVA_HOME%\jre\lib\ext\》 下】
+《E:\tomcat\webapps\servletproject\WEB-INF\classes\JavaBean.java》
+package com.kingowe.jstl ;
+
+public class JavaBean
+{
+	private String content ;
+	public JavaBean(){}
+	public void setContent(String content){
+		this.content = content ;
+	}
+	public String getContent(){
+		return this.content ;
+	}
+}
+
+
+《E:\tomcat\webapps\servletproject\jstltest1.jsp》
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%@page import="com.kingowe.jstl.*"%>
+<%
+	JavaBean bean = new JavaBean() ;
+	request.setAttribute("info", bean) ;
+%>
+<c:set value="kingowe" target="${info}" property="content"/>
+<h3>${info.content}</h3>
+
+
+浏览器结果：
+kingowe
+
+
+
+
+	3. <c:remove>		语法：<c:remove var="属性名称" [scope="page|request|session|application"]/>
+
+	4. <c:catch>		语法：<c:catch [var="保存异常信息的属性名称"]> 有可能发生异常的语句 </c:catch>
+	
+示例代码：
+
+<%
+     <c:catch var="errormsg">
+	int n = 10 / 0 ;
+     </c:catch>
+%>
+<h3>出错信息：${errormsg}</h3>
+
+
+	5. <c:if>		语法：	1). <c:if test="判断条件" var="存储判断结果" [scope="page|request|session|application"]/>
+					2). <c:if test="判断条件" var="存储判断结果" [scope="page|request|session|application"]>
+						满足条件时执行的语句
+					    </c:if>
+
+
+
+示例代码：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<c:if test="${param.info=='kongchao'}" var="result" scope="page">	// 可以通过 URL 重写传参
+     <h6>判断结果：${result}</h6>
+     <h3>欢迎 ${param.info}</h3>
+</c:if>
+
+
+
+
+	5. <c:choose>		语法：	1). <c:choose> 标签体内容 (<c:when>、<c:otherwise>) </c:choose>
+
+	   <c:when>		语法：   <c:when test="判断条件"> 满足条件时的执行内容 </c:when>
+	   <c:otherwise>	语法：   <c:otherwise> 当所有的when都不满足时，执行这里的内容 </c:otherwise>
+
+
+
+	6. <c:forEach>		语法： 	<c:forEach [var="每个对象的属性名称"] items="集合" [varStatus="保存相关成员信息"]
+					[begin="集合的开始输出位置"] [end="集合的结束输出位置"] [step="每次增长的步长"]>
+						具体的操作代码
+					</c:forEach>
+
+
+实例代码：
+
+【输出数组】：
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%
+	String[] names = {"孔超" ,"kingowe", "kongchao"} ;
+	pageContext.setAttribute("info", names) ;
+%>
+<c:forEach items="${info}" var="name">
+	<h3> ${name} </h3>
+</c:forEach>
+
+
+结果：
+孔超
+
+kingowe
+
+kongchao
+
+
+
+【输出数组，按指定格式】：
+
+【间隔一个元素输出】
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%
+	String[] names = {"孔超" ,"kingowe", "kongchao"} ;
+	pageContext.setAttribute("info", names) ;
+%>
+<h3>隔一个输出：</h3>
+<c:forEach items="${info}" var="name" step="2">
+	<h3> ${name} </h3>
+</c:forEach>
+
+结果：
+隔一个输出：
+
+孔超
+
+kongchao
+
+
+
+【从第二个开始输出，输出完第三个结束】
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%
+	String[] names = {"孔超" ,"kingowe", "kongchao"} ;
+	pageContext.setAttribute("info", names) ;
+%>
+<h3>从第二个开始输出，输出完第三个结束：</h3>
+<c:forEach items="${info}" var="name" begin="1" end="2">
+	<h3> ${name} </h3>
+</c:forEach>
+
+结果：
+从第二个开始输出：
+
+kingowe
+
+kongchao
+
+
+
+
+【输出集合(List)】
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%
+	List names = new ArrayList() ;
+	names.add("孔超") ;
+	names.add("kingowe") ;
+	names.add("kongchao") ;
+	pageContext.setAttribute("info", names) ;
+%>
+<h3>全部信息：</h3>
+<c:forEach items="${info}" var="name">
+	<h3> ${name} </h3>
+</c:forEach>
+
+结果：
+全部信息：
+
+孔超
+
+kingowe
+
+kongchao
+
+
+【输出集合(Map)】
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%
+	Map info = new HashMap() ;
+	info.put("name", "孔超") ;
+	info.put("company", "kingowe") ;
+	info.put("age", 27) ;
+	pageContext.setAttribute("info", info) ;
+%>
+<h3>全部信息：</h3>
+<c:forEach items="${info}" var="info">
+	<h3> ${info.key} -->  ${info.value} </h3>
+</c:forEach>
+
+
+结果：
+全部信息：
+
+age --> 27
+
+company --> kingowe
+
+name --> 孔超
+
+
+
+
+
+
+
+	7.<c:forTokens> 		语法： 	<c:forTokens items="要输出的字符串" delims="字符串分隔符" var="存放每个字符串的变量"
+						     varStatus="存放当前对象的相关信息" begin="开始位置" end="结束位置" step="输出间隔">
+							标签体内容
+						</c:forTokens>
+
+
+	。<c:forTokens> 标签的作用类似于 java 中 String 类的 split() 方法， 属性 items 的值可以为：${attribute}, 也可以直接为:"String"
+
+
+	8.<c:import>			语法： 	<c:import url="包含地址的URL" [context="上下文路径"] [var="保存内容的属性名称"] 
+						     [scope="page|request|session|application"] [charEncoding="字符编码"]
+							[varReader="以Reader方式读取内容"] >
+						   标签体内容
+						   [<c:param name="参数名称" value="参数内容"/>]	// 给被包含的页面传递的参数
+						</c:import>
+
+
+	。<c:import> 标签可以将其他页面的内容一起包含进来显示，与<jsp:include> 功能类似，但是与 <jsp:include> 不同的是 <c:import> 可以包含
+		外部(别的项目)的页面，<jsp:include> 只可以包含本项目中的页面，<c:import> 在包含的时候，只是包含的页面的文字,图片等不会显示
+
+
+
+
+
+	9.<c:url>			语法： 	1).<c:url value="操作的URL" [context="上下文路径"] [var="保存的属性名称"] 
+							[scope="page|request|session|application"] />
+
+						2).<c:url value="操作的URL" [context="上下文路径"] [var="保存的属性名称"] 
+								[scope="page|request|session|application"] >
+							<c:param name="参数名称" value="参数内容" />
+						   </c:url>	
+
+	。<c:url> 标签可以直接产生一个 URL， 相当于URL重写
+
+示例代码：
+《E:\tomcat\webapps\servletproject\jstltest1.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<c:url value="http://www.kingowe.org" var="urlinfo">	// 【如果 value的值不写 http://  则默认为本地路径】
+	<c:param name="author" value="kongchao"/>
+	<c:param name="company" value="kingowe"/>
+</c:url>
+<a href="${urlinfo}"> 新的地址 </a>
+
+	。运行之后 在浏览器中会有一个 “新的地址” 的超链接， 右键属性 可以看到它指向的地址为：
+		http://www.kingowe.org/?author=kongchao&company=kingowe		// 就类似于地址重写
+
+	。如果 value 的值为中文，则会默认进行编码的转换
+
+
+
+《E:\tomcat\webapps\servletproject\jstltest1.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<c:url value="www.kingowe.org" var="urlinfo">		// 【改变了上例中的value， 去掉了 http://】
+	<c:param name="author" value="kongchao"/>
+	<c:param name="company" value="kingowe"/>
+</c:url>
+<a href="${urlinfo}"> 新的地址 </a>
+
+	与上例相同，执行后 路径指向：http://localhost:8080/servletproject/www.kingowe.org?author=kongchao&company=kingowe
+
+
+
+
+
+
+
+	10.<c:redirect>			语法：	1).<c:redirect url="跳转的地址" context="上下文路径"/> 
+						2.)<c:redirect url="跳转的地址" context="上下文路径">
+							<c:param name="参数名称" value="参数内容">
+						   </c:redirect> 
+
+
+	。 <c:redirect> 标签的功能与 response.sendRedirect() ; 的功能一样，都是进行的客户端跳转，提供这个标签的原因：
+	     response.sendRedirect() 属于 JSP 代码， 既然是 JSP 代码，就需要包含在 Scriptlet 标签中，而一个 JSP 页面
+		最好不要包含任何的 Scriptlet 代码，所以就可以使用 <c:redirect> 标签完成	
+ 
+
+
+
+
+
+
+
+
+   》》 国际化标签 （I18N格式标签库）
+
+
+
+  	【1. 读取资源文件】
+
+		。所有的资源文件都是 *.properties 为后缀的，所有的内容要按照 key=value 的格式编写，在 WEB Project 中，资源文件
+			要保存在 WEB-INF/classes  中，
+		
+		。 JSTL 中提供了四个标签 用于资源的读取和操作： <fmt:message>  <fmt:param>  <fmt:bundle>  <fmt:setBundle>
+
+
+		。 如果需要将中文进行转码操作， 可以执行 《%JAVA_HOME%\bin\native2ascii.exe》 ，在 命令窗口中输入中文，即可的到
+			中文对应的编码
+
+
+
+	1. <fmt:bundle>			语法：	<fmt:bundle basename="资源文件名称" [prefix="前置标记"]>
+							标签体内容
+						</fmt:bundle> 
+
+	。 <fmt:bundle> 用来设置要读取的资源文件的名称，但是只有名称不够，因为要读取里面的内容，所以还需要 <fmt:message> 标签的支持
+		当使用 <fmt:bundle> 设置好要读取的资源文件名之后，就可以使用 <fmt:message> 标签根据 key 读取 value 
+
+	
+	
+	2. <fmt:message>		语法：	1).<fmt:message key="资源文件的key" [bundle="资源文件名称"] [var="存储内容的属性名称"]
+								[scope="page|request|session|application"]/>
+
+						2).<fmt:message key="资源文件的key" [bundle="资源文件名称"] [var="存储内容的属性名称"]
+								[scope="page|request|session|application"]>
+							<fmt:param value="设置占位符内容"/>	// 【占位符为 key 中的 {0}】
+						   </fmt:message>
+
+
+
+
+
+实例代码：
+
+《资源文件：E:\tomcat\webapps\servletproject\WEB-INF\classes\message.properties》
+name = kongchao
+info = \u6b22\u8fce{0}\u5149\u4e34		// 这些编码是 “欢迎{0}光临” 中文的编码  {0} 表示占位符
+
+
+《JSP测试页面：E:\tomcat\webapps\servletproject\jstltest2.jsp》
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="fmt" uri="www.kingowe.org/jstl/fmt"%>
+
+<fmt:bundle basename="message">		
+	<fmt:message key="name" var="info1"/>
+</fmt:bundle>
+
+<fmt:bundle basename="message">		
+	<fmt:message key="info" var="info2"/>
+</fmt:bundle>
+
+<fmt:bundle basename="message">		<!--【注意：文件名不要写后缀】-->
+	<fmt:message key="info" var="info3">
+		<fmt:param value="kingowe" />	<!--【设置key为info所对应的value值中的占位符 {0} 的内容】-->
+	</fmt:message>
+</fmt:bundle>
+
+<h3>（1）name = ${info1}</h3>
+<h3>（2）info = ${info2}</h3>
+<h3>（3）info = ${info3}</h3>
+
+
+浏览器结果：
+（1）name = kongchao
+
+（2）info = 欢迎{0}光临
+
+（3）info = 欢迎kingowe光临
+
+
+
+	。 <fmt:message key="info" var="info4" bundle="message"/>    这种写法是错的， 只使用 <fmt:message> 不使用 <fmt:bundle> 无法
+		取得属性
+
+
+
+
+
+
+
+
+	3.<fmt:setBundle>		语法： 	<fmt:bundle basename="资源文件名称" [var="保存资源文件内容的属性名称"] 
+							[scope="page|request|session|application"]/>
+
+
+	<fmt:setBundle> 在进行资源文件读取的时候，设置一个默认的读取资源名称，这样 每次在使用 <fmt:message> 进行信息读取的时候，直接
+		通过 bundle 设置要读取的资源的属性即可
+
+
+
+
+
+
+   》》SQL 标签库 （了解）
+
+
+
+
+   》》XML 标签库 （了解）
+
+
+	。Xpath 路径标记：
+		1. 根元素		/
+		2. 父节点		../
+		3. 任何路径下的节点	//
+		4. 属性			@属性名称
+		5. 通配符		*
+
+
+示例代码：
+《test1.xml》
+<?xml version="1.0" encoding="GBK"?>
+<addresslist>
+	<linkman>
+		<name id="007">kingowe</name>
+		<email>1075562287@qq.com</email>
+	</linkman>
+</addresslist>
+
+	。在该 XML 文档中，找到 name 元素： /adresslist/linkman/name
+			   直接找到 name 元素：  //name
+			   找到 id 属性：  //name/@id	
+
+
+
+
+
+
+	1. <x:parse>			语法： 	1).<x:parse [doc="XML文件内容"] [var="保存名称"] [scope="..."] [varDom="DOM 解析后的XML对象"]
+							[scopeDom="varDom范围"] [systemId="xml 文件的uri"]/>
+
+						2).<x:parse [var="保存名称"] [scope="..."] [varDom="DOM 解析后的XML对象"]
+								[scopeDom="varDom范围"] [systemId="xml 文件的uri"]>
+							要解析的XML文件
+						   </x:parse>
+								
+
+
+	2. <x:out>			语法： 	<x:out select="XPath路径" [escapeXml="true|false"]/>
+
+
+	<x:out> 标签的作用主要是用于输出 XML 文件的内容，
+
+
+
+实例代码：
+
+《E:\tomcat\webapps\servletproject\test1.xml》
+
+<?xml version="1.0" encoding="GBK"?>
+<addresslist>
+	<linkman>
+		<name id="007">kingowe</name>
+		<email>1075562287@qq.com</email>
+	</linkman>
+</addresslist>
+
+
+《E:\tomcat\webapps\servletproject\xml_out.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="c" uri="www.kingowe.org/jstl/core"%>
+<%@ taglib prefix="x" uri="www.kingowe.org/jstl/xml"%>
+<html>
+<head><title></title></head>
+<body>
+	<c:import var="add" url="/test1.xml" charEncoding="GBK"/>
+	<x:parse var="addressXml" doc="${add}"/>	// 此处即为解析操作
+	<h3>
+		姓名：<x:out select="$addressXml/addresslist/linkman/name"/>
+		（编号：<x:out select="$addressXml/addresslist/linkman/name/@id"/>）
+	</h3>
+	<h3>邮箱：<x:out select="$addressXml/addresslist/linkman/email"/></h3>
+</body>
+</html>
+
+
+浏览器结果：
+姓名：kingowe （编号：007）
+
+邮箱：1075562287@qq.com
+
+
+
+
+
+
+   》》 函数标签库（fn）
+
+
+	。函数标签库其实是对String类的一种封装
+
+
+
+	1. ${fn:contains()} 			查询某字符串是否存在，区分大小写
+
+	2. ${fn:containsIgnoreCase()} 		查询某字符串是否存在，忽略大小写
+
+	3. ${fn:startsWith()}			判断是否以指定字符串开头 (${fn:endsWith()})
+
+	4. ${fn:toUpperCase()}			全部转换为大写显示 （${fn:toLowerCase()}）
+
+	5. ${fn:substring()}			字符串截取
+
+	6. ${fn:split()}			字符串拆分
+
+	7. ${fn:join()}				字符串连接
+
+	8. ${fn:escapeXml()}			将 >  < 等替换成转义字符
+
+	9. ${fn:trim()}				去掉左右空格
+
+	10.${fn:replace()}			替换字符串
+
+	11.${fn:indexOf()}			查找指定字符串位置
+
+	12.${fn:substringBefore()}		截取指定字符串之前的内容 （ ${fn:substringAfter()} ）
+
+
+
+实例代码：
+
+《E:\tomcat\webapps\servletproject\jstltest1.jsp》
+
+<%@ page contentType="text/html" pageEncoding="GBK"%>
+<%@ taglib prefix="fn" uri="www.kingowe.org/jstl/fn"%>
+<%
+	pageContext.setAttribute("info", "kingowe king owe , kongchao, ") ;
+%>
+<h3>查找 kongchao：${fn:contains(info,"kongchao")}</h3>
+<h3>查找 kongchao,：${fn:contains(info,"kongchao,")}</h3>
+<h3>查找 kong,：${fn:contains(info,"kong")}</h3>
+<h3>查找 kf,：${fn:contains(info,"kf")}</h3>
+<h3>替换 king 为 kingowe：${fn:replace(info, "king", "kingowe")}</h3>
+
+
+浏览器结果：
+查找 kongchao：true
+
+查找 kongchao,：true
+
+查找 kong,：true
+
+查找 kf,：false
+
+替换 king 为 kingowe：kingoweowe kingowe owe , kongchao,
+
+
+
+
+
+
+
+
+
+【14. AJAX： 异步Javascript 和 XML (Asynchronous Javascript And XML)】
+
+
+
+	。AJAX技术主要的作用是 页面的局部刷新，在 AJAX 中 主要是通过 XMLHttpRequest 对象处理发送异步请求 和处理回应的，如果要创建
+		一个 XMLHttpRequest 对象，必须使用 JavaScript， 创建此对象的时候还需要考虑浏览器内核的问题
+
+实例代码：
+
+《创建 XMLHttpRequest 对象：E:\tomcat\webapps\servletproject\create_ajax.html》
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title></title>
+
+<script language="JavaScript">
+	var xmlHttp ;		// AJAX 核心对象名称
+	function createXmlHttp(){		// 创建 XMLHttpRequest 核心对象
+		if(window.XMLHttpRequest){		// 判断当前使用的浏览器类型
+			xmlHttp = new XMLHttpRequest() ;	// 表示使用的是 Firefox 内核的浏览器
+		} else {
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP") ;		// 表示使用的是 IE 内核的浏览器	
+		}
+	}
+</script>
+
+</head>
+<body>
+</body>
+</html>
+
+
+
+	。XMLHttpRequest 对象的主要属性：
+
+		1. onreadystatechange			指定 当 readState 状态改变的时候使用的操作，一般都用于指定具体的回调函数
+
+		2. readState				返回当前的请求状态，只读
+
+		3. status				返回当前请求的http状态码，只读
+
+		4. responseText				接收以普通文本返回的数据
+
+		5. responseXML				接收以 XML文档形式返回的数据
+
+	
+	。 对readState一共有5种取值：
+		0：请求没有发出（在调用 open() 函数之前）
+		1：请求已经建立，但还没有发出（在调用 send() 函数之前）
+		2：请求已经发出，正在处置当中
+		3：请求已经处理，正在接收服务器信息，响应中 通常有部分数据可用，但是服务器还没有完成响应
+		4：响应已经完成，可以访问服务器 并使用它
+
+
+
+
+	。XMLHttpRequest 对象的主要方法：
+
+		1. absort()			取消当前所发出的的请求
+
+		2. open()			创建一个HTTP请求，并指定请求模式，如：get 或 post
+
+		3. send()			将创建的请求发送到服务器端，并接收回应消息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+【15.韩顺平Servlet】
+
+
+	。使用 form 表单时的 action的值最好为：/web应用名/该文件的url
+
+
+	。存放多个数据，最后需要一起显示时，可以使用集合来存储，而且这些数据可以封装为单个对象，例如：一个购书网站，要存储用户加入购物车的书，
+	    此时可以使用集合，将每本书封装成对象，然后根据需要，将这些对象放进 ArrayList 或者 LinkedHashMap 中,使用LinkedHashMap可以保证 数据存放
+		的顺序与取出的顺序一致
+
+
+	。request 和 response 对象：
+
+		web服务器收到客户端的http请求，会针对每一次请求分别创建一个代表请求的 request 对象 和代表响应的 response 对象，
+	     如果要取得客户机提交的数据，则使用 request 对象的方法，如果要向客户机输出信息，则使用 response 对象
+
+
+	。使用 request.getRequestDispathcher("URL(URI)").forward(request, response) ,  这种方式跳转，只能跳转到 本web应用内 的页面，
+	     所以跳转地址不需要带web应用名称，跳转的页面如果在 所属的 web project File 中无法找到，将会出错， 
+		例如：request.getRequestDispathcher("http://www.baidu.com").forward(request, response)  浏览器中运行时将会出错
+		    使用 href="URL" 此处的URL要带webapps名称
+
+
+	。rd.forward() 与 response.sendRedirect() 的选择： 如果能使用forward，就不要使用 sendRedirect，因为 sendRedirect的开销大,
+		如果是在同一个 webapps 下的跳转，一般使用 forward 就可以了
+
+
+
+
+	。使用 request.getParameter(name) ;   之前最好进行 ==null 的判断，因为如果参数是自己给自己页传的，第一次运行没有参数传入，
+		下边在使用 取得的参数时会取得 null， 使用该参数便会有异常
+
+
+	。处理 get 提交方式的乱码：修改配置文件 《%CATA_LINA%\conf\server.xml》 ,
+
+<Connector port="8080" protocol="HTTP-/1.1" connectionTimeout="20000" redirectPort="8443" 
+   useBodyEncodingForURI="true"/>   
+
+	useBodyEncodingForURI=true"  表示URL使用消息正文的字符集进行编码，只要消息正文使用了正确的字符集，URL所包含的中文参数即可
+		正常接收，该属性的默认值为 false
+
+
+
+	。对于在数据库中查询出来的多条结果 ResultSet对象，在使用该对象进行查询结果遍历之前记得 rs.next()，对于数据库资源，操作之后
+		记得 close()
+
+
+
+
+
+
+
+	。分页技术
+
+		思路： 定义四个分页变量
+			1. pageNow		表示当前处于第几页
+			2. pageSize		表示每页有多少条记录
+			3. pageCount		表示共有多少页
+			4. rowCount		共有多少条记录
+
+
+计算pageCount：
+
+	if(rowCount%pageSize == 0){
+	     pageCounet = rowCount/pageSize ;
+	}else {
+	     pageCounet = rowCount/pageSize + 1 ;
+	}
+
+	简单算法： pageCount = (rowCount-1)/pageSize + 1 ;
+
+
+
+设置分页 href
+
+	href="#"  指联接到当前页面，其实是无意义的，页面也不会刷新
+
+     for(int i=1; i<pageCount; i++)
+	<a href='webapp/uri?pageNow=i'></a>
+
+
+
+
+
+
+
+
+【16.韩顺平JSP】
+
+
+	。<%int i = 0%>   <%这里边也可以访问到 i,是因为在JSP页面被转换成Servlet程序之后，"<%%>"这个里边的内容都被定义在了_jspService() 方法
+		中，定义的 i 就相当于该方法中的一个局部变量 %>
+
+
+	。当使用 include 指令 <%@ include file="fileName"%> 引入一个页面时， 被引入的页面内容只能是 jsp页面， 也就是说 被引入的页面中不能有
+      		HTML 中的<body> 之类的标签，否则会出错 
+
+
+
+
+【17. 小知识点】
+
+	
+
+	。转化日期：String date = "1994-01-01" ;  DateLocalConverter dlc = new DateLocalConverter() ;   dlc.convert(date, "yyyy-MM-dd") ;// 该方法返回Object
+	     如果给定的日期字符串 date 无法转换成指定格式(yyyy-MM-dd)的日期，将会抛出异常，所以可以用来判断 用户在文本框中输入的日期是否合法，如果不合法
+		可以在 try{} catch(){} 中给出相应的处理：
+
+String date = "1994-01-01" ;  
+try{
+    DateLocalConverter dlc = new DateLocalConverter() ;   
+    dlc.convert(date, "yyyy-MM-dd") ;
+}catch(Exception e){
+    // 如果捕获到了异常 则说明日期转换出错了
+    map.put("birthday", "日期格式不合法！") ;     // 将错误信息添加进map集合，最后统一显示
+    flag = false ;
+}
+
+	注意问题：对日期的验证不使用SimpleDateFormat，因为如果日期为"1994-01-32" ,则日期会变为"1994-02-01" ,所以不使用 SimpleDateFormat:
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
+Date date = sdf.format("1994-01-32") ;	// 同样对 date 进行判断，1994-01-32可以转换成date 1994-0a-3b 无法转换成date
+
+
+
+
+
+
+
+
+
+  【【临时】】. JSP中的内置对象列表
+
+
+	》》 pageContext 所属类(接口)(Java EE) javax.servlet.jsp.PageContext
+
+
+	》》 request 所属类(接口)(Java EE) javax.servlet.http.HttpServletRequest
+
+	
+	》》 response  所属类(接口)(Java EE)  javax.servlet.http.HttpServletResponse   
+
+
+	》》 session 所属类(接口)(Java EE)   javax.servlet.http.HttpSession
+
+
+	》》 application  所属类(接口)(Java EE)   javax.servlet.ServletContext
+
+
+	》》 config   所属类(接口)(Java EE)	javax.servlet.ServletConfig
+
+
+	> > out	所属类(接口)(Java EE)  javax.servlet.jsp.JspWriter
+
+
+	> > page  所属类(接口)   java.lang.Object
+
+
+	> > exception  所属类(接口)   java.lang.Throwable
+
+
+
+
+
+
+  ================================================================================================================================================================
+
+     目录：
+
+	1. Servlet处理流程  第一个Servlet程序以及解释		2. Servlet与表单	3. Servlet生命周期		4. 取得初始化配置信息
+	5. 取得其他内置对象		6. Servlet 跳转		7. WEB 开发模式 Mode I   Mode II			8. 过滤器
+	9. 监听器			10.表达式语言		11.tomcat 数据源					12. JSP 标签编程
+	13.JSP标准标签库		14.AJAX			15.韩顺平Servlet
+
+  ================================================================================================================================================================
+
+
+
+
+
+
+
+
+

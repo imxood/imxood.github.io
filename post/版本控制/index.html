@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> 版本控制 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<h2 id="gitignore忽略规则的匹配语法">.gitignore忽略规则的匹配语法</h2>
+
+<p>git对于.ignore配置文件是按行从上到下进行规则匹配的，意味着如果前面的规则匹配的范围更大，则后面的规则将不会生效</p>
+
+<ol>
+<li>空格不匹配任意文件，可作为分隔符，可用反斜杠转义</li>
+<li>以“＃”开头的行都会被 Git 忽略。即#开头的文件标识注释，可以使用反斜杠进行转义。</li>
+<li>可以使用标准的glob模式匹配。所谓的glob模式是指shell所使用的简化了的正则表达式。</li>
+<li>以斜杠&rdquo;/&ldquo;开头表示目录；&rdquo;/&ldquo;结束的模式只匹配文件夹以及在该文件夹路径下的内容，但是不匹配该文件；&rdquo;/&ldquo;开始的模式匹配项目跟目录；如果一个模式不包含斜杠，则它匹配相对于当前 .gitignore 文件路径的内容，如果该模式不在 .gitignore 文件中，则相对于项目根目录。</li>
+<li>以星号&rdquo;*&ldquo;通配多个字符，即匹配多个任意字符；使用两个星号&rdquo;**&rdquo; 表示匹配任意中间目录，比如<code>a/**/z</code>可以匹配 a/z, a/b/z 或 a/b/c/z等。</li>
+<li>以问号&rdquo;?&ldquo;通配单个字符，即匹配一个任意字符；</li>
+<li>以方括号&rdquo;[]&ldquo;包含单个字符的匹配列表，即匹配任何一个列在方括号中的字符。比如[abc]表示要么匹配一个a，要么匹配一个b，要么匹配一个c；如果在方括号中使用短划线分隔两个字符，表示所有在这两个字符范围内的都可以匹配。比如[0-9]表示匹配所有0到9的数字，[a-z]表示匹配任意的小写字母. 。</li>
+<li>以叹号&rdquo;!&ldquo;表示不忽略(跟踪)匹配到的文件或目录，即要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。需要特别注意的是：如果文件的父目录已经被前面的规则排除掉了，那么对这个文件用&rdquo;!&ldquo;规则是不起作用的。也就是说&rdquo;!&ldquo;开头的模式表示否定，该文件将会再次被包含，如果排除了该文件的父级目录，则使用&rdquo;!&ldquo;也不会再次被包含。可以使用反斜杠进行转义。</li>
+</ol>
+
+<p>##　示例</p>
+
+<pre><code>#表示此为注释,将被Git忽略
+*.a             表示忽略所有 .a 结尾的文件
+!lib.a          表示但lib.a除外
+/TODO           表示仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
+build/          表示忽略 build/目录下的所有文件，过滤整个build文件夹；
+doc/*.txt       表示会忽略doc/notes.txt但不包括 doc/server/arch.txt
+
+bin/:           表示忽略当前路径下的bin文件夹，该文件夹下的所有内容都会被忽略，不忽略 bin 文件
+/bin:           表示忽略根目录下的bin文件
+/*.c:           表示忽略cat.c，不忽略 build/cat.c
+debug/*.obj:    表示忽略debug/io.obj，不忽略 debug/common/io.obj和tools/debug/io.obj
+**/foo:         表示忽略/foo,a/foo,a/b/foo等
+a/**/b:         表示忽略a/b, a/x/b,a/x/y/b等
+!/bin/run.sh    表示不忽略bin目录下的run.sh文件
+*.log:          表示忽略所有 .log 文件
+config.php:     表示忽略当前路径的 config.php 文件
+
+/mtk/           表示过滤整个文件夹
+*.zip           表示过滤所有.zip文件
+/mtk/do.c       表示过滤某个具体文件
+
+被过滤掉的文件就不会出现在git仓库中（gitlab或github）了，当然本地库中还有，只是push的时候不会上传。
+
+需要注意的是，gitignore还可以指定要将哪些文件添加到版本管理中，如下：
+!*.zip
+!/mtk/one.txt
+
+唯一的区别就是规则开头多了一个感叹号，Git会将满足这类规则的文件添加到版本管理中。为什么要有两种规则呢？
+想象一个场景：假如我们只需要管理/mtk/目录中的one.txt文件，这个目录中的其他文件都不需要管理，那么.gitignore规则应写为：：
+/mtk/*
+!/mtk/one.txt
+
+假设我们只有过滤规则，而没有添加规则，那么我们就需要把/mtk/目录下除了one.txt以外的所有文件都写出来！
+注意上面的/mtk/*不能写为/mtk/，否则父目录被前面的规则排除掉了，one.txt文件虽然加了!过滤规则，也不会生效！
+
+----------------------------------------------------------------------------------
+还有一些规则如下：
+fd1/*
+说明：忽略目录 fd1 下的全部内容；注意，不管是根目录下的 /fd1/ 目录，还是某个子目录 /child/fd1/ 目录，都会被忽略；
+
+/fd1/*
+说明：忽略根目录下的 /fd1/ 目录的全部内容；
+
+/*
+!.gitignore
+!/fw/
+/fw/*
+!/fw/bin/
+!/fw/sf/
+说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；注意要先对bin/的父目录使用!规则，使其不被排除。
+</code></pre>
+
+<h1 id="git">git</h1>
+
+<h3 id="创建一个新的仓库">创建一个新的仓库:</h3>
+
+<pre><code>git init
+git add README.md
+git commit -m &quot;first commit&quot;
+git remote add origin git@github.com:imxood/ros_samples.git
+
+git branch --set-upstream-to=origin/master
+
+git push -u origin master
+
+git remote set-url origin git@github.com:imxood/xxx.git
+</code></pre>
+
+<h3 id="查看分支">查看分支:</h3>
+
+<pre><code>git branch [-a]
+</code></pre>
+
+<h3 id="查看远程仓库信息">查看远程仓库信息:</h3>
+
+<pre><code>git remote show origin
+</code></pre>
+
+<h3 id="切换分支">切换分支:</h3>
+
+<pre><code>git checkout -b kinetic origin/kinetic
+</code></pre>
+
+<h3 id="git子模块">git子模块</h3>
+
+<pre><code>cd sources/ros: 进入仓库中的指定路径后,
+git submodule add git@github.com:imxood/ros_comm.git
+子模块是单独的仓库，子模块修改不会影响父模块的'changed'
+
+cat .git/config
+cat .gitmodules
+
+git submodule init
+git submodule update
+
+git clone &lt;repository&gt; --recursive 递归的方式克隆整个项目
+git submodule add &lt;repository&gt; &lt;path&gt; 添加子模块
+git submodule init 初始化子模块
+git submodule update 更新子模块
+git submodule foreach git pull 拉取所有子模块
+</code></pre>
+
+<h3 id="git查看修改记录技巧">git查看修改记录技巧</h3>
+
+<pre><code>git log --pretty=oneline  master
+</code></pre>
+
+<h3 id="获取最新更新-覆盖本地">获取最新更新，覆盖本地</h3>
+
+<pre><code>git fetch --all
+git reset --hard origin/kinetic-devel
+
+&quot;git add .&quot;后，取消添加
+git reset HEAD .
+
+git clone -b v1.10.9 https://github.com/OGRECave/ogre.git
+
+git checkout . #本地所有修改的。没有的提交的，都返回到原来的状态
+git stash #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。
+git reset --hard HASH #返回到某个节点，不保留修改。
+git reset --soft HASH #返回到某个节点。保留修改
+
+git clean -df #返回到某个节点
+git clean 参数
+    -n 显示 将要 删除的 文件 和  目录
+    -f 删除 文件
+    -df 删除 文件 和 目录
+</code></pre>
+
+<h3 id="git-更换远程url">git 更换远程url</h3>
+
+<pre><code>查看当前的远程信息
+git remote -v
+更换
+git remote set-url {remote name} {new remote url}
+如:
+git remote set-url origin git@github.com:imxood/stackedit.git
+</code></pre>
+
+<h3 id="执行git-pull的时候-提示-fatal-refusing-to-merge-unrelated-histories">执行git pull的时候,提示: fatal: refusing to merge unrelated histories</h3>
+
+<pre><code>解决方法:
+    git pull --allow-unrelated-histories
+</code></pre>
+
+<h3 id="删除历史版本记录">删除历史版本记录</h3>
+
+<ol>
+<li>Checkout</li>
+</ol>
+
+<p>git checkout &ndash;orphan latest_branch</p>
+
+<ol>
+<li>Add all the files</li>
+</ol>
+
+<p>git add -A</p>
+
+<ol>
+<li>Commit the changes</li>
+</ol>
+
+<p>git commit -am &ldquo;commit message&rdquo;</p>
+
+<ol>
+<li>Delete the branch</li>
+</ol>
+
+<p>git branch -D master</p>
+
+<ol>
+<li>Rename the current branch to master</li>
+</ol>
+
+<p>git branch -m master</p>
+
+<ol>
+<li>Finally, force update your repository</li>
+</ol>
+
+<p>git push -f origin master</p>
+
+<h3 id="tag">tag</h3>
+
+<pre><code>查看所有tag
+git tag
+
+切换指定tag，并不能修改代码
+git checkout tagName
+
+创键分支branchName,切换到指定tag，就可以修改了
+git checkout -b branchName tagName
+
+再切回去
+git checkout master
+</code></pre>
+
+<h3 id="fork的项目与原作者同步">fork的项目与原作者同步：</h3>
+
+<pre><code>git clone git@github.com:imxood/vscode-ros.git  我自己的
+cd vscode-ros
+git remote add vscode-ros git@github.com:ajshort/vscode-ros.git
+git fetch vscode-ros
+git merge vscode-ros/master
+</code></pre>
+
+<h3 id="配置代理">配置代理</h3>
+
+<pre><code>git config --global https.proxy http://127.0.0.1:10001
+git config --global https.proxy https://127.0.0.1:10001
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+git config --global http.proxy 'socks5://127.0.0.1:1080'
+git config --global https.proxy 'socks5://127.0.0.1:1080'
+</code></pre>
+
+<h3 id="git-status-中文乱码-解决">git status 中文乱码，解决</h3>
+
+<pre><code>git config --global core.quotepath false
+</code></pre>
+
+<h3 id="warning-crlf-will-be-replaced-by-lf-in">warning: CRLF will be replaced by LF in</h3>
+
+<pre><code>git config core.autocrlf false  关闭设置中的自动转换功能
+</code></pre>
+
+<h3 id="删除了git的历史记录后-某一个-本地git-配置过程中fatal-拒绝合并无关的历史">删除了git的历史记录后, 某一个&rdquo;本地git&rdquo;配置过程中fatal:拒绝合并无关的历史</h3>
+
+<pre><code>先将远程仓库和本地仓库关联起来:
+$ git branch --set-upstream-to=origin/master master
+然后使用git pull整合远程仓库和本地仓库(忽略版本不同造成的影响):
+$ git pull --allow-unrelated-histories
+</code></pre>
+
+<h1 id="svn">svn</h1>
+
+<h2 id="常用用法">常用用法</h2>
+
+<pre><code>svn checkout https://192.168.10.1:4433/svn/robot
+svn info
+svn status
+svn update
+svn add File, 把指定文件或目录纳入版本库
+svn commit dirName, 提交修改的文件或目录至版本库
+
+svn up --username zhangsan --password 123456
+
+svn propset svn:executable on *.sh *.py 给指定文件可执行权限,提交时权限依旧
+</code></pre>
+
+<h3 id="撤销svn-add">撤销svn add:</h3>
+
+<pre><code>svn revert --recursive example_folder
+</code></pre>
+
+<h3 id="如何回退版本">如何回退版本:</h3>
+
+<pre><code>svn info    查看当前版本号及url
+svn log     查看历史版本号
+svn merge -r 184:182 url 对指定的url，从r184回退到r182
+</code></pre>
+
+<h3 id="svn-ignore">svn ignore</h3>
+
+<pre><code>https://blog.csdn.net/yhl27/article/details/24318001
+
+export SVN_EDITOR=vim
+svn propedit svn:ignore .
+svn ci -m ','
+</code></pre>
+
+<h3 id="svn-co时排除目录">SVN CO时排除目录</h3>
+
+<pre><code>svn checkout --depth immediates $URL test_dir
+svn up --set-depth infinity test_dir/source
+</code></pre>
+
+<h3 id="创建了一个文件夹-并且把它加入版本控制-但忽略文件夹中的所有文件的内容">创建了一个文件夹，并且把它加入版本控制，但忽略文件夹中的所有文件的内容</h3>
+
+<pre><code>$ svn mkdir spool
+$ svn propset svn:ignore '*' spool
+$ svn ci -m ','
+</code></pre>
+
+<h3 id="创建一个文件夹-但不加入版本控制-即忽略这个文件夹">创建一个文件夹，但不加入版本控制，即忽略这个文件夹</h3>
+
+<pre><code>$ mkdir spool
+$ svn propset svn:ignore 'spool' .
+$ svn ci -m ','
+</code></pre>
+
+<h3 id="对比差异">对比差异:</h3>
+
+<pre><code>$ svn diff -rA
+$ svn diff -rA:B
+</code></pre>
+
+<h3 id="显示最近5条提交的详细信息">显示最近5条提交的详细信息</h3>
+
+<pre><code>$ svn log -l 5 -v
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/%E6%A0%91%E8%8E%93%E6%B4%BE/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

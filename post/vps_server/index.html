@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> vps server ubuntu配置 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/vps_server/">vps server ubuntu配置</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<h2 id="安装常用软件">安装常用软件</h2>
+
+<pre><code>sudo apt install -y vim python2.7 python-pip git
+sudo -H pip2 install --upgrade pip
+</code></pre>
+
+<h2 id="添加用户-分配权限">添加用户, 分配权限</h2>
+
+<pre><code>sudo useradd -m imxood
+sudo usermod -a -G sudo,adm,ssh imxood
+</code></pre>
+
+<h2 id="为新用户设置密码">为新用户设置密码</h2>
+
+<pre><code>sudo passwd imxood
+</code></pre>
+
+<h2 id="使用新用户操作">使用新用户操作</h2>
+
+<pre><code>sudo su imxood
+</code></pre>
+
+<h2 id="创建develop文件夹">创建develop文件夹</h2>
+
+<pre><code>mkdir ~/develop -p
+~/develop
+</code></pre>
+
+<h2 id="安装进程管理工具">安装进程管理工具</h2>
+
+<pre><code>sudo apt install -y supervisor
+配置文件是: /etc/supervisor/supervisord.conf
+</code></pre>
+
+<h2 id="安装shadowsocks-server">安装shadowsocks server</h2>
+
+<pre><code>sudo -H pip2 install shadowsocks &amp;&amp; sudo mkdir -p /etc/shadowsocks &amp;&amp; sudo vim /etc/shadowsocks/config.json
+</code></pre>
+
+<p>添加如下内容:</p>
+
+<pre><code>{
+    &quot;server&quot;:&quot;xxx&quot;,
+    &quot;server_port&quot;:8388,
+    &quot;local_address&quot;: &quot;127.0.0.1&quot;,
+    &quot;local_port&quot;:1080,
+    &quot;password&quot;:&quot;xxx&quot;,
+    &quot;timeout&quot;:300,
+    &quot;method&quot;:&quot;aes-256-cfb&quot;,
+    &quot;fast_open&quot;: false
+}
+</code></pre>
+
+<h3 id="添加自启动配置文件">添加自启动配置文件:</h3>
+
+<p>sudo vim /etc/supervisor/conf.d/shadowsocks.conf</p>
+
+<h3 id="添加如下内容">添加如下内容:</h3>
+
+<pre><code>[program:ssserver]
+command=/usr/local/bin/ssserver -c /etc/shadowsocks/config.json
+</code></pre>
+
+<h2 id="kcptun-server-加速shadowsocks服务">kcptun server, 加速shadowsocks服务</h2>
+
+<p>linux版:
+wget <a href="https://github.com/xtaci/kcptun/releases/download/v20181002/kcptun-linux-amd64-20181002.tar.gz">https://github.com/xtaci/kcptun/releases/download/v20181002/kcptun-linux-amd64-20181002.tar.gz</a>
+sudo tar -xvf kcptun-linux-amd64-20181002.tar.gz -C /usr/bin/
+sudo vim /etc/kcptun-config.json</p>
+
+<pre><code>{
+    &quot;listen&quot;: &quot;:10001&quot;,
+    &quot;target&quot;: &quot;127.0.0.1:10000&quot;,
+    &quot;key&quot;: &quot;xxx&quot;,
+    &quot;crypt&quot;: &quot;aes&quot;,
+    &quot;mode&quot;: &quot;fast2&quot;,
+    &quot;mtu&quot;: 1350,
+    &quot;sndwnd&quot;: 1024,
+    &quot;rcvwnd&quot;: 1024,
+    &quot;datashard&quot;: 10,
+    &quot;parityshard&quot;: 3,
+    &quot;dscp&quot;: 0,
+    &quot;nocomp&quot;: false,
+    &quot;quiet&quot;: false,
+    &quot;pprof&quot;: false
+}
+</code></pre>
+
+<p>windows版:
+<a href="https://github.com/shadowsocks/kcptun/releases/download/v20170718/kcptun-windows-amd64-20170718.tar.gz">https://github.com/shadowsocks/kcptun/releases/download/v20170718/kcptun-windows-amd64-20170718.tar.gz</a></p>
+
+<h3 id="添加自启动配置文件-1">添加自启动配置文件:</h3>
+
+<p>sudo vim /etc/supervisor/conf.d/kcptun.conf</p>
+
+<pre><code>[program:kcptun]
+command=/usr/bin/server_linux_amd64 -c /etc/kcptun-config.json
+redirect_stderr=true
+stdout_logfile=/tmp/kcptun.log
+</code></pre>
+
+<h2 id="ssh配置">ssh配置</h2>
+
+<p>vim /etc/ssh/sshd_config</p>
+
+<pre><code>Port 22
+
+ClientAliveInterval 60
+ClientAliveCountMax 3
+</code></pre>
+
+<h2 id="tank云盘-一个小工具-似乎没哈用">tank云盘(一个小工具, 似乎没哈用)</h2>
+
+<pre><code>sudo apt install -y mysql-server mysql-client golang 注意提示mysql的root密码
+外网访问:
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+注释: bind-address = 127.0.0.1
+mysql -uroot -p 进入mysql
+
+创建数据库:
+create database tank character set utf8;
+
+创建用户,分配权限:
+grant all on tank.* to myusername@'%' identified by 'mypassword' with grant option;
+flush privileges;
+
+sudo service mysql restart
+
+wget https://tank.eyeblue.cn/api/alien/download/d15ef4e6-226d-433a-4892-7c44e22b4520/tank-1.0.5.linux-amd64.tar.gz
+tar -xvf tank-1.0.5.linux-amd64.tar.gz
+cd tank-1.0.5
+
+vim conf/tank.json
+修改端口及连接信息
+
+添加自启动配置:
+sudo vim /etc/supervisor/conf.d/tank.conf
+添加内容:
+[program:CloudDisk]
+command=/home/imxood/develop/tank-1.0.5/tank
+
+sudo supervisorctl reload
+</code></pre>
+
+<h2 id="安装ftp服务">安装ftp服务</h2>
+
+<pre><code>需求：创建一个ftp用户，用户名：testUser，密码：testUser，连接端口：30000，该用户只能访问/home/test/testDir 下的内容
+
+1)如果没有安装vsftpd，需先安装vsftpd
+
+apt-get install vsftpd
+
+
+
+2）创建用户
+
+useradd test -m
+
+为该用户添加密码
+
+passwd testUser 回车
+
+输入密码：testUser
+
+
+3）修改配置文件
+
+(1) vi /etc/vsftpd.conf
+
+修改或添加如下行：
+
+anonymous_enable=NO
+
+local_enable=YES
+
+write_enable=YES
+
+chroot_local_user=NO
+
+chroot_list_file=/etc/vsftpd.chroot_list
+
+
+(2) vi vsftpd.chroot_list
+
+在单独一行添加:test
+
+（3）如果没有vsftpd_user_config，则创建该目录
+
+mkdir vsftpd_user_config
+
+cd vsftpd_user_config
+
+vi test
+
+添加 local_root=/home/test/ftp
+
+
+
+4）重启vsftpd
+
+service vsftpd restart
+
+
+
+假设是在ip为192.168.10.1上创建的ftp用户
+
+在浏览器下访问ftp的格式为：ftp://192.168.10.1
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/mssqlserver/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/vscode/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

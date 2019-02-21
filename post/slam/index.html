@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> slam &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/slam/">slam</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<p>1, 编译csm:
+sudo apt install build-essential cmake libgs-dev libcairo2-dev
+git clone <a href="https://github.com/AndreaCensi/csm.git">https://github.com/AndreaCensi/csm.git</a>
+mkdir csm/out -p
+cd csm/out
+cmake .. &amp;&amp; make &amp;&amp; sudo make install</p>
+
+<p>2, odom_ws</p>
+
+<p>sudo apt install libeigen3-dev</p>
+
+<h1 id="概率机器人学习">概率机器人学习</h1>
+
+<p><img src="./images/BayesTrouble_1.jpg" alt="" />
+1. X, Z, U 三个表征:
+    1. 状态(会对未来产生影响的机器人及所有方面的因素, 比如: 附近人的行踪, 墙的位置, 机器人的速度、位姿)
+    2. 测量(利用传感器获取环境状态的信息的过程, 比如摄像头采集到的照片信息, 激光测到的距离信息)
+    3. 控制(携带状态改变的信息, 比如机器人控制的速度信息)</p>
+
+<p>疑问(1): 这里的&rdquo;控制&rdquo;怎么解释呢, 书中说里程计也是控制数据?我理解到的里程计信息是这样的: 在指定频率下, 一次间隔后, 编码值的变化, 引起机器人的位姿变化(差速控制原理), 再更新最新的位姿, 并发布最新的位姿到tf和里程计中
+   这里的里程计信息很明显是状态统计吧, 由速度控制产生的结果被轮子驱动读取到并发布出去</p>
+
+<pre><code>疑问(2): X, Z, U, 时序是怎样的?
+根据书中图片:
+![](./images/BayesNetwork.jpg)
+
+我的理解:
+
+先抛开概率论, 我们想象一下过程, 初始环境: X0, Z0, U0, 在下一个时刻(时刻1)时, 有了一个控制U1(比如说速度指令), 此时, X和Z并没有立即改变(改变需要时间), 此时根据控制U1和前一时刻的测量Z0, 就能预测U1产生的结果X1(X1即为控制U1和测量Z1的充分统计量)(状态转移概率), 根据X0、Z0, U1同样也能预测Z1(测量概率)
+
+根据这里的想象， 再根据条件独立， 那么也可以解释： p(Xt | X0:t-1, Z1:t-1, U1:t)中的Z和U为什么从1开始
+</code></pre>
+
+<h2 id="卡尔曼滤波-概念理解">卡尔曼滤波 概念理解</h2>
+
+<p>如何正确估计一棵果树的高度？</p>
+
+<ol>
+<li>果树高度叫做待估的状态变量。我们想一年知道一次，这就叫做步长。</li>
+<li>种下果树的时候大概1米吧，但我也不确定，有可能90公分也有可能110公分。这个1米就是你的初始状态估计, 这个10公分的不确定性，叫做状态估计的误差协方差矩阵</li>
+<li>在网上查了查，这种果树差不多每年都比前一年生长10%的高度（纯假设），这个生长的规律/模型就叫做状态转移矩阵。</li>
+<li>模型不可能是100%准确的，我们用一个叫做过程噪声的东西来衡量它, 比如假设这个估计模型误差在0.3米，这叫做白噪声。过程噪声越小就意味着你相信生长模型很准确，越大就表示模型越垃圾。</li>
+<li>找两个朋友定期观察, 朋友A很认真, 每次拿尺子量, 误差0.1m, 两年一次; 朋友B比较懒, 看了一眼, 给个值, 误差0.5m, 一年一次. 这里的两年和一年叫做测量更新频率, 0.1m和0.5m叫做测量噪声, 基于测量噪声可以建立一个测量噪声误差, 用于衡量A和B观测值的权重</li>
+</ol>
+
+<p>
+上面2和3构成了生长模型, 即便没有A和B的数据, 也能测量结果, 但是也不能只依靠模型, 因为果树进入成熟期就慢慢不长了, 所以我们需要A和B的观测值取矫正估计
+
+从模型这里，有一个衡量初始估计是否准确的矩阵叫做状态估计协方差矩阵，有一个衡量生长模型准确度的过程噪声矩阵; 从观测那里, 有一个衡量观测是否准确的矩阵叫做观测噪声协方差矩阵.
+
+把模型与测量结合起来, 构建增益矩阵. 增益矩阵做的事是: 我该相信我的模型多一点, 还是A和B的测量多一点呢
+
+于是, 就有了这样一个系统: 当模型比较准确时, 我相信模型多一点, 当它不准确时, 我相信实际测量多一些. 而且, 测量帮我矫正模型的准确度, 当A和B突然不给我测量时, 我也可以根据已建好的系统估计下一个步长(明年)果树的高度.
+
+卡尔曼滤波就这样建立起来了. 最理想的情况是怎样? 最准确的果树初始高度估计(较小的状态估计误差), 最准确的果树生长状态模型(较小的过程噪声), 最准确的果树测量值(较小的测量噪声), 而且测量类型越多越好(尺子和视力)
+</p>
+
+<p>参考: <a href="https://www.zhihu.com/question/23971601/answer/194464093">https://www.zhihu.com/question/23971601/answer/194464093</a></p>
+
+<h2 id="卡尔曼滤波-数学推导">卡尔曼滤波 数学推导</h2>
+
+<p>参考: <a href="https://blog.csdn.net/heyijia0327/article/details/17487467">https://blog.csdn.net/heyijia0327/article/details/17487467</a></p>
+
+<h2 id="协方差">协方差</h2>
+
+<p>
+均值描述的是样本集合的中间点，它告诉我们的信息是很有限的，而标准差给我们描述的则是样本集合的各个样本点到均值的距离之平均。
+
+以这两个集合为例，[0，8，12，20]和[8，9，11，12]，两个集合的均值都是10，但显然两个集合差别是很大的，计算两者的标准差，前者是8.3，后者是1.8，显然后者较为集中，故其标准差小一些，标准差描述的就是这种“散布度”。
+</p>
+
+<p>参考: <a href="http://blog.sina.com.cn/s/blog_672c5a470100miqq.html">http://blog.sina.com.cn/s/blog_672c5a470100miqq.html</a></p>
+
+<h2 id="无偏估计-样本方差中n-1的解释">无偏估计, 样本方差中n-1的解释</h2>
+
+<p>模拟工具: <a href="http://onlinestatbook.com/rvls/index.html">http://onlinestatbook.com/rvls/index.html</a></p>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/shell/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/mssqlserver/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

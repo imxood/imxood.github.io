@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> c_cxx_asm &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/c_cxx_asm/">c_cxx_asm</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            <pre><code>
+int snprintf(char *str, size_t size, const char *format, ...)
+(1) 如果格式化后的字符串长度 &lt; size，则将此字符串全部复制到str中，并给其后添加一个字符串结束符('\0')
+(2) 如果格式化后的字符串长度 &gt;= size，则只将其中的(size-1)个字符复制到str中，并给其后添加一个字符串结束符('\0')，返回值为欲写入的字符串长度
+
+void *memcpy(void *dest, const void *src, size_t n);
+从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中
+
+
+任务对象:
+
+(k-v)多个消息队列
+msg_queue_-&gt;message_count()
+Message_Block[]
+    release
+
+    m_pVoiceBuff
+
+    Message_Block
+
+SendVoiceToTaskQue(m_pVoiceBuff, nActualVoiceBufLen);
+
+while(isRun){
+
+}
+
+单元测试很重要
+
+static std::string UrlEncode(const std::string &amp;str)
+{
+    std::string strTemp = &quot;&quot;;
+    size_t length = str.length();
+    for (size_t i = 0; i &lt; length; i++)
+    {
+        if (isalnum((unsigned char)str[i]) ||
+            (str[i] == '-') ||
+            (str[i] == '_') ||
+            (str[i] == '.') ||
+            (str[i] == '~') ||
+            (str[i] == '=') ||
+            (str[i] == '&amp;'))
+        {
+            strTemp += str[i];
+        }
+        else if (str[i] == ' ')
+            strTemp += &quot;+&quot;;
+        else
+        {
+            strTemp += '%';
+            strTemp += ToHex((unsigned char)str[i] &gt;&gt; 4);
+            strTemp += ToHex((unsigned char)str[i] % 16);
+        }
+    }
+    return strTemp;
+}
+
+static std::string UrlDecode(const std::string &amp;str)
+{
+    std::string strTemp = &quot;&quot;;
+    size_t length = str.length();
+    for (size_t i = 0; i &lt; length; i++)
+    {
+        if (str[i] == '+')
+            strTemp += ' ';
+        else if (str[i] == '%')
+        {
+            assert(i + 2 &lt; length);
+            unsigned char high = FromHex((unsigned char)str[++i]);
+            unsigned char low = FromHex((unsigned char)str[++i]);
+            strTemp += high * 16 + low;
+        }
+        else
+            strTemp += str[i];
+    }
+    return strTemp;
+}
+
+
+## 正则使用
+
+    单个字符
+
+    [abc] 匹配 a, b 或 c.
+    [^xyz] 匹配任何非 x, y, z的字符
+
+    组（用以匹配连续的多个字符）
+
+    (a+).*
+
+    example:
+
+    &quot;/topic/voice/tts/in/topic_id&quot; ---&gt; regex reg(&quot;^(/topic).*(/topic_id)$&quot;, regex::icase);
+
+### 使用c++11计时
+
+</code></pre>
+
+<pre><code class="language-c++">    auto start = chrono::system_clock::now();
+    sleep(1);
+    auto end = chrono::system_clock::now();
+    auto duration = chrono::duration_cast&lt;chrono::milliseconds&gt;(end - start);
+    printf(&quot;%ld\n&quot;, duration.count());
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/ccxx/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/electron/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

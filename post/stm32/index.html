@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> STM32学习笔记 &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/stm32/">STM32学习笔记</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            
+
+<ol>
+<li><p>使用STM32CubeMX生成项目时,在Makefile中配置:</p>
+
+<ol>
+<li>BINPATH</li>
+<li>删除三行:Src/stm32f1xx_it.c、stm32f1xx_hal_msp.c、Src/main.c、Src/stm32f1xx_hal_msp.c</li>
+</ol></li>
+
+<li><p>使用cortex-debug插件调试</p></li>
+
+<li><p>在STM32CubeMX的Makefile项目中添加FreeRTOS
+添加源文件到C_SOURCES
+添加头文件到C_INCLUDES</p></li>
+</ol>
+
+<h2 id="使用openocd的stlink调试器">使用openocd的stlink调试器:</h2>
+
+<p>openocd -f /usr/local/share/openocd/scripts/interface/stlink.cfg -f /usr/local/share/openocd/scripts/target/stm32f7x.cfg</p>
+
+<h2 id="vscoe-配置stm32-debug">vscoe, 配置stm32 debug</h2>
+
+<pre><code class="language-json">{
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;stm32 debug&quot;,
+            &quot;type&quot;: &quot;cppdbg&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;targetArchitecture&quot;: &quot;arm&quot;,
+            &quot;program&quot;: &quot;${workspaceFolder}/build/f767demo.elf&quot;,
+            &quot;args&quot;: [],
+            &quot;stopAtEntry&quot;: false,
+            &quot;cwd&quot;: &quot;${workspaceFolder}&quot;,
+            &quot;environment&quot;: [],
+            &quot;externalConsole&quot;: false,
+            &quot;MIMode&quot;: &quot;gdb&quot;,
+            &quot;miDebuggerPath&quot;: &quot;${env:HOME}/programs/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gdb&quot;,
+            &quot;setupCommands&quot;: [
+                {
+                    &quot;description&quot;: &quot;Enable pretty-printing for gdb&quot;,
+                    &quot;text&quot;: &quot;-enable-pretty-printing&quot;,
+                    &quot;ignoreFailures&quot;: true
+                },
+                { &quot;text&quot;: &quot;file ${workspaceFolder}/build/f767demo.elf&quot;},
+                { &quot;text&quot;: &quot;set remotetimeout 30&quot; },
+                { &quot;text&quot;: &quot;target remote localhost:3333&quot; },
+                // { &quot;text&quot;: &quot;monitor reset&quot; },
+                { &quot;text&quot;: &quot;monitor halt&quot; },
+                { &quot;text&quot;: &quot;monitor reset init&quot; },
+                { &quot;text&quot;: &quot;load&quot; },
+                { &quot;text&quot;: &quot;info target&quot; }
+            ]
+        }
+    ]
+}
+</code></pre>
+
+<p>这里做一下使用f103c8t6最小系统的笔记</p>
+
+<p>使用HAL库</p>
+
+<h2 id="gpio">GPIO</h2>
+
+<pre><code>1. 每个GPIO端口都需要按32位字被访问
+2. 每个GPIO端口都有7个寄存器来控制:
+    2个32位的端口配置寄存器 CRL和CRH
+    2个32位的数据寄存器 IDR和ODR
+    1个32位的置位/复位寄存器 BSRR
+    1个16位的复位寄存器 BRR
+    1个32位的锁存寄存器 LCKR
+</code></pre>
+
+<h2 id="板上常用资源">板上常用资源</h2>
+
+<pre><code>板载LED:
+    LED0    PC13
+
+板载key:
+    S1  RESET
+    S2  PA0
+</code></pre>
+
+<h2 id="需求">需求</h2>
+
+<pre><code>1. 按键控制
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/qt/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/blender/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+project重命名后的一个问题
+
+web project项目重命名之后:tomcat下的名字却是:newname(oldname),那么你可以试试下面的方法。
+
+1、对工程重命名（选择工程，右键Refactor－>Rename）
+
+2、修改Web路径（选择工程，右键Properties－>Web Project Settings,修改Context-root的值）
+
+3、.project文件中<name>oldname</name>,改成新的newname
+
+4、在项目根目录下.settings下的org.eclipse.wst.common.component文件，修改<wb-module deploy-name="oldname">改成<wb-module deploy-name="newname">
+
+OK,问题解决！

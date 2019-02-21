@@ -6,28 +6,9 @@
     <description>Recent content in Tags on 分享生活,分享感动</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Feb 2019 21:00:45 +0800</lastBuildDate>
     
 	<atom:link href="http://imxood.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Development</title>
-      <link>http://imxood.github.io/tags/development/</link>
-      <pubDate>Wed, 20 Feb 2019 21:00:45 +0800</pubDate>
-      
-      <guid>http://imxood.github.io/tags/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Golang</title>
-      <link>http://imxood.github.io/tags/golang/</link>
-      <pubDate>Wed, 20 Feb 2019 21:00:45 +0800</pubDate>
-      
-      <guid>http://imxood.github.io/tags/golang/</guid>
-      <description></description>
-    </item>
     
   </channel>
 </rss>

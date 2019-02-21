@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title> platformio &middot; 分享生活,分享感动 </title>
+
+
+<link rel="stylesheet" href="http://imxood.github.io/css/slim.css">
+<link rel="stylesheet" href="http://imxood.github.io/css/highlight.min.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+<link href="" rel="alternate" type="application/rss+xml" title="分享生活,分享感动" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+  <h1 class="site-title"><a href="http://imxood.github.io/">分享生活,分享感动</a></h1>
+  <p class="site-tagline"></p>
+  <div class="nav">
+    <a class="nav-btn" href="#">
+      <span class="ci ci-burger"></span>
+    </a>
+    <ul class="nav-list">
+       
+	  <li class="spacer">&ac;</li>
+  
+    </ul>
+  </div>
+</div>
+    <div class="content">
+      <div class="posts">
+        <div class="post">
+          <h2 class="post-title"><a href="http://imxood.github.io/post/platformio/">platformio</a></h2>
+          <span class="post-date">Feb 20, 2019 </span>
+          <div class="post-content">
+            <pre><code>  account   Manage PIO Account
+  boards    Embedded Board Explorer
+  ci        Continuous Integration
+  debug     PIO Unified Debugger
+  device    Monitor device or list existing
+  home      PIO Home
+  init      Initialize PlatformIO project or update existing
+  lib       Library Manager
+  platform  Platform Manager
+  remote    PIO Remote
+  run       Process project environments
+  settings  Manage PlatformIO settings
+  test      Local Unit Testing
+  update    Update installed platforms, packages and libraries
+  upgrade   Upgrade PlatformIO to the latest version
+
+
+搜索stm32f767板:
+pio boards stm32f767
+pio platform search stm32
+
+创键
+pio init --ide vscode --board genericSTM32F103RC -O framework=stm32cube
+nucleo_f767zi
+
+Useful commands:
+`platformio run` - process/build project from the current directory
+`platformio run --target upload` or `platformio run -t upload` - upload firmware to embedded board
+`platformio run --target clean` - clean project (remove compiled files)
+`platformio run --help` - additional information
+
+
+$ pio init --help
+
+Usage: pio init [OPTIONS]
+
+Options:
+  -d, --project-dir DIRECTORY
+  -b, --board ID
+  --ide [atom|clion|codeblocks|eclipse|emacs|netbeans|qtcreator|sublimetext|vim|visualstudio|vscode]
+  -O, --project-option TEXT
+  --env-prefix TEXT
+  -s, --silent
+  -h, --help
+</code></pre>
+
+          </div>
+        </div>
+        <div class="pagination">
+          <a class="btn previous " href="http://imxood.github.io/post/opencv/"> Prev</a>  
+          <a class="btn next " href="http://imxood.github.io/post/python/"> Next</a> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+  
+  <p>Powered by <a href="https://gohugo.io">Hugo</a>. This theme—Slim—is open sourced on <a href="https://github.com/zhe/hugo-theme-slim">Github</a>.</p>
+  
+</div>
+
+  </div>
+  <script src="http://imxood.github.io/js/slim.js"></script>
+  <script src="http://imxood.github.io/js/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+</body>
+
+</html>

@@ -16,8 +16,10 @@
     
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/stylesheet.css">
-    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="http://imxood.github.io/css/stylesheet.css">
+    <link rel="stylesheet" href="http://imxood.github.io/css/home.css">
+
+    
 
     
     
@@ -48,7 +50,9 @@
                 }else{
                     document.body.classList.remove('mobile');  
                 }
-        }</script>
+    }</script>
+
+    
     
     <nav class="navbar navbar-default navbar-fixed-top" style="opacity: .9" role="navigation">
         <div class="container-fluid">
@@ -62,16 +66,16 @@
                     <span class="big-icon icon-bar"></span>
 
                 </button>
-                <a class="navbar-brand" href="/">分享生活,分享感动</a>
+                <a class="navbar-brand" href="http://imxood.github.io/">分享生活,分享感动</a>
             </div>
 
             <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" style="height: auto;">
                 <ul class="nav navbar-nav navbar-right">
                     
-                        <li class="active"><a class="nav-item nav-link" href="/">Home</a></li>
+                        <li class=""><a class="nav-item nav-link" href="http://imxood.github.io/">Home</a></li>
                         <li></li>
                         <li></li>
-                        <li class=""><a class="nav-item nav-link" href="/about/">About</a></li>
+                        <li class=""><a class="nav-item nav-link" href="http://imxood.github.io/about/">About</a></li>
                     
                 </ul>
             </div>
@@ -589,6 +593,7 @@
 
 
 
+
 <script>
  (function(){
   var seriesA = document.getElementsByTagName("a");
@@ -612,7 +617,7 @@
       var dcreateE = document.createElement("details")
       var screateE = document.createElement("summary")
       screateE.textContent = i;
-      var inner = screateE.outerHTML + "<br >" 
+      var inner = screateE.outerHTML 
 
       nameSeries[i].forEach(x =>{
         inner += x.outerHTML
@@ -633,6 +638,10 @@
  })()
 </script>
 
+
+
+
+    
 
 </body>
 

@@ -1,0 +1,14 @@
++++ date = "2019-04-09T00:50:00" draft = true title = "esp32学习记录"
+
++++
+
+~~~
+git clone -b release/v1.2.0.0 https://github.com/espressif/esp32-at.git
+cd esp32-at
+change the .gitmodules, add one line:
+branch = release/v3.3
+then, run command:
+git submodule update --init --recursive
+make menuconfig
+make flash -j12
+~~~

@@ -1043,5 +1043,14 @@ D、DSP技术： Digital Signal Process，DSP处理器通过硬件实现数字�
 注意：　要学会举一反多，有强大的基础，很多东西简单看看就能会。想成为合格的程序员，前提是必须熟练至少一种编程语言，并具有良好的逻辑思维。一定要理论结合实践。</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/</guid>
+      <description> objcopy arm-zephyr-eabi-objcopy -S -Obinary -j .dccm_data zephyr.elf dccm.bin ps: 提取出zephyr.elf中的.dccm_data段, 输出到dccm.bin文件 -S, &amp;quot;Remove all symbol and relocation information&amp;quot; -j &amp;lt;name&amp;gt;, &amp;quot;Only copy section &amp;lt;name&amp;gt; into the output&amp;quot; arm-zephyr-eabi-objcopy -S -Obinary -R .comment -R COMMON -R .eh_frame -R .iccm_text -R .iccm_rodata -R .dccm_data zephyr.elf sram.bin ps: 删除对应段，并把处理后的内容输出到sram.bin -R &amp;lt;name&amp;gt;, &amp;quot;Remove section &amp;lt;name&amp;gt; from the output&amp;quot;  </description>
+    </item>
+    
   </channel>
 </rss>

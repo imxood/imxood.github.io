@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2019-04-17T19:00:00+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://imxood.github.io/post/qt/</loc>
     <lastmod>2019-02-20T19:25:43+08:00</lastmod>
   </url>
@@ -191,7 +196,7 @@
   
   <url>
     <loc>http://imxood.github.io/post/</loc>
-    <lastmod>2019-02-20T19:25:43+08:00</lastmod>
+    <lastmod>2019-04-17T19:00:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -202,7 +207,7 @@
   
   <url>
     <loc>http://imxood.github.io/</loc>
-    <lastmod>2019-02-20T19:25:43+08:00</lastmod>
+    <lastmod>2019-04-17T19:00:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   

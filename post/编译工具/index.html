@@ -163,6 +163,51 @@ Key to Flags:
   O (extra OS processing required) o (OS specific), p (processor specific)
 </code></pre>
 
+<h2 id="objdump">objdump</h2>
+
+<pre><code>-d, --disassemble        Display assembler contents of executable sections
+-s, --full-contents      Display the full contents of all sections requested
+</code></pre>
+
+<pre><code class="language-shell">imxood@imxood-pc:~/develop$ objdump -s -d hello.o 
+
+hello.o:     file format elf64-x86-64
+
+Contents of section .text:
+ 0000 554889e5 4883ec10 c745fc00 00000083  UH..H....E......
+ 0010 45fc0183 45fc0183 45fc01bf 00000000  E...E...E.......
+ 0020 e8000000 00b80000 0000c9c3           ............    
+Contents of section .rodata:
+ 0000 68656c6c 6f2c2074 68652077 6f726c64  hello, the world
+ 0010 2100                                 !.              
+Contents of section .comment:
+ 0000 00474343 3a202855 62756e74 7520352e  .GCC: (Ubuntu 5.
+ 0010 342e302d 36756275 6e747531 7e31362e  4.0-6ubuntu1~16.
+ 0020 30342e31 31292035 2e342e30 20323031  04.11) 5.4.0 201
+ 0030 36303630 3900                        60609.          
+Contents of section .eh_frame:
+ 0000 14000000 00000000 017a5200 01781001  .........zR..x..
+ 0010 1b0c0708 90010000 1c000000 1c000000  ................
+ 0020 00000000 2c000000 00410e10 8602430d  ....,....A....C.
+ 0030 06670c07 08000000                    .g......        
+
+Disassembly of section .text:
+
+0000000000000000 &lt;main&gt;:
+   0:	55                   	push   %rbp
+   1:	48 89 e5             	mov    %rsp,%rbp
+   4:	48 83 ec 10          	sub    $0x10,%rsp
+   8:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%rbp)
+   f:	83 45 fc 01          	addl   $0x1,-0x4(%rbp)
+  13:	83 45 fc 01          	addl   $0x1,-0x4(%rbp)
+  17:	83 45 fc 01          	addl   $0x1,-0x4(%rbp)
+  1b:	bf 00 00 00 00       	mov    $0x0,%edi
+  20:	e8 00 00 00 00       	callq  25 &lt;main+0x25&gt;
+  25:	b8 00 00 00 00       	mov    $0x0,%eax
+  2a:	c9                   	leaveq 
+  2b:	c3                   	retq
+</code></pre>
+
 <h2 id="objcopy">objcopy</h2>
 
 <pre><code class="language-shell">arm-zephyr-eabi-objcopy -S -Obinary -j .dccm_data zephyr.elf dccm.bin
@@ -176,7 +221,7 @@ arm-zephyr-eabi-objcopy -S -Obinary -R .comment -R COMMON -R .eh_frame -R .iccm_
 </code></pre>
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYxNDAyMDY0M119
+eyJoaXN0b3J5IjpbNTI1NzIxMDQwLC02MTQwMjA2NDNdfQ==
 -->
 
   </div>

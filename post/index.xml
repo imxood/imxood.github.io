@@ -13,6 +13,15 @@
     
     <item>
       <title>编译工具</title>
+      <link>http://imxood.github.io/post/google-colab%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Wed, 17 Apr 2019 19:00:00 +0800</pubDate>
+      
+      <guid>http://imxood.github.io/post/google-colab%E4%BD%BF%E7%94%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>编译工具</title>
       <link>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7/</link>
       <pubDate>Wed, 17 Apr 2019 19:00:00 +0800</pubDate>
       
@@ -966,15 +975,6 @@ Odometry: 使用从差速控制得到的位移及旋转角度, 发布里程信�
       
       <guid>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/</guid>
       <description>cmake常用语法 include_directories(include) 设置头文件路径 link_directories(/usr/lib) 设置库路径 add_library(hello1 src/hello.cpp) 添加静态库 add_library(hello2 SHARED src/hello.cpp) 添加动态库 add_executable(sayHello src/useHello.cpp) 添加可执行程序 target_link_libraries(sayHello hello) 链接库 set(CMAKE_BUILD_TYPE Release) 设置编译类型, 默认就是Release set(CMAKE_CXX_FLAGS &amp;quot;${CMAKE_CXX_FLAGS} -std=c++11&amp;quot;) 设置编译参数 set(CMAKE_CXX_STANDARD 11) ADD_DEFINITIONS(-DmacroName -DmacroName=macroValue ......) 设置宏 file(GLOB SRC_FILES src/*.c src/*.h) 生成一个匹配条件的文件列表 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/exec/) 设置可执行程序的生成目录 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/) 设置动态库的生成目录 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/static/) 设置静态库的生成目录 安装可执行程序或库: install( TARGETS hello1 hello2 RUNTIME DESTINATION bin ARCHIVE DESTINATION lib　#安装静态库到/usr/local/lib目录 LIBRARY DESTINATION lib　#安装动态库到/usr/local/lib目录 ) install( #安装头文件到/usr/local/include目录 FILES ${PROJECT_SOURCE_DIR}/include/hello.h DESTINATION include ) install( DIRECTORIES ${PROJECT_SOURCE_DIR}/include/utils DESTINATION include ) 执行一个command,生成${TEST_FILE}文件 add_custom_command(OUTPUT ${TEST_FILE} COMMAND echo &amp;quot;Generating log.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>http://imxood.github.io/post/google-colab%E4%BD%BF%E7%94%A8/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://imxood.github.io/post/google-colab%E4%BD%BF%E7%94%A8/</guid>
-      <description> Written with StackEdit.  </description>
     </item>
     
     <item>

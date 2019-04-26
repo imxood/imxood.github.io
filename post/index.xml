@@ -6,10 +6,20 @@
     <description>Recent content in Posts on 分享生活,分享感动</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Apr 2019 19:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 19 Apr 2019 19:00:00 +0800</lastBuildDate>
     
 	<atom:link href="http://imxood.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Google 应用</title>
+      <link>http://imxood.github.io/post/google%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Fri, 19 Apr 2019 19:00:00 +0800</pubDate>
+      
+      <guid>http://imxood.github.io/post/google%E5%BA%94%E7%94%A8/</guid>
+      <description>为了使用google服务， 你需要先注册google gmail。
+ colab 打开google硬盘， 这里就把google硬盘当做本地磁盘 (记住: 类似windows系统中的文件操作)，创建文件夹，多级文件夹，可以在文件夹中创建不同的应用。 1. 创建顶级文件夹&amp;rdquo;Colab&amp;rdquo;, 点击文件夹&amp;rdquo;Colab&amp;rdquo;, 进入该文件夹 2. 右击右侧空白, 弹出右键菜单，点击&amp;rdquo;更多&amp;rdquo;，如果没有&amp;rdquo;Colaboratory&amp;rdquo;的话，就点击&amp;rdquo;关联更多应用&amp;rdquo;，搜索应用: &amp;ldquo;colab&amp;rdquo;，点击&amp;rdquo;关联&amp;rdquo;，点击弹出的框，弹出框中，有一项要记得勾选，就是说默认打开应用，点击&amp;rdquo;OK&amp;rdquo;，再次右键菜单，点击&amp;rdquo;更多&amp;rdquo;，点击&amp;rdquo;Colaboratory&amp;rdquo;, 就会创建一个Colaboratory应用，即一个ipynb文件，然后查看一下，这个ipynb文件在硬盘上的路径. 3. 此时，如果你需要数据集，你就可以把数据集放在项目所在的文件夹中，对于文件路径，请参考: https://qiita.com/Rowing0914/items/51a770925653c7c528f9</description>
+    </item>
     
     <item>
       <title>编译工具</title>

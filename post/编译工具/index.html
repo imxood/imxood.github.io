@@ -9,14 +9,15 @@
     
     
     <title>编译工具</title>
-    
-
 
     
         
 
         
         
+        
+        
+
         
         
             <link rel="stylesheet" href="http://imxood.github.io/css/main.css">
@@ -34,8 +35,6 @@
 
     
 
-    
-    
 </head>
 
 
@@ -220,6 +219,42 @@ arm-zephyr-eabi-objcopy -S -Obinary -R .comment -R COMMON -R .eh_frame -R .iccm_
   -R &lt;name&gt;, &quot;Remove section &lt;name&gt; from the output&quot;
 </code></pre>
 
+<h2 id="openocd">Openocd</h2>
+
+<pre><code>
+</code></pre>
+
+<h2 id="gdb">gdb</h2>
+
+<pre><code>arm-zephyr-eabi-gdb /home/imxood/develop/code/sources/zephyrproject/zephyr/builds/zephyr/zephyr.elf
+
+gdb shell:
+    target remote localhost:3333
+    monitor reset
+    monitor halt
+    load
+    l, list source
+    c, continue
+    b, 加断点
+        b 16, 在当前第16行加断点
+        b i=1, 在i=1时加断点
+        b main, 在main函数入口添加断点
+    i, info
+        i b, 查看断点信息
+    d, delet
+        d break, 删除所有的断点
+        d break 1, 删除序号为1的断点
+    s, step
+    n, next
+    u, util
+        u 16, 即运行到第16行
+    finish, 完成并跳出当前的子函数
+    p, print
+    display, 自动显示变量的值
+        display variable1, 每当执行停止时会自动显示变量的值
+    bt, backtrace
+</code></pre>
+
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbMjAxMzY2ODUzMyw1MjU3MjEwNDAsLTYxND
 AyMDY0M119
@@ -227,6 +262,7 @@ AyMDY0M119
 
   </div>
 
+  <br>
 
 
 

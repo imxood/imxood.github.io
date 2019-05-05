@@ -34,7 +34,7 @@ body.mobile {
   padding: 15px 20px;
 }
 
-.title details{
+.title details {
   /* background: #cfd7ff; */
   border: 1px solid #4e57ef;
   box-shadow: 3px 4px 0px #aaaab7;
@@ -83,14 +83,18 @@ body.mobile .navbar-nav {
 }
 
 div.outer {
-  margin: 7rem 10% 2% 10%;
+  margin: 0 10% 2% 10%;
 }
 
 body.mobile div.outer {
-  margin: 8.2rem 1rem 1rem 1rem;
+  margin: 0 1rem 1rem 1rem;
 }
 
 body.mobile .big-icon {
   width: 4.3rem;
   height: 6px;
+}
+
+body.mobile .navbar-nav li {
+  margin-bottom: 1rem;
 }

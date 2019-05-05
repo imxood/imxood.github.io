@@ -229,10 +229,11 @@ arm-zephyr-eabi-objcopy -S -Obinary -R .comment -R COMMON -R .eh_frame -R .iccm_
 
 <h2 id="gdb">gdb</h2>
 
-<p>```
-arm-zephyr-eabi-gdb /home/imxood/develop/code/sources/zephyrproject/zephyr/builds/zephyr/zephyr.elf</p>
+<pre><code>arm-zephyr-eabi-gdb /home/imxood/develop/code/sources/zephyrproject/zephyr/builds/zephyr/zephyr.elf
 
-<p>gdb shell:
+GDB Shell:
+
+Common Command:
     l, list source
     c, continue
     b, 加断点
@@ -254,17 +255,22 @@ arm-zephyr-eabi-gdb /home/imxood/develop/code/sources/zephyrproject/zephyr/build
         display variable1, 每当执行停止时会自动显示变量的值
     bt, backtrace
     -, 进入tui模式
-    Ctrl + X + A, 退出tui模式</p>
+    Ctrl + X + A, 退出tui模式
+Monitor Command:
+	monitor reset, 重置设备
+	monitor 
 
-<p>monitor command:
-    monitor reset, 重置设备
-    monitor</p>
+烧写程序:
+gdb BinFile
+target remote localhost:3333
+load
 
-<p>target remote localhost:3333
+</code></pre>
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYzNTI4NjYxMCwyMDEzNjY4NTMzLDUyNT
-cyMTA0MCwtNjE0MDIwNjQzXX0=
---></p>
+eyJoaXN0b3J5IjpbNzM3MDUwNTA2LDIwMTM2Njg1MzMsNTI1Nz
+IxMDQwLC02MTQwMjA2NDNdfQ==
+-->
 
   </div>
 

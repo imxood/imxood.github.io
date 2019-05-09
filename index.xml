@@ -988,7 +988,8 @@ Odometry: 使用从差速控制得到的位移及旋转角度, 发布里程信�
 Open PowerShell,
 PS&amp;gt; git clone https://github.com/Microsoft/vcpkg.git PS&amp;gt; cd vcpkg PS&amp;gt; .\bootstrap-vcpkg.bat  Add the vcpkg path to Environment PATH.
 Reopen PowerShell with administrator,
-PS&amp;gt; vcpkg integrate install  Then, at any time, you can download the packages managed by vcpkg. For example:
+PS&amp;gt; vcpkg integrate install  Then, at any time, you can download the packages managed by vcpkg.
+For example:
 PS&amp;gt; vcpkg install curl # install specific package  You can use vcpkg to search packages:</description>
     </item>
     

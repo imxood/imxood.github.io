@@ -81,7 +81,7 @@
   <h2></h2>
         
 
-<h2 id="use-vcpkg-to-build-third-application">Use Vcpkg to build third application.</h2>
+<h1 id="use-vcpkg-to-build-third-application">Use Vcpkg to build third application.</h1>
 
 <p>Before doing this, download git cmake, and add them to Environment PATH</p>
 
@@ -99,8 +99,8 @@ PS&gt; .\bootstrap-vcpkg.bat
 <pre><code>PS&gt; vcpkg integrate install
 </code></pre>
 
-<p>Then, at any time, you can download the packages managed by vcpkg.
-For example:</p>
+<p>Then, at any time, you can download the packages managed by vcpkg.<br />
+<strong>For example:</strong></p>
 
 <pre><code>PS&gt; vcpkg install curl # install specific package
 </code></pre>
@@ -111,9 +111,30 @@ For example:</p>
 PS&gt; vcpkg search tesseract # Search specific packages
 </code></pre>
 
-<h2 id="install-tesseract">install tesseract</h2>
+<h1 id="install-tesseract">install tesseract</h1>
+
+<h3 id="two-ways">two ways</h3>
+
+<h3 id="method-1-use-vcpkg-to-build-tesseract">method 1: use vcpkg to build tesseract</h3>
 
 <pre><code>vcpkg install tesseract
+</code></pre>
+
+<h3 id="method-2-download-pre-built-binary-package-to-install-directly">method 2: download pre-built binary package to install directly</h3>
+
+<ul>
+<li><a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w32-setup-v4.1.0.20190314.exe">tesseract-ocr-w32-setup-v4.1.0.20190314 (rc1)</a> (32 bit) and</li>
+<li><a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v4.1.0.20190314.exe">tesseract-ocr-w64-setup-v4.1.0.20190314 (rc1)</a> (64 bit) resp.</li>
+</ul>
+
+<p>when installing the package, choose &ldquo;Additional language data(language)&rdquo; &ndash;&gt; &ldquo;Chinaese (Simplified)&rdquo;, the other is default.</p>
+
+<p><img src="images/wechat_20190510071415.png" alt="file" />
+<img src="images/wechat_20190510072239.png" alt="file" /></p>
+
+<p>After install, you can test:</p>
+
+<pre><code>PS&gt; .\tesseract.exe INPUT_IMAGES\chi_sim\timg.jpg OUTPUT_IMAGES\chi_sim -l chi_sim
 </code></pre>
 
   </div>

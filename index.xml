@@ -980,6 +980,20 @@ Odometry: 使用从差速控制得到的位移及旋转角度, 发布里程信�
     
     <item>
       <title></title>
+      <link>http://imxood.github.io/post/ocr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://imxood.github.io/post/ocr/</guid>
+      <description>Use Vcpkg to build third application. Before doing this, download git cmake, and add them to Environment PATH
+Open PowerShell,
+PS&amp;gt; git clone https://github.com/Microsoft/vcpkg.git PS&amp;gt; cd vcpkg PS&amp;gt; .\bootstrap-vcpkg.bat  Add the vcpkg path to Environment PATH.
+Reopen PowerShell with administrator,
+PS&amp;gt; vcpkg integrate install  Then, at any time, you can download the packages managed by vcpkg. For example:
+PS&amp;gt; vcpkg install curl # install specific package  You can use vcpkg to search packages:</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>http://imxood.github.io/post/arm-gcc%E6%B1%87%E7%BC%96/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

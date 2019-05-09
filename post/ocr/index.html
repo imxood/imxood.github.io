@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     
     
-    <title>ros</title>
+    <title></title>
 
     
 
@@ -78,45 +78,43 @@
   <div class="side-btn"><a href="http://imxood.github.io/" class="back">Home</a></div>
   
 <div class="blog-post">
-  <h2>ros</h2>
+  <h2></h2>
         
 
-<p>em &lsquo;module&rsquo; object has no attribute &lsquo;Interpreter&rsquo;
-solved:
-    pip uninstall em
-    pip install empy</p>
+<h2 id="use-vcpkg-to-build-third-application">Use Vcpkg to build third application.</h2>
 
-<h2 id="nodelet用法">nodelet用法:</h2>
+<p>Before doing this, download git cmake, and add them to Environment PATH</p>
 
-<pre><code>nodelet manager               - Launch a nodelet manager node.  启动一个manager
-nodelet load pkg/Type manager - Launch a nodelet of type pkg/Type on manager manager. 向manager中加载nodelet
-nodelet standalone pkg/Type   - Launch a nodelet of type pkg/Type in a standalone node.
-nodelet unload name manager   - Unload a nodelet a nodelet by name from manager. 从manager中移除nodelet
+<p>Open PowerShell,</p>
 
-开启一个名字为nodelet_manager的manager节点:
-rosrun nodelet nodelet manager __name:=nodelet_manager
-
-向创建的nodelet_manager中加载pkg/Type为nodelet_tutorial_math/Plus的nodelet节点，并将其重命名为nodelet1，nodelet1/in话题重映射为foo，value值设为1.1:
-rosrun nodelet nodelet load nodelet_tutorial_math/Plus nodelet_manager __name:=nodelet1 nodelet1/in:=foo _value:=1.1
+<pre><code>PS&gt; git clone https://github.com/Microsoft/vcpkg.git
+PS&gt; cd vcpkg
+PS&gt; .\bootstrap-vcpkg.bat
 </code></pre>
 
-<p>ros报错:</p>
+<p>Add the vcpkg path to Environment PATH.</p>
 
-<pre><code>m_subscriber = g_nh-&gt;subscribe(TOPIC_NAME_SCHEDULE, 10, &amp;CSubscribeTask::schedeleCallback, this);
-while (!m_bExit &amp;&amp; ros::ok())
-{
-    ros::spinOnce();
-    loop_rate.sleep();
-    sleep(1);
-}
+<p>Reopen PowerShell with administrator,</p>
+
+<pre><code>PS&gt; vcpkg integrate install
 </code></pre>
 
-<p>terminate called after throwing an instance of &lsquo;boost::exception_detail::clone_impl<a href="boost::exception_detail::error_info_injector&lt;boost::lock_error">boost::exception_detail::error_info_injector&lt;boost::lock_error</a> &gt;&rsquo;
-  what():  boost: mutex lock failed in pthread_mutex_lock: 无效的参数
-已放弃 (核心已转储)</p>
+<p>Then, at any time, you can download the packages managed by vcpkg.
+For example:</p>
 
-<p>解决方法:
-把m_subscriber改成局部变量就好, 问题不详</p>
+<pre><code>PS&gt; vcpkg install curl # install specific package
+</code></pre>
+
+<p>You can use vcpkg to search packages:</p>
+
+<pre><code>PS&gt; vcpkg search # View all packages
+PS&gt; vcpkg search tesseract # Search specific packages
+</code></pre>
+
+<h2 id="install-tesseract">install tesseract</h2>
+
+<pre><code>vcpkg install tesseract
+</code></pre>
 
   </div>
 

@@ -933,6 +933,14 @@ sudo ls -l /proc/21943/fd</p>
    User git
    ProxyCommand nc -v -x 127.0.0.1:1080 %h %p
 </code></pre>
+
+<h2 id="install-boot-repair">install boot-repair</h2>
+
+<pre><code class="language-sh"># 添加软件源并更新
+sudo add-apt-repository ppa:yannubuntu/boot-repair &amp;&amp;　apt-get update
+＃　安装boot-repair并启动软件
+sudo apt install -y boot-repair &amp;&amp; boot-repair
+</code></pre>
   </div>
 
 <br>

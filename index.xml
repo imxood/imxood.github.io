@@ -1019,15 +1019,6 @@ cs 片选</description>
     
     <item>
       <title></title>
-      <link>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</guid>
-      <description>ubuntu 技巧 点击图标最小化 gsettings set org.gnome.shell.extensions.dash-to-dock click-action &amp;lsquo;minimize&amp;rsquo;</description>
-    </item>
-    
-    <item>
-      <title></title>
       <link>http://imxood.github.io/post/%E5%A4%A7%E7%A5%9E%E8%B7%AF%E7%BA%BF/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

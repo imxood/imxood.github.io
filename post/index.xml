@@ -17,12 +17,10 @@
       <pubDate>Tue, 14 May 2019 19:25:43 +0800</pubDate>
       
       <guid>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</guid>
-      <description>ubuntu 技巧 使用gsettings配置Gnome3行为 gsettings list-schemas/list-keys/set/get/range 查看所有的schema gsettings list-schemas
+      <description>ubuntu 技巧 使用gsettings配置Gnome3行为 gsettings list-schemas/list-keys/set/get/range # 显示所有的scheme用法描述 #!/bin/bash schemas=$(gsettings list-schemas) echo &amp;quot;gsettings doc&amp;quot; &amp;gt; test.txt for schema in $schemas do echo &amp;quot;schema: $schema&amp;quot; &amp;gt;&amp;gt; test.txt keys=$(gsettings list-keys $schema) for key in $keys do echo -e &amp;quot;\tkey: $key&amp;quot; &amp;gt;&amp;gt; test.txt describe=$(gsettings describe $schema $key) echo -e &amp;quot;\tdescribe: $describe\n&amp;quot; &amp;gt;&amp;gt; test.txt done done  查看所有的schema gsettings list-schemas
 查看某个schema的所有key gsettings list-keys org.gnome.shell.extensions.dash-to-dock
 查看某个schema的某个key的可选值 gsettings range org.gnome.shell.extensions.dash-to-dock click-action
-查看某个schema的某个key的当前值 gsettings get org.gnome.shell.extensions.dash-to-dock click-action
-常用gsettings配置 点击图标最小化 gsettings set org.gnome.shell.extensions.dash-to-dock click-action &amp;lsquo;minimize&amp;rsquo;
-在dock窗口中,滚动轮滑键,切换窗口 gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action &amp;lsquo;cycle-windows&amp;rsquo;</description>
+查看某个schema的某个key的当前值 gsettings get org.gnome.shell.extensions.dash-to-dock click-action</description>
     </item>
     
     <item>

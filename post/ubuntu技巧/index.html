@@ -87,6 +87,27 @@
 
 <h4 id="gsettings-list-schemas-list-keys-set-get-range">gsettings list-schemas/list-keys/set/get/range</h4>
 
+<pre><code class="language-sh"># 显示所有的scheme用法描述
+
+#!/bin/bash
+
+schemas=$(gsettings list-schemas)
+
+echo &quot;gsettings doc&quot; &gt; test.txt
+
+for schema in $schemas
+do
+    echo &quot;schema: $schema&quot; &gt;&gt; test.txt
+    keys=$(gsettings list-keys $schema)
+    for key in $keys
+    do
+        echo -e &quot;\tkey: $key&quot; &gt;&gt; test.txt
+        describe=$(gsettings describe $schema $key)
+        echo -e &quot;\tdescribe: $describe\n&quot; &gt;&gt; test.txt
+    done
+done
+</code></pre>
+
 <h4 id="查看所有的schema">查看所有的schema</h4>
 
 <p>gsettings list-schemas</p>

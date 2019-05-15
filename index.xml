@@ -6,10 +6,20 @@
     <description>Recent content on 分享生活,分享感动</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Apr 2019 19:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 14 May 2019 19:25:43 +0800</lastBuildDate>
     
 	<atom:link href="http://imxood.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>linux命令</title>
+      <link>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</link>
+      <pubDate>Tue, 14 May 2019 19:25:43 +0800</pubDate>
+      
+      <guid>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</guid>
+      <description>ubuntu 技巧 使用gsettings配置Gnome3行为 gsettings set/get/range/list-keys gsettings range org.gnome.shell.extensions.dash-to-dock click-action
+点击图标最小化 gsettings set org.gnome.shell.extensions.dash-to-dock click-action &amp;lsquo;minimize&amp;rsquo;</description>
+    </item>
     
     <item>
       <title>Google 应用</title>

@@ -18,6 +18,7 @@
       
       <guid>http://imxood.github.io/post/ubuntu%E6%8A%80%E5%B7%A7/</guid>
       <description>ubuntu 技巧 使用gsettings配置Gnome3行为 gsettings set/get/range/list-keys gsettings range org.gnome.shell.extensions.dash-to-dock click-action
+gsettings list-keys org.gnome.shell.extensions.dash-to-dock | awk &amp;lsquo;{print $1}&amp;rsquo; | xargs -i sh -c &amp;ldquo;echo &amp;lsquo;{}:&amp;rsquo; &amp;gt;&amp;gt; test.txt &amp;amp;&amp;amp; gsettings describe org.gnome.shell.extensions.dash-to-dock {} &amp;gt;&amp;gt; test.txt &amp;amp;&amp;amp; echo &amp;gt;&amp;gt; test.txt&amp;rdquo;
 点击图标最小化 gsettings set org.gnome.shell.extensions.dash-to-dock click-action &amp;lsquo;minimize&amp;rsquo;</description>
     </item>
     

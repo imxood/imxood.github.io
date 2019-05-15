@@ -89,6 +89,8 @@
 
 <p>gsettings range org.gnome.shell.extensions.dash-to-dock click-action</p>
 
+<p>gsettings list-keys org.gnome.shell.extensions.dash-to-dock | awk &lsquo;{print $1}&rsquo; | xargs -i sh -c &ldquo;echo &lsquo;{}:&rsquo; &gt;&gt; test.txt &amp;&amp; gsettings describe org.gnome.shell.extensions.dash-to-dock {} &gt;&gt; test.txt &amp;&amp; echo &gt;&gt; test.txt&rdquo;</p>
+
 <h3 id="点击图标最小化">点击图标最小化</h3>
 
 <p>gsettings set org.gnome.shell.extensions.dash-to-dock click-action &lsquo;minimize&rsquo;</p>

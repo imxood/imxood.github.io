@@ -269,12 +269,40 @@ target remote localhost:3333
 load
 monitor reset
 
+## Makefile
+```sh
+$(VariableName)
+
+自动化变量:
+    $@ 表示目标集
+    $&lt; 表示依赖集
+
+@echo &quot;正在编译&quot;
+
+两行命令加&quot;;&quot;
+
+命令前加&quot;-&quot;,报错继续执行,否则停止
+make的&quot;-k&quot;, 某个规则失败, 其它规则继续执行
+
+x = foo, x会受后面影响
+x := foo, x不受后面影响
+FOO ?= bar, 若果FOO未被定义,则值为bar, 否则不处理
+objects += another.o, 追加
+
+$(foo:.o=.c), 把结尾是.o的字符串替换为.c结尾
+$(foo:%.o=%.c), 同上  
+$($(x)), 把变量的值当做变量
+
+override &lt;variable&gt; = &lt;value&gt;
+override &lt;variable&gt; := &lt;value&gt;
+
 </code></pre>
 
+<p>```
 <!--stackedit_data:
 eyJoaXN0b3J5IjpbMTQzMjAwODM5NCwxNzUyMDYxMTY3LDIwMT
 M2Njg1MzMsNTI1NzIxMDQwLC02MTQwMjA2NDNdfQ==
--->
+--></p>
 
   </div>
 

@@ -941,6 +941,16 @@ sudo add-apt-repository ppa:yannubuntu/boot-repair &amp;&amp;　apt-get update
 ＃　安装boot-repair并启动软件
 sudo apt install -y boot-repair &amp;&amp; boot-repair
 </code></pre>
+
+<h2 id="pip-升级问题">pip 升级问题</h2>
+
+<pre><code>Traceback (most recent call last):
+  File &quot;/usr/bin/pip3&quot;, line 9, in &lt;module&gt;
+    from pip import main
+ImportError: cannot import name 'main'
+
+curl https://bootstrap.pypa.io/get-pip.py | sudo -H python3
+</code></pre>
   </div>
 
 <br>

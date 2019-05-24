@@ -733,10 +733,10 @@ cat /proc/asound/cards 查看声卡设备
     
     <item>
       <title>linux工具使用</title>
-      <link>http://imxood.github.io/post/linux%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</link>
+      <link>http://imxood.github.io/post/linux%E5%B7%A5%E5%85%B7/</link>
       <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
       
-      <guid>http://imxood.github.io/post/linux%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/</guid>
+      <guid>http://imxood.github.io/post/linux%E5%B7%A5%E5%85%B7/</guid>
       <description>linux必装软件： sudo apt install curl vim-gnome git cmake nethogs \ unity-tweak-tool python-pip shadowsocks polipo sudo -H pip2 install --upgrade pip  配置中文环境 locale 查看当前环境 locale -a 查看可使用的环境列表 sudo apt install language-pack-zh-hans 安装中文语言包 sudo bash -c &#39;echo &amp;quot;LC_ALL=zh_CN.UTF-8&amp;quot; &amp;gt;&amp;gt; /etc/default/locale&#39; sudo apt install curl  c++ environment sudo apt install build-essential cmake  安装docker curl -sSL https://get.daocloud.io/docker | sh 写在docker: sudo apt remove docker docker-engine 安装 Docker Compose: sudo curl -L https://get.</description>
     </item>
     

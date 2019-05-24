@@ -555,7 +555,12 @@ dia-normal &ldquo;$@&rdquo;</p>
 <h2 id="python-升级">python 升级</h2>
 
 <pre><code>sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt update &amp;&amp; sudo apt install python3.7
+sudo apt update &amp;&amp; sudo apt install -y python3.7
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2
+
+sudo update-alternatives --config python3
 </code></pre>
 
   </div>

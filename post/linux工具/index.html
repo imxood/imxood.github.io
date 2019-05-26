@@ -571,6 +571,18 @@ sudo update-alternatives --config python3
 <pre><code>curl https://bootstrap.pypa.io/get-pip.py | sudo -H python3
 </code></pre>
 
+<h2 id="ubuntu-nvidia-graphics-drivers">ubuntu nvidia graphics drivers</h2>
+
+<pre><code>sudo apt purge nvidia*
+sudo add-apt-repository -y ppa:graphics-drivers &amp;&amp; sudo apt update
+sudo apt install nvidia-410
+</code></pre>
+
+<h2 id="ubuntu-bison-flex">ubuntu bison flex</h2>
+
+<pre><code>sudo apt install bison flex
+</code></pre>
+
   </div>
 
 <br>

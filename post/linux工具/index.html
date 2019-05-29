@@ -585,10 +585,11 @@ sudo apt install nvidia-410
 
 <h2 id="源码安装qemu">源码安装qemu</h2>
 
-<pre><code>sudo apt purge &quot;qemu*&quot; &amp;&amp; sudo apt autoremove -y &amp;&amp; sudo apt install checkinstall -y &amp;&amp; sudo apt build-dep qemu -y
+<pre><code># 参考https://wiki.qemu.org/Hosts/Linux
+sudo apt purge &quot;qemu*&quot; &amp;&amp; sudo apt autoremove -y &amp;&amp; sudo apt install checkinstall -y &amp;&amp; sudo apt build-dep qemu -y
 下载[qemu-4.0.0](https://download.qemu.org/qemu-4.0.0.tar.xz)
 tar -xvf qemu-4.0.0.tar.xz &amp;&amp; cd qemu-4.0.0
-./configure &amp;&amp; make -j11
+./configure --enable-debug &amp;&amp; make -j11
 sudo checkinstall make install
 # sudo apt install ./*.deb
 </code></pre>

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     
     
-    <title>编译构建</title>
+    <title></title>
 
     
 
@@ -78,126 +78,8 @@
   <div class="side-btn"><a href="http://imxood.github.io/" class="back">Home</a></div>
   
 <div class="blog-post">
-  <h2>编译构建</h2>
+  <h2></h2>
         
-
-<h1 id="cmake常用语法">cmake常用语法</h1>
-
-<pre><code>include_directories(include)                                            设置头文件路径
-link_directories(/usr/lib)                                              设置库路径
-
-add_library(hello1 src/hello.cpp)                                       添加静态库
-add_library(hello2 SHARED src/hello.cpp)                                添加动态库
-add_executable(sayHello src/useHello.cpp)                               添加可执行程序
-target_link_libraries(sayHello hello)                                   链接库
-
-set(CMAKE_BUILD_TYPE Release)                                           设置编译类型, 默认就是Release
-
-set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -std=c++11&quot;)                    设置编译参数
-
-set(CMAKE_CXX_STANDARD 11)
-
-ADD_DEFINITIONS(-DmacroName -DmacroName=macroValue ......)              设置宏
-
-file(GLOB SRC_FILES src/*.c src/*.h)                                    生成一个匹配条件的文件列表
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/exec/)         设置可执行程序的生成目录
-
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/)          设置动态库的生成目录
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/static/)   设置静态库的生成目录
-
-安装可执行程序或库:
-install(
-    TARGETS hello1 hello2
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib　#安装静态库到/usr/local/lib目录
-    LIBRARY DESTINATION lib　#安装动态库到/usr/local/lib目录
-)
-
-install(
-    #安装头文件到/usr/local/include目录
-    FILES ${PROJECT_SOURCE_DIR}/include/hello.h DESTINATION include
-)
-
-install(
-    DIRECTORIES ${PROJECT_SOURCE_DIR}/include/utils DESTINATION include
-)
-
-执行一个command,生成${TEST_FILE}文件
-add_custom_command(OUTPUT  ${TEST_FILE}
-    COMMAND echo &quot;Generating log.txt file...&quot;
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_LIST_FILE} ${TEST_FILE}
-    COMMENT  &quot;This is a test&quot;
-)
-目标Test1,会等待${TEST_FILE}的生成,然后执行
-add_custom_target(Test1 ALL DEPENDS ${TEST_FILE})
-
-执行Test1 command
-add_custom_command(TARGET Test1
-    PRE_BUILD
-    COMMAND echo &quot;executing a fake command&quot;
-    COMMENT &quot;This command will be executed before building target Test1&quot;
-)
-
-搜集所有在指定路径下的源文件的文件名
-aux_source_directory(&lt; dir &gt; &lt; variable &gt;)
-
-CMAKE_C_FLAGS 设置C编译选项
-CMAKE_CXX_FLAGS 设置C++编译选项
-
-
--DCMAKE_INSTALL_RPATH=/usr 编译期与运行期的rpath都会多一条
--DCMAKE_SKIP_RPATH=FALSE 编译期与运行期都不忽略RPATH
-</code></pre>
-
-<h3 id="cmake常用的变量">cmake常用的变量</h3>
-
-<pre><code>PROJECT_NAME       项目名称
-PROJECT_SOURCE_DIR 工程的根目录
-PROJECT_BINARY_DIR 运行cmake命令的目录
-CMAKE_INCLUDE_PATH 环境变量,非cmake变量
-CMAKE_LIBRARY_PATH 环境变量
-CMAKE_CURRENT_SOURCE_DIR 当前处理的CMakeLists.txt所在的路径
-CMAKE_SOURCE_DIR cmake配置文件的顶层目录
-CMAKE_BINARY_DIR
-CMAKE_PREFIX_PATH
-CMAKE_FILES_DIRECTORY
-CMAKE_INSTALL_PREFIX
-
-cmake_minimum_required(VERSION 2.8)
-
-pkg_check_modules:
-    &lt;XPREFIX&gt;_FOUND          ... set to 1 if module(s) exist
-    &lt;XPREFIX&gt;_LIBRARIES      ... only the libraries (w/o the '-l')
-    &lt;XPREFIX&gt;_LIBRARY_DIRS   ... the paths of the libraries (w/o the '-L')
-    &lt;XPREFIX&gt;_LDFLAGS        ... all required linker flags
-    &lt;XPREFIX&gt;_LDFLAGS_OTHER  ... all other linker flags
-    &lt;XPREFIX&gt;_INCLUDE_DIRS   ... the '-I' preprocessor flags (w/o the '-I')
-    &lt;XPREFIX&gt;_CFLAGS         ... all required cflags
-    &lt;XPREFIX&gt;_CFLAGS_OTHER   ... the other compiler flags
-
-    &lt;XPREFIX&gt;_LIBDIR
-    &lt;XPREFIX&gt;_PREFIX
-</code></pre>
-
-<h3 id="对于-usr-local-lib-pkgconfig下的pc文件">对于/usr/local/lib/pkgconfig下的pc文件</h3>
-
-<pre><code>    eg,/usr/local/lib/pkgconfig/audio_process.pc:
-        libdir=/usr/local/lib
-        includedir=/usr/local/include
-
-        Name: audio_processing
-        Description: Webrtc audio process module
-        Version: 0.1
-        Libs: -L${libdir} -laudio_processing
-        Cflags: -DWEBRTC_AUDIO_PROCESSING_ONLY_BUILD -I${includedir}/webrtc -DWEBRTC_POSIX
-    libdir,指定了库的路径
-    includedir,指定了库的头文件路径
-    Libs中的-L指定了${audio_process_LIBRARY_DIRS},-l指定了${audio_process_LIBRARIES}
-    Cflags中的-I指定了${audio_process_INCLUDE_DIRS}
-    -DWEBRTC_POSIX,表明需要一个WEBRTC_POSIX宏
-</code></pre>
 
 <h1 id="catkin">Catkin</h1>
 

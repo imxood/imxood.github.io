@@ -982,15 +982,6 @@ Odometry: 使用从差速控制得到的位移及旋转角度, 发布里程信�
     </item>
     
     <item>
-      <title>编译构建</title>
-      <link>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/</link>
-      <pubDate>Wed, 20 Feb 2019 19:25:43 +0800</pubDate>
-      
-      <guid>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/</guid>
-      <description>cmake常用语法 include_directories(include) 设置头文件路径 link_directories(/usr/lib) 设置库路径 add_library(hello1 src/hello.cpp) 添加静态库 add_library(hello2 SHARED src/hello.cpp) 添加动态库 add_executable(sayHello src/useHello.cpp) 添加可执行程序 target_link_libraries(sayHello hello) 链接库 set(CMAKE_BUILD_TYPE Release) 设置编译类型, 默认就是Release set(CMAKE_CXX_FLAGS &amp;quot;${CMAKE_CXX_FLAGS} -std=c++11&amp;quot;) 设置编译参数 set(CMAKE_CXX_STANDARD 11) ADD_DEFINITIONS(-DmacroName -DmacroName=macroValue ......) 设置宏 file(GLOB SRC_FILES src/*.c src/*.h) 生成一个匹配条件的文件列表 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/exec/) 设置可执行程序的生成目录 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/) 设置动态库的生成目录 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib/static/) 设置静态库的生成目录 安装可执行程序或库: install( TARGETS hello1 hello2 RUNTIME DESTINATION bin ARCHIVE DESTINATION lib　#安装静态库到/usr/local/lib目录 LIBRARY DESTINATION lib　#安装动态库到/usr/local/lib目录 ) install( #安装头文件到/usr/local/include目录 FILES ${PROJECT_SOURCE_DIR}/include/hello.h DESTINATION include ) install( DIRECTORIES ${PROJECT_SOURCE_DIR}/include/utils DESTINATION include ) 执行一个command,生成${TEST_FILE}文件 add_custom_command(OUTPUT ${TEST_FILE} COMMAND echo &amp;quot;Generating log.</description>
-    </item>
-    
-    <item>
       <title></title>
       <link>http://imxood.github.io/post/ocr/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -1087,6 +1078,16 @@ C、网络与信息安全技术： 如加密技术，数字证书CA等。
 D、DSP技术： Digital Signal Process，DSP处理器通过硬件实现数字信号处理算法。
 说明：太多细节未说明，可根据实际情况调整。重点在于1、3，不必完全按照顺序作。对于学习c++，理由是c++不只是一种语言，一种工具，她还是一 种艺术，一种文化，一种哲学理念、但不是拿来炫耀得东西。对于linux内核，学习编程，读一些优秀代码也是有必要的。
 注意：　要学会举一反多，有强大的基础，很多东西简单看看就能会。想成为合格的程序员，前提是必须熟练至少一种编程语言，并具有良好的逻辑思维。一定要理论结合实践。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://imxood.github.io/post/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/</guid>
+      <description>Catkin http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html CATKIN_DEVEL_PATH CATKIN_INSTALL_PATH catkin config --install CATKIN_DEVEL_PREFIX CATKIN_PACKAGE_*** catkin build --this -j4 -DPEAK_TEST=ON CMakeLists.txt: if (PEAK_TEST) else() ifend() 使用cmake的install时，默认没有rpath，需要使用CMAKE_INSTALL_RPATH_USE_LINK_PATH启动: catkin build robot_driver -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON catkin相关变量: http://docs.ros.org/jade/api/catkin/html/user_guide/variables.html  GCC, G++ -g 只是编译器，在编译的时候，产生调试信息。 -std=c++11  ninja gn http://blog.csdn.net/zhangtracy/article/details/79045363 https://chromium.googlesource.com/chromium/src/+/master/tools/gn/README.md gn args out --list gn args out --list=use_custom_libcxx gn args out/Debug, 打开编译器，添加你需要的编译选项，可覆盖默认配置 也可直接修改out/Debug/args.gn文件  GDB调试 应用在目标机上: gdbserver 192.168.99.10:10000 test_program
+主机: gdb: show architecture target remote 192.168.99.10:10000</description>
     </item>
     
   </channel>

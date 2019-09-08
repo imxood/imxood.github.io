@@ -227,51 +227,9 @@ arm-zephyr-eabi-objcopy -S -Obinary -R .comment -R COMMON -R .eh_frame -R .iccm_
 <pre><code>openocd -f interface/stlink.cfg -f board/stm32f7discovery.cfg
 </code></pre>
 
-<h2 id="gdb">gdb</h2>
+<h2 id="makefile">Makefile</h2>
 
-<pre><code>arm-zephyr-eabi-gdb /home/imxood/develop/code/sources/zephyrproject/zephyr/builds/zephyr/zephyr.elf
-
-GDB Shell:
-
-Common Command:
-    l, list source
-    c, continue
-    b, 加断点
-        b 16, 在当前第16行加断点
-        b i=1, 在i=1时加断点
-        b main, 在main函数入口添加断点
-    i, info
-        i b, 查看断点信息
-    d, delet
-        d break, 删除所有的断点
-        d break 1, 删除序号为1的断点
-    s, step
-    n, next
-    u, util
-        u 16, 即运行到第16行
-    finish, 完成并跳出当前的子函数
-    p, print
-    display, 自动显示变量的值
-        display variable1, 每当执行停止时会自动显示变量的值
-    bt, backtrace
-    -, 进入tui模式
-    Ctrl + X + A, 退出tui模式
-Monitor Command:
-	monitor help, 查看所有monitor支持的命令
-	monitor reset, 重置设备
-	monitor halt, 暂停cpu
-	monitor reg, 查看所有寄存器内容
-	monitor reg PC, 查看PC寄存器内容
-
-烧写程序:
-gdb BinFile
-target remote localhost:3333
-load
-monitor reset
-
-## Makefile
-```sh
-$(VariableName)
+<pre><code class="language-sh">$(VariableName)
 
 自动化变量:
     $@ 表示目标集
@@ -297,12 +255,6 @@ override &lt;variable&gt; = &lt;value&gt;
 override &lt;variable&gt; := &lt;value&gt;
 
 </code></pre>
-
-<p>```
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQzMjAwODM5NCwxNzUyMDYxMTY3LDIwMT
-M2Njg1MzMsNTI1NzIxMDQwLC02MTQwMjA2NDNdfQ==
---></p>
 
   </div>
 

@@ -1,0 +1,18 @@
+{
+    "name": "imxood.github.io",
+    "version": "0.0.1",
+    "description": "分享技术",
+    "repository": "https://github.com/imxood/imxood.github.io.git",
+    "author": "maxu",
+    "license": "MIT",
+    "scripts": {
+        "dev": "vuepress dev docs",
+        "build": "vuepress build docs",
+        "serve": "vuepress serve docs"
+    },
+    "devDependencies": {
+        "typescript": "^4.2.3",
+        "vuepress": "^2.0.0-beta.6",
+        "vuepress-vite": "^2.0.0-beta.6"
+    }
+}

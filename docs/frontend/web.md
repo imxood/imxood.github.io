@@ -4,10 +4,10 @@
 
     网址: https://github.com/nvm-sh/nvm
 
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-	nvm install --lts
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    nvm install --lts
 
-	npm config set registry https://registry.npm.taobao.org
+    npm config set registry https://registry.npm.taobao.org
     npm config get registry
 
     npm install -g yarn
@@ -19,8 +19,8 @@
 
 ## 生成tsconfig.json文件
 
-	yarn add -D typescript
-	yarn tsc --init
+    yarn add -D typescript
+    yarn tsc --init
 
 
 ## 使用npm安装cordova, 执行cordova create报错
@@ -43,7 +43,6 @@ npm ls electron -g  全局包版本号
 
 ## package.json 版本约定号
 
-~~~
     ~version
 
     大概匹配某个版本
@@ -72,11 +71,9 @@ npm ls electron -g  全局包版本号
     如：^0.2.3 , 表示>=0.2.3 <0.3.0, 可以是0.2.3, 0.2.4, ....., 0.2.n
 
     如：^0.0, 表示 >=0.0.0 <0.1.0, 可以是0.0.0, 0.0.1, ....., 0.0.n
-~~~
 
 ## jquery
 
-~~~
     prop attr的区别：
         在这里, 我们可以将attribute理解为“特性”, property理解为为“属性”从而来区分俩者的差异。
         举个例子, option当做一个对象：
@@ -87,7 +84,6 @@ npm ls electron -g  全局包版本号
             ...
         }
         attributes是自定义的键值对, property是对象自身的属性:selected、disabled、attributes...
-~~~
 
 ##　报错:sh: 1: tsc: not found
 

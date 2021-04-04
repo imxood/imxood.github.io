@@ -8,9 +8,27 @@ export const navbar: NavbarConfig = [
         ],
     },
     {
-        text: "后端",
+        text: "硬件",
         children: [
-            "/backend/rust/",
+            "/hardware/",
+        ],
+    },
+    {
+        text: "系统",
+        children: [
+            "/system/rust/",
+        ],
+    },
+    {
+        text: "数学",
+        children: [
+            "/math/",
+        ],
+    },
+    {
+        text: "算法",
+        children: [
+            "/algorithm/",
         ],
     },
     {

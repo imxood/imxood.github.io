@@ -24,6 +24,7 @@ export const sidebar: SidebarConfig = {
         {
             isGroup: true,
             text: "前端",
+            link: "a",
             children: [
                 "/frontend/web.md",
                 "/frontend/vue/vue.md",

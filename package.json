@@ -6,9 +6,9 @@
     "author": "maxu",
     "license": "MIT",
     "scripts": {
-        "dev": "vuepress dev docs",
-        "build": "vuepress build docs",
-        "serve": "vuepress serve docs"
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs",
+        "docs:serve": "vuepress serve docs"
     },
     "devDependencies": {
         "typescript": "^4.2.3",

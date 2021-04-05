@@ -11,9 +11,20 @@ create-missing = false
 [output.html]
 site-url = "/note/"
 default-theme = "Rust"
-mathjax-support = true
 no-section-label = true
+git-repository-url = "https://github.com/imxood/imxood.github.io"
 
 [output.html.fold]
 enable = true
-level = 0
+level = 1
+
+[output.html.search]
+limit-results = 20
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 2
+
+[preprocessor.katex]

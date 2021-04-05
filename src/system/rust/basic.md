@@ -111,6 +111,7 @@
         cd iced
 
         cargo build
+        cargo build -vv 显示详细的编译命令
 
         // --features glow,glow_canvas
         cargo run --package todos

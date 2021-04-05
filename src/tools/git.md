@@ -30,3 +30,8 @@ git config --global core.autocrlf false
     git push --set-upstream origin main
 
 
+## workflow
+
+[GitHub Actions 的元数据语法](https://docs.github.com/cn/actions/creating-actions/metadata-syntax-for-github-actions)
+
+[GitHub Actions 的工作流程语法](https://docs.github.com/cn/actions/reference/workflow-syntax-for-github-actions)

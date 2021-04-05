@@ -27,3 +27,9 @@ output.html.print 是否开起打印功能, 打印功能是 它打开生成的�
 no-section-label 这个可以去掉侧边栏的数字前缀
 
 output.html.fold 可以控制sidebar是否可以折叠及默认行为
+
+## preprocessor
+
+[数学公式 mdbook-katex](https://katex.org/docs/supported.html)
+
+[流程图 mdbook-mermaid](https://mermaid-js.github.io/mermaid/#/)

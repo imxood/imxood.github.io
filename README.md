@@ -1,3 +1,3 @@
-# 学习笔记
+# 学而时习之
 
-使用 [vuepress2](https://vuepress2.netlify.app/zh/guide/getting-started.html) 搭建
+本笔记由 [mdbook](https://github.com/rust-lang/mdBook) 构建

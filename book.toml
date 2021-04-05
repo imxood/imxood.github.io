@@ -1,0 +1,19 @@
+[book]
+authors = ["maxu"]
+language = "en"
+multilingual = false
+src = "src"
+title = "学习笔记"
+
+[build]
+create-missing = false
+
+[output.html]
+site-url = "/note/"
+default-theme = "Rust"
+mathjax-support = true
+no-section-label = true
+
+[output.html.fold]
+enable = true
+level = 0

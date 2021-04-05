@@ -166,8 +166,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="c语言"><a class="header" href="#c语言">C语言</a></h1>
-<h2 id="编译过程"><a class="header" href="#编译过程">编译过程</a></h2>
+                        <h1><a class="header" href="#c语言" id="c语言">C语言</a></h1>
+<h2><a class="header" href="#编译过程" id="编译过程">编译过程</a></h2>
 <pre><code>预处理: 展开头文件及宏定义
 	gcc -E -I./inc test.c -o test.i
 	cpp test.c -I./inc -o test.i
@@ -181,7 +181,7 @@
 链接: 将目标文件和库文件链接成最后的可执行程序
 	ld -o test.out test.o inc/mymath.o ...libraries...
 </code></pre>
-<h2 id="内存布局"><a class="header" href="#内存布局">内存布局</a></h2>
+<h2><a class="header" href="#内存布局" id="内存布局">内存布局</a></h2>
 <pre><code>栈区
 
 	局部变量, 编译器在编译时已经确定了栈的大小
@@ -206,11 +206,11 @@
 
 	函数定义
 </code></pre>
-<h2 id="大小端-位域"><a class="header" href="#大小端-位域">大小端 位域</a></h2>
+<h2><a class="header" href="#大小端-位域" id="大小端-位域">大小端 位域</a></h2>
 <pre><code>大小端:
     intel芯片用的是小端, 就是内存是递增的, 数据是按照字节存放的, 低位数据放在低地址上, 不符合人类的阅读顺序, 比如: 对int类型数据 它的数据是: b3 b2 b1 b0, 内存从低到高: b0 b1 b2 b3
 </code></pre>
-<h2 id="结构体对齐"><a class="header" href="#结构体对齐">结构体对齐</a></h2>
+<h2><a class="header" href="#结构体对齐" id="结构体对齐">结构体对齐</a></h2>
 <ol>
 <li>
 <p>第一个成员的偏移量为0</p>
@@ -263,7 +263,7 @@ char e;
 </code></pre>
 </li>
 </ol>
-<h2 id="gcc中常用属性"><a class="header" href="#gcc中常用属性">gcc中常用属性</a></h2>
+<h2><a class="header" href="#gcc中常用属性" id="gcc中常用属性">gcc中常用属性</a></h2>
 <p>用于设置编译器的一些特殊行为</p>
 <pre><code>设置对齐字节数:
 	__attribute__((__aligned__(4)))
@@ -283,11 +283,11 @@ char e;
 设置特定函数的优化级别， O0,O1,O2,O3:
 	__attribute__((optmize(&quot;Ox&quot;)))
 </code></pre>
-<h2 id="gcc-优化"><a class="header" href="#gcc-优化">gcc 优化</a></h2>
-<h3 id="优化级别"><a class="header" href="#优化级别">优化级别</a></h3>
+<h2><a class="header" href="#gcc-优化" id="gcc-优化">gcc 优化</a></h2>
+<h3><a class="header" href="#优化级别" id="优化级别">优化级别</a></h3>
 <pre><code>O0,O1,O2,O3,Os
 </code></pre>
-<h3 id="优化方法"><a class="header" href="#优化方法">优化方法</a></h3>
+<h3><a class="header" href="#优化方法" id="优化方法">优化方法</a></h3>
 <p>通过给gcc参数:</p>
 <pre><code>gcc -O2 ...
 </code></pre>
@@ -298,7 +298,7 @@ char e;
 给特定函数设置属性:
 	__attribute__((optmize(&quot;O3&quot;)))
 </code></pre>
-<h2 id="main函数之前发生的事"><a class="header" href="#main函数之前发生的事">main函数之前发生的事</a></h2>
+<h2><a class="header" href="#main函数之前发生的事" id="main函数之前发生的事">main函数之前发生的事</a></h2>
 <p>大概是:</p>
 <ol>
 <li>设置栈帧</li>

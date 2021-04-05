@@ -10,15 +10,22 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@master
+
             - name: Install Rust (rustup)
               run: rustup update stable --no-self-update && rustup default stable
+
+            - name: Install mdbook
+              run: cargo install mdbook
+
             - name: Build book
-              run: cargo run -- build guide
-            - name: Deploy to GitHub
+              run: mdbook build
+
+            - name: Deploy to GitHub Pages
+              uses: crazy-max/ghaction-github-pages@v2
+              with:
+                  # 部署到 gh-pages 分支
+                  target_branch: gh-pages
+                  # 部署目录为 book
+                  build_dir: book
               env:
-                  GITHUB_DEPLOY_KEY: ${{ secrets.PAGES_GENERATE_TOKEN }}
-              run: |
-                  touch book/.nojekyll
-                  curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs | rustc - -o /tmp/deploy
-                  cd book
-                  /tmp/deploy
+                  GITHUB_TOKEN: ${{ secrets.PAGES_GENERATE_TOKEN }}

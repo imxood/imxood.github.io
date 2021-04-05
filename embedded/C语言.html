@@ -1,0 +1,379 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>C语言 - 学习笔记</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../index.html">首页</a></li><li class="chapter-item "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="../hardware/usb,电源,电池-供电电路.html">usb,电源,电池-供电电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../embedded/C语言.html" class="active">C语言</a></li></ol></li><li class="chapter-item "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/basic.html">Rust</a></li></ol></li><li class="chapter-item "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../algorithm/index.html"></a></li></ol></li><li class="chapter-item "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../math/积分.html">积分</a></li><li class="chapter-item "><a href="../math/微分.html">微分</a></li></ol></li><li class="chapter-item "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/git.html">git</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">学习笔记</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="c语言"><a class="header" href="#c语言">C语言</a></h1>
+<h2 id="编译过程"><a class="header" href="#编译过程">编译过程</a></h2>
+<pre><code>预处理: 展开头文件及宏定义
+	gcc -E -I./inc test.c -o test.i
+	cpp test.c -I./inc -o test.i
+
+编译: 将预处理的代码翻译成汇编代码
+	gcc -S -I./inc test.c -o test.s
+
+汇编: 将汇编代码翻译成机器码, 这一步生成二进制格式的目标文件
+	as test.s -o test.o
+
+链接: 将目标文件和库文件链接成最后的可执行程序
+	ld -o test.out test.o inc/mymath.o ...libraries...
+</code></pre>
+<h2 id="内存布局"><a class="header" href="#内存布局">内存布局</a></h2>
+<pre><code>栈区
+
+	局部变量, 编译器在编译时已经确定了栈的大小
+
+
+堆区
+
+	malloc分配的内存, 程序员自己控制 分配与释放
+
+
+数据区
+
+	全局区(静态区)
+		如果已初始化, 放在DATA段
+		如果未初始化, 放在BSS段, 这里只保存必要的大小信息, 不占用可执行程序的大小, 加载程序时分配内存
+
+	常量区
+		常量字面量
+
+
+代码区
+
+	函数定义
+</code></pre>
+<h2 id="大小端-位域"><a class="header" href="#大小端-位域">大小端 位域</a></h2>
+<pre><code>大小端:
+    intel芯片用的是小端, 就是内存是递增的, 数据是按照字节存放的, 低位数据放在低地址上, 不符合人类的阅读顺序, 比如: 对int类型数据 它的数据是: b3 b2 b1 b0, 内存从低到高: b0 b1 b2 b3
+</code></pre>
+<h2 id="结构体对齐"><a class="header" href="#结构体对齐">结构体对齐</a></h2>
+<ol>
+<li>
+<p>第一个成员的偏移量为0</p>
+</li>
+<li>
+<p>其它成员的偏移量是其对齐数的整数倍</p>
+</li>
+<li>
+<p>结构体的大小为最大对齐数的整数倍</p>
+<p>例子：
+struct One {
+char a;
+double b;
+short c;
+int d;
+char e;
+};
+规则1： a的偏移量是0
+规则2：
+由于b的对齐数是8,所以1个字节补7个字节，b的偏移量为 0 + 1 + 7 = 8
+由于c的对齐数是2,c前面的长度是  8 + 8 = 16, 是2的倍数， 所以c的偏移量是 16
+由于d的对齐数是4,d前面的长度是 16 + 2 = 18, 不是4的倍数， 补2个字节， d的偏移量是 18 + 2 = 20
+由于e的对齐数是1,e前面的长度是 20 + 4 = 24, 是1的倍数, d的偏移量就是 24
+整体的大小为 24 + 1 = 25
+规则3：
+由于25不是最大对齐数的整数倍, 所以补7个字节, 为32</p>
+<p>另外:</p>
+<pre><code> 如果使用了 #pragma pack(4) 这个宏可以改变最大对齐数, 这意味着比如double的对齐数就是4.
+ 也可以使用: __attribute__((__aligned__(4)))
+
+ #pragma pack(4)
+
+ struct One {
+ 	char a;
+ 	double b;
+ 	short c;
+ 	int d;
+ 	char e;
+ };
+
+ 规则1： a的偏移量是0
+ 规则2：
+ 	由于b的对齐数是4,所以1个字节补3个字节，b的偏移量为 0 + 1 + 3 = 4
+ 	由于c的对齐数是2,c前面的长度是  4 + 8 = 12, 是2的倍数， 所以c的偏移量是 12
+ 	由于d的对齐数是4,d前面的长度是 12 + 2 = 14, 不是4的倍数， 补2个字节， d的偏移量是 14 + 2 = 16
+ 	由于e的对齐数是1,e前面的长度是 16 + 4 = 20, 是1的倍数, d的偏移量就是 20
+ 	整体的大小为 20 + 1 = 21
+ 规则3：
+ 	由于21不是最大对齐数的整数倍, 所以补3个字节, 为24
+</code></pre>
+</li>
+</ol>
+<h2 id="gcc中常用属性"><a class="header" href="#gcc中常用属性">gcc中常用属性</a></h2>
+<p>用于设置编译器的一些特殊行为</p>
+<pre><code>设置对齐字节数:
+	__attribute__((__aligned__(4)))
+
+取消优化对齐, 按照实际字节数存储
+	__attribute__((packed))
+
+将函数或数据放到特定的代码段:
+	__attribute__((section(&quot;section-name&quot;)))
+
+阻止函数内联:
+	__attribute__((noinline))
+
+让函数总是内联:
+	__attribute__((__always_inline__))
+
+设置特定函数的优化级别， O0,O1,O2,O3:
+	__attribute__((optmize(&quot;Ox&quot;)))
+</code></pre>
+<h2 id="gcc-优化"><a class="header" href="#gcc-优化">gcc 优化</a></h2>
+<h3 id="优化级别"><a class="header" href="#优化级别">优化级别</a></h3>
+<pre><code>O0,O1,O2,O3,Os
+</code></pre>
+<h3 id="优化方法"><a class="header" href="#优化方法">优化方法</a></h3>
+<p>通过给gcc参数:</p>
+<pre><code>gcc -O2 ...
+</code></pre>
+<p>通过代码:</p>
+<pre><code>给这行代码以下的代码设置优化级别:
+	#pragma GCC optimize (&quot;O3&quot;)
+
+给特定函数设置属性:
+	__attribute__((optmize(&quot;O3&quot;)))
+</code></pre>
+<h2 id="main函数之前发生的事"><a class="header" href="#main函数之前发生的事">main函数之前发生的事</a></h2>
+<p>大概是:</p>
+<ol>
+<li>设置栈帧</li>
+<li>设置bss区域数据为0</li>
+<li>如果需要, 执行 hardware/software init</li>
+<li>配置参数</li>
+<li>调用main</li>
+<li>执行exit.</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../hardware/usb,电源,电池-供电电路.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../system/rust/basic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../hardware/usb,电源,电池-供电电路.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../system/rust/basic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

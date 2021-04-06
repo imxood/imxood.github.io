@@ -28,3 +28,5 @@ expand = true
 heading-split-level = 2
 
 [preprocessor.katex]
+
+[preprocessor.mermaid]

@@ -167,21 +167,22 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#mos管" id="mos管">MOS管</a></h1>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="mos管"><a class="header" href="#mos管">MOS管</a></h1>
 <p>参考: <a href="https://blog.csdn.net/weixin_32821257/article/details/112181812">超低内阻mos管-MOS总结</a></p>
-<h2><a class="header" href="#分类" id="分类">分类</a></h2>
+<h2 id="分类"><a class="header" href="#分类">分类</a></h2>
 <p><img src="images/mos%E7%AE%A1.png" alt="" /></p>
 <p>场效应管主要分为: 结型场效应管 和 金属-氧化物-半导体型场效应管(MOS管), 这两种都有P管和N管.</p>
 <p>结型场效应管, 在实际应用中几乎不用, 主要用的是MOS管.</p>
 <p><img src="images/mos%E7%AE%A11.png" alt="" /></p>
-<h2><a class="header" href="#使用场景" id="使用场景">使用场景</a></h2>
+<h2 id="使用场景"><a class="header" href="#使用场景">使用场景</a></h2>
 <p>一般主板上使用最多的是<strong>增强型MOS管</strong></p>
 <p><strong>NMOS最多, 一般多用在信号控制上</strong></p>
 <p>其次是<strong>PMOS, 多用在电源开关等方面</strong></p>
 <p><strong>耗尽型几乎不用</strong></p>
-<h2><a class="header" href="#n和p区分" id="n和p区分">N和P区分</a></h2>
+<h2 id="n和p区分"><a class="header" href="#n和p区分">N和P区分</a></h2>
 <p><img src="images/%E5%8C%BA%E5%88%86n%E7%AE%A1%E5%92%8Cp%E7%AE%A1.png" alt="" /></p>
-<h2><a class="header" href="#寄生二极管" id="寄生二极管">寄生二极管</a></h2>
+<h2 id="寄生二极管"><a class="header" href="#寄生二极管">寄生二极管</a></h2>
 <p>由于生产工艺, mos管会有一个寄生二极管(也叫体二极管)</p>
 <p>寄生二极管是有方向的, NMOS是由S极→D极, PMOS是由D极→S极</p>
 <p>寄生二极管和普通二极管一样, 正接会导通, 反接截止</p>
@@ -189,19 +190,19 @@
 <p>对于PMOS, 当D极接正, S极接负, 寄生二极管导通, 反之截止</p>
 <p><img src="images/%E5%AF%84%E7%94%9F%E4%BA%8C%E6%9E%81%E7%AE%A1.png" alt="" /></p>
 <p>某些场合下, 也会选择走寄生二极管</p>
-<h2><a class="header" href="#导通条件" id="导通条件">导通条件</a></h2>
+<h2 id="导通条件"><a class="header" href="#导通条件">导通条件</a></h2>
 <p>MOS管是压控型, 导通由G和S极之间压差决定</p>
 <p>对NMOS来说, Vg-Vs&gt;Vgs(th), 即G极和S极的压差大于一定值, MOS管会导通, 但是也不能大太多, 否则烧坏MOS管, 开启电压和其他参数可以看具体器件的SPEC.</p>
 <p>对PMOS来说, Vs-Vg&gt;Vgs(th), 即S极和G极的压差大于一定值, MOS管会导通, 同样的, 具体参数看器件的SPEC.</p>
-<h2><a class="header" href="#基本开关电路" id="基本开关电路">基本开关电路</a></h2>
-<h3><a class="header" href="#nmos管开关电路" id="nmos管开关电路">NMOS管开关电路</a></h3>
+<h2 id="基本开关电路"><a class="header" href="#基本开关电路">基本开关电路</a></h2>
+<h3 id="nmos管开关电路"><a class="header" href="#nmos管开关电路">NMOS管开关电路</a></h3>
 <p>当GPIO_CTRL电压小于MOS管开启电压时, MOS管截止, OUT通过R1上拉到5V, OUT=5V</p>
 <p>当GPIO_CTRL电压大于MOS管开启电压时, MOS管导通, D极电压等于S极电压, 即OUT=0V</p>
 <p><img src="images/nmos-switch.png" alt="" /></p>
-<h3><a class="header" href="#pmos管开关电路" id="pmos管开关电路">PMOS管开关电路</a></h3>
+<h3 id="pmos管开关电路"><a class="header" href="#pmos管开关电路">PMOS管开关电路</a></h3>
 <p>PMOS管最常用在电源开关电路中, 当GPIO_CRTL=0V时, S和G极压差大于MOS管开启电压时, MOS管导通, 5V_VOUT=5V_VIN</p>
 <p><img src="images/pmos-switch.png" alt="" /></p>
-<h2><a class="header" href="#与三极管的区别" id="与三极管的区别">与三极管的区别</a></h2>
+<h2 id="与三极管的区别"><a class="header" href="#与三极管的区别">与三极管的区别</a></h2>
 <p>三极管是电流控制, MOS管是电压控制, 主要有如下的区别:</p>
 <ol>
 <li>
@@ -223,15 +224,15 @@
 <p>MOS管常用来作为电源开关, 以及大电流开关电路、高频高速电路中, 三极管常用来数字电路开关控制.</p>
 </li>
 </ol>
-<h2><a class="header" href="#g和s极串联电阻的作用" id="g和s极串联电阻的作用">G和S极串联电阻的作用</a></h2>
+<h2 id="g和s极串联电阻的作用"><a class="header" href="#g和s极串联电阻的作用">G和S极串联电阻的作用</a></h2>
 <p>MOS管的输入阻抗很大, 容易受到外界信号的干扰, 只要少量的静电, 就能使G-S极间等效电容两端产生很高的电压, 如果不及时把静电释放掉, 两端的高压容易使MOS管产生误动作, 甚至有可能击穿G-S极, <strong>起到一个固定电平的作用</strong>.</p>
-<h2><a class="header" href="#g极串联电阻的作用" id="g极串联电阻的作用">G极串联电阻的作用</a></h2>
+<h2 id="g极串联电阻的作用"><a class="header" href="#g极串联电阻的作用">G极串联电阻的作用</a></h2>
 <p>MOS管是压控型, 有的情况下, 为什么还需要在G极串联一个电阻呢？</p>
 <p>1, 减缓Rds从无穷大到Rds(on).
 2, 防止震荡, 一般单片机的I/O输出口都会带点杂散电感, 在电压突变的情况下, 可能与栅极电容形成LC震荡, 串联电阻可以增大阻尼减小震荡效果.  3, 减小栅极充电峰值电流</p>
-<h2><a class="header" href="#mos管的米勒效应" id="mos管的米勒效应">MOS管的米勒效应</a></h2>
+<h2 id="mos管的米勒效应"><a class="header" href="#mos管的米勒效应">MOS管的米勒效应</a></h2>
 <p>关于MOS管的米勒效应, 可以阅读文章: <a href="https://www.eet-china.com/mp/a39546.html">臭名昭著的MOS管米勒效应</a></p>
-<h2><a class="header" href="#选型要点" id="选型要点">选型要点</a></h2>
+<h2 id="选型要点"><a class="header" href="#选型要点">选型要点</a></h2>
 <ol>
 <li>电压值</li>
 </ol>

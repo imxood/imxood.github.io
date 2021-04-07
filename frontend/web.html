@@ -167,8 +167,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#web" id="web">web</a></h1>
-<h2><a class="header" href="#使用-nvm-管理-nodejs" id="使用-nvm-管理-nodejs">使用 nvm 管理 nodejs</a></h2>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="web"><a class="header" href="#web">web</a></h1>
+<h2 id="使用-nvm-管理-nodejs"><a class="header" href="#使用-nvm-管理-nodejs">使用 nvm 管理 nodejs</a></h2>
 <pre><code>网址: https://github.com/nvm-sh/nvm
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -180,14 +181,14 @@ npm config get registry
 npm install -g yarn
 yarn config set registry 'https://registry.npm.taobao.org'
 </code></pre>
-<h2><a class="header" href="#yarn-常见用法" id="yarn-常见用法">yarn 常见用法</a></h2>
+<h2 id="yarn-常见用法"><a class="header" href="#yarn-常见用法">yarn 常见用法</a></h2>
 <pre><code>yarn global add typescript
 </code></pre>
-<h2><a class="header" href="#生成tsconfigjson文件" id="生成tsconfigjson文件">生成tsconfig.json文件</a></h2>
+<h2 id="生成tsconfigjson文件"><a class="header" href="#生成tsconfigjson文件">生成tsconfig.json文件</a></h2>
 <pre><code>yarn add -D typescript
 yarn tsc --init
 </code></pre>
-<h2><a class="header" href="#使用npm安装cordova-执行cordova-create报错" id="使用npm安装cordova-执行cordova-create报错">使用npm安装cordova, 执行cordova create报错</a></h2>
+<h2 id="使用npm安装cordova-执行cordova-create报错"><a class="header" href="#使用npm安装cordova-执行cordova-create报错">使用npm安装cordova, 执行cordova create报错</a></h2>
 <pre><code>npm ERR! not a package.........@cordova-app-hello-world\index.js
 卸载cordova, 使用yarm重新安装即可:
     sudo npm uninstall -g cordova
@@ -195,11 +196,11 @@ yarn tsc --init
     sudo yarn config set registry https://registry.npm.taobao.org
     sudo yarn global add cordova
 </code></pre>
-<h2><a class="header" href="#npm查看版本号" id="npm查看版本号">npm查看版本号</a></h2>
+<h2 id="npm查看版本号"><a class="header" href="#npm查看版本号">npm查看版本号</a></h2>
 <pre><code>npm ls electron     本地包版本号
 npm ls electron -g  全局包版本号
 </code></pre>
-<h2><a class="header" href="#packagejson-版本约定号" id="packagejson-版本约定号">package.json 版本约定号</a></h2>
+<h2 id="packagejson-版本约定号"><a class="header" href="#packagejson-版本约定号">package.json 版本约定号</a></h2>
 <pre><code>~version
 
 大概匹配某个版本
@@ -229,7 +230,7 @@ npm ls electron -g  全局包版本号
 
 如：^0.0, 表示 &gt;=0.0.0 &lt;0.1.0, 可以是0.0.0, 0.0.1, ....., 0.0.n
 </code></pre>
-<h2><a class="header" href="#jquery" id="jquery">jquery</a></h2>
+<h2 id="jquery"><a class="header" href="#jquery">jquery</a></h2>
 <pre><code>prop attr的区别：
     在这里, 我们可以将attribute理解为“特性”, property理解为为“属性”从而来区分俩者的差异。
     举个例子, option当做一个对象：
@@ -244,10 +245,10 @@ npm ls electron -g  全局包版本号
 <p>##　报错:sh: 1: tsc: not found</p>
 <pre><code>需要安装typescript, 执行:sudo npm install -g typescript
 </code></pre>
-<h2><a class="header" href="#chrome插件开发" id="chrome插件开发">chrome插件开发</a></h2>
+<h2 id="chrome插件开发"><a class="header" href="#chrome插件开发">chrome插件开发</a></h2>
 <pre><code>[an example](https://developer.chrome.com/extensions/getstarted/ &quot;略略&quot;)
 </code></pre>
-<h2><a class="header" href="#div层调整zindex属性无效原因分析及解决方法" id="div层调整zindex属性无效原因分析及解决方法">div层调整zindex属性无效原因分析及解决方法</a></h2>
+<h2 id="div层调整zindex属性无效原因分析及解决方法"><a class="header" href="#div层调整zindex属性无效原因分析及解决方法">div层调整zindex属性无效原因分析及解决方法</a></h2>
 <pre><code>这种情况发生的条件有三个:
 
 1、父标签 position属性为relative
@@ -299,7 +300,7 @@ ul中的li居中:li的默认display为block,设置li为inline
 
 
 动画滚动:
-$msg_container.animate({ scrollTop: $msg_container.prop(&quot;scrollHeight&quot;) });
+msg_container.animate({ scrollTop: msg_container.prop(&quot;scrollHeight&quot;) });
 
 
 /**
@@ -346,9 +347,8 @@ document.onkeydown = function(){
     }
 };
 </code></pre>
-<h2><a class="header" href="#设置页面居中" id="设置页面居中">设置页面居中</a></h2>
-<pre><code>background:url(${sb.imageUrl }) no-repeat; background-size:150px 100px; background-position: center;
-</code></pre>
+<h2 id="设置页面居中"><a class="header" href="#设置页面居中">设置页面居中</a></h2>
+<pre><code>background:url(&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.10903em;&quot;&gt;U&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.01968em;&quot;&gt;l&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03148em;&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.65952em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.04398em;&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03148em;&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.85396em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.80952em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mpunct&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;````</code></pre>
 
                     </main>
 

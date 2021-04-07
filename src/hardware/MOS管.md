@@ -1,16 +1,38 @@
 # MOS管
 
+参考: [MOS管原理,非常详细](https://wenku.baidu.com/view/fc0a7d2eccbff121dd3683b2.html)
+
 参考: [超低内阻mos管-MOS总结](https://blog.csdn.net/weixin_32821257/article/details/112181812)
 
-## 分类
+## 三个极怎么判定
 
-![](images/mos管.png)
+![](images/三个极怎么判定.png)
 
-场效应管主要分为: 结型场效应管 和 金属-氧化物-半导体型场效应管(MOS管), 这两种都有P管和N管.
+## 是N沟道还是P沟道
 
-结型场效应管, 在实际应用中几乎不用, 主要用的是MOS管.
+![](images/N沟道.png)
 
-![](images/mos管1.png)
+![](images/P沟道.png)
+
+## 寄生二极管的方向如何判定
+
+![](images/寄生二极管的方向.png)
+
+![](images/寄生二极管的方向1.png)
+
+## MOS管用作开关时在电路中的连接方法
+
+![](images/MOS管用作开关时在电路中的连接方法.png)
+
+![](images/MOS管用作开关时在电路中的连接方法-反证.png)
+
+## 应用
+
+![](images/NMOS管应用-信号切换.png)
+
+![](images/NMOS管应用-电压通断.png)
+
+![](images/PMOS管应用-电压通断.png)
 
 ## 使用场景
 
@@ -21,50 +43,6 @@
 其次是**PMOS, 多用在电源开关等方面**
 
 **耗尽型几乎不用**
-
-## N和P区分
-
-![](images/区分n管和p管.png)
-
-## 寄生二极管
-
-由于生产工艺, mos管会有一个寄生二极管(也叫体二极管)
-
-寄生二极管是有方向的, NMOS是由S极→D极, PMOS是由D极→S极
-
-寄生二极管和普通二极管一样, 正接会导通, 反接截止
-
-对于NMOS, 当S极接正, D极接负, 寄生二极管会导通, 反之截止
-
-对于PMOS, 当D极接正, S极接负, 寄生二极管导通, 反之截止
-
-![](images/寄生二极管.png)
-
-某些场合下, 也会选择走寄生二极管
-
-## 导通条件
-
-MOS管是压控型, 导通由G和S极之间压差决定
-
-对NMOS来说, Vg-Vs>Vgs(th), 即G极和S极的压差大于一定值, MOS管会导通, 但是也不能大太多, 否则烧坏MOS管, 开启电压和其他参数可以看具体器件的SPEC.
-
-对PMOS来说, Vs-Vg>Vgs(th), 即S极和G极的压差大于一定值, MOS管会导通, 同样的, 具体参数看器件的SPEC.
-
-## 基本开关电路
-
-### NMOS管开关电路
-
-当GPIO_CTRL电压小于MOS管开启电压时, MOS管截止, OUT通过R1上拉到5V, OUT=5V
-
-当GPIO_CTRL电压大于MOS管开启电压时, MOS管导通, D极电压等于S极电压, 即OUT=0V
-
-![](images/nmos-switch.png)
-
-### PMOS管开关电路
-
-PMOS管最常用在电源开关电路中, 当GPIO_CRTL=0V时, S和G极压差大于MOS管开启电压时, MOS管导通, 5V_VOUT=5V_VIN
-
-![](images/pmos-switch.png)
 
 ## 与三极管的区别
 

@@ -11,13 +11,17 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@v1
-              with:
-                  mdbook-version: "0.4.6"
-                  # mdbook-version: 'latest'
+            - name: Install Rust (rustup)
+              run: rustup update stable --no-self-update && rustup default stable
 
-            - run: mdbook build
+            - name: Setup mdBook
+              uses: imxood/actions-mdbook@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.PAGES_GENERATE_TOKEN }}
+
+            - run: |
+                  echo $PATH
+                  mdbook build
 
             - name: Deploy
               uses: peaceiris/actions-gh-pages@v3

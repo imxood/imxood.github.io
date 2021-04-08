@@ -36,28 +36,6 @@
     卸载:
         rustup self uninstall
 
-## vscode 中 rust 的插件
-
-    1. rust-analyzer
-    2. Crates
-    3. Better TOML
-    4. CodeLLDB
-
-## Rust hello_world
-
-    编写点一个程序:
-        vim main.rs
-
-        fn main() {
-            println!("Hello, world!");
-        }
-
-    编译:
-        rustc main.rs
-
-    运行:
-        ./main
-
 ## cargo 命令
 
     添加工具:
@@ -83,6 +61,28 @@
         cargo new hello_world <--bin>, 创建一个二进制程序
         cargo new hello_world --lib, 创建一个库
 
+
+## vscode 中 rust 的插件
+
+    1. rust-analyzer
+    2. Crates
+    3. Better TOML
+    4. CodeLLDB
+
+## Rust hello_world
+
+    编写点一个程序:
+        vim main.rs
+
+        fn main() {
+            println!("Hello, world!");
+        }
+
+    编译:
+        rustc main.rs
+
+    运行:
+        ./main
 
 ## 库
 
@@ -125,11 +125,11 @@
 
     examples=(iced_core iced_futures iced_graphics iced_native iced_style iced_glow iced_glutin iced_winit iced_web iced_wgpu bezier_tool iced clock color_palette counter custom_widget download_progress events game_of_life geometry integration pane_grid pick_list pokedex progress_bar qr_code scrollable solar_system stopwatch styling svg todos tour)
 
-    for example in ${examples[@]}; do
+    for example in \${examples[@]}; do
         cargo build --verbose --package $example
     done
 
-    for example in ${examples[@]}; do
+    for example in \${examples[@]}; do
         echo "start run: cargo run --verbose --package $example"
         cargo run --verbose --package $example
     done
@@ -144,11 +144,6 @@
     学习canvas:
         examples/clock
 
-
-### bevy, 游戏引擎
-
-    git clone https://github.com/bevyengine/bevy
-    cargo run --example breakout
 
 ## libusb, usb库
 

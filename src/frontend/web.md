@@ -195,4 +195,4 @@ npm ls electron -g  全局包版本号
 
 ## 设置页面居中
 
-    background:url(${sb.imageUrl }) no-repeat; background-size:150px 100px; background-position: center;
+    background:url(\${sb.imageUrl }) no-repeat; background-size:150px 100px; background-position: center;

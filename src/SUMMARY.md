@@ -3,7 +3,7 @@
 - [首页](./README.md)
 
 - [硬件]()
-    - [三极管](./hardware/三极管.md)
+    - [晶体管](./hardware/晶体管.md)
     - [MOS管](./hardware/MOS管.md)
     - [usb,电源,电池-供电电路](./hardware/usb,电源,电池-供电电路.md)
 
@@ -11,7 +11,8 @@
     - [C语言](./embedded/C语言.md)
 
 - [系统]()
-    - [Rust](./system/rust/basic.md)
+    - [Rust](./system/rust/rust.md)
+        - [Bevy](./system/rust/bevy.md)
 
 - [前端]()
     - [Web](./frontend/web.md)
@@ -25,5 +26,7 @@
     - [微分](./math/微分.md)
 
 - [工具]()
+    - [github](./tools/github.md)
+    - [markdown](./tools/markdown.md)
     - [mdbook](./tools/mdbook.md)
-    - [git](./tools/git.md)
+    - [linux工具](./tools/linux工具.md)

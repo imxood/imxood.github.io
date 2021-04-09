@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">首页</a></li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="hardware/晶体管.html">晶体管</a></li><li class="chapter-item "><a href="hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="hardware/usb,电源,电池-供电电路.html">usb,电源,电池-供电电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="embedded/C语言.html">C语言</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/bevy.html">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="frontend/web.html">Web</a></li><li class="chapter-item "><a href="frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="math/积分.html">积分</a></li><li class="chapter-item "><a href="math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tools/github.html">github</a></li><li class="chapter-item "><a href="tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="tools/linux工具.html">linux工具</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">Title of Part</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="hardware/晶体管.html">晶体管</a></li><li class="chapter-item "><a href="hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="hardware/usb,电源,电池-供电电路.html">usb,电源,电池-供电电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="embedded/C语言.html">C语言</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/bevy.html">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="frontend/web.html">Web</a></li><li class="chapter-item "><a href="frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="math/积分.html">积分</a></li><li class="chapter-item "><a href="math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tools/github.html">github</a></li><li class="chapter-item "><a href="tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1486,27 +1486,120 @@ V_{\mbox{初始}}</p>
 <h1 id="mdbook-构建工具"><a class="header" href="#mdbook-构建工具">mdbook 构建工具</a></h1>
 <p><a href="https://rust-lang.github.io/mdBook/index.html">官方文档</a></p>
 <h2 id="安装"><a class="header" href="#安装">安装</a></h2>
-<h3 id="从预编译文件中安装"><a class="header" href="#从预编译文件中安装">从预编译文件中安装</a></h3>
-<p><a href="https://github.com/rust-lang/mdBook/releases">预编译文件</a></p>
-<h3 id="安装发布到-cratesio-的版本"><a class="header" href="#安装发布到-cratesio-的版本">安装发布到 Crates.io 的版本</a></h3>
-<p>cargo install mdbook</p>
+<ul>
+<li>
+<p>方法1. <a href="https://github.com/rust-lang/mdBook/releases">预编译文件</a></p>
+</li>
+<li>
+<p>方法2. 编译:</p>
+<p><code>cargo install mdbook</code></p>
+</li>
+</ul>
 <h2 id="mdbook-用法"><a class="header" href="#mdbook-用法">mdbook 用法</a></h2>
-<pre><code>mdbook help
-mdbook init
-mdbook build
-mdbook watch --open
-mdbook serve --open -n 0.0.0.0
+<pre><code>mdbook --help
+mdbook &lt;SUBCOMMAND&gt; --help
+
+mdbook init 初始化项目
+mdbook init --theme, 初始化项目, 并复制默认的theme到你的项目目录
+mdbook build, 编译生成静态文件
+mdbook watch --open, 编译成静态文件并打开浏览器, 如果文件改变就重新build
+mdbook serve --open, 编译成静态文件并创建server, 打开浏览器, 如果文件改变就重新build
 </code></pre>
-<h2 id="可选项"><a class="header" href="#可选项">可选项</a></h2>
+<h2 id="booktoml-配置"><a class="header" href="#booktoml-配置">book.toml 配置</a></h2>
 <p>output.html.print 是否开起打印功能, 打印功能是 它打开生成的一个包含所有内容的print.html页面, 然后打印这个文件...如果保存为pdf的话没有目录</p>
 <p>no-section-label 这个可以去掉侧边栏的数字前缀</p>
 <p>output.html.fold 可以控制sidebar是否可以折叠及默认行为</p>
 <h2 id="preprocessor"><a class="header" href="#preprocessor">preprocessor</a></h2>
-<p><a href="https://katex.org/docs/supported.html">数学公式 mdbook-katex</a></p>
-<p><a href="https://mermaid-js.github.io/mermaid/#/">流程图 mdbook-mermaid</a></p>
+<p><a href="https://github.com/lzanini/mdbook-katex">数学公式 mdbook-katex</a></p>
+<p><a href="https://github.com/badboy/mdbook-mermaid">流程图 mdbook-mermaid</a></p>
+<p>cargo install mdbook-katex mdbook-mermaid</p>
+<h2 id="源码分析"><a class="header" href="#源码分析">源码分析</a></h2>
+<ol>
+<li>
+<p>使用 env_logger crate 输出log, 通过 RUST_LOG 环境变量 控制 log 的输出, 如: export RUST_LOG=mdbook, 启用可执行程序 mdbook 的 all logging</p>
+</li>
+<li>
+<p>使用 clap crate 解析命令行参数</p>
+</li>
+<li>
+<p>加载配置</p>
+<p>使用 toml crate 加载 book.toml文件, 并序列化成 BookConfig对象. BookConfig对象需要实现 serde 的 Deserialize
+使用 std::env 读取环境变量, 根据环境变量中 &quot;MDBOOK_&quot; 前缀的变量更新配置, 如: MDBOOK_BOOK__TITLE=&quot;Hello&quot; 即设置 book.title 的值为&quot;Hello&quot;</p>
+</li>
+<li>
+<p>解析 SUMMARY.md 文件</p>
+<p>使用 pulldown-cmark crate 解析 markdown文件</p>
+<p>核心思想: pull parser, 像游标一样移动, 提供 self.stream.next() 这样的方法向前移动游标, 返回值为解析到的事件, 对特定事件处理并loop.</p>
+<p>比如: Event::Start(Tag::Heading(1)), 如果检查到这个事件就执行:
+<code>let tags = collect_events!(self.stream, end Tag::Heading(1));</code>
+这样就能拿到解析到的数据. 通过对不同的事件处理 并 loop, 完成解析工作.</p>
+<p>parse_numbered, 解析中间部分的列表. 即: Numbered Chapter
+parse_nested_numbered, 用于解析一个子列表
+parse_nested_item, 用于解析子列表中的某一项</p>
+<p>next_event() 中, 通过 parser.back.take() 若为None则向前移动游标, 否则就返回 back.take()的结果.</p>
+<p>例子1:</p>
+<p><code>- [首页](./README.md)</code></p>
+<p>具体的event过程:
+Parsing prefix items
+Next event: Some(Start(List(None)))
+Next event: Some(Start(Item))
+Next event: Some(Start(Link(Inline, Borrowed(&quot;./README.md&quot;), Borrowed(&quot;&quot;))))
+Next event: Some(Text(Borrowed(&quot;首页&quot;)))
+Next event: Some(End(Link(Inline, Borrowed(&quot;./README.md&quot;), Borrowed(&quot;&quot;))))
+Next event: Some(End(Item))
+Next event: Some(End(List(None)))
+Next event: Some(Start(Heading(1)))
+Back: Start(Heading(1))</p>
+<p>例子2:</p>
+<pre><code>- [硬件]()
+   - [晶体管](./hardware/晶体管.md)
+   - [MOS管](./hardware/MOS管.md)
+
+ 具体的event过程:
+     Parsing numbered chapters at level 0
+     Next event: Some(Start(List(None)))
+     Next event: Some(Start(Item))
+     Next event: Some(Start(Paragraph))
+     Next event: Some(Start(Link(Inline, Borrowed(&quot;&quot;), Borrowed(&quot;&quot;))))
+     Next event: Some(Text(Borrowed(&quot;硬件&quot;)))
+     Next event: Some(End(Link(Inline, Borrowed(&quot;&quot;), Borrowed(&quot;&quot;))))
+     Found chapter: 1. 硬件 ([draft])
+     Next event: Some(End(Paragraph))
+     Next event: Some(Start(List(None)))
+     Parsing numbered chapters at level 1.
+     Next event: Some(Start(Item))
+     Next event: Some(Start(Link(Inline, Borrowed(&quot;./hardware/晶体管.md&quot;), Borrowed(&quot;&quot;))))
+     Next event: Some(Text(Borrowed(&quot;晶体管&quot;)))
+     Next event: Some(End(Link(Inline, Borrowed(&quot;./hardware/晶体管.md&quot;), Borrowed(&quot;&quot;))))
+     Found chapter: 1.1. 晶体管 (./hardware/晶体管.md)
+     Next event: Some(End(Item))
+     Next event: Some(Start(Item))
+     Next event: Some(Start(Link(Inline, Borrowed(&quot;./hardware/MOS管.md&quot;), Borrowed(&quot;&quot;))))
+     Next event: Some(Text(Borrowed(&quot;MOS管&quot;)))
+     Next event: Some(End(Link(Inline, Borrowed(&quot;./hardware/MOS管.md&quot;), Borrowed(&quot;&quot;))))
+     Found chapter: 1.2. MOS管 (./hardware/MOS管.md)
+     Next event: Some(End(Item))
+     Next event: Some(End(List(None)))
+</code></pre>
+</li>
+<li>
+<p>renderer工作过程</p>
+<p>默认使用的是 &quot;html&quot;渲染器, 用于把上一步解析到的</p>
+</li>
+<li>
+<p>使用 notify crate 捕获特定路径下文件的changed事件</p>
+</li>
+<li>
+<p>使用 warp crate 用于创建http server 和 websocket server</p>
+</li>
+</ol>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="linux-工具"><a class="header" href="#linux-工具">linux 工具</a></h1>
 <h2 id="flameshot-截图工具"><a class="header" href="#flameshot-截图工具">flameshot 截图工具</a></h2>
+<p>命令: flameshot gui, 进入截图</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="linux-工具-1"><a class="header" href="#linux-工具-1">linux 工具</a></h1>
+<h2 id="flameshot-截图工具-1"><a class="header" href="#flameshot-截图工具-1">flameshot 截图工具</a></h2>
 <p>命令: flameshot gui, 进入截图</p>
 
                     </main>

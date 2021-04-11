@@ -34,7 +34,10 @@ output.html.fold 可以控制sidebar是否可以折叠及默认行为
 
 [流程图 mdbook-mermaid](https://github.com/badboy/mdbook-mermaid)
 
-cargo install mdbook-katex mdbook-mermaid
+cargo install mdbook-katex
+
+cargo install mdbook-mermaid
+mdbook-mermaid install path/to/your/book
 
 ## 源码分析
 

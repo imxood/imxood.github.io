@@ -9,9 +9,11 @@ title = "学习笔记"
 create-missing = false
 
 [output.html]
+default-theme = "rust"
 site-url = "/note/"
 no-section-label = true
 git-repository-url = "https://github.com/imxood/imxood.github.io"
+additional-js =["mermaid.min.js", "mermaid-init.js"]
 
 [output.html.fold]
 enable = true

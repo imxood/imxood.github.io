@@ -12,18 +12,18 @@
 
 - [系统]()
     - [Rust](./system/rust/rust.md)
-        - [Bevy](./system/rust/bevy.md)
+    - [Bevy引擎](./system/rust/bevy.md)
 
 - [前端]()
     - [Web](./frontend/web.md)
     - [Vue](./frontend/vue/vue.md)
 
-- [算法]()
-    - [](./algorithm/README.md)
+<!-- - [算法]()
+    - [](./algorithm/README.md) -->
 
-- [数学]()
+<!-- - [数学]()
     - [积分](./math/积分.md)
-    - [微分](./math/微分.md)
+    - [微分](./math/微分.md) -->
 
 - [工具]()
     - [github](./tools/github.md)

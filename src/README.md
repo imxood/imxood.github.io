@@ -1,3 +1,8 @@
-# 分享技术, 分享精彩
+# 学而时习之
 
-学过的东西, 要记得做个记录
+## 常读书, 读好书
+
+![](./images/读书.jpg)
+
+
+本笔记由 [mdbook](https://github.com/rust-lang/mdBook) 构建

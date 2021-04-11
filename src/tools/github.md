@@ -29,6 +29,11 @@
     git add . && git commit -m "."
     git push --set-upstream origin main
 
+## git remote
+
+    git remote -v, 显示当前远程仓库信息
+    git remote set-url origin https://github.com/imxood/mdbook-katex.git, 设置远程仓库
+
 
 ## workflow
 

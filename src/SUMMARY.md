@@ -1,13 +1,14 @@
 - [首页](./README.md)
 
-# Title of Part
+# 文章
 - [硬件]()
-    - [晶体管](./hardware/晶体管.md)
+    - [二极管](./hardware/二极管.md)
+    - [三极管](./hardware/三极管.md)
     - [MOS管](./hardware/MOS管.md)
-    - [usb,电源,电池-供电电路](./hardware/usb,电源,电池-供电电路.md)
 
 - [嵌入式]()
     - [C语言](./embedded/C语言.md)
+    - [GPIO和AFIO](./embedded/GPIO和AFIO.md)
 
 - [系统]()
     - [Rust](./system/rust/rust.md)

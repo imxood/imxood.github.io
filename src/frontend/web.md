@@ -13,10 +13,6 @@
     npm install -g yarn
     yarn config set registry 'https://registry.npm.taobao.org'
 
-## yarn 常见用法
-
-    yarn global add typescript
-
 ## 生成tsconfig.json文件
 
     yarn add -D typescript
@@ -31,14 +27,6 @@
         sudo npm install -g yarn
         sudo yarn config set registry https://registry.npm.taobao.org
         sudo yarn global add cordova
-
-
-## npm查看版本号
-
-~~~
-npm ls electron     本地包版本号
-npm ls electron -g  全局包版本号
-~~~
 
 
 ## package.json 版本约定号

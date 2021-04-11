@@ -10,7 +10,6 @@ create-missing = false
 
 [output.html]
 site-url = "/note/"
-default-theme = "Rust"
 no-section-label = true
 git-repository-url = "https://github.com/imxood/imxood.github.io"
 

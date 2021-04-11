@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="sidebar-visible no-js rust">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -50,7 +50,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -76,7 +76,7 @@
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('light')
+            html.classList.remove('rust')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../hardware/二极管.html" class="active">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../math/积分.html">积分</a></li><li class="chapter-item "><a href="../math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tools/github.html">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../hardware/二极管.html" class="active">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a></li><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tools/github.html">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -114,8 +114,8 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -178,14 +178,14 @@
 <p>P型半导体和N型半导体构成PN结后, N区的电子(多子)会扩散到P区, 和P区的空穴结合, 于是N区产生了正离子, P区产生了负离子, 正离子和负离子之间形成了内电场, 内电场会阻碍扩散运动, 内电场也会让P区的电子(少子)向N区漂移</p>
 <p>慢慢地, 当N区的电子浓度降低, 扩散运动减弱, 但是由于内电场是在不断增强, 所以漂移运动在不断增强, 直到扩散运动和漂移运动达到平衡</p>
 <p>在无外电场和外部激发下, 参与扩散的多子与参与漂移的少子 数目相同, 从而达到动态平衡, 形成的这个内电场区域称之为PN结, 或: 阻挡层、耗尽层、空间电荷区.</p>
-<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%931.gif" alt="" />
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%932.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%931.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%932.gif" alt="" /></p>
 <h2 id="pn结-的-正向电压"><a class="header" href="#pn结-的-正向电压">PN结 的 正向电压</a></h2>
-<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" />
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
 <h2 id="pn结-的-反向电压"><a class="header" href="#pn结-的-反向电压">PN结 的 反向电压</a></h2>
-<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" />
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" /></p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
 <p>在低掺杂的情况下, 耗尽层较宽, 当加很小的反向电压, 相当于是增强了内电场, 于是就加剧了少子的漂移运动, 同时多子的扩散作用也会加剧, 所以耗尽层会变窄, 并达到新的平衡.</p>
 <p>在高掺杂的情况下, 耗尽层很窄, 当加很小的反向电压, 就会加剧少子的漂移运动, 在耗尽层形成很强的电场, 而直接破坏共价键, 使价电子脱离共价键的束缚, 产生电子-空穴对, 使电流急剧增大.</p>
 <p>在很低的反向电压时, 就引起电流急剧增大, 这被称为齐纳击穿, 如果反向电压继续增大, 新产生的电子-空穴对被电场加速后又撞出其它的价电子, 载流子雪崩式倍增, 就产生了雪崩击穿.</p>
@@ -205,24 +205,24 @@
 <p>而在二极管两端加反向电压时, 二极管因为内部PN结的关系, 反向电流很小, 可以忽略不计, 可以看作是截止状态.</p>
 <h3 id="半波整流电路"><a class="header" href="#半波整流电路">半波整流电路</a></h3>
 <p>参考: <a href="https://www.diangon.com/thread-34486-1-1.html">二极管整流电路工作原理图解</a></p>
-<p>半波整流电路:
-<img src="images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF.png" alt="" /></p>
-<p>半波整流电路波形:
-<img src="images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF%E6%B3%A2%E5%BD%A2.png" alt="" /></p>
+<p>半波整流电路:</p>
+<p><img src="images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF.png" alt="" /></p>
+<p>半波整流电路波形:</p>
+<p><img src="images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF%E6%B3%A2%E5%BD%A2.png" alt="" /></p>
 <p>220V/50Hz交流电经过变压器输出U2, U2也是正弦交流电压, 大小和方向不断变化.</p>
 <p>当正半周流过二极管时, A点电位处于高电平, B点电位处于低电平, 二极管处于正向偏置, 此时二极管导通.</p>
 <p>当负半周流向二极管时, A点电位低于B点电位, 二极管反偏, 处于截至状态, 没有电流流过.</p>
 <p>产生的波形只在一个方向上变化, 称这种为脉动直流电</p>
 <h3 id="桥式整流电路"><a class="header" href="#桥式整流电路">桥式整流电路</a></h3>
 <p>参考: <a href="https://www.eet-china.com/mp/a10091.html">秒懂桥式整流工作原理(动画)</a></p>
-<p>变压器u2正半周时电流通路:
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
-<p>变压器u2负半周时电流通路:
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
-<p>整个周期电流通路是这样的:
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
-<p>桥式整流电路输出波形与全波整流电路的一样, 也是全波波形, 所以整流后输出电压是整流前的0.9倍
-<img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
+<p>变压器u2正半周时电流通路:</p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
+<p>变压器u2负半周时电流通路:</p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
+<p>整个周期电流通路是这样的:</p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
+<p>桥式整流电路输出波形与全波整流电路的一样, 也是全波波形, 所以整流后输出电压是整流前的0.9倍</p>
+<p><img src="./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
 <p>总结:</p>
 <ul>
 <li>画图时要注意4只整流二极管连接方法.</li>
@@ -231,6 +231,13 @@
 <li>桥式整流电路输出波形是全波波形</li>
 </ul>
 
+                        <script src="https://utteranc.es/client.js"
+                            repo="imxood/imxood.github.io"
+                            issue-term="pathname"
+                            theme="boxy-light"
+                            crossorigin="anonymous"
+                            async>
+                        </script>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -293,6 +300,10 @@
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../mermaid-init.js"></script>
         
 
         

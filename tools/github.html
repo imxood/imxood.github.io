@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="sidebar-visible no-js rust">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -50,7 +50,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -76,7 +76,7 @@
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('light')
+            html.classList.remove('rust')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../math/积分.html">积分</a></li><li class="chapter-item "><a href="../math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tools/github.html" class="active">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a></li><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tools/github.html" class="active">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -114,8 +114,8 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -223,12 +223,19 @@ $GITHUB_ENV, 用于设置环境变量
     echo &quot;{name}={value}&quot; &gt;&gt; $GITHUB_ENV
 </code></pre>
 
+                        <script src="https://utteranc.es/client.js"
+                            repo="imxood/imxood.github.io"
+                            issue-term="pathname"
+                            theme="boxy-light"
+                            crossorigin="anonymous"
+                            async>
+                        </script>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../math/微分.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../frontend/vue/vue.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
@@ -246,7 +253,7 @@ $GITHUB_ENV, 用于设置环境变量
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../math/微分.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../frontend/vue/vue.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
@@ -285,6 +292,10 @@ $GITHUB_ENV, 用于设置环境变量
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../mermaid-init.js"></script>
         
 
         

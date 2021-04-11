@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="sidebar-visible no-js rust">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -52,7 +52,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -78,7 +78,7 @@
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('light')
+            html.classList.remove('rust')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/bevy.html">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="frontend/web.html">Web</a></li><li class="chapter-item "><a href="frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="math/积分.html">积分</a></li><li class="chapter-item "><a href="math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tools/github.html">github</a></li><li class="chapter-item "><a href="tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="system/rust/rust.html">Rust</a></li><li class="chapter-item "><a href="system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="frontend/web.html">Web</a></li><li class="chapter-item "><a href="frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="tools/github.html">github</a></li><li class="chapter-item "><a href="tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -116,8 +116,8 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -172,7 +172,8 @@
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="学而时习之"><a class="header" href="#学而时习之">学而时习之</a></h1>
 <h2 id="常读书-读好书"><a class="header" href="#常读书-读好书">常读书, 读好书</a></h2>
-<p><img src="./images/%E8%AF%BB%E4%B9%A6.jpg" alt="" /></p>
+<!-- ![](./images/读书.jpg) -->
+<img width="80%" src="./images/读书.jpg">
 <p>本笔记由 <a href="https://github.com/rust-lang/mdBook">mdbook</a> 构建</p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="二极管"><a class="header" href="#二极管">二极管</a></h1>
@@ -185,14 +186,14 @@
 <p>P型半导体和N型半导体构成PN结后, N区的电子(多子)会扩散到P区, 和P区的空穴结合, 于是N区产生了正离子, P区产生了负离子, 正离子和负离子之间形成了内电场, 内电场会阻碍扩散运动, 内电场也会让P区的电子(少子)向N区漂移</p>
 <p>慢慢地, 当N区的电子浓度降低, 扩散运动减弱, 但是由于内电场是在不断增强, 所以漂移运动在不断增强, 直到扩散运动和漂移运动达到平衡</p>
 <p>在无外电场和外部激发下, 参与扩散的多子与参与漂移的少子 数目相同, 从而达到动态平衡, 形成的这个内电场区域称之为PN结, 或: 阻挡层、耗尽层、空间电荷区.</p>
-<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%931.gif" alt="" />
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%932.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%931.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%932.gif" alt="" /></p>
 <h2 id="pn结-的-正向电压"><a class="header" href="#pn结-的-正向电压">PN结 的 正向电压</a></h2>
-<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" />
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E6%AD%A3%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
 <h2 id="pn结-的-反向电压"><a class="header" href="#pn结-的-反向电压">PN结 的 反向电压</a></h2>
-<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" />
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE1.gif" alt="" /></p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-PN%E7%BB%93%E5%8F%8D%E5%90%91%E5%81%8F%E7%BD%AE2.gif" alt="" /></p>
 <p>在低掺杂的情况下, 耗尽层较宽, 当加很小的反向电压, 相当于是增强了内电场, 于是就加剧了少子的漂移运动, 同时多子的扩散作用也会加剧, 所以耗尽层会变窄, 并达到新的平衡.</p>
 <p>在高掺杂的情况下, 耗尽层很窄, 当加很小的反向电压, 就会加剧少子的漂移运动, 在耗尽层形成很强的电场, 而直接破坏共价键, 使价电子脱离共价键的束缚, 产生电子-空穴对, 使电流急剧增大.</p>
 <p>在很低的反向电压时, 就引起电流急剧增大, 这被称为齐纳击穿, 如果反向电压继续增大, 新产生的电子-空穴对被电场加速后又撞出其它的价电子, 载流子雪崩式倍增, 就产生了雪崩击穿.</p>
@@ -212,24 +213,24 @@
 <p>而在二极管两端加反向电压时, 二极管因为内部PN结的关系, 反向电流很小, 可以忽略不计, 可以看作是截止状态.</p>
 <h3 id="半波整流电路"><a class="header" href="#半波整流电路">半波整流电路</a></h3>
 <p>参考: <a href="https://www.diangon.com/thread-34486-1-1.html">二极管整流电路工作原理图解</a></p>
-<p>半波整流电路:
-<img src="hardware/images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF.png" alt="" /></p>
-<p>半波整流电路波形:
-<img src="hardware/images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF%E6%B3%A2%E5%BD%A2.png" alt="" /></p>
+<p>半波整流电路:</p>
+<p><img src="hardware/images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF.png" alt="" /></p>
+<p>半波整流电路波形:</p>
+<p><img src="hardware/images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%8D%8A%E6%B3%A2%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF%E6%B3%A2%E5%BD%A2.png" alt="" /></p>
 <p>220V/50Hz交流电经过变压器输出U2, U2也是正弦交流电压, 大小和方向不断变化.</p>
 <p>当正半周流过二极管时, A点电位处于高电平, B点电位处于低电平, 二极管处于正向偏置, 此时二极管导通.</p>
 <p>当负半周流向二极管时, A点电位低于B点电位, 二极管反偏, 处于截至状态, 没有电流流过.</p>
 <p>产生的波形只在一个方向上变化, 称这种为脉动直流电</p>
 <h3 id="桥式整流电路"><a class="header" href="#桥式整流电路">桥式整流电路</a></h3>
 <p>参考: <a href="https://www.eet-china.com/mp/a10091.html">秒懂桥式整流工作原理(动画)</a></p>
-<p>变压器u2正半周时电流通路:
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
-<p>变压器u2负半周时电流通路:
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
-<p>整个周期电流通路是这样的:
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
-<p>桥式整流电路输出波形与全波整流电路的一样, 也是全波波形, 所以整流后输出电压是整流前的0.9倍
-<img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
+<p>变压器u2正半周时电流通路:</p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
+<p>变压器u2负半周时电流通路:</p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
+<p>整个周期电流通路是这样的:</p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
+<p>桥式整流电路输出波形与全波整流电路的一样, 也是全波波形, 所以整流后输出电压是整流前的0.9倍</p>
+<p><img src="hardware/./images/%E4%BA%8C%E6%9E%81%E7%AE%A1-%E6%A1%A5%E5%BC%8F%E6%95%B4%E6%B5%81%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
 <p>总结:</p>
 <ul>
 <li>画图时要注意4只整流二极管连接方法.</li>
@@ -259,22 +260,22 @@
 <p>参考: <a href="http://blog.sciencenet.cn/blog-729147-1041542.html">张云 - 三极管的动画</a></p>
 <p>这里的三极管是双极型晶体管, 模电的放大电路和数电的简单逻辑电路里面都会用到.
 有集电极c、基极b、发射极e、以及两个PN结：集电结和发射结. 集电极面积比较大, 基极厚度薄而且载流子浓度比较低.</p>
-<p>下图是个NPN型的三极管:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-NPN%E5%9E%8B.png" alt="" /></p>
+<p>下图是个NPN型的三极管:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-NPN%E5%9E%8B.png" alt="" /></p>
 <p>当发射结正偏时, 电荷分布会发生变化, 发射结宽度会变窄;相当于给电子打开了一扇e到b的大门</p>
-<p>集电结反偏时, 电荷分布会也发生变化, 集电结宽度会变宽. 相当于打开了阻碍电子从c级跑出去的大门, 如下方动画所示:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
-<p>b级会接一个大电阻RB限制电流Ib的大小, 跑到b极的那些多余的电子就只好穿越集电结, 形成电流Ic, 如下方动画所示：
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
-<p>如果基极电压翻倍, 电荷分布会继续发生变化, 发射结宽度会变得更窄, 这扇大门变得更宽了, 将会有更多的电子跑到b级. 如下方动画所示:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
-<p>由于RB是大电阻, Ib就算翻倍了也还是很小, 所以更多的电子会穿越集电结, 让Ic也翻倍. 如下方动画所示:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
-<p>两个直流电源是可以合并到一起的, 再加上小信号ui和两个电容, 就得到了放大电路, 如下图所示:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF5.png" alt="" /></p>
-<p>如果电阻大小合适, 这个放大电路能够将小信号<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>放大成相位相反的大信号<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 如下方动画所示:
-<img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF6.gif" alt="" />
-红色为输入端, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的变化会影响<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 把发射结看成一个小电阻, 红色的Q点就会沿黑线运动, 然后画出<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的图像;
+<p>集电结反偏时, 电荷分布会也发生变化, 集电结宽度会变宽. 相当于打开了阻碍电子从c级跑出去的大门, 如下方动画所示:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF1.gif" alt="" /></p>
+<p>b级会接一个大电阻RB限制电流Ib的大小, 跑到b极的那些多余的电子就只好穿越集电结, 形成电流Ic, 如下方动画所示：</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF2.gif" alt="" /></p>
+<p>如果基极电压翻倍, 电荷分布会继续发生变化, 发射结宽度会变得更窄, 这扇大门变得更宽了, 将会有更多的电子跑到b级. 如下方动画所示:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF3.gif" alt="" /></p>
+<p>由于RB是大电阻, Ib就算翻倍了也还是很小, 所以更多的电子会穿越集电结, 让Ic也翻倍. 如下方动画所示:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF4.gif" alt="" /></p>
+<p>两个直流电源是可以合并到一起的, 再加上小信号ui和两个电容, 就得到了放大电路, 如下图所示:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF5.png" alt="" /></p>
+<p>如果电阻大小合适, 这个放大电路能够将小信号<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>放大成相位相反的大信号<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 如下方动画所示:</p>
+<p><img src="hardware/images/%E4%B8%89%E6%9E%81%E7%AE%A1-%E6%94%BE%E5%A4%A7%E7%94%B5%E8%B7%AF6.gif" alt="" /></p>
+<p>红色为输入端, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">u</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的变化会影响<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 把发射结看成一个小电阻, 红色的Q点就会沿黑线运动, 然后画出<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的图像;
 根据<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>=<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathrm">B</span></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>,画出<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的图像, 纵坐标从<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">μ</span><span class="mord mathnormal">A</span></span></span></span>变成了<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">A</span></span></span></span>;
 而输出端有<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, 当<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>不变时, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>与<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>反相</p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
@@ -700,10 +701,124 @@ vite.config.js:
     });
 </code></pre>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h3 id="bevy-一个游戏引擎"><a class="header" href="#bevy-一个游戏引擎">bevy 一个游戏引擎</a></h3>
+<h1 id="bevy-一个游戏引擎"><a class="header" href="#bevy-一个游戏引擎">bevy 一个游戏引擎</a></h1>
+<h2 id="code"><a class="header" href="#code">code</a></h2>
 <pre><code>git clone https://github.com/bevyengine/bevy
 cargo run --example breakout
 </code></pre>
+<h2 id="state"><a class="header" href="#state">state</a></h2>
+<p>主要的数据结构:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 用于操作游戏state, 比如 设置/替换/退出/进入 state
+enum ScheduledOperation&lt;T: Component + Clone + Eq&gt; {
+    Set(T),
+    Replace(T),
+    Pop,
+    Push(T),
+}
+
+// 状态切换 如果是 PreStartup 则会进入 Startup
+// 后面几个是 (leaving, entering), 表示从 leaving状态 切换到 entering状态
+enum StateTransition&lt;T: Component + Clone + Eq&gt; {
+    PreStartup,
+    Startup,
+    // The parameter order is always (leaving, entering)
+    ExitingToResume(T, T),
+    ExitingFull(T, T),
+    Entering(T, T),
+    Resuming(T, T),
+    Pausing(T, T),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>初始化状态, 并添加特定状态下要执行的系统集:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 添加一个 state, 即此处的GameState, 设置初始状态为 Playing
+// 并添加一个systemset, 设置 run_criteria 为 state_cleaner
+App::build()
+    .add_state(GameState::Playing)
+    .add_system_set(SystemSet::on_enter(GameState::Playing).with_system(setup.system()))
+
+// 这个函数主要用于处理 state.scheduled 和 state.transition
+fn state_cleaner&lt;T: Component + Clone + Eq&gt;(
+    mut state: ResMut&lt;State&lt;T&gt;&gt;,
+    mut prep_exit: Local&lt;bool&gt;,
+)
+{
+    match state.scheduled.take() {
+
+        Some(ScheduledOperation::Set(next)) =&gt; {
+            state.transition = Some(StateTransition::ExitingFull(
+                state.stack.last().unwrap().clone(),
+                next,
+            ));
+        }
+        Some(ScheduledOperation::Replace(next)) =&gt; { ... }
+        Some(ScheduledOperation::Push(next)) =&gt; { ... }
+        Some(ScheduledOperation::Pop) =&gt; { ... }
+        None =&gt; match state.transition.take() {
+            Some(StateTransition::ExitingFull(p, n)) =&gt; { ... }
+            Some(StateTransition::Pausing(p, n)) =&gt; { ... }
+            Some(StateTransition::ExitingToResume(p, n)) =&gt; { ... }
+            Some(StateTransition::PreStartup) =&gt; { ... }
+        }
+}
+
+// 当执行 state.set(GameState::GameOver), 会设置 scheduled 的值, 就会在下一个frame中改变 state.transition 的值,
+pub fn set(&amp;mut self, state: T) -&gt; Result&lt;(), StateError&gt; {
+    if self.stack.last().unwrap() == &amp;state {
+        return Err(StateError::AlreadyInState);
+    }
+
+    if self.scheduled.is_some() {
+        return Err(StateError::StateAlreadyQueued);
+    }
+
+    self.scheduled = Some(ScheduledOperation::Set(state));
+    Ok(())
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>这会添加两个systemset, 其中的system会按照添加的顺序添加到, 在stage中运行时, 这些systems会自上而下运行</p>
+<p><code>.add_state(GameState::Playing)</code> 这会初始化状态并放入全局组件中, 会添加一个 systemset, 并带有 state_cleaner 的 run_criteria, 用于处理 判断状态是否满足预期, 是否应该运行.</p>
+<p>当执行 <code>SystemSet::on_enter</code>, <code>SystemSet::on_exit</code>, <code>SystemSet::on_update</code>时, 会添加不同的run_criteria, 用于判断特定的状态发生时是否应该执行. 比如:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn on_update(s: T) -&gt; RunCriteriaDescriptor {
+    (|state: Res&lt;State&lt;T&gt;&gt;, pred: Local&lt;Option&lt;T&gt;&gt;| {
+        // 当判断当前的state是预期的状态时, 同时事务还未开始时, return true, 表示执行
+        state.stack.last().unwrap() == pred.as_ref().unwrap() &amp;&amp; state.transition.is_none()
+    })
+    .system()
+    .config(|(_, pred)| *pred = Some(Some(s.clone()))) // 这会把传入的状态即期望的状态保存到这个 system 的第二个参数, 即pred
+    .chain(should_run_adapter::&lt;T&gt;.system())
+    .after(DriverLabel::of::&lt;T&gt;())
+    .label_discard_if_duplicate(StateCallback::Update.into_label(s))
+}
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 初始化状态
+Self {
+    stack: vec![initial],
+    transition: Some(StateTransition::PreStartup),
+    scheduled: None,
+    end_next_loop: false,
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>当 systemset 第一次运行时, stage.scheduled 为 None, 则设置 state.transition = Some(StateTransition::Startup), 表示执行Startup事务. 并 设置 prep_exit 为 true, 表示第一次运行完成.</p>
+<p>先有 scheduled 再根据 scheduled 判断 transaction</p>
+<p>当执行 <code>state.set(GameState::GameOver)</code> 时, 会验证: 1.当前的 stage.stack 的最后一项不能是要设置的状态 2.stage.scheduled 需要是空的, 然后更新状态: <code>self.scheduled = Some(ScheduledOperation::Set(state))</code></p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="web"><a class="header" href="#web">web</a></h1>
 <h2 id="使用-nvm-管理-nodejs"><a class="header" href="#使用-nvm-管理-nodejs">使用 nvm 管理 nodejs</a></h2>
@@ -887,13 +1002,6 @@ document.onkeydown = function(){
 <h3 id="创建项目"><a class="header" href="#创建项目">创建项目</a></h3>
 <pre><code>yarn create @vitejs/app
 </code></pre>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="算法"><a class="header" href="#算法">算法</a></h1>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="积分"><a class="header" href="#积分">积分</a></h1>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="微分"><a class="header" href="#微分">微分</a></h1>
-<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">μ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.599109em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0500050000000003em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="git笔记"><a class="header" href="#git笔记">git笔记</a></h1>
 <h2 id="第一次提交代码"><a class="header" href="#第一次提交代码">第一次提交代码</a></h2>
@@ -1546,7 +1654,9 @@ mdbook serve --open, 编译成静态文件并创建server, 打开浏览器, 如�
 <h2 id="preprocessor"><a class="header" href="#preprocessor">preprocessor</a></h2>
 <p><a href="https://github.com/lzanini/mdbook-katex">数学公式 mdbook-katex</a></p>
 <p><a href="https://github.com/badboy/mdbook-mermaid">流程图 mdbook-mermaid</a></p>
-<p>cargo install mdbook-katex mdbook-mermaid</p>
+<p>cargo install mdbook-katex</p>
+<p>cargo install mdbook-mermaid
+mdbook-mermaid install path/to/your/book</p>
 <h2 id="源码分析"><a class="header" href="#源码分析">源码分析</a></h2>
 <ol>
 <li>
@@ -1646,6 +1756,13 @@ mdbook serve --open, 编译成静态文件并创建server, 打开浏览器, 如�
 <h2 id="flameshot-截图工具-1"><a class="header" href="#flameshot-截图工具-1">flameshot 截图工具</a></h2>
 <p>命令: flameshot gui, 进入截图</p>
 
+                        <script src="https://utteranc.es/client.js"
+                            repo="imxood/imxood.github.io"
+                            issue-term="pathname"
+                            theme="boxy-light"
+                            crossorigin="anonymous"
+                            async>
+                        </script>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -1692,6 +1809,10 @@ mdbook serve --open, 编译成静态文件并创建server, 打开浏览器, 如�
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="mermaid-init.js"></script>
         
 
         

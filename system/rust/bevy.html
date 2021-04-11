@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="sidebar-visible no-js rust">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Bevy - 学习笔记</title>
+        <title>Bevy引擎 - 学习笔记</title>
         
         
 
@@ -50,7 +50,7 @@
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "../../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -76,7 +76,7 @@
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('light')
+            html.classList.remove('rust')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../system/rust/rust.html">Rust</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../system/rust/bevy.html" class="active">Bevy</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>算法</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../algorithm/index.html"></a></li></ol></li><li class="chapter-item expanded "><div>数学</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../math/积分.html">积分</a></li><li class="chapter-item "><a href="../../math/微分.html">微分</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../tools/github.html">github</a></li><li class="chapter-item "><a href="../../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../../tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../../hardware/MOS管.html">MOS管</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../system/rust/rust.html">Rust</a></li><li class="chapter-item expanded "><a href="../../system/rust/bevy.html" class="active">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../tools/github.html">github</a></li><li class="chapter-item "><a href="../../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../../tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -114,8 +114,8 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
@@ -168,11 +168,132 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h3 id="bevy-一个游戏引擎"><a class="header" href="#bevy-一个游戏引擎">bevy 一个游戏引擎</a></h3>
+<h1 id="bevy-一个游戏引擎"><a class="header" href="#bevy-一个游戏引擎">bevy 一个游戏引擎</a></h1>
+<h2 id="code"><a class="header" href="#code">code</a></h2>
 <pre><code>git clone https://github.com/bevyengine/bevy
 cargo run --example breakout
 </code></pre>
+<h2 id="state"><a class="header" href="#state">state</a></h2>
+<p>主要的数据结构:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 用于操作游戏state, 比如 设置/替换/退出/进入 state
+enum ScheduledOperation&lt;T: Component + Clone + Eq&gt; {
+    Set(T),
+    Replace(T),
+    Pop,
+    Push(T),
+}
 
+// 状态切换 如果是 PreStartup 则会进入 Startup
+// 后面几个是 (leaving, entering), 表示从 leaving状态 切换到 entering状态
+enum StateTransition&lt;T: Component + Clone + Eq&gt; {
+    PreStartup,
+    Startup,
+    // The parameter order is always (leaving, entering)
+    ExitingToResume(T, T),
+    ExitingFull(T, T),
+    Entering(T, T),
+    Resuming(T, T),
+    Pausing(T, T),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>初始化状态, 并添加特定状态下要执行的系统集:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 添加一个 state, 即此处的GameState, 设置初始状态为 Playing
+// 并添加一个systemset, 设置 run_criteria 为 state_cleaner
+App::build()
+    .add_state(GameState::Playing)
+    .add_system_set(SystemSet::on_enter(GameState::Playing).with_system(setup.system()))
+
+// 这个函数主要用于处理 state.scheduled 和 state.transition
+fn state_cleaner&lt;T: Component + Clone + Eq&gt;(
+    mut state: ResMut&lt;State&lt;T&gt;&gt;,
+    mut prep_exit: Local&lt;bool&gt;,
+)
+{
+    match state.scheduled.take() {
+
+        Some(ScheduledOperation::Set(next)) =&gt; {
+            state.transition = Some(StateTransition::ExitingFull(
+                state.stack.last().unwrap().clone(),
+                next,
+            ));
+        }
+        Some(ScheduledOperation::Replace(next)) =&gt; { ... }
+        Some(ScheduledOperation::Push(next)) =&gt; { ... }
+        Some(ScheduledOperation::Pop) =&gt; { ... }
+        None =&gt; match state.transition.take() {
+            Some(StateTransition::ExitingFull(p, n)) =&gt; { ... }
+            Some(StateTransition::Pausing(p, n)) =&gt; { ... }
+            Some(StateTransition::ExitingToResume(p, n)) =&gt; { ... }
+            Some(StateTransition::PreStartup) =&gt; { ... }
+        }
+}
+
+// 当执行 state.set(GameState::GameOver), 会设置 scheduled 的值, 就会在下一个frame中改变 state.transition 的值,
+pub fn set(&amp;mut self, state: T) -&gt; Result&lt;(), StateError&gt; {
+    if self.stack.last().unwrap() == &amp;state {
+        return Err(StateError::AlreadyInState);
+    }
+
+    if self.scheduled.is_some() {
+        return Err(StateError::StateAlreadyQueued);
+    }
+
+    self.scheduled = Some(ScheduledOperation::Set(state));
+    Ok(())
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>这会添加两个systemset, 其中的system会按照添加的顺序添加到, 在stage中运行时, 这些systems会自上而下运行</p>
+<p><code>.add_state(GameState::Playing)</code> 这会初始化状态并放入全局组件中, 会添加一个 systemset, 并带有 state_cleaner 的 run_criteria, 用于处理 判断状态是否满足预期, 是否应该运行.</p>
+<p>当执行 <code>SystemSet::on_enter</code>, <code>SystemSet::on_exit</code>, <code>SystemSet::on_update</code>时, 会添加不同的run_criteria, 用于判断特定的状态发生时是否应该执行. 比如:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn on_update(s: T) -&gt; RunCriteriaDescriptor {
+    (|state: Res&lt;State&lt;T&gt;&gt;, pred: Local&lt;Option&lt;T&gt;&gt;| {
+        // 当判断当前的state是预期的状态时, 同时事务还未开始时, return true, 表示执行
+        state.stack.last().unwrap() == pred.as_ref().unwrap() &amp;&amp; state.transition.is_none()
+    })
+    .system()
+    .config(|(_, pred)| *pred = Some(Some(s.clone()))) // 这会把传入的状态即期望的状态保存到这个 system 的第二个参数, 即pred
+    .chain(should_run_adapter::&lt;T&gt;.system())
+    .after(DriverLabel::of::&lt;T&gt;())
+    .label_discard_if_duplicate(StateCallback::Update.into_label(s))
+}
+<span class="boring">}
+</span></code></pre></pre>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 初始化状态
+Self {
+    stack: vec![initial],
+    transition: Some(StateTransition::PreStartup),
+    scheduled: None,
+    end_next_loop: false,
+}
+
+<span class="boring">}
+</span></code></pre></pre>
+<p>当 systemset 第一次运行时, stage.scheduled 为 None, 则设置 state.transition = Some(StateTransition::Startup), 表示执行Startup事务. 并 设置 prep_exit 为 true, 表示第一次运行完成.</p>
+<p>先有 scheduled 再根据 scheduled 判断 transaction</p>
+<p>当执行 <code>state.set(GameState::GameOver)</code> 时, 会验证: 1.当前的 stage.stack 的最后一项不能是要设置的状态 2.stage.scheduled 需要是空的, 然后更新状态: <code>self.scheduled = Some(ScheduledOperation::Set(state))</code></p>
+
+                        <script src="https://utteranc.es/client.js"
+                            repo="imxood/imxood.github.io"
+                            issue-term="pathname"
+                            theme="boxy-light"
+                            crossorigin="anonymous"
+                            async>
+                        </script>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -235,6 +356,10 @@ cargo run --example breakout
         <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        
+        <script type="text/javascript" src="../../mermaid.min.js"></script>
+        
+        <script type="text/javascript" src="../../mermaid-init.js"></script>
         
 
         

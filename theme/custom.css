@@ -1,0 +1,29 @@
+/* custom styles */
+
+.utterances {
+    max-width: 100%;
+}
+
+#content {
+    font-size: 1.2em;
+    padding: 0;
+}
+
+.content main {
+    max-width: 90%;
+}
+
+.nav-chapters {
+    font-size: 2em;
+    min-width: 60px;
+}
+
+@media only screen and (max-width: 1080px) {
+    #content {
+        font-size: 0.9em;
+    }
+
+    .content main {
+        max-width: 100%;
+    }
+}

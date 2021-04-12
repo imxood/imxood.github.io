@@ -14,10 +14,15 @@ site-url = "/note/"
 no-section-label = true
 git-repository-url = "https://github.com/imxood/imxood.github.io"
 additional-js =["mermaid.min.js", "mermaid-init.js"]
+additional-css = ["theme/custom.css"]
 
 [output.html.fold]
 enable = true
 level = 1
+
+[output.html.playground]
+editable = true
+line-numbers = true
 
 [output.html.search]
 limit-results = 20

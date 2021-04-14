@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>MOS管 - 学习笔记</title>
+        <title>后端开发 - 学习笔记</title>
         
         
 
@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item expanded "><a href="../hardware/MOS管.html" class="active">MOS管</a></li><li class="chapter-item "><a href="../hardware/门电路.html">门电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a></li><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>后端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../backend/后端开发.html">后端开发</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tools/github.html">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="../hardware/门电路.html">门电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../system/rust/rust.html">Rust</a></li><li class="chapter-item "><a href="../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>后端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../backend/后端开发.html" class="active">后端开发</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../tools/github.html">github</a></li><li class="chapter-item "><a href="../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../tools/linux工具.html">Title of prefix element</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -170,51 +170,11 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
-<h1 id="mos管"><a class="header" href="#mos管">MOS管</a></h1>
-<p>参考: <a href="https://wenku.baidu.com/view/fc0a7d2eccbff121dd3683b2.html">MOS管原理,非常详细</a></p>
-<p>参考: <a href="https://blog.csdn.net/weixin_32821257/article/details/112181812">超低内阻mos管-MOS总结</a></p>
-<h2 id="三个极怎么判定"><a class="header" href="#三个极怎么判定">三个极怎么判定</a></h2>
-<p><img src="images/%E4%B8%89%E4%B8%AA%E6%9E%81%E6%80%8E%E4%B9%88%E5%88%A4%E5%AE%9A.png" alt="" /></p>
-<h2 id="是n沟道还是p沟道"><a class="header" href="#是n沟道还是p沟道">是N沟道还是P沟道</a></h2>
-<p><img src="images/N%E6%B2%9F%E9%81%93.png" alt="" /></p>
-<p><img src="images/P%E6%B2%9F%E9%81%93.png" alt="" /></p>
-<h2 id="寄生二极管的方向如何判定"><a class="header" href="#寄生二极管的方向如何判定">寄生二极管的方向如何判定</a></h2>
-<p><img src="images/%E5%AF%84%E7%94%9F%E4%BA%8C%E6%9E%81%E7%AE%A1%E7%9A%84%E6%96%B9%E5%90%91.png" alt="" /></p>
-<p><img src="images/%E5%AF%84%E7%94%9F%E4%BA%8C%E6%9E%81%E7%AE%A1%E7%9A%84%E6%96%B9%E5%90%911.png" alt="" /></p>
-<h2 id="mos管用作开关时在电路中的连接方法"><a class="header" href="#mos管用作开关时在电路中的连接方法">MOS管用作开关时在电路中的连接方法</a></h2>
-<p><img src="images/MOS%E7%AE%A1%E7%94%A8%E4%BD%9C%E5%BC%80%E5%85%B3%E6%97%B6%E5%9C%A8%E7%94%B5%E8%B7%AF%E4%B8%AD%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95.png" alt="" /></p>
-<p><img src="images/MOS%E7%AE%A1%E7%94%A8%E4%BD%9C%E5%BC%80%E5%85%B3%E6%97%B6%E5%9C%A8%E7%94%B5%E8%B7%AF%E4%B8%AD%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95-%E5%8F%8D%E8%AF%81.png" alt="" /></p>
-<h2 id="应用"><a class="header" href="#应用">应用</a></h2>
-<p><img src="images/NMOS%E7%AE%A1%E5%BA%94%E7%94%A8-%E4%BF%A1%E5%8F%B7%E5%88%87%E6%8D%A2.png" alt="" /></p>
-<p><img src="images/NMOS%E7%AE%A1%E5%BA%94%E7%94%A8-%E7%94%B5%E5%8E%8B%E9%80%9A%E6%96%AD.png" alt="" /></p>
-<p><img src="images/PMOS%E7%AE%A1%E5%BA%94%E7%94%A8-%E7%94%B5%E5%8E%8B%E9%80%9A%E6%96%AD.png" alt="" /></p>
-<h2 id="使用场景"><a class="header" href="#使用场景">使用场景</a></h2>
-<p>一般主板上使用最多的是<strong>增强型MOS管</strong></p>
-<p><strong>NMOS最多, 一般多用在信号控制上</strong></p>
-<p>其次是<strong>PMOS, 多用在电源开关等方面</strong></p>
-<p><strong>耗尽型几乎不用</strong></p>
-<h2 id="与三极管的区别"><a class="header" href="#与三极管的区别">与三极管的区别</a></h2>
-<p>三极管是电流控制, MOS管是电压控制, 主要有如下的区别:</p>
-<ol>
-<li>
-<p>只容许从信号源取少量电流的情况下, 选用MOS管；在信号电压较低, 有容许从信号源取较多电流的条件下, 选用三极管.</p>
-</li>
-<li>
-<p>MOS管是单极性器件(靠一种多数载流子导电), 三极管是双极性器件(既有多数载流子, 也要少数载流子导电).</p>
-</li>
-<li>
-<p>有些MOS管的源极和漏极可以互换运用, 栅极也可正可负, 灵活性比三极管好.</p>
-</li>
-<li>
-<p>MOS管应用普遍, 可以在很小电流和很低电压下工作.</p>
-</li>
-<li>
-<p>MOS管输入阻抗大, 低噪声, MOS管较贵, 三极管的损耗大.</p>
-</li>
-<li>
-<p>MOS管常用来作为电源开关, 以及大电流开关电路、高频高速电路中, 三极管常用来数字电路开关控制.</p>
-</li>
-</ol>
+<h1 id="后端开发"><a class="header" href="#后端开发">后端开发</a></h1>
+<h2 id="http-basic-auth-认证"><a class="header" href="#http-basic-auth-认证">HTTP Basic Auth 认证</a></h2>
+<p>参考: <a href="https://www.cnblogs.com/rinack/p/7595232.html">HTTP Basic auth认证</a></p>
+<p>在 Request Herder 中添加: 'authorization: Basic BASE64_CODE', 将 BASE64_CODE 替换为你的认证内容的base64编码数据.</p>
+<p>注意: BASE64的加密强度非常低，直接能在请求头中看到，几乎相当于明文了!</p>
 
                         <script src="https://utteranc.es/client.js"
                             repo="imxood/imxood.github.io"
@@ -228,13 +188,13 @@
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../hardware/三极管.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../frontend/vue/vue.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../hardware/门电路.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../tools/github.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -246,13 +206,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../hardware/三极管.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../frontend/vue/vue.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="../hardware/门电路.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../tools/github.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

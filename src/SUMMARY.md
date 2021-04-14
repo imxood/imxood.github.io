@@ -8,6 +8,7 @@
     - [门电路](./hardware/门电路.md)
 
 - [嵌入式]()
+    - [Rust嵌入式](./embedded/Rust嵌入式.md)
     - [C语言](./embedded/C语言.md)
     - [GPIO和AFIO](./embedded/GPIO和AFIO.md)
 

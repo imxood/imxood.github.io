@@ -45,7 +45,6 @@
         cargo install cargo-generate
         cargo install cargo-edit
         cargo install mdbook
-        cargo install cargo-binutils
 
     创建项目:
         cargo new hello_cargo

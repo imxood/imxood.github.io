@@ -10,7 +10,7 @@
 }
 
 .content main {
-    max-width: 90%;
+    max-width: 85%;
 }
 
 .nav-chapters {
@@ -18,7 +18,16 @@
     min-width: 60px;
 }
 
-@media only screen and (max-width: 1080px) {
+.mobile-nav-chapters {
+    font-size: 2em;
+    width: 60px;
+}
+
+.nav-wrapper {
+    margin-top: 0;
+}
+
+@media only screen and (max-width: 1380px) {
     #content {
         font-size: 0.9em;
     }

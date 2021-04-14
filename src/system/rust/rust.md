@@ -33,6 +33,9 @@
 	## riscv
     rustup target add riscv32imac-unknown-none-elf
 
+    ## arm
+    rustup target add thumbv7m-none-eabi
+
     卸载:
         rustup self uninstall
 
@@ -42,6 +45,7 @@
         cargo install cargo-generate
         cargo install cargo-edit
         cargo install mdbook
+        cargo install cargo-binutils
 
     创建项目:
         cargo new hello_cargo
@@ -50,6 +54,7 @@
         cd hello_cargo
         cargo build
         cargo build --release
+        cargo build --target thumbv7m-none-eabi
 
     编译 但不生成 可执行程序:
         cargo check

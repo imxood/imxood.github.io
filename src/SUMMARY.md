@@ -5,6 +5,7 @@
     - [二极管](./hardware/二极管.md)
     - [三极管](./hardware/三极管.md)
     - [MOS管](./hardware/MOS管.md)
+    - [门电路](./hardware/门电路.md)
 
 - [嵌入式]()
     - [C语言](./embedded/C语言.md)
@@ -17,6 +18,9 @@
 - [前端]()
     - [Web](./frontend/web.md)
     - [Vue](./frontend/vue/vue.md)
+
+- [后端]()
+    - [后端开发](./backend/后端开发.md)
 
 <!-- - [算法]()
     - [](./algorithm/README.md) -->

@@ -11,6 +11,7 @@
     - [STM32](./embedded/stm32.md)
     - [Rust嵌入式](./embedded/Rust嵌入式.md)
     - [C语言](./embedded/C语言.md)
+    - [GDB](./embedded/gdb.md)
     - [GPIO和AFIO](./embedded/GPIO和AFIO.md)
     - [传感器]()
         - [ws2812](./embedded/传感器/ws2812.md)

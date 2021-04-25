@@ -55,6 +55,6 @@
 
 ## 优化
 
-官方的文档写的很清晰了
+官方文档写的很清晰
 
 [The Embedded Rust Book - Optimizations: the speed size tradeoff](https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html)

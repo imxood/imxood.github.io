@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../../hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="../../hardware/门电路.html">门电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../embedded/Rust嵌入式.html">Rust嵌入式</a></li><li class="chapter-item "><a href="../../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../system/rust/rust.html" class="active">Rust</a></li><li class="chapter-item "><a href="../../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>后端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../backend/后端开发.html">后端开发</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../tools/github.html">github</a></li><li class="chapter-item "><a href="../../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../../tools/linux工具.html">linux工具</a></li></ol></li><li class="chapter-item expanded "><a href="../../tools/linux工具.html">Title of prefix element</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">首页</a></li><li class="chapter-item expanded affix "><li class="part-title">文章</li><li class="chapter-item expanded "><div>硬件</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../hardware/二极管.html">二极管</a></li><li class="chapter-item "><a href="../../hardware/三极管.html">三极管</a></li><li class="chapter-item "><a href="../../hardware/MOS管.html">MOS管</a></li><li class="chapter-item "><a href="../../hardware/门电路.html">门电路</a></li></ol></li><li class="chapter-item expanded "><div>嵌入式</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../embedded/stm32.html">STM32</a></li><li class="chapter-item "><a href="../../embedded/Rust嵌入式.html">Rust嵌入式</a></li><li class="chapter-item "><a href="../../embedded/C语言.html">C语言</a></li><li class="chapter-item "><a href="../../embedded/GPIO和AFIO.html">GPIO和AFIO</a></li><li class="chapter-item "><div>传感器</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../embedded/传感器/ws2812.html">ws2812</a></li></ol></li></ol></li><li class="chapter-item expanded "><div>设计</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../design/blender.html">Blender</a></li></ol></li><li class="chapter-item expanded "><div>系统</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../system/rust/rust.html" class="active">Rust</a></li><li class="chapter-item "><a href="../../system/rust/bevy.html">Bevy引擎</a></li></ol></li><li class="chapter-item expanded "><div>前端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../frontend/web.html">Web</a></li><li class="chapter-item "><a href="../../frontend/vue/vue.html">Vue</a></li></ol></li><li class="chapter-item expanded "><div>后端</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../backend/后端开发.html">后端开发</a></li></ol></li><li class="chapter-item expanded "><div>工具</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../tools/github.html">github</a></li><li class="chapter-item "><a href="../../tools/markdown.html">markdown</a></li><li class="chapter-item "><a href="../../tools/mdbook.html">mdbook</a></li><li class="chapter-item "><a href="../../tools/linux工具.html">linux工具</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -172,74 +172,141 @@
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="rust-笔记"><a class="header" href="#rust-笔记">Rust 笔记</a></h1>
 <h2 id="rust-的-安装与卸载"><a class="header" href="#rust-的-安装与卸载">Rust 的 安装与卸载</a></h2>
-<pre><code>参考链接:
-    https://www.rust-lang.org/zh-CN/tools/install
+<p><a href="https://www.rust-lang.org/zh-CN/tools/install">官方 -- 安装 Rust</a></p>
+<pre><code># 安装
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
-安装:
-    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+# 版本号
+rustc --version
 
-版本号:
-    rustc --version
+# 升级
+rustup update stable
+rustup update
 
-升级:
-    rustup update stable
-    rustup update
+# 设置默认 版本
+rustup default stable
+rustup default nightly
 
-设置默认 版本:
-    rustup default stable
-    rustup default nightly
+# 工具链
+rustup toolchain install nightly
+rustup toolchain install nightly-2020-11-19
+rustup toolchain list
+rustup default nightly-2020-11-19
 
-工具链
-    rustup toolchain install nightly
-    rustup toolchain install nightly-2020-11-19
-    rustup toolchain list
-    rustup default nightly-2020-11-19
-
-    ps:
-        &quot;2020-11-19&quot; 这个时间是在 rust 的 git 中的tag上找的
+ps:
+    &quot;2020-11-19&quot; 这个时间是在 rust 的 git 中的tag上找的
 
     rustup override set nightly
 
-## riscv
+# riscv
 rustup target add riscv32imac-unknown-none-elf
 
-## arm
+# arm
 rustup target add thumbv7m-none-eabi
 
-卸载:
-    rustup self uninstall
+# 卸载
+rustup self uninstall
 </code></pre>
 <h2 id="cargo-命令"><a class="header" href="#cargo-命令">cargo 命令</a></h2>
 <pre><code>添加工具:
+    # 基于模板生成项目
     cargo install cargo-generate
+
+    # cargo扩展, 允许对 dependencies 的增删改
     cargo install cargo-edit
+    新增命令:
+        cargo add &lt;crate&gt;
+        cargo add &lt;crate&gt; --allow-prerelease
+        cargo rm &lt;crate&gt;
+        cargo upgrade
+
+    # 文档生成工具
     cargo install mdbook
 
-创建项目:
-    cargo new hello_cargo
+    # 查看依赖关系
+    cargo install cargo-tree
+    命令:
+        cargo tree
+        cargo tree -e features
+        cargo tree -f &quot;{p} {f}&quot;
 
-编译 并生成可执行程序:
-    cd hello_cargo
-    cargo build
-    cargo build --release
-    cargo build --target thumbv7m-none-eabi
 
-编译 但不生成 可执行程序:
-    cargo check
+    cargo install cargo-web
 
-运行目标程序 (也可以一步构建项目):
-    cargo run
+# 创建项目
+cargo new hello_cargo
 
-创建:
-    cargo new hello_world &lt;--bin&gt;, 创建一个二进制程序
-    cargo new hello_world --lib, 创建一个库
+# 编译 并生成可执行程序
+cd hello_cargo
+cargo build
+cargo build --release
+cargo build --target thumbv7m-none-eabi
+
+# 编译 但不生成 可执行程序
+cargo check
+
+# 运行目标程序 (也可以一步构建项目)
+cargo run
+
+# 创建
+cargo new hello_world &lt;--bin&gt;, 创建一个二进制程序
+cargo new hello_world --lib, 创建一个库
+
+# 参数
+
+不使用默认的features:
+    --no-default-features
+
+    指定features:
+        --features=&quot;FEATURE1 FEATURE2 ...&quot;
 </code></pre>
 <h2 id="vscode-中-rust-的插件"><a class="header" href="#vscode-中-rust-的插件">vscode 中 rust 的插件</a></h2>
 <pre><code>1. rust-analyzer
 2. Crates
-3. Better TOML
+3. Even Better TOML
 4. CodeLLDB
 </code></pre>
+<h2 id="rust-软件源"><a class="header" href="#rust-软件源">rust 软件源</a></h2>
+<p><a href="https://huangjj27.gitlab.io/posts/rust-mirror/">参考自</a></p>
+<h3 id="设置环境变量"><a class="header" href="#设置环境变量">设置环境变量</a></h3>
+<pre><code># 清华大学
+export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+
+# 中国科学技术大学
+export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+
+# 上海交通大学
+export RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/
+</code></pre>
+<h3 id="加速-crate-拉取-homecargoconfig"><a class="header" href="#加速-crate-拉取-homecargoconfig">加速 crate 拉取, HOME/.cargo/config</a></h3>
+<pre><code>[source.crates-io]
+registry = &quot;https://github.com/rust-lang/crates.io-index&quot;
+
+# 替换成你偏好的镜像源
+replace-with = 'sjtu'
+#replace-with = 'ustc'
+
+# 清华大学
+[source.tuna]
+registry = &quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;
+
+# 中国科学技术大学
+[source.ustc]
+registry = &quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;
+
+# 上海交通大学
+[source.sjtu]
+registry = &quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;
+
+# rustcc社区
+[source.rustcc]
+registry = &quot;git://crates.rustcc.cn/crates.io-index&quot;
+</code></pre>
+<h2 id="rust-编译过程"><a class="header" href="#rust-编译过程">Rust 编译过程</a></h2>
+<p><img src="./images/rust%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B.png" alt="" /></p>
+<p>Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步编译到LLVM中间码(LLVM IR), 再交给LLVM, 最终生成机器码, 所以LLVM是编译器后端.</p>
+<p>宏展开 --&gt; 语法语义分析 --&gt; 生成抽象语法树 --&gt; LLVM IR (LLVM中间语言) --&gt; 通过LLVM生成机器码</p>
 <h2 id="rust-hello_world"><a class="header" href="#rust-hello_world">Rust hello_world</a></h2>
 <pre><code>编写点一个程序:
     vim main.rs
@@ -297,8 +364,7 @@ for example in ${examples[@]}; do
 done
 
 for example in ${examples[@]}; do
-    echo &quot;start run: cargo run --verbose --package example&quot;
-    cargo run --verbose --package example
+    echo &quot;start run: cargo run --verbose --package &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.01968em;&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.77777em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03148em;&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;example
 done
 </code></pre>
 <h3 id="iced-例子"><a class="header" href="#iced-例子">iced 例子</a></h3>
@@ -379,7 +445,7 @@ vite.config.js:
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../../embedded/GPIO和AFIO.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../design/blender.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
@@ -397,7 +463,7 @@ vite.config.js:
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../../embedded/GPIO和AFIO.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../design/blender.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 

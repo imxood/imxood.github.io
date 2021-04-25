@@ -2,76 +2,152 @@
 
 ## Rust 的 安装与卸载
 
-    参考链接:
-        https://www.rust-lang.org/zh-CN/tools/install
+[官方 -- 安装 Rust](https://www.rust-lang.org/zh-CN/tools/install)
 
-    安装:
-        curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    # 安装
+    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
-    版本号:
-        rustc --version
+    # 版本号
+    rustc --version
 
-    升级:
-        rustup update stable
-        rustup update
+    # 升级
+    rustup update stable
+    rustup update
 
-    设置默认 版本:
-        rustup default stable
-        rustup default nightly
+    # 设置默认 版本
+    rustup default stable
+    rustup default nightly
 
-    工具链
-        rustup toolchain install nightly
-        rustup toolchain install nightly-2020-11-19
-        rustup toolchain list
-        rustup default nightly-2020-11-19
+    # 工具链
+    rustup toolchain install nightly
+    rustup toolchain install nightly-2020-11-19
+    rustup toolchain list
+    rustup default nightly-2020-11-19
 
-        ps:
-            "2020-11-19" 这个时间是在 rust 的 git 中的tag上找的
+    ps:
+        "2020-11-19" 这个时间是在 rust 的 git 中的tag上找的
 
         rustup override set nightly
 
-	## riscv
+    # riscv
     rustup target add riscv32imac-unknown-none-elf
 
-    ## arm
+    # arm
     rustup target add thumbv7m-none-eabi
 
-    卸载:
-        rustup self uninstall
+    # 卸载
+    rustup self uninstall
 
 ## cargo 命令
 
     添加工具:
+        # 基于模板生成项目
         cargo install cargo-generate
+
+        # cargo扩展, 允许对 dependencies 的增删改
         cargo install cargo-edit
+        新增命令:
+            cargo add <crate>
+            cargo add <crate> --allow-prerelease
+            cargo rm <crate>
+            cargo upgrade
+
+        # 文档生成工具
         cargo install mdbook
 
-    创建项目:
-        cargo new hello_cargo
+        # 查看依赖关系
+        cargo install cargo-tree
+        命令:
+            cargo tree
+            cargo tree -e features
+            cargo tree -f "{p} {f}"
 
-    编译 并生成可执行程序:
-        cd hello_cargo
-        cargo build
-        cargo build --release
-        cargo build --target thumbv7m-none-eabi
 
-    编译 但不生成 可执行程序:
-        cargo check
+        cargo install cargo-web
 
-    运行目标程序 (也可以一步构建项目):
-        cargo run
+    # 创建项目
+    cargo new hello_cargo
 
-    创建:
-        cargo new hello_world <--bin>, 创建一个二进制程序
-        cargo new hello_world --lib, 创建一个库
+    # 编译 并生成可执行程序
+    cd hello_cargo
+    cargo build
+    cargo build --release
+    cargo build --target thumbv7m-none-eabi
+
+    # 编译 但不生成 可执行程序
+    cargo check
+
+    # 运行目标程序 (也可以一步构建项目)
+    cargo run
+
+    # 创建
+    cargo new hello_world <--bin>, 创建一个二进制程序
+    cargo new hello_world --lib, 创建一个库
+
+    # 参数
+
+    不使用默认的features:
+        --no-default-features
+
+        指定features:
+            --features="FEATURE1 FEATURE2 ..."
 
 
 ## vscode 中 rust 的插件
 
     1. rust-analyzer
     2. Crates
-    3. Better TOML
+    3. Even Better TOML
     4. CodeLLDB
+
+## rust 软件源
+
+[参考自](https://huangjj27.gitlab.io/posts/rust-mirror/)
+
+### 设置环境变量
+
+    # 清华大学
+    export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+
+    # 中国科学技术大学
+    export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+    export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+
+    # 上海交通大学
+    export RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/
+
+### 加速 crate 拉取, $HOME/.cargo/config
+
+    [source.crates-io]
+    registry = "https://github.com/rust-lang/crates.io-index"
+
+    # 替换成你偏好的镜像源
+    replace-with = 'sjtu'
+    #replace-with = 'ustc'
+
+    # 清华大学
+    [source.tuna]
+    registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+    # 中国科学技术大学
+    [source.ustc]
+    registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+    # 上海交通大学
+    [source.sjtu]
+    registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+    # rustcc社区
+    [source.rustcc]
+    registry = "git://crates.rustcc.cn/crates.io-index"
+## Rust 编译过程
+
+![](./images/rust编译过程.png)
+
+Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步编译到LLVM中间码(LLVM IR), 再交给LLVM, 最终生成机器码, 所以LLVM是编译器后端.
+
+宏展开 --> 语法语义分析 --> 生成抽象语法树 --> LLVM IR (LLVM中间语言) --> 通过LLVM生成机器码
+
 
 ## Rust hello_world
 

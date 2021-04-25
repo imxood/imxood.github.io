@@ -8,9 +8,15 @@
     - [门电路](./hardware/门电路.md)
 
 - [嵌入式]()
+    - [STM32](./embedded/stm32.md)
     - [Rust嵌入式](./embedded/Rust嵌入式.md)
     - [C语言](./embedded/C语言.md)
     - [GPIO和AFIO](./embedded/GPIO和AFIO.md)
+    - [传感器]()
+        - [ws2812](./embedded/传感器/ws2812.md)
+
+- [设计]()
+    - [Blender](design/blender.md)
 
 - [系统]()
     - [Rust](./system/rust/rust.md)
@@ -35,5 +41,3 @@
     - [markdown](./tools/markdown.md)
     - [mdbook](./tools/mdbook.md)
     - [linux工具](./tools/linux工具.md)
-
-[Title of prefix element](./tools/linux工具.md)

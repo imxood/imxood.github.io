@@ -31,6 +31,7 @@
 
     查看大小
         cargo size --bin app
+        cargo size --bin app -- -A
 
     查看二进制信息:
         cargo readobj --bin app -- -file-headers
@@ -51,3 +52,9 @@
 			"executable": "./target/thumbv7em-none-eabihf/debug/app",
 			"configFiles": ["interface/stlink.cfg", "board/stm32f746g-disco.cfg"],
 		}
+
+## 优化
+
+官方的文档写的很清晰了
+
+[The Embedded Rust Book - Optimizations: the speed size tradeoff](https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html)

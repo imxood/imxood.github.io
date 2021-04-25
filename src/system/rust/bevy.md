@@ -64,7 +64,7 @@ fn state_cleaner<T: Component + Clone + Eq>(
         }
 }
 
-// 当执行 state.set(GameState::GameOver), 会设置 scheduled 的值, 就会在下一个frame中改变 state.transition 的值,
+// 当执行 state.set(GameState::GameOver), 会设置 scheduled 的值, 就会改变 state.transition 的值, 后面特定的system_set就启动
 pub fn set(&mut self, state: T) -> Result<(), StateError> {
     if self.stack.last().unwrap() == &state {
         return Err(StateError::AlreadyInState);

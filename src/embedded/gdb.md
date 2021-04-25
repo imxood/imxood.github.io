@@ -1,4 +1,8 @@
-# GDB 命令行中调试
+# GDB 用法
+
+参考: [100个gdb小技巧](https://wizardforcel.gitbooks.io/100-gdb-tips/content/part13.html)
+
+## GDB 命令行中调试
 
     连接stm32设备:
         openocd -f interface/stlink.cfg -f board/stm32f746g-disco.cfg,
@@ -24,3 +28,8 @@
 
     显示变量:
         info local VARIABLE_NAME
+
+## gdb命令的参数
+
+    设置
+    --command=FILE

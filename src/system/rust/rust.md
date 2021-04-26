@@ -40,30 +40,27 @@
 
 ## cargo 命令
 
-    添加工具:
-        # 基于模板生成项目
-        cargo install cargo-generate
+    安装常用的工具:
 
-        # cargo扩展, 允许对 dependencies 的增删改
-        cargo install cargo-edit
-        新增命令:
-            cargo add <crate>
-            cargo add <crate> --allow-prerelease
-            cargo rm <crate>
-            cargo upgrade
-
-        # 文档生成工具
-        cargo install mdbook
-
+        # 扩展cargo, 允许对 dependencies 的增删改
         # 查看依赖关系
-        cargo install cargo-tree
-        命令:
-            cargo tree
-            cargo tree -e features
-            cargo tree -f "{p} {f}"
+        # 基于模板生成项目
+        # 文档生成, 及插件: 用于数学表达式, 生成流程图表
 
+        cargo install cargo-edit cargo-tree cargo-generate
+        cargo install mdbook mdbook-katex mdbook-mermaid
 
-        cargo install cargo-web
+        ps:
+            cargo-edit 部分命令:
+                cargo add <crate>
+                cargo add <crate> --allow-prerelease
+                cargo rm <crate>
+                cargo upgrade
+
+            cargo-tree 部分命令:
+                cargo tree
+                cargo tree -e features
+                cargo tree -f "{p} {f}"
 
     # 创建项目
     cargo new hello_cargo

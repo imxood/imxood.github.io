@@ -77,7 +77,7 @@
 
     npm run
 
-## rust neon electron vue
+## electron vue
 
 [electron-vue](https://github.com/SimulatedGREG/electron-vue)
 
@@ -106,3 +106,10 @@
                 "node_modules/vue-devtools/vender"
             );
         });
+
+    运行:
+        npm run dev
+
+## element-ui
+
+[element-ui](https://element.eleme.cn/#/zh-CN/component/quickstart)

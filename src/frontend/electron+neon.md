@@ -35,5 +35,74 @@
     # 清理
     neon clean
 
-electron neno
-rust
+## 打包
+
+~~方法1:~~
+
+~~npm install electron-packager -g~~  
+~~electron-packager .~~
+
+方法2:
+
+[electron-builder](https://www.electron.build/)
+
+## 使用 vue
+
+    npm install -g @vue/cli
+
+
+## rust+neon+electron
+
+    新建:
+        neon new rust-api
+        cd rust-api
+        npm link
+
+    添加一个 electron basic
+    git clone https://github.com/electron/electron-quick-start
+    cd electron-quick-start
+
+    npm install rust-api
+    npm install electron-build-env neon-cli --save-dev
+
+    添加:
+    "scripts": {
+        "run": "npm run build && npm run start",
+        "start": "electron .",
+        "build": "electron-build-env neon build rust-api",
+        "release": "electron-build-env neon build rust-api --release"
+    }
+
+        ps: 注意这里的"build"参数: rust-api
+
+    npm run
+
+## rust neon electron vue
+
+[electron-vue](https://github.com/SimulatedGREG/electron-vue)
+
+    添加vue-cli:
+        npm install -g vue-cli
+
+    使用vue-cli创建新项目:
+        vue init simulatedgreg/electron-vue electron-app
+
+    Error: Unable to install `vue-devtools`
+    解决:
+        yarn add vue-devtools --dev
+        编辑 src/main/index.dev.js:
+
+        import { app, BrowserWindow } from "electron";
+
+        // Install `vue-devtools`
+        app.on("ready", async () => {
+            // let installExtension = require('electron-devtools-installer')
+            // installExtension.default(installExtension.VUEJS_DEVTOOLS)
+            //   .then(() => {})
+            //   .catch(err => {
+            //     console.log('Unable to install `vue-devtools`: \n', err)
+            //   })
+            await new BrowserWindow.addDevToolsExtension(
+                "node_modules/vue-devtools/vender"
+            );
+        });

@@ -1283,8 +1283,68 @@ hello node
 # 清理
 neon clean
 </code></pre>
-<p>electron neno
-rust</p>
+<h2 id="打包"><a class="header" href="#打包">打包</a></h2>
+<p><del>方法1:</del></p>
+<p><del>npm install electron-packager -g</del><br />
+<del>electron-packager .</del></p>
+<p>方法2:</p>
+<p><a href="https://www.electron.build/">electron-builder</a></p>
+<h2 id="使用-vue"><a class="header" href="#使用-vue">使用 vue</a></h2>
+<pre><code>npm install -g @vue/cli
+</code></pre>
+<h2 id="rustneonelectron"><a class="header" href="#rustneonelectron">rust+neon+electron</a></h2>
+<pre><code>新建:
+    neon new rust-api
+    cd rust-api
+    npm link
+
+添加一个 electron basic
+git clone https://github.com/electron/electron-quick-start
+cd electron-quick-start
+
+npm install rust-api
+npm install electron-build-env neon-cli --save-dev
+
+添加:
+&quot;scripts&quot;: {
+    &quot;run&quot;: &quot;npm run build &amp;&amp; npm run start&quot;,
+    &quot;start&quot;: &quot;electron .&quot;,
+    &quot;build&quot;: &quot;electron-build-env neon build rust-api&quot;,
+    &quot;release&quot;: &quot;electron-build-env neon build rust-api --release&quot;
+}
+
+    ps: 注意这里的&quot;build&quot;参数: rust-api
+
+npm run
+</code></pre>
+<h2 id="rust-neon-electron-vue"><a class="header" href="#rust-neon-electron-vue">rust neon electron vue</a></h2>
+<p><a href="https://github.com/SimulatedGREG/electron-vue">electron-vue</a></p>
+<pre><code>添加vue-cli:
+    npm install -g vue-cli
+
+使用vue-cli创建新项目:
+    vue init simulatedgreg/electron-vue electron-app
+
+Error: Unable to install `vue-devtools`
+解决:
+    yarn add vue-devtools --dev
+    编辑 src/main/index.dev.js:
+
+    import { app, BrowserWindow } from &quot;electron&quot;;
+
+    // Install `vue-devtools`
+    app.on(&quot;ready&quot;, async () =&gt; {
+        // let installExtension = require('electron-devtools-installer')
+        // installExtension.default(installExtension.VUEJS_DEVTOOLS)
+        //   .then(() =&gt; {})
+        //   .catch(err =&gt; {
+        //     console.log('Unable to install `vue-devtools`: \n', err)
+        //   })
+        await new BrowserWindow.addDevToolsExtension(
+            &quot;node_modules/vue-devtools/vender&quot;
+        );
+    });
+</code></pre>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="vue-笔记"><a class="header" href="#vue-笔记">vue 笔记</a></h1>
 <h2 id="使用vite工具"><a class="header" href="#使用vite工具">使用vite工具</a></h2>
@@ -2078,6 +2138,25 @@ cd DSView
 mkdir build -p &amp;&amp; cd build &amp;&amp; cmake ..
 make -j
 sudo make install
+</code></pre>
+<h2 id="wps-中文字体部分无显示"><a class="header" href="#wps-中文字体部分无显示">wps 中文字体部分无显示</a></h2>
+<p><a href="https://mxy493.xyz/2019040840601/">添加字体， 更新字体缓存</a> 需要重启生效(或登出?)</p>
+<h2 id="samba-共享"><a class="header" href="#samba-共享">Samba 共享</a></h2>
+<p>安装</p>
+<pre><code>sudo apt-get install samba
+</code></pre>
+<p>修改 /etc/samba/smb.cof</p>
+<pre><code>[profiles]
+comment = Share Folder
+path = /develop/share
+guest ok = yes
+browseable = yes
+public = yes
+writable = yes
+force users = nobody
+force group = nogroup
+force create mode = 0775
+force directory mode = 0775
 </code></pre>
 
                         <script src="https://utteranc.es/client.js"

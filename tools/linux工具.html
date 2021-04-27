@@ -200,6 +200,25 @@ mkdir build -p &amp;&amp; cd build &amp;&amp; cmake ..
 make -j
 sudo make install
 </code></pre>
+<h2 id="wps-中文字体部分无显示"><a class="header" href="#wps-中文字体部分无显示">wps 中文字体部分无显示</a></h2>
+<p><a href="https://mxy493.xyz/2019040840601/">添加字体， 更新字体缓存</a> 需要重启生效(或登出?)</p>
+<h2 id="samba-共享"><a class="header" href="#samba-共享">Samba 共享</a></h2>
+<p>安装</p>
+<pre><code>sudo apt-get install samba
+</code></pre>
+<p>修改 /etc/samba/smb.cof</p>
+<pre><code>[profiles]
+comment = Share Folder
+path = /develop/share
+guest ok = yes
+browseable = yes
+public = yes
+writable = yes
+force users = nobody
+force group = nogroup
+force create mode = 0775
+force directory mode = 0775
+</code></pre>
 
                         <script src="https://utteranc.es/client.js"
                             repo="imxood/imxood.github.io"

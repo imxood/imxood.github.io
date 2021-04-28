@@ -113,3 +113,7 @@
 ## element-ui
 
 [element-ui](https://element.eleme.cn/#/zh-CN/component/quickstart)
+
+## mockjs + axios 很香
+
+[vue项目中使用mockjs+axios模拟后台数据返回](https://www.cnblogs.com/steamed-twisted-roll/p/10823871.html)

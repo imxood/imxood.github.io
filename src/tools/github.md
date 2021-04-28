@@ -13,6 +13,10 @@
     git commit -m "."
     git push
 
+## 远程url变更, 更新本地 origin
+
+    git remote set-url origin  GIT_URL
+
 
 ## warning: CRLF will be replaced by LF
 

@@ -117,3 +117,8 @@
 ## mockjs + axios 很香
 
 [vue项目中使用mockjs+axios模拟后台数据返回](https://www.cnblogs.com/steamed-twisted-roll/p/10823871.html)
+
+## 使用 electron-vue-next (vite vue3)
+
+    # 我使用的是默认配置
+    npm init electron-vue-next

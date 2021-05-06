@@ -1,5 +1,9 @@
 # web
 
+## typescript 模块解析
+
+[typescript 模块解析](https://www.tslang.cn/docs/handbook/module-resolution.html)
+
 ## 使用 nvm 管理 nodejs
 
     网址: https://github.com/nvm-sh/nvm

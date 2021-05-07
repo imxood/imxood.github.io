@@ -117,3 +117,163 @@
 ## mockjs + axios 很香
 
 [vue项目中使用mockjs+axios模拟后台数据返回](https://www.cnblogs.com/steamed-twisted-roll/p/10823871.html)
+
+## vue3 webpack
+
+[Vue3+Electron整合方式](https://github.com/nofacer/vue3-electron)
+
+    npm init -y
+
+    npm install -D webpack webpack-cli
+    npm install -D vue@next vue-loader@next @vue@compiler-sfc
+
+    npm install -D style-loader sass-loader node-sass css-loader
+
+    npm install -D url-loader
+
+    过程主要时:
+        在 webpack config 中配置怎么解析vue文件,scss文件,scss样式,require路径,
+        解析 entry 中指定的文件, output 指定了 输出的文件, 这就是一个打包的过程
+
+
+webpack.config.js配置:
+
+```javascript
+    const path = require('path')
+    const { VueLoaderPlugin } = require('vue-loader')
+
+    module.exports = {
+        entry: './app.js',
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist')
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader'
+                },
+                // 普通的 `.scss` 文件和 `*.vue` 文件中的
+                // `<style lang="scss">` 块都应用它
+                {
+                    test: /\.scss$/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                        'sass-loader'
+                    ]
+                },
+                // 图片加载, base64数据, 如: <img :src="require('@/img/vue_logo.png').default">
+                {
+                    test: /\.(png|jpg|gif)$/i,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 8192,
+                            },
+                        },
+                    ],
+                },
+            ]
+        },
+        plugins: [
+            new VueLoaderPlugin()
+        ],
+        resolve: {
+            // 设置import或require时可以使用@作为路径, 如:
+            alias: {
+                '@': path.resolve('src')
+            }
+        }
+    }
+```
+
+## vue3 webpack electron
+
+[Vue3+Electron整合方式](https://github.com/nofacer/vue3-electron)
+
+    npm install -D electron
+
+    npm install -D electron-builder
+
+    指定 目标环境为: electron-renderer
+    配置 vue项目的打包输出 以及 electron 的打包输出
+    在 package.json 中指定electron启动的入口文件 electron 的打包输出的js文件
+    并添加:
+        "scripts": {
+            "start": "electron .",
+            "build": "./node_modules/.bin/webpack",
+            "dist": "electron-builder"
+        },
+        "postinstall": "electron-builder install-app-deps",
+        "build": {
+            "files": [
+                "./dist/**/*",
+                "./index.html"
+            ],
+            "directories": {
+                "output": "package"
+            }
+        },
+    "build" 用于 electron builder 需要打包哪些文件 以及 输出到哪里
+
+webpack.config.js 配置:
+
+```javascript
+const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
+
+module.exports = {
+    mode: 'development',
+    target: "electron-renderer",
+    entry: {
+        "bundle": ["./app.js"],
+        "main": ["./main.js"]
+    },
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            // 普通的 `.scss` 文件和 `*.vue` 文件中的
+            // `<style lang="scss">` 块都应用它
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            // 图片加载, base64数据, 如: <img :src="require('@/img/vue_logo.png').default">
+            {
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
+        ]
+    },
+    plugins: [
+        new VueLoaderPlugin()
+    ],
+    resolve: {
+        // 设置import或require时可以使用@作为路径, 如:
+        alias: {
+            '@': path.resolve('src')
+        }
+    }
+}
+```

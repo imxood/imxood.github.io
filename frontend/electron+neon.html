@@ -271,10 +271,167 @@ Error: Unable to install `vue-devtools`
 <p><a href="https://element.eleme.cn/#/zh-CN/component/quickstart">element-ui</a></p>
 <h2 id="mockjs--axios-很香"><a class="header" href="#mockjs--axios-很香">mockjs + axios 很香</a></h2>
 <p><a href="https://www.cnblogs.com/steamed-twisted-roll/p/10823871.html">vue项目中使用mockjs+axios模拟后台数据返回</a></p>
-<h2 id="使用-electron-vue-next-vite-vue3"><a class="header" href="#使用-electron-vue-next-vite-vue3">使用 electron-vue-next (vite vue3)</a></h2>
-<pre><code># 我使用的是默认配置
+<h2 id="vue3-webpack"><a class="header" href="#vue3-webpack">vue3 webpack</a></h2>
+<p><a href="https://github.com/nofacer/vue3-electron">Vue3+Electron整合方式</a></p>
+<pre><code>npm init -y
+
+npm install -D webpack webpack-cli
+npm install -D vue@next vue-loader@next @vue@compiler-sfc
+
+npm install -D style-loader sass-loader node-sass css-loader
+
+npm install -D url-loader
+
+过程主要时:
+    在 webpack config 中配置怎么解析vue文件,scss文件,scss样式,require路径,
+    解析 entry 中指定的文件, output 指定了 输出的文件, 这就是一个打包的过程
+</code></pre>
+<p>webpack.config.js配置:</p>
+<pre><code class="language-javascript">    const path = require('path')
+    const { VueLoaderPlugin } = require('vue-loader')
+
+    module.exports = {
+        entry: './app.js',
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist')
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.vue/,
+                    loader: 'vue-loader'
+                },
+                // 普通的 `.scss` 文件和 `*.vue` 文件中的
+                // `&lt;style lang=&quot;scss&quot;&gt;` 块都应用它
+                {
+                    test: /\.scss/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                        'sass-loader'
+                    ]
+                },
+                // 图片加载, base64数据, 如: &lt;img :src=&quot;require('@/img/vue_logo.png').default&quot;&gt;
+                {
+                    test: /\.(png|jpg|gif)/i,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 8192,
+                            },
+                        },
+                    ],
+                },
+            ]
+        },
+        plugins: [
+            new VueLoaderPlugin()
+        ],
+        resolve: {
+            // 设置import或require时可以使用@作为路径, 如:
+            alias: {
+                '@': path.resolve('src')
+            }
+        }
+    }
+</code></pre>
+<h2 id="vue3-webpack-electron"><a class="header" href="#vue3-webpack-electron">vue3 webpack electron</a></h2>
+<p><a href="https://github.com/nofacer/vue3-electron">Vue3+Electron整合方式</a></p>
+<pre><code>npm install -D electron
+
+npm install -D electron-builder
+
+指定 目标环境为: electron-renderer
+配置 vue项目的打包输出 以及 electron 的打包输出
+在 package.json 中指定electron启动的入口文件 electron 的打包输出的js文件
+并添加:
+    &quot;scripts&quot;: {
+        &quot;start&quot;: &quot;electron .&quot;,
+        &quot;build&quot;: &quot;./node_modules/.bin/webpack&quot;,
+        &quot;dist&quot;: &quot;electron-builder&quot;
+    },
+    &quot;postinstall&quot;: &quot;electron-builder install-app-deps&quot;,
+    &quot;build&quot;: {
+        &quot;files&quot;: [
+            &quot;./dist/**/*&quot;,
+            &quot;./index.html&quot;
+        ],
+        &quot;directories&quot;: {
+            &quot;output&quot;: &quot;package&quot;
+        }
+    },
+&quot;build&quot; 用于 electron builder 需要打包哪些文件 以及 输出到哪里
+</code></pre>
+<p>webpack.config.js 配置:</p>
+<pre><code class="language-javascript">const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
+
+module.exports = {
+    mode: 'development',
+    target: &quot;electron-renderer&quot;,
+    entry: {
+        &quot;bundle&quot;: [&quot;./app.js&quot;],
+        &quot;main&quot;: [&quot;./main.js&quot;]
+    },
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.vue/,
+                loader: 'vue-loader'
+            },
+            // 普通的 `.scss` 文件和 `*.vue` 文件中的
+            // `&lt;style lang=&quot;scss&quot;&gt;` 块都应用它
+            {
+                test: /\.scss/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            // 图片加载, base64数据, 如: &lt;img :src=&quot;require('@/img/vue_logo.png').default&quot;&gt;
+            {
+                test: /\.(png|jpg|gif)/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
+        ]
+    },
+    plugins: [
+        new VueLoaderPlugin()
+    ],
+    resolve: {
+        // 设置import或require时可以使用@作为路径, 如:
+        alias: {
+            '@': path.resolve('src')
+        }
+    }
+}
+</code></pre>
+<h2 id="vite-electron-创建-vite--electron-项目"><a class="header" href="#vite-electron-创建-vite--electron-项目">vite-electron 创建 vite + electron 项目</a></h2>
+<pre><code>yarn create vite-electron electron-app
+</code></pre>
+<h2 id="使用-electron-vue-next-vite-vue3-electron"><a class="header" href="#使用-electron-vue-next-vite-vue3-electron">使用 electron-vue-next (vite vue3 electron)</a></h2>
+<pre><code># 我使用默认配置
 npm init electron-vue-next
 </code></pre>
+<h2 id="electron-默认不能在渲染进程中使用node环境"><a class="header" href="#electron-默认不能在渲染进程中使用node环境">electron 默认不能在渲染进程中使用node环境</a></h2>
+<p><a href="https://www.electronjs.org/docs/tutorial/context-isolation">上下文隔离</a></p>
+<h2 id="import-和-require-区别"><a class="header" href="#import-和-require-区别">import 和 require 区别</a></h2>
+<p>在 typescript 使用 import<br />
+在 js 中使用 require</p>
 
                         <script src="https://utteranc.es/client.js"
                             repo="imxood/imxood.github.io"

@@ -57,3 +57,5 @@
     force group = nogroup
     force create mode = 0775
     force directory mode = 0775
+
+[linux访问windows的共享](https://segmentfault.com/a/1190000039363538)

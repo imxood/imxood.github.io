@@ -277,3 +277,22 @@ module.exports = {
     }
 }
 ```
+
+## vite-electron 创建 vite + electron 项目
+
+    yarn create vite-electron electron-app
+
+## 使用 electron-vue-next (vite vue3 electron)
+
+    # 我使用默认配置
+    npm init electron-vue-next
+
+
+## electron 默认不能在渲染进程中使用node环境
+
+[上下文隔离](https://www.electronjs.org/docs/tutorial/context-isolation)
+
+## import 和 require 区别
+
+在 typescript 使用 import  
+在 js 中使用 require

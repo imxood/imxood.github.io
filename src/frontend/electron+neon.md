@@ -296,3 +296,7 @@ module.exports = {
 
 在 typescript 使用 import  
 在 js 中使用 require
+
+## dplayer
+
+[用于测试的视频](http://samples.mplayerhq.hu/)

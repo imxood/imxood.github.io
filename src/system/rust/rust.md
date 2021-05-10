@@ -38,6 +38,21 @@
     # 卸载
     rustup self uninstall
 
+    # 查看组件
+    rustup component list
+
+## 自动补全
+
+    rustup completions bash rustup > ~/.rustup_completes
+
+    添加到 .bashrc 中:
+        source ~/.rustup_completes
+
+    rustup completions bash cargo
+    
+    添加到 .bashrc 中:
+        source $(rustc --print sysroot)/etc/bash_completion.d/cargo
+
 ## cargo 命令
 
     安装常用的工具:
@@ -45,15 +60,13 @@
         # 扩展cargo, 允许对 dependencies 的增删改
         # 查看依赖关系
         # 基于模板生成项目
-        # 文档生成, 及插件: 用于数学表达式, 生成流程图表
-
-        cargo install cargo-edit cargo-tree cargo-generate
-        cargo install mdbook mdbook-katex mdbook-mermaid
+        # 宏展开
+        cargo install cargo-edit cargo-tree cargo-generate cargo-expand
 
         ps:
             cargo-edit 部分命令:
                 cargo add <crate>
-                cargo add <crate> --allow-prerelease
+                cargo add <crate> --allow-prerelease, 允许使用beta版本的库
                 cargo rm <crate>
                 cargo upgrade
 
@@ -61,6 +74,9 @@
                 cargo tree
                 cargo tree -e features
                 cargo tree -f "{p} {f}"
+
+        # 文档生成, 及插件: 用于数学表达式, 生成流程图表
+        cargo install mdbook mdbook-katex mdbook-mermaid
 
     # 创建项目
     cargo new hello_cargo

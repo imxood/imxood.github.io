@@ -192,3 +192,9 @@
 ## 设置页面居中
 
     background:url(\${sb.imageUrl }) no-repeat; background-size:150px 100px; background-position: center;
+
+    div居中:
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); // 偏移自身的50%

@@ -296,3 +296,23 @@ module.exports = {
 
 在 typescript 使用 import  
 在 js 中使用 require
+
+## dplayer
+
+[用于测试的视频](http://samples.mplayerhq.hu/)
+
+## ffmpeg 使用
+
+    # 生成 hls格式 视频
+    ffmpeg -i ./demo.mp4 -hls_time 10 -hls_list_size 0 -f hls test/demo.m3u8
+
+    ~$ tree test/
+    test/
+    ├── demo0.ts
+    ├── demo1.ts
+    ├── demo2.ts
+    ├── demo3.ts
+    ├── demo4.ts
+    ├── demo5.ts
+    ├── demo6.ts
+    └── demo.m3u8

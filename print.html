@@ -732,6 +732,20 @@ rustup target add thumbv7m-none-eabi
 
 # 卸载
 rustup self uninstall
+
+# 查看组件
+rustup component list
+</code></pre>
+<h2 id="自动补全"><a class="header" href="#自动补全">自动补全</a></h2>
+<pre><code>rustup completions bash rustup &gt; ~/.rustup_completes
+
+添加到 .bashrc 中:
+    source ~/.rustup_completes
+
+rustup completions bash cargo
+
+添加到 .bashrc 中:
+    source (rustc --print sysroot)/etc/bash_completion.d/cargo
 </code></pre>
 <h2 id="cargo-命令"><a class="header" href="#cargo-命令">cargo 命令</a></h2>
 <pre><code>安装常用的工具:
@@ -739,15 +753,13 @@ rustup self uninstall
     # 扩展cargo, 允许对 dependencies 的增删改
     # 查看依赖关系
     # 基于模板生成项目
-    # 文档生成, 及插件: 用于数学表达式, 生成流程图表
-
-    cargo install cargo-edit cargo-tree cargo-generate
-    cargo install mdbook mdbook-katex mdbook-mermaid
+    # 宏展开
+    cargo install cargo-edit cargo-tree cargo-generate cargo-expand
 
     ps:
         cargo-edit 部分命令:
             cargo add &lt;crate&gt;
-            cargo add &lt;crate&gt; --allow-prerelease
+            cargo add &lt;crate&gt; --allow-prerelease, 允许使用beta版本的库
             cargo rm &lt;crate&gt;
             cargo upgrade
 
@@ -755,6 +767,9 @@ rustup self uninstall
             cargo tree
             cargo tree -e features
             cargo tree -f &quot;{p} {f}&quot;
+
+    # 文档生成, 及插件: 用于数学表达式, 生成流程图表
+    cargo install mdbook mdbook-katex mdbook-mermaid
 
 # 创建项目
 cargo new hello_cargo
@@ -887,7 +902,8 @@ for example in ${examples[@]}; do
 done
 
 for example in ${examples[@]}; do
-    echo &quot;start run: cargo run --verbose --package &lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.01968em;&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.77777em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.02778em;&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8888799999999999em;vertical-align:-0.19444em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03148em;&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.03588em;&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;e&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;example
+    echo &quot;start run: cargo run --verbose --package example&quot;
+    cargo run --verbose --package example
 done
 </code></pre>
 <h3 id="iced-例子"><a class="header" href="#iced-例子">iced 例子</a></h3>
@@ -1254,6 +1270,12 @@ document.onkeydown = function(){
 </code></pre>
 <h2 id="设置页面居中"><a class="header" href="#设置页面居中">设置页面居中</a></h2>
 <pre><code>background:url(${sb.imageUrl }) no-repeat; background-size:150px 100px; background-position: center;
+
+div居中:
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); // 偏移自身的50%
 </code></pre>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
 <h1 id="electronneon"><a class="header" href="#electronneon">electron+neon</a></h1>

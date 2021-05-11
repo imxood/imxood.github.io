@@ -316,3 +316,52 @@ module.exports = {
     ├── demo5.ts
     ├── demo6.ts
     └── demo.m3u8
+
+## ffmpeg
+
+    # 安装 模拟的 video loop设备
+    https://github.com/umlaeute/v4l2loopback --> make && sudo make install-all, 加载ko并运行
+
+    # 强制 format ?
+    # v4l2loopback-ctl set-caps /dev/video0 "UYVY:640x480"
+
+    # 创建新loop设备
+    sudo v4l2loopback-ctl add -n "loopy doopy" /dev/video7
+
+    # 删除设备
+    sudo v4l2loopback-ctl delete /dev/video7
+
+    # 安装 v412-ctl 工具 (video4linux)
+    sudo apt install v4l-utils
+
+    # 当 设备 没有输入时 停留 3000ms 后, 输出 空帧 (但是继续输入, ffplay似乎不动了?)
+    v4l2-ctl -d /dev/video0 -c timeout=3000
+
+    # 超时图片, 取代空帧 ?
+    v4l2loopback-ctl set-timeout-image -t 3000 /dev/video0 service-unavailable.png
+
+    # 查看设备列表
+    v4l2-ctl --list-devices
+
+    # 查看当前摄像头支持的视频压缩格式
+    v4l2-ctl -d /dev/video0 --list-formats
+
+    # 改变分辨率, 同时, 会根据输出文件后缀改变 video format
+    ffmpeg -i demo.mp4 -vf scale=1280x720 output.mkv
+
+    # 输出视频数据到 /dev/video0 设备上
+    # read video in the real framerate
+    # input file
+    # webcams expect raw video
+    # the same format used by my real one
+    ffmpeg -re -i pickle-rick.mkv -vcodec rawvideo -pix_fmt yuv420p -framerate 25 -f v4l2 /dev/video0
+
+    # 播放 /dev/video0 上的视频数据 (没有声音)
+    ffplay /dev/video0
+
+    # 记录 /dev/video0 设备上的数据 10s, 输出到 output.mkv 文件
+    ffmpeg -f v4l2 -framerate 25 -video_size 640x480 -i /dev/video0 -t 00:00:10 output.mkv
+
+## 库
+
+    pkg-config --cflags --libs gstreamer-1.0

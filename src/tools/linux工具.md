@@ -59,3 +59,7 @@
     force directory mode = 0775
 
 [linux访问windows的共享](https://segmentfault.com/a/1190000039363538)
+
+## BT 下载工具 -- Tixati
+
+使用Tixati, 在界面上, 点击Transfers, 点击 "Add", 打开URL, 输入 BT链接, 就会搜索资源, 点击 Start 开始下载

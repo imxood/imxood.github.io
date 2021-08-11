@@ -9,6 +9,7 @@
 
 - [嵌入式]()
     - [STM32](./embedded/stm32.md)
+    - [RT-thread](./embedded/rt-thread.md)
     - [Rust嵌入式](./embedded/Rust嵌入式.md)
     - [C语言](./embedded/C语言.md)
     - [GDB](./embedded/gdb.md)

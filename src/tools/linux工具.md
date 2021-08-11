@@ -63,3 +63,37 @@
 ## BT 下载工具 -- Tixati
 
 使用Tixati, 在界面上, 点击Transfers, 点击 "Add", 打开URL, 输入 BT链接, 就会搜索资源, 点击 Start 开始下载
+
+## python 版本管理工具 -- pyenv
+
+    https://github.com/pyenv/pyenv
+
+    安装：
+
+        git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+        cd ~/.pyenv && src/configure && make -C src
+
+        echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+        echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+        eval "$(pyenv init -)"
+
+    用法：
+
+        pyenv install -l
+
+        pyenv install 3.9.6
+
+        pyenv global 3.9.6
+        pyenv local 3.9.6
+
+        查看当前版本：
+            pyenv version
+
+        查看当前所有的版本：
+            pyenv versions
+        
+        python --version
+        pip --version
+
+        pyenv local 3.9.6 当前目录下自动创建环境

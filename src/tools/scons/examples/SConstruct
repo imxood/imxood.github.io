@@ -1,0 +1,31 @@
+
+env = Environment(
+    CC='gcc',
+    LIBPATH=['#build/libs/bar', '#build/libs/foo'],
+    CPPPATH = ['#build/libs/foo']
+)
+
+Export('env')
+
+
+# VariantDir('build/libs/bar', 'libs/bar')
+# SConscript('libs/bar/SConscript')
+
+
+SConscript('libs/foo/SConscript', variant_dir='build/libs/foo', duplicate=0)
+# SConscript('src/SConscript', variant_dir='build/src', duplicate=0)
+
+
+
+
+# SConscript('libs/bar/SConscript', variant_dir='build/libs/bar')
+
+
+env.VariantDir('build/libs/bar', '#')
+env.Library('build/libs/bar/bar', 'build/libs/bar/bar.c')
+Repository('#../bar')
+
+
+# 添加一个额外的自定义命令
+echo = Builder(action = 'echo "hello"')
+env['BUILDERS']['echo'] = echo

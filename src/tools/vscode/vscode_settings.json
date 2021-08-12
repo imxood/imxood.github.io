@@ -1,0 +1,14 @@
+{
+    "terminal.integrated.scrollback": 5000,
+    "editor.fontSize": 18,
+    "terminal.integrated.fontSize": 15,
+    "editor.renderWhitespace": "all",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "python.formatting.autopep8Args": [
+        "--max-line-length=200"
+    ],
+    "python.linting.flake8Args": [
+        "--max-line-length=200"
+    ]
+}

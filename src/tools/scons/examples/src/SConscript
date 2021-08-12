@@ -1,0 +1,9 @@
+Import('env')
+
+env.Program(
+    'hello.exe',
+    ['hello.c'],
+    LIBS=['foo', 'bar'],
+    CCFLAGS='-MD -MF hello.d',
+    parse_flags='-Iinclude -DEBUG -lm'
+)

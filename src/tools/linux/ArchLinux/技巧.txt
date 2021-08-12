@@ -1,0 +1,5 @@
+连接wifi
+
+wpa_passphrase maxu "mx123456" | sudo tee /etc/wpa_supplicant/maxu.conf
+wpa_passphrase maxu-mobile "maxu88888888" | sudo tee /etc/wpa_supplicant/maxu-mobile.conf
+sudo wpa_supplicant -B -i wlo1 -c /etc/wpa_supplicant/maxu.conf

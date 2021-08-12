@@ -1,0 +1,14 @@
+[Unit]
+Description=log server
+After=network.target
+
+[Service]
+ExecStart=python3 app.py
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=notify
+
+[Install]
+WantedBy=multi-user.target
+Alias=log_server.service

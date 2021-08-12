@@ -1,0 +1,133 @@
+version: "3.1"
+
+networks:
+    frantnet:
+    endnet:
+
+services:
+
+    web:
+        image: nginx
+        links:
+            - redmine:redmine
+            # - gitlab:gitlab
+            # - jenkins:jenkins
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - /srv/nginx/logs:/var/log/nginx
+        # command: [nginx-debug, '-g', 'daemon off;']
+
+    postgres:
+        image: postgres:latest
+        restart: always
+        # networks:
+        #     - endnet
+        volumes:
+            - /srv/docker/postgres-redmine:/var/lib/postgresql/data
+        environment:
+            - 'POSTGRES_USER=redmine'
+            - 'POSTGRES_PASSWORD=password'
+            - 'POSTGRES_DB=redmine'
+            - 'POSTGRES_PORT=5432'
+
+    redmine:
+        # container_name: redmine-site
+        image: sameersbn/redmine:latest
+        restart: always
+        depends_on:
+            - postgres
+        # networks:
+        #     - frantnet
+        #     - endnet
+        volumes:
+            # - /srv/docker/redmine:/home/redmine/data
+            - /srv/docker/redmine/redmine:/home/redmine/data
+            # - /srv/docker/redmine/data:/usr/src/redmine/files:z
+            # - /srv/docker/redmine/plugins:/usr/src/redmine/plugins:z
+        ports:
+            - 8080:3000
+        environment:
+            - TZ=Asia/Shanghai
+
+            - DB_ADAPTER=postgresql
+            - DB_HOST=postgres
+            - DB_PORT=5432
+            - DB_USER=redmine
+            - DB_PASS=password
+            - DB_NAME=redmine
+            - REDMINE_RELATIVE_URL_ROOT=/redmine
+
+            - SMTP_ENABLED=true
+            - SMTP_METHOD=smtp
+            - SMTP_DOMAIN=www.example.com
+            - SMTP_HOST=smtp.163.com
+            - SMTP_PORT=25
+            - SMTP_USER=starstartech@163.com
+            - SMTP_PASS=password
+            - SMTP_STARTTLS=true
+            - SMTP_AUTHENTICATION=:login
+
+            - IMAP_ENABLED=true
+            - IMAP_HOST=imap.163.com
+            - IMAP_PORT=993
+            - IMAP_USER=starstartech@163.com
+            - IMAP_PASS=password
+            - IMAP_SSL=true
+            - IMAP_INTERVAL=30
+
+    # taiga:
+    #     image: 'benhutchins/taiga'
+    #     ports:
+    #         - 80:80
+    #     # - 443:443 # To enable SSL, uncomment this line
+    #     depends_on:
+    #         - postgres
+    #     volumes:
+    #         # I recommend specifying a volume that maps to taiga's media,
+    #         # this way uploaded files are not lost during upgrades of the taiga image
+    #         - /srv/taiga/media:/usr/src/taiga-back/media
+
+    #         # If you'd like to store the configuration outside of the container,
+    #         # uncomment this volume. This allows for easy changes to the configuration.
+    #         # - ./conf/taiga:/taiga
+
+    #         # - ./ssl.crt:/etc/nginx/ssl/ssl.crt:ro # To enable SSL, uncomment this line
+    #         # - ./ssl.key:/etc/nginx/ssl/ssl.key:ro # To enable SSL, uncomment this line
+    #     environment:
+    #         # Your hostname (REQUIRED)
+    #         TAIGA_HOSTNAME: localhost
+
+    #         # Database settings
+    #         # To use an external database, simply update these and remove the postgres
+    #         # service from this docker-compose.yml file
+    #         TAIGA_DB_NAME: taigadb
+    #         TAIGA_DB_HOST: postgres
+    #         TAIGA_DB_USER: postgres
+    #         TAIGA_DB_PASSWORD: password
+    #         TAIGA_SLEEP: 15 # when the db comes up from docker, it is usually too quick
+
+    #         # TAIGA_SSL: True # To enable SSL, uncomment this line
+    #         # TAIGA_SSL_BY_REVERSE_PROXY: True # To enable SSL, handling by a reverse proxy, uncomment this
+
+    #         # To use an external SMTP for emails, fill in these values:
+    #         # TAIGA_ENABLE_EMAIL: True
+    #         # TAIGA_EMAIL_FROM: no-reply@taiga.mycompany.net
+    #         # TAIGA_EMAIL_USE_TLS: True
+    #         # TAIGA_EMAIL_HOST: smtp.google.com
+    #         # TAIGA_EMAIL_PORT: 587
+    #         # TAIGA_EMAIL_USER: me@gmail.com
+    #         # TAIGA_EMAIL_PASS: super-secure-pass phrase thing!
+
+    # postgres:
+    #     image: postgres
+    #     environment:
+    #         POSTGRES_DB: taigadb
+    #         POSTGRES_PASSWORD: password
+    #         POSTGRES_USER: postgres
+    #     ports:
+    #         - 5432
+    #     volumes:
+    #         # this helps prevent your postgres data from deleted
+    #         - /srv/taiga/pgdata:/var/lib/postgresql/data

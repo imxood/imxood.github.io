@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="icon" href="data:;base64,=">
+	<link rel="stylesheet" href="{{url_for('static', filename='fonts/jquery.filer-icons/jquery-filer.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='layui/css/layui.css')}}">
+	<script src="{{url_for('static', filename='layui/layui.js')}}"></script>
+	<style>
+		.container {
+			width: 95%;
+			margin: 0 auto;
+		}
+
+		.table {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.table thead th {
+			vertical-align: bottom;
+			border-bottom: 2px solid #eceeef;
+		}
+
+		.table tbody tr:hover {
+			background-color: rgba(0, 0, 0, 0.075)
+		}
+
+		.table td,
+		.table th {
+			padding: .3rem;
+			vertical-align: top;
+			border-top: 1px solid #eceeef;
+		}
+
+		.text-left {
+			text-align: left !important;
+		}
+
+		.text-right {
+			text-align: right !important;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="table-responsive">
+			<table id="list-table" class="table table-hover">
+				<thead>
+					<tr>
+						<th class="text-left " data-sort="string">Name</th>
+						<th class="text-right " data-sort="int">Size</th>
+						<th class="text-right " data-sort="int">Modified</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="3">
+							<small class="pull-xs-left text-muted" dir="ltr">{{total.dir}} folders and {{total.file}}
+								files,
+								{{total.size | size_fmt}} in total</small>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+					{% for entry in contents if entry.type == 'dir' %}
+					<tr>
+						<td class="text-left " data-sort-value="dir-{{entry.name | lower}}">
+							<i id="icon-jfi-folder" class="icon-jfi-folder"></i>
+							<a href="{{entry.name}}/"><strong>{{entry.name}}</strong></a>
+						</td>
+						<td class="text-right" data-sort-value="-1">&mdash;</td>
+						<td class="text-right" data-sort-value="{{entry.mtime}}" title="{{entry.mtime | time_fmt}}">
+							{{entry.mtime | humanize}}
+						</td>
+					</tr>
+					{% endfor %}
+					{% for entry in contents if entry.type == 'file' %}
+					<tr>
+						<td class="text-left" data-sort-value="file-{{entry.name | lower}}">
+							<i class="{{entry.name | icon_fmt}}"></i>
+							<a href="{{entry.name}}" data-size="{{entry.size | size_fmt}}">{{entry.name}}
+							</a>
+						</td>
+						<td class="text-right" data-sort-value="{{entry.size}}" title="{{entry.size}} bytes">
+							{{entry.size | size_fmt}}</td>
+						<td class="text-right" data-sort-value="{{entry.mtime}}" title="{{entry.mtime | time_fmt}}">
+							{{entry.mtime | humanize}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+python3 manage.py db init
+python3 manage.py db migrate
+python3 manage.py db upgrade
+python3 manage.py shell
+
+
+survey = Survey(name='Dogs')
+question = Question(text='What is your favorite dog?')
+question.choices = [Choice(text='Beagle'), Choice(text='Rottweiler'), Choice(text='Labrador')]
+question2 = Question(text='What is your second favorite dog?')
+question2.choices = [Choice(text='Beagle'), Choice(text='Rottweiler'), Choice(text='Labrador')]
+survey.questions = [question, question2]
+db.session.add(survey)
+db.session.commit()
+surveys = Survey.query.all()

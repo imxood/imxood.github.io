@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    esp32:
+        build:
+            context: .
+        image: imxood/esp32
+        restart: always
+        # environment:
+        #     - http_proxy=mx-servers:1081
+        #     - https_proxy=mx-servers:1081
+        networks:
+            - mx-network
+        devices:
+            - "/dev/ttyUSB0:/dev/ttyUSB0"
+        ports:
+            - "22:22"
+
+networks:
+    mx-network:
+        external: true

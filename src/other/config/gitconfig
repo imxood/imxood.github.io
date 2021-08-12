@@ -1,0 +1,13 @@
+[core]
+	quotepath = false
+	gitproxy = git-proxy
+	editor = vim
+[user]
+	email =
+	name =
+[push]
+	default = simple
+[http]
+	proxy = http://127.0.0.1:1081
+[https]
+ 	proxy = http://127.0.0.1:1081

@@ -1,0 +1,363 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.1.1/react-redux.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.4/redux.js"></script>
+    <style>
+        .active {
+            color: red
+        }
+
+        .line {
+            display: inline-block;
+            border-bottom: 1px solid #222222;
+            width: 100px;
+            position: absolute;
+            left: 0;
+            top: 7px;
+        }
+
+        .ui.comments .comment {
+            padding: 0;
+            margin: 2em 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div class="ui container" style="padding:30px;">
+        <div id="app"></div>
+    </div>
+    <script type="text/babel">
+
+        /* hello, world */
+
+        class Hello extends React.Component {
+
+            state = {
+                num: 1,
+                message: "my friend (from state)"
+            }
+
+            componentWillMount() {
+                console.log("componentWillMount 函数触发")
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h1> hello {this.state.message}</h1>
+                        <button onClick={this.updateMessage}>Click me!</button>
+                    </div>
+                )
+            }
+
+            componentDidMount() {
+                console.log("componentDidMount 函数触发")
+            }
+
+            updateMessage = () => {
+                this.setState({
+                    message: "my friend (from changed state)"
+                })
+            }
+        }
+
+        ReactDOM.render(
+            <Hello />,
+            document.getElementById("root")
+        );
+
+
+
+        /* ToDoList with React */
+
+        class TodoForm extends React.Component {
+
+            styles = {
+                'title': {
+                    width: 200,
+                    display: 'inline-block',
+                    marginRight: 10,
+                    verticalAlign: 'top'
+                }
+            }
+
+            handleSubmit = (e) => {
+                event.preventDefault()
+                let text = this.refs.text.value
+                if (!text.trim()) {
+                    console.log("Input can't be null")
+                    return
+                }
+                let id = uuid()
+                this.props.AddTodoItem({ id, text, complete: false })
+            }
+
+            render() {
+                return (
+                    <form class="ui reply form" onSubmit={this.handleSubmit}>
+                        <div class="field" style={this.styles.title} >
+                            <input type="text" placeholder="TODO" ref="text" />
+                        </div>
+                        <button type="submit" class="ui submit button">添加</button>
+                    </form>
+                )
+            }
+        }
+
+        class Todo extends React.Component {
+
+            styles = {
+                'title': {
+                    paddingLeft: '20px',
+                    paddingRight: '50px',
+                    position: 'relative'
+                },
+                'delete': {
+                    marginLeft: '20px',
+                    marginRight: '50px'
+                }
+            }
+
+            handleChangeComplete = () => {
+                this.props.ChangeComplete(this.props.id)
+            }
+
+            handleDeleteItem = () => {
+                this.props.DeleteItem(this.props.id)
+            }
+
+            render() {
+                console.log(this.styles.title)
+                return (
+                    <div class="comment">
+                        <div class="content">
+                            <span class="author" style={this.styles.title}>
+                                {this.props.text}
+                                <span class={this.props.complete ? 'line' : ''}></span>
+                            </span>
+                            <span class="author" style={this.styles.title}>
+                                {this.props.complete ? "已完成" : "未完成"}
+                            </span>
+                            <span class="author">{this.props.id}</span>
+                            <span class="ui blue button" style={this.styles.delete}>删除</span>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        class TodoList extends React.Component {
+
+            render() {
+                console.log(this.props)
+                var vaule = this.props.choosevalue
+                const a = this.props.data.map(({ id, text, complete }, index) => {
+                    if (vaule == '1') {
+                        return <Todo ChangeComplete={this.ChangeComplete} key={index} id={id} text={text} complete={complete} />
+                    }
+                    if (vaule == '2' && complete == false) {
+                        return <Todo key={index} id={id} text={text} complete={complete} />
+                    }
+                    if (vaule == '3' && complete == true) {
+                        return <Todo key={index} id={id} text={text} complete={complete} />
+                    }
+                })
+
+                return (
+                    <div>{a}</div>
+                )
+            }
+        }
+
+        class TodoFooter extends React.Component {
+
+            styles = {
+                'title': {
+                    marginRight: 10,
+                    fontSize: 20
+                },
+
+                'top': {
+                    marginTop: 20
+                }
+            }
+
+            handleAll = (e) => {
+                let all = this.refs.all.value
+                this.props.SubmitChooseValue(all)
+            }
+
+            handleActive = (e) => {
+                let active = this.refs.active.value
+                this.props.SubmitChooseValue(active)
+            }
+
+            handleComplete = (e) => {
+                let complete = this.refs.complete.value
+                this.props.SubmitChooseValue(complete)
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h2 style={this.styles.top}>show</h2>
+                        <button type='submit' style={this.styles.top} class='ui blue button' value='1' ref='all' onClick={this.handleAll}>全部</button>
+                        <button type='submit' style={this.styles.top} class='ui blue button' value='2' ref='active' onClick={this.handleActive}>还未完成</button>
+                        <button type='submit' style={this.styles.top} class='ui blue button' value='3' ref='complete' onClick={this.handleComplete}>已完成</button>
+                    </div>
+                )
+            }
+        }
+
+        /* todolist */
+        class TodoApp extends React.Component {
+
+            state = {
+                choosevalue: 1,
+                data: this.props.data
+            }
+
+            OnAddTodoItem = (newItem) => {
+                let newData = this.state.data.concat(newItem)
+                this.setState({ data: newData })
+            }
+
+            ChooseValue = (id) => {
+                this.setState({ choosevalue: id })
+            }
+
+            render() {
+
+                const { data } = this.state
+
+                return (
+                    <div class="ui comments">
+                        <h1>My ToDoList with React</h1>
+                        <div class="ui divider"></div>
+                        <TodoForm AddTodoItem={this.OnAddTodoItem} />
+                        <TodoList data={data} choosevalue={this.state.choosevalue} />
+                        <TodoFooter SubmitChooseValue={this.ChooseValue} />
+                    </div>
+                )
+            }
+        }
+
+        function counter(state = 0, action) {
+            switch (action.type) {
+                case "INCREASE": return state + 1;
+                case "DECREASE": return state - 1;
+                default: return state;
+            }
+        }
+
+        let data = [
+            { id: 0, text: '天气不错哦!!!', complete: false },
+            { id: 1, text: '天气不错哦!!!', complete: false },
+            { id: 2, text: '出去玩啊!!!', complete: true },
+        ]
+
+        /* action */
+        const ADD_TODO = 'ADD_TODO'
+        const DELETE_TODO = 'DELETE_TODO'
+        const FILTER_TODO = 'FILTER_TODO'
+
+        const Filters = {
+            SHOW_ALL: "SHOW_ALL",
+            SHOW_COMPLETED: "SHOW_COMPLETED",
+            SHOW_ACTIVE: "SHOW_ACTIVE",
+        }
+
+        function addTodo(text) {
+            return { type: ADD_TODO, text }
+        }
+
+        function deleteTodo(index) {
+            return { type: DELETE_TODO, index }
+        }
+
+        function filterTodo(filter) {
+            return { type: FILTER_TODO, filter }
+        }
+
+        /* reducer */
+        const reducer = (state, action) => {
+
+            switch (action.type) {
+
+                case ADD_TODO:
+                    return { text: "add todo" } 
+
+                case DELETE_TODO:
+                    return { text: "delete todo" }
+
+                case FILTER_TODO:
+                    return { text: "filter todo" }
+
+                default:
+                    return { text: "" }
+            }
+        }
+
+        /* state */
+        /* 
+            {
+                filter: "SHOW_ALL",
+                todos: [
+                    {
+                        id: 0,
+                        text: "",
+                        completed: false
+                    }
+                ]
+            }
+
+         */
+
+        function todoApp(state = { filter: "SHOW_ALL" }, action) {
+            return {
+                filter: filterTodo(state.filter, action),
+                todos: filterTodo(state.filter, action),
+            }
+        }
+
+        Redux.combineReducers({
+
+        })
+
+        let store = Redux.createStore(reducer)
+
+        function mapStateToProps(state) {
+            return { text: state.text }
+        }
+
+        function mapDispatchToProps(dispatch) {
+            return {
+                onAddTodoAction: () => dispatch(AddTodoAction),
+                onDeleteTodoAction: () => dispatch(DeleteTodoAction),
+                onFilterTodoAction: () => dispatch(FilterTodoAction),
+            }
+        }
+
+        TodoApp = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TodoApp)
+
+        ReactDOM.render(
+            <ReactRedux.Provider store={store}>
+                <TodoApp data={data} />
+            </ReactRedux.Provider>,
+            document.getElementById('app')
+        )
+
+        ReactRedux
+
+
+    </script>
+</body>
+
+</html>

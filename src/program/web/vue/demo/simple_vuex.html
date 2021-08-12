@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
+</head>
+
+<body>
+	<div id="app"></div>
+</body>
+<script>
+	// 如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
+
+	const store = new Vuex.Store({
+		state: {
+			count: 0
+		},
+		mutations: {
+			increment(state) {
+				state.count++
+			}
+		}
+	})
+
+	console.log(store.state.count) // -> 0
+
+	store.commit('increment')
+
+	console.log(store.state.count) // -> 1
+
+
+	// 创建一个 Counter 组件
+	const Counter = {
+		template: `<div>{{ count }}</div>`,
+		computed: {
+			count() {
+				return store.state.count
+			}
+		}
+	}
+
+	new Vue({
+		render: h => h(Counter),
+	}).$mount('#app')
+
+</script>
+
+</html>

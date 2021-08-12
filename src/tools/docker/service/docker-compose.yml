@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+    v2ray:
+        image: 'v2ray/official'
+        container_name:
+            'v2ray'
+        ports:
+            - '1080:1080'
+            - '1081:1081'
+        volumes:
+            - '/docker/v2ray:/etc/v2ray'

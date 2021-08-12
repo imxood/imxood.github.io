@@ -1,0 +1,6 @@
+env = Environment()
+
+# VariantDir('build/libs/bar', '#../bar')
+
+env.Library('build/bar', 'bar.c')
+# Repository('#../bar')

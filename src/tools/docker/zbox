@@ -1,0 +1,1 @@
+docker run -d -p 80:80 -p 3306:3306 -e ADMINER_USER="root" -e ADMINER_PASSWD="123456" -e BIND_ADDRESS="false" -v /srv/zbox/:/opt/zbox/ --add-host smtp.exmail.qq.com:163.177.90.125 --name zentao-server idoop/zentao:latest

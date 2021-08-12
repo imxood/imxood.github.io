@@ -1,1 +1,6 @@
 book
+node_modules
+yarn.lock
+Cargo.lock
+__pycache__
+*.pyc

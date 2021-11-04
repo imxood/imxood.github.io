@@ -5,10 +5,30 @@
     sudo apt install libusb-1.0-0-dev
 
     git clone https://github.com/ntfreak/openocd.git
-    ./bootstrap
-    ./configure
-    make -j
-    sudo make install
+
+    编译
+        ./bootstrap
+        ./configure
+        make -j
+        sudo make install
+
+    vscode 调试 openocd 本身， 编译：
+        export CFLAGS="-O0"
+        ./bootstrap
+        ./configure --prefix=/develop/sources/openocd/output
+        make -j
+        make install
+
+    配置：
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "debug openocd",
+            "program": "${workspaceFolder}/output/bin/openocd",
+            "args": ["-f", "board/stm32h750b-disco.cfg"],
+            "cwd": "${workspaceFolder}"
+        },
+
 
 
 ## openocd调试stm32f7
@@ -194,3 +214,15 @@
 	}
 
     必要时, 可以添加 armToolchainPath, 但是 openocd 的路径好像不能添加, 只能设置环境变量
+
+## arm-none-eabi-gdb
+
+    info target
+    info mem 显示内存情况， 包括 ROM 和 RAM
+
+    where 显示当前程序执行位置
+
+    monitor target
+    monitor targets
+
+    monitor flash banks 查看 flash

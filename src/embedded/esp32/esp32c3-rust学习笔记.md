@@ -8,7 +8,9 @@
 
         2> 使用 cmake 编译 esp-idf， 配置文件是： sdkconfig 和 sdkconfig_defaults
 
-            把 esp-idf-sys 中的 resources/cmake_project 作为一个基本的项目, 复制到你的项目编译输出路径下:
+            把 esp-idf-sys 中的 resources/cmake_project 作为一个基本的项目,
+            (参考下： https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/api-guides/build-system.html#cmake-esp-idf)
+            复制到你的项目编译输出路径下:
                 target/riscv32imc-esp-espidf/debug/build/esp-idf-sys-eac6c6bb186a6e4d/out
                     .
                     ├── build
@@ -16,6 +18,9 @@
                     └── main.c
 
                 sdkconfig 和 sdkconfig_defaults 是 从环境变量 ESP_IDF_SDKCONFIG 和 ESP_IDF_SDKCONFIG_DEFAULTS 中取到的
+                这个项目就是一个 ESP-IDF hello world 的cmake项目
+                编译从 ESP_IDF_SDKCONFIG 和 ESP_IDF_SDKCONFIG_DEFAULTS 中定义的组件， 并生成一个 libespidf.elf 可执行文件，这个文件可能只是为了生成依赖的库，没有其它作用
+                生成的 库 会以 println!("cargo: ... ") 的形式输出？
 
             主要过程是：
               cmake::Config::new(&out_dir)
@@ -35,6 +40,8 @@
                 .env("IDF_TARGET", &chip.to_string())
                 .build();
 
+            为了编译自定义组件， 应该需要考虑配置 sdkconfig_defaults 文件
+
         3>. 解析 cmake 的输出结果, 如: link_args sdkconfig_json, 把解析的结果返回 -- EspIdfBuildOutput
 
     2. 生成rs代码
@@ -42,7 +49,7 @@
         一个bindgen需要的头文件 header_file:
             src/include/esp-idf/bindings.h
 
-        执行, 返回值是 bindings_file:
+        执行下面 build code, 返回值是 bindings_file:
             bindgen::run(
                 build_output
                     .bindgen
@@ -71,4 +78,13 @@
         
         include!(env!("EMBUILD_GENERATED_BINDINGS_FILE"));
 
+    4. esp-idf-sys 的 src代码
+
+        src/start.rs 定义了我们项目的入口, 及rust运行的基础, 我们的项目中 main 函数会在 src/start.rs 中被引用
+
     上面几个过程就有了 esp32 的 c bind 的 crate 了.
+
+    上面的整个过程 就是: 
+        编译esp-idf源码, 根据配置生成 各种.a
+        生成 rust绑定
+        编译 rust code

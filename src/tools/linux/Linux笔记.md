@@ -1,5 +1,18 @@
 # Linux笔记
 
+## 自动挂载
+
+    sudo blkid
+
+    vim /etc/fstab
+
+    UUID=7f02008a-bbbc-4db5-ab13-eafeacf19356 /develop ext4 defaults 0 2
+
+    第一个数字0表示不使用bump程序对它进行备份。
+    第二个数字2表示开机不优先检查此磁盘，1表示开机优先检查磁盘，用于根分区/, 2用于普通分区，0禁止磁盘检查
+
+    重启
+
 ## issue
 
     maxu@maxu-pc:/media/maxu$ sudo mount -t ntfs-3g /dev/sdb4 /mnt/A/

@@ -1,6 +1,6 @@
 # raspberry笔记
 
-## 使用imager烧写TF卡
+## 使用 imager 烧写TF卡
 
     https://mirrors.tuna.tsinghua.edu.cn/raspbian-images/raspbian_lite/images/raspbian_lite-2020-02-14/2020-02-13-raspbian-buster-lite.zip
 
@@ -46,3 +46,16 @@
     处理方法: 使用代理, 配置 http_proxy, https_proxy
     
 ## 挂载硬盘, 设置共享, 添加用户权限
+
+
+## 2021-1201
+
+    1. 系统镜像
+
+        http://mirrors.ustc.edu.cn/raspberry-pi-os-images/raspios_armhf/images/raspios_armhf-2021-11-08/
+
+        基本桌面环境
+
+    2. 使用 Etcher 烧写镜像
+
+        deepin 应用市场安装 Etcher

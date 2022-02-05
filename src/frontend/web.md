@@ -198,3 +198,10 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%); // 偏移自身的50%
+
+## 指定宽度 剩余铺满
+
+    <div style="display: flex;">
+        <div style="flex-grow: 1;"></div>
+        <div style="width: 300px;"></div>
+    </div>

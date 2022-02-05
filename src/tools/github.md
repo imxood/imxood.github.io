@@ -76,3 +76,33 @@
 
         跟上面是类似的.
         echo "{name}={value}" >> \$GITHUB_ENV
+
+## 同步fork上游的代码
+
+查看远程状态
+
+	git remote -v
+
+添加 fork的上游仓库
+
+	git remote add upstream https://github.com/larksuite/rsmpeg.git
+	
+再次 查看状态是否被添加
+
+	git remote -v
+	
+获取上游的更新, 会被存储到本地分支 upstream/master
+	
+	git fetch upstream
+	
+切换到本地要merge的分支 master
+	
+	git checkout master
+	
+把 upstream/master 分支 merge 到本地 master
+	
+	git merge upstream/master
+	
+提交
+
+	git push origin master

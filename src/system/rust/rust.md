@@ -105,6 +105,13 @@
         指定features:
             --features="FEATURE1 FEATURE2 ..."
 
+    # 显示详细的编译信息, 包括 build.rs 中的 print
+    cargo build -vv
+
+    # 安装 binutils 工具
+    cargo install cargo-binutils
+    rustup component add llvm-tools-preview
+
 
 ## vscode 中 rust 的插件
 
@@ -304,3 +311,7 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
     impl Future for Server
 
     Server实例就可以直接使用 .await 了
+
+## 汇编
+
+    https://godbolt.org/ 二进制浏览器

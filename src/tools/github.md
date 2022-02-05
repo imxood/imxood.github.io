@@ -27,7 +27,20 @@
 
     git config --global core.quotepath false
 
-## 创建空的新分支
+## 分支管理
+
+### 删除分支
+
+    # 删除本地分支
+    git branch -d localBranchName
+
+    # 删除远程分支
+    git push origin --delete remoteBranchName
+
+    # 删除后 同步分支
+    git fetch -p
+
+### 创建空的新分支
 
     git checkout --orphan main, 创建没有commits的孤儿分支
     git add . && git commit -m "."

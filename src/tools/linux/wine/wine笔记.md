@@ -29,6 +29,8 @@ sudo apt install fonts-wqy-microhei
 
 cp /usr/share/fonts/truetype/wqy/wqy-microhei.ttc ~/.wine/drive_c/windows/Fonts
 
+// deepin: cp /usr/share/fonts/truetype/wqy/wqy-microhei.ttc ~/.deepinwine/Deepin-WeChat/drive_c/windows/Fonts
+// deepin: cp /usr/share/fonts/truetype/wqy/wqy-microhei.ttc ~/.deepinwine/Deepin-QQ/drive_c/windows/Fonts
 
 
 wqy-microhei.reg:
@@ -53,5 +55,13 @@ REGEDIT4
 ```
 
 wine regedit wqy-microhei.reg
+// deepin: deepin-wine6-stable regedit wqy-microhei.reg
 
 LC_ALL=zh_CN.UTF-8 wine regedit wqy-microhei.reg
+
+## WINE_CMD
+
+    sudo vim /opt/deepinwine/tools/run.sh
+
+    修改：
+        WINE_CMD="LC_ALL=zh_CN.UTF-8 deepin-wine"

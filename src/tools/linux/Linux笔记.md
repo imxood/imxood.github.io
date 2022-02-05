@@ -1,5 +1,18 @@
 # Linux笔记
 
+## 自动挂载
+
+    sudo blkid
+
+    vim /etc/fstab
+
+    UUID=7f02008a-bbbc-4db5-ab13-eafeacf19356 /develop ext4 defaults 0 2
+
+    第一个数字0表示不使用bump程序对它进行备份。
+    第二个数字2表示开机不优先检查此磁盘，1表示开机优先检查磁盘，用于根分区/, 2用于普通分区，0禁止磁盘检查
+
+    重启
+
 ## issue
 
     maxu@maxu-pc:/media/maxu$ sudo mount -t ntfs-3g /dev/sdb4 /mnt/A/
@@ -273,10 +286,21 @@ REJECT 拒绝数据包通过，必要时会给数据发送端一个响应的信�
 
 ### 查看usb设备的具体信息
 
-    udevadm info --attribute-walk --path=/sys/bus/usb-serial/devices/ttyUSB0
-    sudo vim /etc/udev/rules.d/myusb.rules 编写设备规则
-    rule:
+    插拔USB， 查看usb信息：
+        dmesg -w
+
+    编写设备规则
+        sudo vim /etc/udev/rules.d/myusb.rules
+
+        添加：
+            ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", MODE:="0666", SYMLINK+="esp32c3"
+    
         MODE:="0666" 设置每个人都有读写权限
+
+        sudo service udev reload
+        sudo service udev restart
+
+        再插拔一次 USB
 
 ### linux中的常见脚本
 

@@ -41,6 +41,14 @@
     # 查看组件
     rustup component list
 
+## rustc
+
+    # 查看当前 系统 的目标配置信息
+    rustc --print cfg
+
+    # 查看当前 项目 的目标配置信息
+    cargo rustc -- --print cfg
+
 ## 自动补全
 
     rustup completions bash rustup > ~/.rustup_completes

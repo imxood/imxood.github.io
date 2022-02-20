@@ -118,3 +118,18 @@ Self {
 
 
 当执行 `` state.set(GameState::GameOver) `` 时, 会验证: 1.当前的 stage.stack 的最后一项不能是要设置的状态 2.stage.scheduled 需要是空的, 然后更新状态: ``self.scheduled = Some(ScheduledOperation::Set(state))``
+
+## 2022.01.15
+
+    添加 WindowPlugin 插件
+        会 添加大量的窗口初始化事件:
+            WindowResized
+            CreateWindow
+            WindowCreated
+            WindowCloseRequested
+            CloseWindow
+            CursorMoved
+            ...
+
+    添加 WinitPlugin 插件
+        初始化 winit 环境, 创建窗口, 并设置 runner(处理事件的loop)

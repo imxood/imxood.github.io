@@ -8,10 +8,7 @@
 - 解读 rustdesk 源码
 - 实现自定义 Allocator
 
-
 ### 常读书, 读好书
-
-<!-- ![](./images/读书.jpg) -->
 
 <img width="70%" src="./images/读书.jpg">
 

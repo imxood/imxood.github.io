@@ -94,53 +94,71 @@ void setup(void) {
   tft_ST7735.print("rotation: " + String(tft_ST7735.getRotation()));
   tft_ST7735.setCursor(0, 40);
   tft_ST7735.print(String(tft_ST7735.width()) + " x " + String(tft_ST7735.height()));
+  
+  tft_ST7735.setCursor(0, 100);
+  tft_ST7735.print("1");
+  tft_ST7735.setCursor(0, 120);
+  tft_ST7735.print("2");
+  tft_ST7735.setCursor(0, 140);
+  tft_ST7735.print("3");
+  tft_ST7735.setCursor(0, 150);
+  tft_ST7735.print("4");
+
+  tft_ST7735.setCursor(110, 80);
+  tft_ST7735.print("1");
+  tft_ST7735.setCursor(115, 80);
+  tft_ST7735.print("2");
+  tft_ST7735.setCursor(120, 80);
+  tft_ST7735.print("3");
+  tft_ST7735.setCursor(125, 80);
+  tft_ST7735.print("4");
 
   delay(2000);
 
-  tft_ST7735.setRotation(3);
-  tft_ST7735.setCursor(0, 30);
-  tft_ST7735.print("rotation: " + String(tft_ST7735.getRotation()));
-  tft_ST7735.setCursor(0, 40);
-  tft_ST7735.print(String(tft_ST7735.width()) + " x " + String(tft_ST7735.height()));
-
-  delay(2000);
-
-  tft_ST7735.fillScreen(ST77XX_RED);
-  tft_ST7735.setCursor(50, 50);
-  tft_ST7735.print("RED");
-  delay(1000);
-  tft_ST7735.fillScreen(ST77XX_GREEN);
-  tft_ST7735.setCursor(50, 50);
-  tft_ST7735.print("GREEN");
-  delay(1000);
-  tft_ST7735.fillScreen(ST77XX_BLUE);
-  tft_ST7735.setCursor(50, 50);
-  tft_ST7735.print("BLUE");
-  delay(1000);
-
-  delay(1000);
-  for(int offset=0; offset<tft_ST7735.height()/2; offset++){
-    int col;
-    if(offset%2 == 0)
-      col = ST77XX_WHITE;
-    else
-      col = ST77XX_BLACK;
-      
-    tft_ST7735.drawRect(offset, offset, 
-                 tft_ST7735.width()-2*offset, tft_ST7735.height()-2*offset,
-                 col);
-    delay(100);
-  }
-
-  delay(2000);
-
-  Serial.println("- setup() end -");
-  delay(1000);
+//  tft_ST7735.setRotation(3);
+//  tft_ST7735.setCursor(0, 30);
+//  tft_ST7735.print("rotation: " + String(tft_ST7735.getRotation()));
+//  tft_ST7735.setCursor(0, 40);
+//  tft_ST7735.print(String(tft_ST7735.width()) + " x " + String(tft_ST7735.height()));
+//
+//  delay(2000);
+//
+//  tft_ST7735.fillScreen(ST77XX_RED);
+//  tft_ST7735.setCursor(50, 50);
+//  tft_ST7735.print("RED");
+//  delay(1000);
+//  tft_ST7735.fillScreen(ST77XX_GREEN);
+//  tft_ST7735.setCursor(50, 50);
+//  tft_ST7735.print("GREEN");
+//  delay(1000);
+//  tft_ST7735.fillScreen(ST77XX_BLUE);
+//  tft_ST7735.setCursor(50, 50);
+//  tft_ST7735.print("BLUE");
+//  delay(1000);
+//
+//  delay(1000);
+//  for(int offset=0; offset<tft_ST7735.height()/2; offset++){
+//    int col;
+//    if(offset%2 == 0)
+//      col = ST77XX_WHITE;
+//    else
+//      col = ST77XX_BLACK;
+//      
+//    tft_ST7735.drawRect(offset, offset, 
+//                 tft_ST7735.width()-2*offset, tft_ST7735.height()-2*offset,
+//                 col);
+//    delay(100);
+//  }
+//
+//  delay(2000);
+//
+//  Serial.println("- setup() end -");
+//  delay(1000);
 }
 
 void loop() {
-  tft_ST7735.invertDisplay(true);
+//  tft_ST7735.invertDisplay(true);
   delay(500);
-  tft_ST7735.invertDisplay(false);
+//  tft_ST7735.invertDisplay(false);
   delay(500);
 }

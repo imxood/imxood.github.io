@@ -1,0 +1,1 @@
+ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", MODE:="0666", SYMLINK+="esp32c3"

@@ -44,3 +44,27 @@ https://docs.lvgl.io/v7/en/html/get-started/pc-simulator.html
 
         git clone --recursive https://github.com/lvgl/lv-port_stm32f746_disco.git
 
+## lvgl
+
+设置 宽和高.
+
+lv_disp_drv_t disp_drv;
+disp_drv.hor_res = LV_HOR_RES_MAX;
+disp_drv.ver_res = LV_VER_RES_MAX;
+
+有两种方式设置旋转屏幕:
+
+1. lvgl soft 实现, 这耗时较大
+
+    disp_drv.sw_rotate = 1;
+    disp_drv.rotated = LV_DISP_ROT_90;
+
+2. 硬件实现, 速度快, 消耗小
+
+    disp_drv.rotated = LV_DISP_ROT_90; // 这种情况, 这个只用来 确定 分辨率
+    
+    并设置 CONFIG_LV_DISPLAY_ORIENTATION
+
+    硬件调用:
+    st7735s_set_orientation(uint8_t orientation)
+    可能需要 设置屏幕 X.Y对调, X方向从上到下, Y方向从下到上 等等

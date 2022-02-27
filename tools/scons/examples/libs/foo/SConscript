@@ -1,0 +1,5 @@
+Import('env')
+
+env.Library('foo', ['foo.c'])
+env.StaticLibrary('sfoo', ['foo.c'])
+env.SharedLibrary('dfoo', ['foo.c'])

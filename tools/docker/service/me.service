@@ -1,0 +1,9 @@
+[Unit]
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/docker-compose -f /develop/sources/imxood.github.io/src/tools/docker/service/docker-compose.yml up -d
+
+[Install]
+WantedBy=multi-user.target

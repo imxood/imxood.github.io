@@ -1,0 +1,13 @@
+* Title: Simple circuit
+
+* Netlist
+V1 a 0 100V
+R1 a b 10
+R2 b 0 10
+
+* Control commands
+.control
+op
+print v(a) v(b) v(a, b) i(v1)
+.endc
+

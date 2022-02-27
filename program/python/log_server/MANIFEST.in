@@ -1,0 +1,4 @@
+include MANIFEST.in
+include log_server.py
+recursive-include log_server/assets *
+recursive-include log_server/templates *

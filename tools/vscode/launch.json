@@ -1,0 +1,137 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+        {
+            "name": "Cortex Debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "/tmp/arduino_build_91378/fm25v10.ino.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": "127.0.0.1:3333",
+            "preLaunchCommands": [
+                "monitor halt",
+                "set $pc=reset_isr",
+                "i r",
+                "b reset_isr",
+                "b main",
+                "c"
+            ]
+        },
+		{
+			"name": "Python: Module",
+			"type": "python",
+			"cwd": "/home/mx/develop/sources/invoke",
+			"request": "launch",
+			"module": "invoke.__main__",
+			"args": [
+				"upload"
+			]
+		},
+		{
+			"name": "west",
+			"type": "python",
+			"request": "launch",
+			"cwd": "${env:ZEPHYR_BASE}/../west/src",
+			"stopOnEntry": true,
+			"module": "west.app.main",
+			"args": [
+				"-vvvv",
+				"build",
+				"-b",
+				"stm32f67ig",
+				"../../zephyr_develop/apps/stm32f767ig_app",
+				"--",
+				"-DBOARD_ROOT=../..",
+				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+			],
+			"console": "integratedTerminal"
+		},
+		{
+			"type": "esp32-debug",
+			"request": "launch",
+			"name": "esp32-debug",
+			"program": "${workspaceFolder}/zephyr_output/zephyr/zephyr.elf",
+			"stopOnEntry": true
+		},
+		{
+			"cwd": "${workspaceRoot}",
+			"executable": "/tmp/arduino_build_476409/main.ino.elf",
+			"name": "Remote Arduino",
+			"request": "launch",
+			"type": "cortex-debug",
+			"servertype": "external",
+			"armToolchainPath": "/home/mx/programs/gcc-arm-none-eabi-9-2019-q4-major/bin",
+			"gdbTarget": "10.239.144.210:3333",
+			"preLaunchCommands": [
+				"monitor halt"
+			]
+		},
+		{
+			"type": "cortex-debug_stm32f7",
+			"request": "launch",
+			"servertype": "openocd",
+			"cwd": "${workspaceRoot}",
+			"executable": "./w_output/zephyr/zephyr.elf",
+			"name": "Stm32f7 Debug",
+			"device": "STM32F7",
+			"configFiles": [
+				"board/stm32f7discovery.cfg"
+			]
+		},
+		{
+			"cwd": "${workspaceRoot}",
+			"executable": "/tmp/arduino_build_242531/main.ino.elf",
+			"name": "Debug Arduino",
+			"request": "launch",
+			"type": "cortex-debug",
+			"servertype": "openocd",
+			"armToolchainPath": "/home/mx/programs/gcc-arm-none-eabi-9-2019-q4-major/bin",
+			"configFiles": [
+				"/usr/local/share/openocd/scripts/board/stm32f7discovery.cfg"
+			]
+		},
+		{
+			"name": "stm32 debug",
+			"type": "cppdbg",
+			"request": "launch",
+			"targetArchitecture": "arm",
+			"program": "${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"miDebuggerPath": "${env:HOME}/programs/gcc-arm-none-eabi-7/bin/arm-none-eabi-gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"text": "file ${workspaceFolder}/build/${workspaceFolderBasename}.elf"
+				},
+				{
+					"text": "set remotetimeout 30"
+				},
+				{
+					"text": "target remote localhost:3333"
+				},
+				{
+					"text": "monitor halt"
+				},
+				{
+					"text": "monitor reset init"
+				},
+				{
+					"text": "load"
+				},
+				{
+					"text": "info target"
+				}
+			]
+		}
+	]
+}

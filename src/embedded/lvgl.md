@@ -1,8 +1,12 @@
 ## 环境
 
+官方文档
+
+https://docs.lvgl.io/master/overview/index.html
+
 ## simulator on PC
 
-https://docs.lvgl.io/v7/en/html/get-started/pc-simulator.html
+模拟器是为了方便在电脑端开发并验证效果
 
 1. 下载 Eclipse CDT IDE 环境
     

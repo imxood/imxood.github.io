@@ -2,11 +2,10 @@
 
 ## 学习计划
 
-- 解决 Vec数据所有权转移 问题
-- 学习 wgpu
+- 学习 egui 源码
 - async wake unpin 分析: https://github.com/zesterer/pollster
+- 学习 wgpu
 - 解读 rustdesk 源码
-- 实现自定义 Allocator
 
 ### 常读书, 读好书
 

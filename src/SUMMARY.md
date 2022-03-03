@@ -31,6 +31,7 @@
         - [后端](./program/rust/rust后端.md)
         - [Game]()
             - [Bevy](./program/rust/game/bevy.md)
+        - [Rust代码集锦](./program/rust/rust代码集锦.md)
 
 - [前端]()
     - [Web](./frontend/web.md)

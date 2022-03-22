@@ -47,7 +47,7 @@
     - [微分](./math/微分.md) -->
 
 - [工具]()
-    - [github](./tools/github.md)
+    - [git笔记](./tools/git笔记.md)
     - [markdown](./tools/markdown.md)
     - [mdbook](./tools/mdbook.md)
     - [linux工具](./tools/linux/linux工具.md)

@@ -400,7 +400,6 @@ markdown的瑞士军刀, 支持输出 PDF、EPUB、HTML 幻灯片等多种格式
 
 ## Openpnp 自动贴片
 
-<<<<<<< HEAD
 	https://openpnp.org
 
 ## Sourcetrail 源码阅读工具
@@ -432,10 +431,7 @@ markdown的瑞士军刀, 支持输出 PDF、EPUB、HTML 幻灯片等多种格式
 
 	# Google Translate -> [English]
 	trans -e google -s auto -t en-US -show-original y -show-original-phonetics n -show-translation y -no-ansi -show-translation-phonetics n -show-prompt-message n -show-languages y -show-original-dictionary n -show-dictionary n -show-alternatives n "%GDWORD%"
-=======
-https://openpnp.org
 
 ## python 库
 
 	jsoncomment, 可以解析带有逗号结尾的json内容
->>>>>>> 8ec77846e4f205a9e6edaefc35b9c063f708ce64

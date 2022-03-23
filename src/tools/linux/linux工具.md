@@ -1,5 +1,17 @@
 # linux 工具
 
+## 查看静态库/动态库中有哪些函数
+
+```readelf -c libavutil.a```
+可以看到库中包含的.obj文件的段信息
+
+![](docs/linux工具/2022-03-23-18-07-32.png)
+
+```objdump -x libavutil.a```
+也能看到.obj文件的段信息, 但是更加详细
+
+![](docs/linux工具/2022-03-23-18-10-52.png)
+
 ## flameshot 截图工具
 
 命令: flameshot gui, 进入截图

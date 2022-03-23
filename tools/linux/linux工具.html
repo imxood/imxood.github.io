@@ -139,6 +139,13 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="linux-工具"><a class="header" href="#linux-工具">linux 工具</a></h1>
+<h2 id="查看静态库动态库中有哪些函数"><a class="header" href="#查看静态库动态库中有哪些函数">查看静态库/动态库中有哪些函数</a></h2>
+<p><code>readelf -c libavutil.a</code>
+可以看到库中包含的.obj文件的段信息</p>
+<p><img src="docs/linux%E5%B7%A5%E5%85%B7/2022-03-23-18-07-32.png" alt="" /></p>
+<p><code>objdump -x libavutil.a</code>
+也能看到.obj文件的段信息, 但是更加详细</p>
+<p><img src="docs/linux%E5%B7%A5%E5%85%B7/2022-03-23-18-10-52.png" alt="" /></p>
 <h2 id="flameshot-截图工具"><a class="header" href="#flameshot-截图工具">flameshot 截图工具</a></h2>
 <p>命令: flameshot gui, 进入截图</p>
 <h2 id="dsview-逻辑分析器"><a class="header" href="#dsview-逻辑分析器">DSView 逻辑分析器</a></h2>

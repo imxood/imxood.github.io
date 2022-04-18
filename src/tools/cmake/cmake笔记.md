@@ -1,8 +1,11 @@
 # cmake常用语法
 
-        cmake --trace-expand --loglevel=VERBOSE ...
-            --trace-expand 可以使变量值显示
-            --loglevel=VERBOSE 可以使message(VERBOSE ...)有输出
+    cmake -B build                                                          配置 编译目录
+    cmake --build build                                                     运行 指定的编译路径
+
+    cmake --trace-expand --loglevel=VERBOSE ...
+        --trace-expand 可以使变量值显示
+        --loglevel=VERBOSE 可以使message(VERBOSE ...)有输出
 
     include_directories(include)                                            设置头文件路径
     link_directories(/usr/lib)                                              设置库路径

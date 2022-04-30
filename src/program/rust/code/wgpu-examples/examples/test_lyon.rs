@@ -15,46 +15,46 @@ use winit::{
     window::{Window, WindowBuilder},
 };
 
+// const VERTICES: &[Vertex] = &[
+//     Vertex { position: [-0.0868241, 0.49240386], color: [0.5, 0.0, 0.5] }, // A
+//     Vertex { position: [-0.49513406, 0.06958647], color: [0.5, 0.0, 0.5] }, // B
+//     Vertex { position: [-0.21918549, -0.44939706], color: [0.5, 0.0, 0.5] }, // C
+//     Vertex { position: [0.35966998, -0.3473291], color: [0.5, 0.0, 0.5] }, // D
+//     Vertex { position: [0.44147372, 0.2347359], color: [0.5, 0.0, 0.5] }, // E
+// ];
+
+// const INDICES: &[u16] = &[
+//     0, 1, 4,
+//     1, 2, 4,
+//     2, 3, 4,
+// ];
+
 const VERTICES: &[Vertex] = &[
-    Vertex { position: [-0.0868241, 0.49240386], color: [0.5, 0.0, 0.5] }, // A
-    Vertex { position: [-0.49513406, 0.06958647], color: [0.5, 0.0, 0.5] }, // B
-    Vertex { position: [-0.21918549, -0.44939706], color: [0.5, 0.0, 0.5] }, // C
-    Vertex { position: [0.35966998, -0.3473291], color: [0.5, 0.0, 0.5] }, // D
-    Vertex { position: [0.44147372, 0.2347359], color: [0.5, 0.0, 0.5] }, // E
+    Vertex {
+        position: [0.0, 0.0],
+        color: [0.5, 0.0, 0.5],
+    },
+    Vertex {
+        position: [0.75, 0.0],
+        color: [0.5, 0.0, 0.5],
+    },
+    Vertex {
+        position: [0.0, 0.5],
+        color: [0.5, 0.0, 0.5],
+    },
+    Vertex {
+        position: [0.75, 0.5],
+        color: [0.5, 0.0, 0.5],
+    },
 ];
 
-const INDICES: &[u16] = &[
-    0, 1, 4,
-    1, 2, 4,
-    2, 3, 4,
-];
- 
+const INDICES: &[u16] = &[1, 0, 2, 1, 2, 3];
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 struct Vertex {
     position: [f32; 2],
     color: [f32; 3],
-}
-
-pub struct WithId(pub u32);
-
-impl FillVertexConstructor<Vertex> for WithId {
-    fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
-        Vertex {
-            position: vertex.position().to_array(),
-            color: [1.0, 1.0, 0.0],
-        }
-    }
-}
-
-impl StrokeVertexConstructor<Vertex> for WithId {
-    fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
-        Vertex {
-            position: vertex.position_on_path().to_array(),
-            color: [1.0, 1.0, 0.0],
-        }
-    }
 }
 
 impl Vertex {
@@ -151,18 +151,25 @@ impl State {
                 targets: &[wgpu::ColorTargetState {
                     // 4.
                     format: config.format,
-                    blend: Some(wgpu::BlendState::REPLACE),
+                    blend: Some(wgpu::BlendState {
+                        color: wgpu::BlendComponent::REPLACE,
+                        alpha: wgpu::BlendComponent::REPLACE,
+                    }),
                     write_mask: wgpu::ColorWrites::ALL,
                 }],
             }),
             primitive: wgpu::PrimitiveState {
                 topology: wgpu::PrimitiveTopology::TriangleList,
-                polygon_mode: wgpu::PolygonMode::Fill,
-                front_face: wgpu::FrontFace::Ccw,
                 strip_index_format: None,
+                front_face: wgpu::FrontFace::Ccw,
                 cull_mode: Some(wgpu::Face::Back),
-                conservative: false,
+                // Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE
+                polygon_mode: wgpu::PolygonMode::Fill,
+                // Requires Features::DEPTH_CLAMPING
+                // clamp_depth: false,
                 unclipped_depth: false,
+                // Requires Features::CONSERVATIVE_RASTERIZATION
+                conservative: false,
             },
             depth_stencil: None, // 1.
             multisample: wgpu::MultisampleState {
@@ -173,21 +180,35 @@ impl State {
             multiview: None,
         });
 
-        let VertexBuffers { vertices, indices } = build_lyon(size.width, size.height);
-
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(&VERTICES),
+            contents: bytemuck::cast_slice(VERTICES),
             usage: wgpu::BufferUsages::VERTEX,
         });
 
-        let index_len = VERTICES.len() as u32;
+        let index_len = INDICES.len() as u32;
 
         let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(&VERTICES),
+            contents: bytemuck::cast_slice(INDICES),
             usage: wgpu::BufferUsages::INDEX,
         });
+
+        // let VertexBuffers { vertices, indices } = build_lyon(size.width, size.height);
+
+        // let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        //     label: Some("Vertex Buffer"),
+        //     contents: bytemuck::cast_slice(&vertices),
+        //     usage: wgpu::BufferUsages::VERTEX,
+        // });
+
+        // let index_len = indices.len() as u32;
+
+        // let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        //     label: Some("Index Buffer"),
+        //     contents: bytemuck::cast_slice(&indices),
+        //     usage: wgpu::BufferUsages::INDEX,
+        // });
 
         Self {
             surface,
@@ -246,12 +267,33 @@ impl State {
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
             render_pass.draw_indexed(0..self.index_len, 0, 0..1);
+            // render_pass.draw(0..self.index_len as u32, 0..1);
         }
 
         self.queue.submit(iter::once(encoder.finish()));
         output.present();
 
         Ok(())
+    }
+}
+
+pub struct WithId(pub u32);
+
+impl FillVertexConstructor<Vertex> for WithId {
+    fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
+        Vertex {
+            position: vertex.position().to_array(),
+            color: [1.0, 1.0, 0.0],
+        }
+    }
+}
+
+impl StrokeVertexConstructor<Vertex> for WithId {
+    fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
+        Vertex {
+            position: vertex.position_on_path().to_array(),
+            color: [1.0, 1.0, 0.0],
+        }
     }
 }
 

@@ -1,0 +1,5 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "src/program/rust/code/wgpu-examples/Cargo.toml"
+    ],
+}

@@ -1,10 +1,9 @@
 use lyon::{
     geom::euclid::rect,
     lyon_tessellation::{
-        geometry_builder::simple_builder, BuffersBuilder, FillOptions, FillTessellator, FillVertex,
-        FillVertexConstructor, StrokeVertex, StrokeVertexConstructor, VertexBuffers,
+        BuffersBuilder, FillOptions, FillTessellator, FillVertex, FillVertexConstructor,
+        StrokeVertex, StrokeVertexConstructor, VertexBuffers,
     },
-    math::Point,
     path::{builder::BorderRadii, traits::PathBuilder, Winding},
 };
 use std::iter;
@@ -15,40 +14,11 @@ use winit::{
     window::{Window, WindowBuilder},
 };
 
-// const VERTICES: &[Vertex] = &[
-//     Vertex { position: [-0.0868241, 0.49240386], color: [0.5, 0.0, 0.5] }, // A
-//     Vertex { position: [-0.49513406, 0.06958647], color: [0.5, 0.0, 0.5] }, // B
-//     Vertex { position: [-0.21918549, -0.44939706], color: [0.5, 0.0, 0.5] }, // C
-//     Vertex { position: [0.35966998, -0.3473291], color: [0.5, 0.0, 0.5] }, // D
-//     Vertex { position: [0.44147372, 0.2347359], color: [0.5, 0.0, 0.5] }, // E
-// ];
-
-// const INDICES: &[u16] = &[
-//     0, 1, 4,
-//     1, 2, 4,
-//     2, 3, 4,
-// ];
-
-const VERTICES: &[Vertex] = &[
-    Vertex {
-        position: [0.0, 0.0],
-        color: [0.5, 0.0, 0.5],
-    },
-    Vertex {
-        position: [0.75, 0.0],
-        color: [0.5, 0.0, 0.5],
-    },
-    Vertex {
-        position: [0.0, 0.5],
-        color: [0.5, 0.0, 0.5],
-    },
-    Vertex {
-        position: [0.75, 0.5],
-        color: [0.5, 0.0, 0.5],
-    },
-];
-
-const INDICES: &[u16] = &[1, 0, 2, 1, 2, 3];
+#[repr(C)]
+#[derive(Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
+struct Globals {
+    resolution: [f32; 2],
+}
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
@@ -80,6 +50,8 @@ struct State {
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
     index_len: u32,
+    globals_buffer: wgpu::Buffer,
+    globals_bind_group: wgpu::BindGroup,
 }
 
 impl State {
@@ -123,16 +95,52 @@ impl State {
         };
         surface.configure(&device, &config);
 
+        let globals_buffer_byte_size = std::mem::size_of::<Globals>() as u64;
+
+        let globals = Globals {
+            resolution: [size.width as f32, size.height as f32],
+        };
+
+        let globals_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Globals Buffer"),
+            contents: bytemuck::cast_slice(&[globals]),
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+        });
+
         // 创建 Shade
         let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(include_str!("square.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(include_str!("./test_wgpu_lyon.wgsl").into()),
+        });
+
+        let globals_bind_group_layout =
+            device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+                label: Some("Globals bind group layout"),
+                entries: &[wgpu::BindGroupLayoutEntry {
+                    binding: 0,
+                    visibility: wgpu::ShaderStages::VERTEX,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: wgpu::BufferSize::new(globals_buffer_byte_size),
+                    },
+                    count: None,
+                }],
+            });
+
+        let globals_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: Some("Globals bind group"),
+            layout: &globals_bind_group_layout,
+            entries: &[wgpu::BindGroupEntry {
+                binding: 0,
+                resource: wgpu::BindingResource::Buffer(globals_buffer.as_entire_buffer_binding()),
+            }],
         });
 
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("Render Pipeline Layout"),
-                bind_group_layouts: &[],
+                bind_group_layouts: &[&globals_bind_group_layout],
                 push_constant_ranges: &[],
             });
 
@@ -180,35 +188,35 @@ impl State {
             multiview: None,
         });
 
-        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(VERTICES),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-
-        let index_len = INDICES.len() as u32;
-
-        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(INDICES),
-            usage: wgpu::BufferUsages::INDEX,
-        });
-
-        // let VertexBuffers { vertices, indices } = build_lyon(size.width, size.height);
-
         // let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         //     label: Some("Vertex Buffer"),
-        //     contents: bytemuck::cast_slice(&vertices),
+        //     contents: bytemuck::cast_slice(VERTICES),
         //     usage: wgpu::BufferUsages::VERTEX,
         // });
 
-        // let index_len = indices.len() as u32;
+        // let index_len = INDICES.len() as u32;
 
         // let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         //     label: Some("Index Buffer"),
-        //     contents: bytemuck::cast_slice(&indices),
+        //     contents: bytemuck::cast_slice(INDICES),
         //     usage: wgpu::BufferUsages::INDEX,
         // });
+
+        let VertexBuffers { vertices, indices } = build_lyon(size.width as f32, size.height as f32);
+
+        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Vertex Buffer"),
+            contents: bytemuck::cast_slice(&vertices),
+            usage: wgpu::BufferUsages::VERTEX,
+        });
+
+        let index_len = indices.len() as u32;
+
+        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Index Buffer"),
+            contents: bytemuck::cast_slice(&indices),
+            usage: wgpu::BufferUsages::INDEX,
+        });
 
         Self {
             surface,
@@ -217,6 +225,8 @@ impl State {
             config,
             size,
             render_pipeline,
+            globals_buffer,
+            globals_bind_group,
             vertex_buffer,
             index_buffer,
             index_len,
@@ -229,6 +239,13 @@ impl State {
             self.config.width = new_size.width;
             self.config.height = new_size.height;
             self.surface.configure(&self.device, &self.config);
+            self.queue.write_buffer(
+                &self.globals_buffer,
+                0,
+                bytemuck::cast_slice(&[Globals {
+                    resolution: [new_size.width as f32, new_size.height as f32],
+                }]),
+            );
         }
     }
 
@@ -264,6 +281,7 @@ impl State {
             });
 
             render_pass.set_pipeline(&self.render_pipeline);
+            render_pass.set_bind_group(0, &self.globals_bind_group, &[]);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
             render_pass.draw_indexed(0..self.index_len, 0, 0..1);
@@ -297,9 +315,8 @@ impl StrokeVertexConstructor<Vertex> for WithId {
     }
 }
 
-fn build_lyon(width: u32, height: u32) -> VertexBuffers<Vertex, u16> {
+fn build_lyon(width: f32, height: f32) -> VertexBuffers<Vertex, u16> {
     let mut geometry: VertexBuffers<Vertex, u16> = VertexBuffers::new();
-    // let mut geometry_builder = simple_builder(&mut geometry);
     let mut geometry_builder = BuffersBuilder::new(&mut geometry, WithId(1 as u32));
 
     let options = FillOptions::tolerance(0.1);
@@ -307,26 +324,28 @@ fn build_lyon(width: u32, height: u32) -> VertexBuffers<Vertex, u16> {
 
     let mut builder = tessellator.builder(&options, &mut geometry_builder);
 
-    builder.add_rectangle(&rect(0.0, 0.0, 600.0, 300.0), Winding::Positive);
+    // builder.add_rectangle(&rect(0.0, 0.0, 50.0, 50.0), Winding::Positive);
 
-    // builder.add_rounded_rectangle(
-    //     &rect(0.0, 0.0, 100.0, 50.0),
-    //     &BorderRadii {
-    //         top_left: 10.0,
-    //         top_right: 5.0,
-    //         bottom_left: 20.0,
-    //         bottom_right: 25.0,
-    //     },
-    //     Winding::Positive,
-    // );
+    // builder.add_circle(point(100.0, 100.0), 50.0, Winding::Positive);
+
+    builder.add_rounded_rectangle(
+        &rect(150.0, 150.0, 200.0, 200.0),
+        &BorderRadii {
+            top_left: 0.0,
+            top_right: 0.0,
+            bottom_left: 0.0,
+            bottom_right: 0.0,
+        },
+        Winding::Positive,
+    );
 
     builder.build().unwrap();
 
     // The tessellated geometry is ready to be uploaded to the GPU.
-    for geo in geometry.vertices.iter_mut() {
-        geo.position[0] /= width as f32;
-        geo.position[1] /= height as f32;
-    }
+    // for geo in geometry.vertices.iter_mut() {
+    //     geo.position[0] /= width as f32;
+    //     geo.position[1] /= height as f32;
+    // }
     println!("width: {:?} height: {:?}", width, height);
     println!("geometry.vertices: {:?}", &geometry.vertices);
     println!("geometry.indices: {:?}", &geometry.indices);

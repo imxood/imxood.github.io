@@ -148,21 +148,33 @@ self.queue.write_buffer(&self.uniform_buffer.buffer, 0, data);
 render_pass.set_bind_group(0, &self.uniform_bind_group, &[]);
 ```
 
-## wgsl
+## wgsl 坐标系
 
-``` @builtin(position) ``` 表示顶点的输出位置, 如果想要看到点 就必须设置, 否则什么也没有
+顶点坐标系
 
-wgsl 使用的坐标系, 正中心是 (0,0), x 和 y 的范围是 (-1, 1)
+正中心是 (0,0), x 和 y 的范围是 (-1, 1)
 
 (-1,1)          (0,1)           (1,1)
-.
 .
 .
 (-1,0)          (0,0)           (1,0)
 .
 .
-.
 (-1,1)          (0,1)           (1,1)
+
+纹理坐标系
+
+![](docs/wgpu/2022-05-02-21-14-14.png)
+
+## 纹理的绘制
+
+``` [[group(0), binding(0)]] var t_diffuse: texture_2d<f32>; [[group(0), binding(1)]] var s_diffuse: sampler;```
+
+图片数据会被加载到 Texture 中, 设置到 Bind Group 中, 在 Shader 中, 会在上面的代码中被截获, 最后会在 ``` [[stage(fragment)]] ``` 中 使用 ``` textureSample(t_diffuse, s_diffuse, in.tex_coor) ``` 根据输入的纹理坐标 对纹理采样, 由于每一个顶点 会处理 fragment, 每一个 vertex坐标 对应一个 texture坐标, 如果 texture坐标 是 铺满 (0.0, 0.0) 到 (1.0, 1.0) 则图像上铺的纹理是完整的.
+
+## wsgl 其它细节
+
+``` @builtin(position) ``` 表示顶点的输出位置, 如果想要看到点 就必须设置, 否则什么也没有
 
 ``` @builtin(vertex_index) ``` 当 ``` 执行 render_pass.draw(0..3, 0..1); ``` 时, vertex_index 被设置额 3 次, 依次是 0,1,2
 

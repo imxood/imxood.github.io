@@ -24,4 +24,5 @@ lto = true
 
 [dev-dependencies]
 fontdue = "0.7.2"
+guillotiere = "0.6.2"
 lyon = "0.17.10"

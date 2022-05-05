@@ -492,6 +492,7 @@ impl FontBuilder {
             label: Some("font_bind_group"),
         });
 
+        // 全局 Buffer
         let globals_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("Globals Buffer"),
             size: std::mem::size_of::<Globals>() as u64,

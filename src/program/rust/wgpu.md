@@ -69,15 +69,15 @@ let render_pipeline_layout =
 
 vertex 的 ``` step_mode ``` 参数用于决定 顶点Buffer 是如何移动的
 
-    当设置为: VertexStepMode::Vertex 时, ``` render_pass.draw(0..4, 0..self.font_instance_num); ``` 表示:
+    当设置为: VertexStepMode::Instance 时, ``` render_pass.draw(0..4, 0..self.font_instance_num); ``` 表示:
+        每一个 font_instance 增加时, vertex_buffer 向前移动一个单位, 相同的vertex 会遍历4次(``` builtin(vertex_index) ``` 就是 从0开始依次到3)
 
-        ```
-            for 0..self.font_instance_num {
+    当设置为: VertexStepMode::Vertex 时, 。。。
 
-            }
-        ```
+fragment 的 ``` blend ``` 参数用于决定 fragment shader如何处理采样Color
 
-
+    当为 wgpu::BlendState::REPLACE 时, 整个输出成单色?
+    当为 wgpu::BlendState::ALPHA_BLENDING 时, 可以通过 fragment shader 控制输出？
 
 ```rust
 let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {

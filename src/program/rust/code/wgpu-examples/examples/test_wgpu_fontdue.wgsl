@@ -39,7 +39,6 @@ fn vs_main(in: VertexInput) -> VertexOutput {
         // 左上角 顶点
         case 1: {
             position = in.pos_start;
-            // out.position = vec4<f32>(, 0.0, 1.0);
             out.tex_position = in.tex_start;
             break;
         }
@@ -59,6 +58,7 @@ fn vs_main(in: VertexInput) -> VertexOutput {
         }
     }
 
+    // 屏幕坐标转换成 wgsl的 顶点坐标
     let invert = vec2<f32>(2.0, -2.0);
     let transformed_pos = position / globals.resolution * invert + vec2<f32>(-1.0, 1.0);
 
@@ -67,17 +67,13 @@ fn vs_main(in: VertexInput) -> VertexOutput {
     return out;
 }
 
-// Fragment shader
 [[group(1), binding(0)]] var t_diffuse: texture_2d<f32>;
 [[group(1), binding(1)]] var s_diffuse: sampler;
 
 [[stage(fragment)]]
 fn fs_main(in: VertexOutput) -> [[location(0)]] vec4<f32> {
-    // 采样的颜色
-    let v = textureSample(t_diffuse, s_diffuse, in.tex_position).a;
-    // 只取采样颜色的透明度 a, rgb值 来自 输入的颜色
-    return vec4<f32>(in.tex_color.rgb, in.tex_color.a * v);
-    // var color = textureSample(t_diffuse, s_diffuse, in.tex_position);
-    // color.a = color.a * 0.1;
-    // return color;
+    // 在纹理的指定位置采样
+    let color = textureSample(t_diffuse, s_diffuse, in.tex_position).a;
+    // 只使用采样颜色的透明度, rgb值 来自 输入的颜色
+    return vec4<f32>(in.tex_color.rgb, in.tex_color.a * color);
 }

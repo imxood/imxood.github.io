@@ -1,5 +1,3 @@
-// Vertex shader
-
 struct VertexInput {
     [[builtin(instance_index)]] vertex_index: u32;
     [[location(0)]] position: vec2<f32>;

@@ -50,8 +50,8 @@ pub fn vector2<T>(w: T, h: T) -> Vector2<T> {
 }
 
 #[inline]
-pub fn point2<T>(w: T, h: T) -> Point2<T> {
-    Point2::new(w, h)
+pub fn point2<T>(x: T, y: T) -> Point2<T> {
+    Point2::new(x, y)
 }
 
 #[inline]
@@ -149,9 +149,15 @@ impl State {
         let mut font_builder = FontBuilder::new(&device, format, &globals_bind_group_layout);
         font_builder.draw(
             "你好，上海加油",
-            point2(10.0, 100.0),
+            point2(10.0, 10.0),
             [0.0, 1.0, 1.0, 1.0],
             30.0,
+        );
+        font_builder.draw(
+            "明天会更好",
+            point2(10.0, 100.0),
+            [0.0, 1.0, 1.0, 1.0],
+            15.0,
         );
 
         Self {
@@ -433,7 +439,7 @@ impl FontBuilder {
         let fonts =
             vec![fontdue::Font::from_bytes(data, fontdue::FontSettings::default()).unwrap()];
         log::info!("elapsed: {:?}", &start.elapsed());
-        let layout = Layout::<(Point, [f32; 4], f32)>::new(CoordinateSystem::PositiveYUp);
+        let layout = Layout::<(Point, [f32; 4], f32)>::new(CoordinateSystem::PositiveYDown);
 
         // 创建 字体Shader
         let font_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
@@ -624,32 +630,20 @@ impl FontBuilder {
         let mut font_instances = Vec::<FontInstance>::new();
         let altas_size = self.altas.size();
 
-        let mut last_pos = point2(0.0, 0.0);
-
         for glyph in glyphs.iter() {
             if self.cache_chars.contains(&glyph.parent) {
                 continue;
             }
             let (pos, color, px) = glyph.user_data;
-            let pos = if last_pos.x == 0.0 && last_pos.y == 0.0 {
-                pos
-            } else {
-                last_pos
-            };
 
             let font = &self.fonts[glyph.font_index];
             let (metrics, bitmap) = font.rasterize_indexed(glyph.key.glyph_index, px);
 
-            let dimention = size2(metrics.width as f32, metrics.height as f32);
+            let dimention = size2(metrics.advance_width, metrics.advance_height);
             if dimention.width <= 0.0 || dimention.height <= 0.0 {
                 log::warn!("字体尺寸异常: {:?}", glyph);
                 continue;
             }
-
-            let offset = size2(
-                metrics.xmin as f32,
-                (-metrics.ymin - metrics.height as i32) as f32,
-            );
 
             let allocate = self
                 .altas
@@ -666,10 +660,11 @@ impl FontBuilder {
                     rect.max.y as f32 / altas_size.height as f32,
                 );
 
-                let pos_start = pos.add_size(&offset);
-                let pos_end = pos_start.add_size(&dimention);
-
-                last_pos = pos_end;
+                let pos_start = point2(pos.x + glyph.x, pos.y + glyph.y);
+                let pos_end = point2(
+                    pos_start.x + glyph.width as f32,
+                    pos_start.y + glyph.height as f32,
+                );
 
                 let font = FontInstance {
                     pos_start: pos_start.to_array(),

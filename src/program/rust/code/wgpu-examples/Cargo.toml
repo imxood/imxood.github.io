@@ -23,6 +23,6 @@ debug = 0
 lto = true
 
 [dev-dependencies]
-fontdue = "0.7.2"
+fontdue = { version = "0.7.2", features = ["parallel"] }
 guillotiere = "0.6.2"
 lyon = "0.17.10"

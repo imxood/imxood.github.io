@@ -42,29 +42,41 @@ struct State {
 }
 
 const VERTICES: &[Vertex] = &[
-    // A 左上
+    // 0 右上
+    Vertex {
+        position: [0.5, 0.5],
+        color: [1.0, 0.0, 0.0],
+        tex_coor: [1.0, 0.0],
+    },
+    // 1 左上
     Vertex {
         position: [-0.5, 0.5],
         color: [1.0, 0.0, 0.0],
         tex_coor: [0.0, 0.0],
     },
-    // B 左下
-    Vertex {
-        position: [-0.5, -0.5],
-        color: [0.0, 1.0, 0.0],
-        tex_coor: [0.0, 1.0],
-    },
-    // C 右下
+    // 2 右下
     Vertex {
         position: [0.5, -0.5],
         color: [0.0, 0.0, 1.0],
         tex_coor: [1.0, 1.0],
     },
-    // D 右上
+    // // 2 右下
+    // Vertex {
+    //     position: [0.5, -0.5],
+    //     color: [0.0, 0.0, 1.0],
+    //     tex_coor: [1.0, 1.0],
+    // },
+    // // 1 左上
+    // Vertex {
+    //     position: [-0.5, 0.5],
+    //     color: [1.0, 0.0, 0.0],
+    //     tex_coor: [0.0, 0.0],
+    // },
+    // 3 左下
     Vertex {
-        position: [0.5, 0.5],
-        color: [1.0, 0.0, 0.0],
-        tex_coor: [1.0, 0.0],
+        position: [-0.5, -0.5],
+        color: [0.0, 1.0, 0.0],
+        tex_coor: [0.0, 1.0],
     },
 ];
 
@@ -184,20 +196,18 @@ impl State {
                 buffers: &[Vertex::desc()],
             },
             fragment: Some(wgpu::FragmentState {
-                // 3.
                 module: &shader,
                 entry_point: "fs_main",
                 targets: &[wgpu::ColorTargetState {
-                    // 4.
                     format: config.format,
                     blend: Some(wgpu::BlendState::REPLACE),
                     write_mask: wgpu::ColorWrites::ALL,
                 }],
             }),
             primitive: wgpu::PrimitiveState {
-                topology: wgpu::PrimitiveTopology::TriangleList, // 1.
+                topology: wgpu::PrimitiveTopology::TriangleStrip,
                 strip_index_format: None,
-                front_face: wgpu::FrontFace::Ccw, // 2.
+                front_face: wgpu::FrontFace::Ccw,
                 cull_mode: Some(wgpu::Face::Back),
                 // Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE
                 polygon_mode: wgpu::PolygonMode::Fill,
@@ -306,11 +316,15 @@ impl State {
             render_pass.set_pipeline(&self.render_pipeline);
             render_pass.set_bind_group(0, &self.image_bind_group, &[]);
 
-            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+            render_pass.push_debug_group("enter debug.");
 
-            // render_pass.draw(0..VERTICES.len() as u32, 0..1);
-            render_pass.draw_indexed(0..self.index_number as u32, 0, 0..1);
+            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+            render_pass.draw(0..VERTICES.len() as u32, 0..2);
+
+            render_pass.pop_debug_group();
+
+            // render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+            // render_pass.draw_indexed(0..self.index_number as u32, 0, 0..2);
         }
 
         self.queue.submit(iter::once(encoder.finish()));
@@ -413,7 +427,6 @@ impl Texture {
 }
 
 fn main() {
-    std::env::set_var("RUST_LOG", "INFO");
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();

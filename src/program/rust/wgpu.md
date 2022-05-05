@@ -67,6 +67,18 @@ let render_pipeline_layout =
 
 在创建渲染管道时, 指定的 vertex 或 fragment 的 buffers, 会 作为输入参数, 传递到 shader 的 入口函数
 
+vertex 的 ``` step_mode ``` 参数用于决定 顶点Buffer 是如何移动的
+
+    当设置为: VertexStepMode::Vertex 时, ``` render_pass.draw(0..4, 0..self.font_instance_num); ``` 表示:
+
+        ```
+            for 0..self.font_instance_num {
+
+            }
+        ```
+
+
+
 ```rust
 let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
     label: Some("Render Pipeline"),
@@ -91,6 +103,19 @@ let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescrip
     }),
     // ...
 });
+```
+
+当创建 pipeline 时, 指定 基本形状 primitive 时, ``` wgpu::FrontFace::Ccw ``` 表示如果顶点是逆时针 则三角形朝前, 否则 朝后.
+``` CullMode::Back ``` 表示 切除朝后的 三角形
+
+``` rust
+primitive: wgpu::PrimitiveState {
+    topology: wgpu::PrimitiveTopology::TriangleList,
+    strip_index_format: None,
+    front_face: wgpu::FrontFace::Ccw,
+    cull_mode: Some(wgpu::Face::Back),
+    ...
+}
 ```
 
 ``` wgsl

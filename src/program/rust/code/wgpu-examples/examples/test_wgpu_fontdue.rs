@@ -1,10 +1,7 @@
 use fontdue::layout::{CoordinateSystem, Layout, TextStyle};
 use guillotiere::AtlasAllocator;
 use image::{DynamicImage, GenericImageView, ImageBuffer, Luma};
-use lyon::{
-    lyon_tessellation::{FillVertex, FillVertexConstructor, StrokeVertex, StrokeVertexConstructor},
-    math::Point,
-};
+use lyon::math::Point;
 use std::iter;
 use std::{collections::HashSet, time::Instant};
 use wgpu::util::DeviceExt;
@@ -20,7 +17,7 @@ use euclid::UnknownUnit;
 
 // pub type Length<T> = euclid::Length<T, UnknownUnit>;
 pub type Point2<T> = euclid::Point2D<T, UnknownUnit>;
-// pub type Point3D<T> = euclid::Point3D<T, UnknownUnit>;
+pub type Point3<T> = euclid::Point3D<T, UnknownUnit>;
 pub type Vector2<T> = euclid::Vector2D<T, UnknownUnit>;
 // pub type Vector3D<T> = euclid::Vector3D<T, UnknownUnit>;
 // pub type HomogeneousVector<T> = euclid::HomogeneousVector<T, UnknownUnit>;
@@ -55,6 +52,11 @@ pub fn point2<T>(x: T, y: T) -> Point2<T> {
 }
 
 #[inline]
+pub fn point3<T>(x: T, y: T, z: T) -> Point3<T> {
+    Point3::new(x, y, z)
+}
+
+#[inline]
 pub fn box2<T>(min: Point2<T>, max: Point2<T>) -> Box2<T> {
     Box2::new(min, max)
 }
@@ -64,9 +66,37 @@ pub fn box2<T>(min: Point2<T>, max: Point2<T>) -> Box2<T> {
 // }
 
 #[repr(C)]
-#[derive(Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
+#[derive(Copy, Clone)]
 struct Globals {
-    resolution: [f32; 2],
+    pub window_width: f32,
+    pub window_height: f32,
+    pub transform: [f32; 16],
+}
+
+impl Globals {
+    pub fn new(window_width: f32, window_height: f32) -> Self {
+        Self {
+            window_width,
+            window_height,
+            transform: orthographic_projection(window_width, window_height),
+        }
+    }
+    pub fn update_window_size(&mut self, window_width: u32, window_height: u32) {
+        self.window_width = window_width as f32;
+        self.window_height = window_height as f32;
+        self.transform = orthographic_projection(self.window_width, self.window_height);
+    }
+}
+
+/// Helper function to generate a transform matrix.
+pub fn orthographic_projection(window_width: f32, window_height: f32) -> [f32; 16] {
+    #[cfg_attr(rustfmt, rustfmt_skip)]
+    [
+        2.0 / window_width, 0.0, 0.0, 0.0,
+        0.0, -2.0 / window_height, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        -1.0, 1.0, 0.0, 1.0,
+    ]
 }
 
 struct State {
@@ -123,9 +153,7 @@ impl State {
         };
         surface.configure(&device, &config);
 
-        let globals = Globals {
-            resolution: [size.width as f32, size.height as f32],
-        };
+        let globals = Globals::new(size.width as f32, size.height as f32);
 
         let globals_bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -156,7 +184,7 @@ impl State {
         font_builder.draw(
             "明天会更好",
             point2(10.0, 100.0),
-            [0.0, 1.0, 1.0, 1.0],
+            [1.0, 0.0, 1.0, 1.0],
             15.0,
         );
 
@@ -178,6 +206,8 @@ impl State {
             self.config.width = new_size.width;
             self.config.height = new_size.height;
             self.surface.configure(&self.device, &self.config);
+            self.globals
+                .update_window_size(new_size.width, new_size.height);
         }
     }
 
@@ -385,15 +415,18 @@ struct FontInstance {
     tex_end: [f32; 2],
     // 纹理颜色
     tex_color: [f32; 4],
+    // z坐标
+    z_index: f32,
 }
 
 impl FontInstance {
-    const VERTEX_ATTRIBUTES: [wgpu::VertexAttribute; 5] = wgpu::vertex_attr_array![
+    const VERTEX_ATTRIBUTES: [wgpu::VertexAttribute; 6] = wgpu::vertex_attr_array![
         0 => Float32x2,
         1 => Float32x2,
         2 => Float32x2,
         3 => Float32x2,
         4 => Float32x4,
+        5 => Float32,
     ];
     pub fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         wgpu::VertexBufferLayout {
@@ -406,7 +439,7 @@ impl FontInstance {
 
 struct FontBuilder {
     fonts: Vec<fontdue::Font>,
-    layout: fontdue::layout::Layout<(Point, [f32; 4], f32)>,
+    font_layout: fontdue::layout::Layout<(Point, [f32; 4], f32)>,
     dirty: bool,
 
     /// 字体纹理地图
@@ -435,11 +468,13 @@ impl FontBuilder {
         let altas_size = altas.size();
 
         let data: &[u8] = include_bytes!("../fonts/DroidSansFallbackFull.ttf");
+        log::info!("ttf font data len: {:?}", data.len());
+
         let start = Instant::now();
         let fonts =
             vec![fontdue::Font::from_bytes(data, fontdue::FontSettings::default()).unwrap()];
         log::info!("elapsed: {:?}", &start.elapsed());
-        let layout = Layout::<(Point, [f32; 4], f32)>::new(CoordinateSystem::PositiveYDown);
+        let font_layout = Layout::<(Point, [f32; 4], f32)>::new(CoordinateSystem::PositiveYDown);
 
         // 创建 字体Shader
         let font_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
@@ -501,7 +536,7 @@ impl FontBuilder {
         // 全局 Buffer
         let globals_buffer = device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("Globals Buffer"),
-            size: std::mem::size_of::<Globals>() as u64,
+            size: std::mem::size_of::<[f32; 16]>() as u64,
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
             mapped_at_creation: false,
         });
@@ -573,7 +608,7 @@ impl FontBuilder {
 
         Self {
             fonts,
-            layout,
+            font_layout,
             altas,
             cache_chars: HashSet::new(),
             globals_bind_group,
@@ -622,10 +657,14 @@ impl FontBuilder {
     ) -> bool {
         let mut updated = false;
 
-        queue.write_buffer(&self.globals_buffer, 0, bytemuck::cast_slice(&[*globals]));
+        queue.write_buffer(
+            &self.globals_buffer,
+            0,
+            bytemuck::cast_slice(&[globals.transform]),
+        );
 
         // 取出字形
-        let glyphs = self.layout.glyphs();
+        let glyphs = self.font_layout.glyphs();
 
         let mut font_instances = Vec::<FontInstance>::new();
         let altas_size = self.altas.size();
@@ -638,12 +677,6 @@ impl FontBuilder {
 
             let font = &self.fonts[glyph.font_index];
             let (metrics, bitmap) = font.rasterize_indexed(glyph.key.glyph_index, px);
-
-            let dimention = size2(metrics.advance_width, metrics.advance_height);
-            if dimention.width <= 0.0 || dimention.height <= 0.0 {
-                log::warn!("字体尺寸异常: {:?}", glyph);
-                continue;
-            }
 
             let allocate = self
                 .altas
@@ -672,6 +705,7 @@ impl FontBuilder {
                     tex_start: tex_start.to_array(),
                     tex_end: tex_end.to_array(),
                     tex_color: color,
+                    z_index: 0.0,
                 };
 
                 font_instances.push(font);
@@ -724,7 +758,7 @@ impl FontBuilder {
     }
 
     pub fn draw(&mut self, text: impl ToString, pos: Point, color: [f32; 4], size: f32) {
-        self.layout.append(
+        self.font_layout.append(
             &self.fonts,
             &TextStyle::with_user_data(text.to_string().as_str(), size, 0, (pos, color, size)),
         );
@@ -732,17 +766,22 @@ impl FontBuilder {
     }
 
     fn clear(&mut self) {
-        self.layout.clear();
+        self.font_layout.clear();
         self.dirty = false;
     }
 }
+
+struct FontCache {}
 
 fn main() {
     std::env::set_var("RUST_LOG", "INFO");
     env_logger::init();
 
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let window = WindowBuilder::new()
+        .with_title("test_wgpu_fontdue")
+        .build(&event_loop)
+        .unwrap();
 
     let mut state: State = pollster::block_on(State::new(&window));
 

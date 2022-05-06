@@ -1,5 +1,5 @@
 struct Globals {
-    resolution: vec2<f32>;
+    transform: mat4x4<f32>;
 };
 
 struct VertexInput {
@@ -14,6 +14,8 @@ struct VertexInput {
     [[location(3)]] tex_end: vec2<f32>;
     // 纹理颜色
     [[location(4)]] tex_color: vec4<f32>;
+    // z坐标
+    [[location(5)]] z_index: f32;
 };
 
 struct VertexOutput {
@@ -27,8 +29,9 @@ struct VertexOutput {
 [[stage(vertex)]]
 fn vs_main(in: VertexInput) -> VertexOutput {
     var out: VertexOutput;
-    var position: vec2<f32>;
+    var position: vec2<f32> = vec2<f32>(0.0, 0.0);
 
+    // 顶点的输出 需要 逆时针方向
     switch(i32(in.vertex_index)) {
         // 右上角 顶点
         case 0: {
@@ -38,7 +41,7 @@ fn vs_main(in: VertexInput) -> VertexOutput {
         }
         // 左上角 顶点
         case 1: {
-            position = in.pos_start;
+            position = in.pos_start.xy;
             out.tex_position = in.tex_start;
             break;
         }
@@ -59,10 +62,7 @@ fn vs_main(in: VertexInput) -> VertexOutput {
     }
 
     // 屏幕坐标转换成 wgsl的 顶点坐标
-    let invert = vec2<f32>(2.0, -2.0);
-    let transformed_pos = position / globals.resolution * invert + vec2<f32>(-1.0, 1.0);
-
-    out.position = vec4<f32>(transformed_pos, 0.0, 1.0);
+    out.position = globals.transform * vec4<f32>(position, in.z_index, 1.0);
     out.tex_color = in.tex_color;
     return out;
 }

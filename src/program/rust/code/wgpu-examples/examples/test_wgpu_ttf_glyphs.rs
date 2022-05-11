@@ -1,5 +1,6 @@
 use lyon::lyon_tessellation::VertexBuffers;
 use std::iter;
+use ttf_glyphs::GlyphVertex;
 use wgpu::util::DeviceExt;
 use winit::{
     event::*,
@@ -36,13 +37,20 @@ impl Globals {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 struct Vertex {
-    position: [f32; 3],
-    color: [f32; 3],
+    position: [f32; 4],
+    color: [f32; 4],
+}
+
+impl From<GlyphVertex> for Vertex {
+    fn from(v: GlyphVertex) -> Self {
+        let GlyphVertex { position, color } = v;
+        Self { position, color }
+    }
 }
 
 impl Vertex {
     const VERTEX_ATTRIBUTES: [wgpu::VertexAttribute; 2] = wgpu::vertex_attr_array![
-        0 => Float32x3, 1 => Float32x3
+        0 => Float32x4, 1 => Float32x4
     ];
     fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         wgpu::VertexBufferLayout {
@@ -176,7 +184,7 @@ impl State {
                 topology: wgpu::PrimitiveTopology::TriangleList,
                 strip_index_format: None,
                 front_face: wgpu::FrontFace::Ccw,
-                cull_mode: None,
+                cull_mode: Some(wgpu::Face::Back),
                 // Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE
                 polygon_mode: wgpu::PolygonMode::Fill,
                 // Requires Features::DEPTH_CLAMPING
@@ -289,55 +297,44 @@ impl State {
 }
 
 fn build_ttf_glyphs() -> VertexBuffers<Vertex, u16> {
-    use ttf_glyphs::{Font, Layout};
+    use ttf_glyphs::{Font, Section};
     let mut font = Font::new(include_bytes!("../../fonts/DroidSansFallbackFull.ttf"), 0).unwrap();
-    let mut layout = Layout::new();
 
-    layout.append(ttf_glyphs::Text::new(
-        "饕餮",
-        ttf_glyphs::Position::new(0, 200),
-        50,
-    ));
-
-    layout.append(ttf_glyphs::Text::new(
-        "饕餮饕餮饕餮饕餮饕餮饕餮饕餮饕餮饕餮饕餮饕餮饕餮",
-        ttf_glyphs::Position::new(0, 300),
-        150,
-    ));
-
-    layout.append(ttf_glyphs::Text::new(
-        "你好!",
-        ttf_glyphs::Position::new(0, 0),
-        16,
-    ));
-
-    layout.append(ttf_glyphs::Text::new(
-        "你好，",
-        ttf_glyphs::Position::new(0, 20),
-        20,
-    ));
-
-    layout.append(ttf_glyphs::Text::new(
-        "你好，",
-        ttf_glyphs::Position::new(0, 50),
-        50,
-    ));
-
-    let ttf_glyphs::GlyphGeometry {
-        vertices,
+    let VertexBuffers {
+        mut vertices,
         indices,
-        glyph_bound,
-        outline_bound,
-    } = layout.apply(&mut font);
+    } = Section::new()
+        .with_size(16.0)
+        .with_color([1.0, 1.0, 0.0, 1.0])
+        .with_max_width(1024.0)
+        .append("饕餮，")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .build(&mut font);
 
-    let vertices = vertices
-        .iter()
-        .map(|v| Vertex {
-            position: [v.x, v.y, 0.0],
-            color: [1.0, 1.0, 0.0],
-        })
-        .collect();
-
+    let vertices = vertices.drain(..).map(|v| v.into()).collect();
     VertexBuffers { vertices, indices }
 }
 

@@ -1,6 +1,7 @@
 {
     "rust-analyzer.linkedProjects": [
         "src/program/rust/code/wgpu-examples/Cargo.toml",
-        "src/program/rust/code/raqote-examples/Cargo.toml"
+        "src/program/rust/code/raqote-examples/Cargo.toml",
+        "src/program/rust/code/poem-examples/Cargo.toml"
     ],
 }

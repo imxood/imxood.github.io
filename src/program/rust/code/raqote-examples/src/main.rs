@@ -2,28 +2,31 @@ use raqote::*;
 use ttf_parser::GlyphId;
 
 fn main() {
+    let gradient = Source::Solid(SolidSource::from_unpremultiplied_argb(255, 255, 255, 0));
+    let mut dt = DrawTarget::new(400, 400);
+
     // 加载字体
     let face =
         ttf_parser::Face::from_slice(include_bytes!("../../fonts/DroidSansFallbackFull.ttf"), 0)
             .map_err(|e| format!("{:?}", &e))
             .unwrap();
-    // let glyph_id = face.glyph_index('饕').unwrap();
-    let glyph_id = GlyphId(500);
 
     // 解析字形
+    let glyph_id = face.glyph_index('你').unwrap();
     let mut outline_builder = OutlineBuilder::new();
-    face.outline_glyph(glyph_id, &mut outline_builder).unwrap();
-
-    // 获取字形路径
+    let rect = face.outline_glyph(glyph_id, &mut outline_builder).unwrap();
     let path = outline_builder.build();
 
-    let mut pb = PathBuilder::new();
-    pb.arc(150., 125., 100., 0., std::f32::consts::PI * 2.0);
-    let path = pb.finish();
+    dt.fill(&path, &gradient, &DrawOptions::new());
 
-    let mut dt = DrawTarget::new(400, 400);
+    // 解析字形
+    let glyph_id = face.glyph_index('。').unwrap();
+    let mut outline_builder = OutlineBuilder::new();
+    let rect = face.outline_glyph(glyph_id, &mut outline_builder).unwrap();
+    let path = outline_builder
+        .build()
+        .transform(&Transform::identity().post_translate(Vector::new(200.0, 0.0)));
 
-    let gradient = Source::Solid(SolidSource::from_unpremultiplied_argb(255, 255, 255, 0));
     dt.fill(&path, &gradient, &DrawOptions::new());
 
     dt.write_png("example.png").unwrap();

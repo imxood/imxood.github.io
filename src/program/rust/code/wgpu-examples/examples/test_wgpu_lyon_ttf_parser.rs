@@ -571,7 +571,7 @@ impl ttf_parser::OutlineBuilder for OutlineBuilder {
 }
 
 fn build_lyon() -> VertexBuffers<Vertex, u16> {
-    let mut geometry: VertexBuffers<Vertex, u16> = VertexBuffers::new();
+    let mut buffer: VertexBuffers<Vertex, u16> = VertexBuffers::new();
     let mut fill_tess = FillTessellator::new();
     let mut stroke_tess = StrokeTessellator::new();
 
@@ -624,7 +624,7 @@ fn build_lyon() -> VertexBuffers<Vertex, u16> {
         .tessellate_rectangle(
             &inner_rect,
             &StrokeOptions::DEFAULT,
-            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.3, [1.0, 1.0, 0.0])),
+            &mut BuffersBuilder::new(&mut buffer, WithZIndex(0.3, [1.0, 1.0, 0.0])),
         )
         .unwrap();
 
@@ -633,7 +633,7 @@ fn build_lyon() -> VertexBuffers<Vertex, u16> {
         .tessellate_rectangle(
             &outline_rect,
             &StrokeOptions::DEFAULT.with_line_width(50.0),
-            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 0.0, 0.0])),
+            &mut BuffersBuilder::new(&mut buffer, WithZIndex(0.2, [1.0, 0.0, 0.0])),
         )
         .unwrap();
 
@@ -642,18 +642,18 @@ fn build_lyon() -> VertexBuffers<Vertex, u16> {
         .tessellate_path(
             &path,
             &FillOptions::tolerance(0.001),
-            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 1.0, 0.0])),
+            &mut BuffersBuilder::new(&mut buffer, WithZIndex(0.2, [1.0, 1.0, 0.0])),
         )
         .unwrap();
 
-    // println!("geometry.vertices: {:?}", &geometry.vertices);
-    // println!("geometry.indices: {:?}", &geometry.indices);
+    // println!("buffer.vertices: {:?}", &buffer.vertices);
+    // println!("buffer.indices: {:?}", &buffer.indices);
     println!(
         " -- {} vertices {} indices",
-        geometry.vertices.len(),
-        geometry.indices.len()
+        buffer.vertices.len(),
+        buffer.indices.len()
     );
-    geometry
+    buffer
 }
 
 fn main() {

@@ -25,4 +25,6 @@ lto = true
 [dev-dependencies]
 fontdue = { version = "0.7.2", features = ["parallel"] }
 guillotiere = "0.6.2"
-lyon = "0.17.10"
+lyon = { version = "0.17.10", features = ["extra"] }
+ttf-glyphs = { path = "/develop/sources/ttf-glyphs" }
+ttf-parser = "0.15.0"

@@ -1,11 +1,18 @@
 use image::{DynamicImage, GenericImageView, ImageBuffer, Luma};
 use lyon::{
-    geom::{euclid::rect, point},
+    geom::{point, rect, vector, Transform},
     lyon_tessellation::{
         BuffersBuilder, FillOptions, FillTessellator, FillVertex, FillVertexConstructor,
-        StrokeOptions, StrokeTessellator, StrokeVertex, StrokeVertexConstructor, VertexBuffers,
+        Orientation, StrokeOptions, StrokeTessellator, StrokeVertex, StrokeVertexConstructor,
+        VertexBuffers,
     },
-    path::{builder::BorderRadii, traits::PathBuilder, FillRule, Path, Winding},
+    math::Rect,
+    path::{
+        builder::{BorderRadii, WithSvg},
+        path::Builder,
+        traits::PathBuilder,
+        FillRule, Path, Winding,
+    },
 };
 use std::iter;
 use wgpu::util::DeviceExt;
@@ -130,7 +137,9 @@ impl State {
         // 创建 Shade
         let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(include_str!("./test_wgpu_lyon.wgsl").into()),
+            source: wgpu::ShaderSource::Wgsl(
+                include_str!("./test_wgpu_lyon_ttf_parser.wgsl").into(),
+            ),
         });
 
         let globals_bind_group_layout =
@@ -523,161 +532,119 @@ impl StrokeVertexConstructor<Vertex> for WithZIndex {
     }
 }
 
+struct OutlineBuilder {
+    builder: WithSvg<Builder>,
+}
+
+impl OutlineBuilder {
+    pub fn new() -> Self {
+        Self {
+            builder: Path::builder().with_svg(),
+        }
+    }
+    pub fn build(self) -> Path {
+        self.builder.build()
+    }
+}
+
+impl ttf_parser::OutlineBuilder for OutlineBuilder {
+    fn move_to(&mut self, x: f32, y: f32) {
+        self.builder.move_to(point(x, y));
+    }
+
+    fn line_to(&mut self, x: f32, y: f32) {
+        self.builder.line_to(point(x, y));
+    }
+
+    fn quad_to(&mut self, x1: f32, y1: f32, x: f32, y: f32) {
+        self.builder.quadratic_bezier_to(point(x1, y1), point(x, y));
+    }
+
+    fn curve_to(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
+        self.builder
+            .cubic_bezier_to(point(x1, y1), point(x2, y2), point(x, y));
+    }
+
+    fn close(&mut self) {
+        self.builder.close();
+    }
+}
+
 fn build_lyon() -> VertexBuffers<Vertex, u16> {
     let mut geometry: VertexBuffers<Vertex, u16> = VertexBuffers::new();
+    let mut fill_tess = FillTessellator::new();
+    let mut stroke_tess = StrokeTessellator::new();
 
-    // {
-    //     let options = FillOptions::non_zero();
-    //     let mut tessellator = FillTessellator::new();
-    //     let mut geometry_builder =
-    //         BuffersBuilder::new(&mut geometry, WithZIndex(0.1, [1.0, 1.0, 0.0]));
-    //     let mut builder = tessellator.builder(&options, &mut geometry_builder);
-
-    //     builder.add_circle(point(100.0, 130.0), 50.0, Winding::Positive);
-
-    //     builder.add_rounded_rectangle(
-    //         &rect(150.0, 150.0, 200.0, 200.0),
-    //         &BorderRadii {
-    //             top_left: 10.0,
-    //             top_right: 0.0,
-    //             bottom_left: 0.0,
-    //             bottom_right: 10.0,
-    //         },
-    //         Winding::Positive,
-    //     );
-
-    //     builder.add_rectangle(&rect(0.0, 0.0, 50.0, 50.0), Winding::Positive);
-    //     builder.build().unwrap();
-    // }
-
-    // {
-    //     let options = FillOptions::non_zero();
-    //     let mut tessellator = FillTessellator::new();
-    //     let mut geometry_builder =
-    //         BuffersBuilder::new(&mut geometry, WithZIndex(0.5, [0.0, 0.0, 1.0]));
-    //     let mut builder = tessellator.builder(&options, &mut geometry_builder);
-    //     builder.add_rectangle(&rect(220.0, 20.0, 50.0, 50.0), Winding::Negative);
-    //     builder.build().unwrap();
-    // };
-
-    // {
-    //     let options = FillOptions::default();
-    //     let mut tessellator = FillTessellator::new();
-    //     let mut geometry_builder =
-    //         BuffersBuilder::new(&mut geometry, WithZIndex(0.3, [1.0, 0.0, 0.0]));
-    //     let mut builder = tessellator.builder(&options, &mut geometry_builder);
-    //     builder.add_rectangle(&rect(220.0, 50.0, 50.0, 50.0), Winding::Positive);
-    //     // builder.add_line_segment(&LineSegment {
-    //     //     from: point(150.0, 250.0),
-    //     //     to: point(250.0, 250.0),
-    //     // });
-    //     builder.build().unwrap();
-    // };
-
-    {
-        use lyon::extra::rust_logo::build_logo_path;
-
-        let mut fill_tess = FillTessellator::new();
-        let mut stroke_tess = StrokeTessellator::new();
-
-        let mut builder = Path::builder().with_svg();
-
-        let start = std::time::Instant::now();
-        let p0 = start.elapsed();
-
-        build_logo_path(&mut builder);
-        let path = builder.build();
-
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
-
-        fill_tess
-            .tessellate_path(
-                &path,
-                &FillOptions::tolerance(0.1).with_fill_rule(FillRule::NonZero),
-                &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 1.0, 0.0])),
-            )
+    let face =
+        ttf_parser::Face::from_slice(include_bytes!("../../fonts/DroidSansFallbackFull.ttf"), 0)
+            .map_err(|e| format!("{:?}", &e))
             .unwrap();
+    let height = face.height() as f32;
+    let descender = face.descender() as f32;
 
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
+    let glyph_id = face.glyph_index('饕').unwrap();
+    let advance_x = face.glyph_hor_advance(glyph_id).unwrap_or(0) as f32;
 
-        // println!("geometry.vertices: {:?}", &geometry.vertices);
-        // println!("geometry.indices: {:?}", &geometry.indices);
-        println!(
-            " -- {} vertices {} indices",
-            geometry.vertices.len(),
-            geometry.indices.len()
-        );
+    let mut outline_builder = OutlineBuilder::new();
 
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
+    let glyph_rect = face.outline_glyph(glyph_id, &mut outline_builder).unwrap();
 
-        stroke_tess
-            .tessellate_path(
-                &path,
-                &StrokeOptions::tolerance(0.1).with_line_width(5.0),
-                &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.3, [0.0, 0.0, 1.0])),
-            )
-            .unwrap();
+    let mut path = outline_builder.build();
+    let mut inner_rect = rect(
+        glyph_rect.x_min as f32,
+        glyph_rect.y_min as f32,
+        glyph_rect.width() as f32,
+        glyph_rect.height() as f32,
+    );
+    let mut outline_rect = rect(0.0, face.descender() as f32, advance_x, height);
 
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
+    /*
+        为了防止 倒置后超出屏幕, 向上移动一定的位置
+    */
+    if descender < 0.0 {
+        let transform = Transform::translation(0.0, -descender);
+        inner_rect = transform.outer_transformed_rect(&inner_rect);
+        outline_rect = transform.outer_transformed_rect(&outline_rect);
+        path = path.transformed(&transform);
     }
 
-    {
-        let mut fill_tess = FillTessellator::new();
-        let mut stroke_tess = StrokeTessellator::new();
+    /*
+        字体坐标系 转换到 屏幕坐标系: 先上下翻转, 再平移
+    */
+    let transform = Transform::identity()
+        .then_scale(1.0, -1.0)
+        .then_translate(vector(0.0, inner_rect.max_y() + inner_rect.min_y()));
 
-        let start = std::time::Instant::now();
-        let p0 = start.elapsed();
+    let inner_rect = transform.outer_transformed_rect(&inner_rect);
+    let outline_rect = transform.outer_transformed_rect(&outline_rect);
+    path = path.transformed(&transform);
 
-        let mut builder = Path::builder();
-        // builder.begin(point(100.0, 100.0));
-        // builder.line_to(point(300.0, 100.0));
-        // builder.line_to(point(300.0, 200.0));
-        // builder.line_to(point(100.0, 200.0));
-        builder.add_rectangle(&rect(220.0, 50.0, 50.0, 50.0), Winding::Positive);
-        let path = builder.build();
+    // 字形内轮廓添加边框
+    stroke_tess
+        .tessellate_rectangle(
+            &inner_rect,
+            &StrokeOptions::DEFAULT,
+            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.3, [1.0, 1.0, 0.0])),
+        )
+        .unwrap();
 
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
+    // 字形外轮廓添加边框
+    stroke_tess
+        .tessellate_rectangle(
+            &outline_rect,
+            &StrokeOptions::DEFAULT.with_line_width(50.0),
+            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 0.0, 0.0])),
+        )
+        .unwrap();
 
-        fill_tess
-            .tessellate_path(
-                &path,
-                &FillOptions::tolerance(0.1).with_fill_rule(FillRule::NonZero),
-                &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 1.0, 0.0])),
-            )
-            .unwrap();
-
-        println!(
-            " -- {} vertices {} indices",
-            geometry.vertices.len(),
-            geometry.indices.len()
-        );
-
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
-
-        stroke_tess
-            .tessellate_path(
-                &path,
-                &StrokeOptions::tolerance(0.1).with_line_width(5.0),
-                &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.3, [0.0, 0.0, 1.0])),
-            )
-            .unwrap();
-
-        let p1 = start.elapsed();
-        println!("p1 - p0: {:?}", p1 - p0);
-        let p0 = p1;
-    }
+    // 构建字形的顶点和索引
+    fill_tess
+        .tessellate_path(
+            &path,
+            &FillOptions::tolerance(0.001),
+            &mut BuffersBuilder::new(&mut geometry, WithZIndex(0.2, [1.0, 1.0, 0.0])),
+        )
+        .unwrap();
 
     // println!("geometry.vertices: {:?}", &geometry.vertices);
     // println!("geometry.indices: {:?}", &geometry.indices);

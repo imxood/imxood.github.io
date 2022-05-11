@@ -5,6 +5,7 @@ use lyon::math::Point;
 use std::iter;
 use std::{collections::HashSet, time::Instant};
 use wgpu::util::DeviceExt;
+use winit::dpi::PhysicalSize;
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
@@ -88,7 +89,7 @@ impl Globals {
     }
 }
 
-/// Helper function to generate a transform matrix.
+/// 正交缩放矩阵, 用于把当前 window的 x轴 和 y轴 缩放到 2 和 -2, 窗口范围是 x: [-1,1] y: [-1,1]
 pub fn orthographic_projection(window_width: f32, window_height: f32) -> [f32; 16] {
     #[cfg_attr(rustfmt, rustfmt_skip)]
     [
@@ -106,8 +107,9 @@ struct State {
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
     globals_bind_group_layout: wgpu::BindGroupLayout,
-    pub globals: Globals,
     font_builder: FontBuilder,
+    pub globals: Globals,
+    depth_texture: Texture,
 }
 
 impl State {
@@ -153,6 +155,8 @@ impl State {
         };
         surface.configure(&device, &config);
 
+        let depth_texture = Texture::create_depth_texture(&device, &config, "depth_texture");
+
         let globals = Globals::new(size.width as f32, size.height as f32);
 
         let globals_bind_group_layout =
@@ -176,16 +180,40 @@ impl State {
 
         let mut font_builder = FontBuilder::new(&device, format, &globals_bind_group_layout);
         font_builder.draw(
-            "你好，上海加油",
-            point2(10.0, 10.0),
-            [0.0, 1.0, 1.0, 1.0],
-            30.0,
+            FontText::new("你好，上海加油", point2(10.0, 10.0), 16.0)
+                .with_color([1.0, 0.0, 0.0, 1.0]),
         );
         font_builder.draw(
-            "明天会更好",
-            point2(10.0, 100.0),
-            [1.0, 0.0, 1.0, 1.0],
-            15.0,
+            FontText::new("你好，上海加油", point2(10.0, 26.0), 16.0)
+                .with_color([1.0, 1.0, 0.0, 1.0])
+                .with_bold(),
+        );
+        font_builder.draw(
+            FontText::new("你好，上海加油", point2(10.0, 45.0), 16.0)
+                .with_color([1.0, 0.0, 1.0, 1.0]),
+        );
+
+        font_builder.draw(
+            FontText::new("明天会更好", point2(10.0, 100.0), 60.0).with_color([0.0, 1.0, 0.0, 1.0]),
+        );
+        font_builder.draw(
+            FontText::new("天气真不错！", point2(10.0, 130.0), 60.0)
+                .with_color([0.0, 0.0, 1.0, 1.0]),
+        );
+
+        font_builder.draw(
+            FontText::new("像一朵盛开的鲜花，永不凋谢！", point2(10.0, 190.0), 50.0)
+                .with_color([1.0, 0.0, 0.0, 1.0]),
+        );
+
+        font_builder.draw(
+            FontText::new(
+                "像一朵盛开的鲜花，永不凋 谢！\n  hello",
+                point2(10.0, 250.0),
+                50.0,
+            )
+            .with_color([1.0, 1.0, 0.0, 1.0])
+            .with_bold(),
         );
 
         Self {
@@ -197,6 +225,7 @@ impl State {
             globals,
             globals_bind_group_layout,
             font_builder,
+            depth_texture,
         }
     }
 
@@ -208,6 +237,8 @@ impl State {
             self.surface.configure(&self.device, &self.config);
             self.globals
                 .update_window_size(new_size.width, new_size.height);
+            self.depth_texture =
+                Texture::create_depth_texture(&self.device, &self.config, "depth_texture");
         }
     }
 
@@ -239,7 +270,14 @@ impl State {
                         store: true,
                     },
                 }],
-                depth_stencil_attachment: None,
+                depth_stencil_attachment: Some(wgpu::RenderPassDepthStencilAttachment {
+                    view: &self.depth_texture.view,
+                    depth_ops: Some(wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(1.0),
+                        store: true,
+                    }),
+                    stencil_ops: None,
+                }),
             });
 
             self.font_builder
@@ -267,10 +305,11 @@ pub struct Texture {
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
     pub sampler: wgpu::Sampler,
-    pub format: wgpu::TextureFormat,
 }
 
 impl Texture {
+    pub const DEPTH_FORMAT: wgpu::TextureFormat = wgpu::TextureFormat::Depth32Float; // 1.
+
     pub fn new(
         device: &wgpu::Device,
         width: u32,
@@ -308,7 +347,6 @@ impl Texture {
             texture,
             view,
             sampler,
-            format,
         }
     }
 
@@ -400,6 +438,51 @@ impl Texture {
         this.write_texture(queue, &rgba, [0, 0], dimensions.0, dimensions.1);
         this
     }
+
+    pub fn create_depth_texture(
+        device: &wgpu::Device,
+        config: &wgpu::SurfaceConfiguration,
+        label: &str,
+    ) -> Self {
+        let size = wgpu::Extent3d {
+            // 2.
+            width: config.width,
+            height: config.height,
+            depth_or_array_layers: 1,
+        };
+        let desc = wgpu::TextureDescriptor {
+            label: Some(label),
+            size,
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: Self::DEPTH_FORMAT,
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT // 3.
+                | wgpu::TextureUsages::TEXTURE_BINDING,
+        };
+        let texture = device.create_texture(&desc);
+
+        let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
+        let sampler = device.create_sampler(&wgpu::SamplerDescriptor {
+            // 4.
+            address_mode_u: wgpu::AddressMode::ClampToEdge,
+            address_mode_v: wgpu::AddressMode::ClampToEdge,
+            address_mode_w: wgpu::AddressMode::ClampToEdge,
+            mag_filter: wgpu::FilterMode::Linear,
+            min_filter: wgpu::FilterMode::Linear,
+            mipmap_filter: wgpu::FilterMode::Nearest,
+            compare: Some(wgpu::CompareFunction::LessEqual), // 5.
+            lod_min_clamp: -100.0,
+            lod_max_clamp: 100.0,
+            ..Default::default()
+        });
+
+        Self {
+            texture,
+            view,
+            sampler,
+        }
+    }
 }
 
 #[repr(C)]
@@ -417,16 +500,19 @@ struct FontInstance {
     tex_color: [f32; 4],
     // z坐标
     z_index: f32,
+    // font 粗体
+    bold: f32,
 }
 
 impl FontInstance {
-    const VERTEX_ATTRIBUTES: [wgpu::VertexAttribute; 6] = wgpu::vertex_attr_array![
+    const VERTEX_ATTRIBUTES: [wgpu::VertexAttribute; 7] = wgpu::vertex_attr_array![
         0 => Float32x2,
         1 => Float32x2,
         2 => Float32x2,
         3 => Float32x2,
         4 => Float32x4,
         5 => Float32,
+        6 => Float32,
     ];
     pub fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         wgpu::VertexBufferLayout {
@@ -437,9 +523,40 @@ impl FontInstance {
     }
 }
 
+struct FontText {
+    pub text: String,
+    pub pos: Point,
+    pub color: [f32; 4],
+    pub size: f32,
+    pub bold: bool,
+}
+
+impl FontText {
+    pub fn new(text: impl ToString, pos: Point, size: f32) -> Self {
+        Self {
+            text: text.to_string(),
+            pos,
+            color: [1.0, 1.0, 1.0, 1.0],
+            size,
+            bold: false,
+        }
+    }
+
+    pub fn with_color(mut self, color: [f32; 4]) -> Self {
+        self.color = color;
+        self
+    }
+
+    pub fn with_bold(mut self) -> Self {
+        self.bold = true;
+        self
+    }
+}
+
 struct FontBuilder {
     fonts: Vec<fontdue::Font>,
-    font_layout: fontdue::layout::Layout<(Point, [f32; 4], f32)>,
+    // draw_fonts: Vec<fontdue::layout::Layout<(Point, [f32; 4])>>,
+    draw_fonts: Vec<FontText>,
     dirty: bool,
 
     /// 字体纹理地图
@@ -467,14 +584,13 @@ impl FontBuilder {
         let altas = AtlasAllocator::new(size2(1024, 1024));
         let altas_size = altas.size();
 
-        let data: &[u8] = include_bytes!("../fonts/DroidSansFallbackFull.ttf");
+        let data: &[u8] = include_bytes!("../../fonts/DroidSansFallbackFull.ttf");
         log::info!("ttf font data len: {:?}", data.len());
 
         let start = Instant::now();
         let fonts =
             vec![fontdue::Font::from_bytes(data, fontdue::FontSettings::default()).unwrap()];
         log::info!("elapsed: {:?}", &start.elapsed());
-        let font_layout = Layout::<(Point, [f32; 4], f32)>::new(CoordinateSystem::PositiveYDown);
 
         // 创建 字体Shader
         let font_shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
@@ -588,7 +704,13 @@ impl FontBuilder {
                 // Requires Features::CONSERVATIVE_RASTERIZATION
                 conservative: false,
             },
-            depth_stencil: None,
+            depth_stencil: Some(wgpu::DepthStencilState {
+                format: Texture::DEPTH_FORMAT,
+                depth_write_enabled: true,
+                depth_compare: wgpu::CompareFunction::Less, // 1.
+                stencil: wgpu::StencilState::default(),     // 2.
+                bias: wgpu::DepthBiasState::default(),
+            }),
             multisample: wgpu::MultisampleState {
                 count: 1,
                 mask: !0,
@@ -608,7 +730,7 @@ impl FontBuilder {
 
         Self {
             fonts,
-            font_layout,
+            draw_fonts: Vec::new(),
             altas,
             cache_chars: HashSet::new(),
             globals_bind_group,
@@ -663,74 +785,89 @@ impl FontBuilder {
             bytemuck::cast_slice(&[globals.transform]),
         );
 
-        // 取出字形
-        let glyphs = self.font_layout.glyphs();
-
         let mut font_instances = Vec::<FontInstance>::new();
         let altas_size = self.altas.size();
 
-        for glyph in glyphs.iter() {
-            if self.cache_chars.contains(&glyph.parent) {
-                continue;
-            }
-            let (pos, color, px) = glyph.user_data;
+        for text in self.draw_fonts.iter() {
+            let mut font_layout =
+                Layout::<(Point, [f32; 4], bool)>::new(CoordinateSystem::PositiveYDown);
+            font_layout.append(
+                &self.fonts,
+                &TextStyle::with_user_data(
+                    text.text.as_str(),
+                    text.size,
+                    0,
+                    (text.pos, text.color, text.bold),
+                ),
+            );
 
-            let font = &self.fonts[glyph.font_index];
-            let (metrics, bitmap) = font.rasterize_indexed(glyph.key.glyph_index, px);
+            // 取出字形
+            let glyphs = font_layout.glyphs();
 
-            let allocate = self
-                .altas
-                .allocate(size2(metrics.width as i32, metrics.height as i32));
-
-            if let Some(allocate) = allocate {
-                let rect = allocate.rectangle;
-                let tex_start = point2(
-                    rect.min.x as f32 / altas_size.width as f32,
-                    rect.min.y as f32 / altas_size.height as f32,
-                );
-                let tex_end = point2(
-                    rect.max.x as f32 / altas_size.width as f32,
-                    rect.max.y as f32 / altas_size.height as f32,
-                );
-
-                let pos_start = point2(pos.x + glyph.x, pos.y + glyph.y);
-                let pos_end = point2(
-                    pos_start.x + glyph.width as f32,
-                    pos_start.y + glyph.height as f32,
-                );
-
-                let font = FontInstance {
-                    pos_start: pos_start.to_array(),
-                    pos_end: pos_end.to_array(),
-                    tex_start: tex_start.to_array(),
-                    tex_end: tex_end.to_array(),
-                    tex_color: color,
-                    z_index: 0.0,
-                };
-
-                font_instances.push(font);
-
-                let buf: ImageBuffer<Luma<u8>, _> =
-                    ImageBuffer::from_raw(metrics.width as u32, metrics.height as u32, bitmap)
-                        .unwrap();
-                let image = DynamicImage::ImageLuma8(buf);
-
-                let mut rgba = image.to_rgba8();
-
-                // 去除黑色背景
-                for color in rgba.pixels_mut() {
-                    if *color == image::Rgba([0x00, 0x00, 0x00, 0xff]) {
-                        color[3] = 0x00;
-                    }
+            for glyph in glyphs.iter() {
+                if self.cache_chars.contains(&glyph.parent) {
+                    continue;
                 }
+                let (pos, color, bold) = glyph.user_data;
 
-                self.texture.write_texture(
-                    &queue,
-                    &rgba,
-                    [rect.min.x as u32, rect.min.y as u32],
-                    rect.width() as u32,
-                    rect.height() as u32,
-                );
+                let font = &self.fonts[glyph.font_index];
+                let (metrics, bitmap) = font.rasterize_indexed(glyph.key.glyph_index, glyph.key.px);
+
+                let allocate = self
+                    .altas
+                    .allocate(size2(metrics.width as i32, metrics.height as i32));
+
+                if let Some(allocate) = allocate {
+                    let rect = allocate.rectangle;
+                    let tex_start = point2(
+                        rect.min.x as f32 / altas_size.width as f32,
+                        rect.min.y as f32 / altas_size.height as f32,
+                    );
+                    let tex_end = point2(
+                        rect.max.x as f32 / altas_size.width as f32,
+                        rect.max.y as f32 / altas_size.height as f32,
+                    );
+
+                    let pos_start = point2(pos.x + glyph.x, pos.y + glyph.y);
+                    let pos_end = point2(
+                        pos_start.x + glyph.width as f32,
+                        pos_start.y + glyph.height as f32,
+                    );
+
+                    let font = FontInstance {
+                        pos_start: pos_start.to_array(),
+                        pos_end: pos_end.to_array(),
+                        tex_start: tex_start.to_array(),
+                        tex_end: tex_end.to_array(),
+                        tex_color: color,
+                        z_index: 0.0,
+                        bold: if bold { 1.0 } else { 0.0 },
+                    };
+
+                    font_instances.push(font);
+
+                    let buf: ImageBuffer<Luma<u8>, _> =
+                        ImageBuffer::from_raw(metrics.width as u32, metrics.height as u32, bitmap)
+                            .unwrap();
+                    let image = DynamicImage::ImageLuma8(buf);
+
+                    let mut rgba = image.to_rgba8();
+
+                    // 去除黑色背景
+                    for color in rgba.pixels_mut() {
+                        if *color == image::Rgba([0x00, 0x00, 0x00, 0xff]) {
+                            color[3] = 0x00;
+                        }
+                    }
+
+                    self.texture.write_texture(
+                        &queue,
+                        &rgba,
+                        [rect.min.x as u32, rect.min.y as u32],
+                        rect.width() as u32,
+                        rect.height() as u32,
+                    );
+                }
             }
         }
 
@@ -757,21 +894,20 @@ impl FontBuilder {
         updated
     }
 
-    pub fn draw(&mut self, text: impl ToString, pos: Point, color: [f32; 4], size: f32) {
-        self.font_layout.append(
-            &self.fonts,
-            &TextStyle::with_user_data(text.to_string().as_str(), size, 0, (pos, color, size)),
-        );
+    pub fn draw(&mut self, text: FontText) {
+        self.draw_fonts.push(text);
         self.dirty = true;
     }
 
     fn clear(&mut self) {
-        self.font_layout.clear();
+        self.draw_fonts.clear();
         self.dirty = false;
     }
 }
 
 struct FontCache {}
+
+const WINDOW_SIZE: PhysicalSize<u32> = PhysicalSize::new(1000, 800);
 
 fn main() {
     std::env::set_var("RUST_LOG", "INFO");
@@ -780,6 +916,7 @@ fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title("test_wgpu_fontdue")
+        .with_inner_size(WINDOW_SIZE)
         .build(&event_loop)
         .unwrap();
 

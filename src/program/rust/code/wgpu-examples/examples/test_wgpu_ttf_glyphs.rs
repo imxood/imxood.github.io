@@ -300,10 +300,8 @@ fn build_ttf_glyphs() -> VertexBuffers<Vertex, u16> {
     use ttf_glyphs::{Font, Section};
     let mut font = Font::new(include_bytes!("../../fonts/DroidSansFallbackFull.ttf"), 0).unwrap();
 
-    let VertexBuffers {
-        mut vertices,
-        indices,
-    } = Section::new()
+    let (rect, buffer) = Section::new()
+        .with_position([0.0, 0.0, 1.0, 1.0])
         .with_size(16.0)
         .with_color([1.0, 1.0, 0.0, 1.0])
         .with_max_width(1024.0)
@@ -325,6 +323,25 @@ fn build_ttf_glyphs() -> VertexBuffers<Vertex, u16> {
         .append("你好。")
         .append("你好。")
         .append("你好。")
+        .build(&mut font);
+
+    let (rect, buffer) = Section::with_buffer(buffer)
+        .with_position([rect.min.x, rect.max.y + 50.0, 1.0, 1.0])
+        .with_size(20.0)
+        .with_border((1.0, [1.0, 0.0, 0.0, 0.5]))
+        .with_color([0.0, 0.0, 1.0, 1.0])
+        .with_max_width(1024.0)
+        .append("饕餮，")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
         .append("你好。")
         .append("你好。")
         .append("你好。")
@@ -333,6 +350,37 @@ fn build_ttf_glyphs() -> VertexBuffers<Vertex, u16> {
         .append("你好。")
         .append("你好。")
         .build(&mut font);
+
+    let (rect, buffer) = Section::with_buffer(buffer)
+        .with_position([rect.min.x, rect.max.y + 50.0, 1.0, 1.0])
+        .with_size(50.0)
+        .with_color([1.0, 0.0, 0.0, 1.0])
+        .with_border((10.0, [0.5, 0.2, 0.7, 1.0]))
+        .with_max_width(1024.0)
+        .append("饕餮，")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .append("你好。")
+        .build(&mut font);
+
+    let VertexBuffers {
+        mut vertices,
+        indices,
+    } = buffer;
 
     let vertices = vertices.drain(..).map(|v| v.into()).collect();
     VertexBuffers { vertices, indices }

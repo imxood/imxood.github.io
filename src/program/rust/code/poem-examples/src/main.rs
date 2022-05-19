@@ -1,35 +1,34 @@
-use poem::{get, handler, listener::TcpListener, web::Data, EndpointExt, Route, Server};
-use std::sync::{Mutex, Arc};
-
-#[derive(Debug, Clone)]
-struct AppState {
-    health_check_response: String,
-    visit_count: Arc<Mutex<u32>>,
-}
+use poem::{get, handler, listener::TcpListener, web::Path, Route, Server};
 
 #[handler]
-async fn health_check(Data(app_state): Data<&AppState>) -> String {
-    let mut count = app_state.visit_count.lock().unwrap();
-    let s = format!("{} {} times", app_state.health_check_response, count);
-
-    *count += 1;
-
-    s
+fn hello(Path(name): Path<String>) -> String {
+    format!("hello, {}", name)
 }
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    let shared_data = AppState {
-        health_check_response: "I'm OK.".to_string(),
-        visit_count: Arc::new(Mutex::new(0)),
-    };
+    std::env::set_var("RUST_LOG", "poem=debug");
+    tracing_subscriber::fmt::init();
 
-    let app = Route::new()
-        .at("/health", get(health_check))
-        .data(shared_data);
+    let app = Route::new().at("/hello/:name", get(hello));
 
-    Server::new(TcpListener::bind("localhost:3000"))
-        .name("teacher-service")
+    Server::new(TcpListener::bind("127.0.0.1:3000"))
+        .name("hello-world")
         .run(app)
         .await
+}
+
+#[tokio::test]
+async fn test_hello() {
+    use poem::test::TestClient;
+
+    let name = "xiaoming";
+
+    let app = Route::new().at("/hello/:name", get(hello));
+    let cli = TestClient::new(app);
+
+    let resp = cli.get("/hello/xiaoming").send().await;
+    resp.assert_status_is_ok();
+
+    resp.assert_text(format!("hello, {}", name)).await;
 }

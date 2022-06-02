@@ -1,0 +1,7 @@
+{% for key, value in users %}
+    {{loop.index}} {{loop.first}} {{key}}: {{value}} {{loop.last}}
+    {% if loop.index == 1 %}
+        {% set pascal = pascal(text=value.0) %}
+        测试 使用索引访问数组 {{value.1}} {{ pascal }}
+    {% endif %}
+{% endfor %}

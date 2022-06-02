@@ -1,0 +1,19 @@
+/* this is comment */
+#content {
+    display: 1.0;
+    /* this is comment */
+    height: 500;
+    background-color: rgb(109, 18, 18);
+}
+
+.first {
+    height: 50px;
+}
+
+#content .first,
+/* this is comment */
+#content .second {
+    height: 50px;
+}
+
+/* this is comment */

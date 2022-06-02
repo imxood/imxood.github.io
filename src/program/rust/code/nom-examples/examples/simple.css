@@ -1,0 +1,18 @@
+/* this is comment */
+#content {
+    display: block;
+    /* this is comment */
+    height: 500px;
+}
+
+.first {
+    height: 50px;
+}
+
+#content .first,
+/* this is comment */
+#content .second {
+    height: 50px;
+}
+
+/* this is comment */

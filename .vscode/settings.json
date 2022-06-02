@@ -1,7 +1,10 @@
 {
     "rust-analyzer.linkedProjects": [
-        "src/program/rust/code/wgpu-examples/Cargo.toml",
-        "src/program/rust/code/raqote-examples/Cargo.toml",
-        "src/program/rust/code/poem-examples/Cargo.toml"
+        // "src/program/rust/code/wgpu-examples/Cargo.toml",
+        // "src/program/rust/code/raqote-examples/Cargo.toml",
+        // "src/program/rust/code/poem-examples/Cargo.toml",
+        // "src/program/rust/code/nom-examples/Cargo.toml",
+        "src/program/rust/code/css-parser/Cargo.toml",
+        "src/program/rust/code/tera-examples/Cargo.toml",
     ],
 }

@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 use nom::bytes::complete::tag;
 use nom::character::complete::multispace0;
 use nom::combinator::map;
@@ -46,7 +48,6 @@ use super::flex::FlexDirection;
 
 // 优先级: 数量符号 > 组合 [] > 与 "&&" > 或 "||" > 互斥 "|"
 
-#[derive(Debug)]
 pub enum RuleObject {
     // 方括号, 表示 多个规则的组合
     // bold [ thin && <length> ]
@@ -54,7 +55,7 @@ pub enum RuleObject {
 
     // 双引号, 各个选项必须出现, 但是顺序任意
     // 如: bold && <length>:
-    DoubleAmpersand(Vec<Box<RuleObject>>),
+    DoubleAmpersand(Box<RuleObject>, Option<Box<RuleObject>>),
 
     // 双杠, 至少一个 最多不超过 双杠参数值 的数量, 顺序任意
     // 如: A || B || C， 可以是 A, A B, B C A 等
@@ -69,6 +70,27 @@ pub enum RuleObject {
 
     // 符号, 如: auto-flow
     Symbol(String, Option<QuantitySymbol>),
+}
+
+impl Debug for RuleObject {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Brackets(arg0, arg1) => {
+                f.debug_tuple("Brackets").field(arg0).field(arg1).finish()
+            }
+            Self::DoubleAmpersand(arg0, arg1) => f
+                .debug_tuple("DoubleAmpersand")
+                .field(arg0)
+                .field(arg1)
+                .finish(),
+            Self::DoubleBar(arg0) => f.debug_tuple("DoubleBar").field(arg0).finish(),
+            Self::SingleBar(arg0) => f.debug_tuple("SingleBar").field(arg0).finish(),
+            Self::Variable(arg0, arg1) => {
+                f.debug_tuple("Variable").field(arg0).field(arg1).finish()
+            }
+            Self::Symbol(arg0, arg1) => f.debug_tuple("Symbol").field(arg0).field(arg1).finish(),
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -137,7 +159,7 @@ pub fn parse_operation(i: &str) -> IResult<&str, RuleObject> {
 fn parse_double_ampersand(i: &str) -> IResult<&str, RuleObject> {
     let (i, obj1) = alt((parse_brackets, parse_variable, parse_string))(i)?;
 
-    let (i, obj2) = delimited(
+    let (i, mut obj2) = delimited(
         multispace0,
         many0(preceded(
             tag("&&"),
@@ -147,12 +169,10 @@ fn parse_double_ampersand(i: &str) -> IResult<&str, RuleObject> {
         multispace0,
     )(i)?;
 
-    let mut objs = vec![Box::new(obj1)];
-    for obj in obj2 {
-        objs.push(Box::new(obj));
-    }
-
-    Ok((i, RuleObject::DoubleAmpersand(objs)))
+    Ok((
+        i,
+        RuleObject::DoubleAmpersand(Box::new(obj1), obj2.pop().map(|v| Box::new(v))),
+    ))
 }
 
 // 解析 双杠
@@ -206,6 +226,6 @@ mod test {
 
     #[test]
     fn test_parse_double_ampersand() {
-        println!("{:#?}", parse_double_ampersand("A && B && C && D").unwrap());
+        println!("{:#?}", parse_double_ampersand("A &&B && C&& D").unwrap());
     }
 }

@@ -226,6 +226,6 @@ mod test {
 
     #[test]
     fn test_parse_double_ampersand() {
-        println!("{:#?}", parse_double_ampersand("A &&B && C&& D").unwrap());
+        println!("{:?}", parse_double_ampersand("A && A1 && [ B && C && C1 ] && D").unwrap());
     }
 }

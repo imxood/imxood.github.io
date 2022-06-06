@@ -1,12 +1,13 @@
 use nom::{
+    branch::alt,
     bytes::complete::{escaped, tag, take_while_m_n},
-    character::complete::{digit1, one_of},
-    combinator::map_res,
-    sequence::tuple,
-    AsChar, IResult,
+    character::complete::{alphanumeric1, digit1, one_of, none_of},
+    combinator::{map, map_res},
+    sequence::{preceded, tuple},
+    AsChar, IResult, error::ErrorKind,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct Color {
     pub red: u8,
     pub green: u8,
@@ -16,6 +17,11 @@ struct Color {
 impl Color {
     fn new(red: u8, green: u8, blue: u8) -> Color {
         Self { red, green, blue }
+    }
+    pub fn parse<'a>(&mut self, i: &'a str) -> IResult<&'a str, ()> {
+        map(parse_rgb, |color| {
+            *self = color;
+        })(i)
     }
 }
 
@@ -43,6 +49,29 @@ fn parse_rgb(i: &str) -> IResult<&str, Color> {
     Ok((input, Color::new(red, green, blue)))
 }
 
+fn parse_str(i: &str) -> IResult<&str, &str> {
+    println!("parse_str i: {:?}", i);
+    preceded(tag("#"), alphanumeric1)(i)
+}
+
 fn main() {
     println!("{:?}", parse_rgb("#FF0000"));
+    let mut color = Color::default();
+    println!("{:?}", color.parse("#ffssff"));
+    println!("color: {:?}", &color);
+
+    alt((
+        map(parse_rgb, |color| {
+            println!("color: {:?}", &color);
+        }),
+        map(parse_str, |s| {
+            println!("s: {:?}", s);
+        }),
+    ))("#ffssff")
+    .unwrap();
+}
+
+#[test]
+fn test_none_of() {
+    println!("{:?}", none_of::<_, _, (&str, ErrorKind)>("abc")("cyas"));
 }

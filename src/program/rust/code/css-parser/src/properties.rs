@@ -1,58 +1,57 @@
-use super::color::Color;
-use super::serialize::ToCss;
-use crate::display::{flex, grid};
-use crate::parse::{nom_char, nom_u8, skip_sp, Parser};
-use crate::types::Float;
-
-use nom::branch::{alt, permutation};
-use nom::bytes::complete::{is_not, tag, take_till};
-use nom::combinator::map;
-use nom::sequence::{separated_pair, terminated};
+use nom::branch::alt;
+use nom::bytes::complete::{is_not, take_till1};
+use nom::combinator::{map, opt};
+use nom::sequence::{pair, separated_pair};
 use nom::IResult;
 
-pub const PROPERTY_COUNT: usize = 3;
+use crate::{
+    color::Color,
+    parse::{nom_char, skip_useless, Parser},
+    serialize::ToCss,
+    types::{Image, Length, Percentage, Position},
+};
 
-pub struct PropertiesBuilder {
-    pub background: Option<Background>,
-    pub height: Option<Height>,
-    pub width: Option<Width>,
-}
-
-impl PropertiesBuilder {
-    pub fn background(mut self, v: Background) -> Self {
-        self.background = Some(v);
-        self
-    }
-    pub fn height(mut self, v: Height) -> Self {
-        self.height = Some(v);
-        self
-    }
-    pub fn width(mut self, v: Width) -> Self {
-        self.width = Some(v);
-        self
-    }
-}
-
-pub struct ComputedProperties {
-    pub background: Background,
-    pub height: Height,
-    pub width: Width,
-}
-
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Property {
-    Background(Background),
-    Height(Height),
     Width(Width),
+    Height(Height),
+    Background(Background),
+    BackgroundColor(BackgroundColor),
+    BackgroundImage(BackgroundImage),
+    BackgroundPosition(BackgroundPosition),
+    GridTemplateColumns(GridTemplateColumns),
 }
 
-impl Property {
-    pub fn name(&self) -> &str {
-        match *self {
-            Self::Background(_) => "background",
-            Self::Height(_) => "height",
-            Self::Width(_) => "width",
-        }
+impl Parser for Property {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let (i, i0) = is_not(";}")(i)?;
+        let (_, (name, value)) = separated_pair(
+            skip_useless(take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
+            skip_useless(nom_char(':')),
+            skip_useless(take_till1(|c: char| c == ';')),
+        )(i0)?;
+        let (_, property) = match name {
+            "width" => map(Width::parse, |width| Self::Width(width))(value),
+            "height" => map(Height::parse, |height| Self::Height(height))(value),
+            "background" => {
+                map(Background::parse, |background| Self::Background(background))(value)
+            }
+            "background-color" => map(BackgroundColor::parse, |background_color| {
+                Self::BackgroundColor(background_color)
+            })(value),
+            "background-image" => map(BackgroundImage::parse, |background_image| {
+                Self::BackgroundImage(background_image)
+            })(value),
+            "background-position" => map(BackgroundPosition::parse, |background_position| {
+                Self::BackgroundPosition(background_position)
+            })(value),
+            "grid-template-columns" => map(GridTemplateColumns::parse, |grid_template_columns| {
+                Self::GridTemplateColumns(grid_template_columns)
+            })(value),
+
+            _ => panic!("解析属性失败, property name: {}", name),
+        }?;
+        Ok((i, property))
     }
 }
 
@@ -62,85 +61,161 @@ impl ToCss for Property {
         W: core::fmt::Write,
     {
         match self {
-            Self::Background(v) => v.to_css(dest),
-            Self::Height(v) => v.to_css(dest),
-            Self::Width(v) => v.to_css(dest),
+            Self::Width(width) => {
+                dest.write_str("width: ")?;
+                width.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::Height(height) => {
+                dest.write_str("height: ")?;
+                height.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::Background(background) => {
+                dest.write_str("background: ")?;
+                background.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::BackgroundColor(background_color) => {
+                dest.write_str("background-color: ")?;
+                background_color.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::BackgroundImage(background_image) => {
+                dest.write_str("background-image: ")?;
+                background_image.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::BackgroundPosition(background_position) => {
+                dest.write_str("background-position: ")?;
+                background_position.to_css(dest)?;
+                dest.write_char(';')
+            }
+            Self::GridTemplateColumns(grid_template_columns) => {
+                dest.write_str("grid-template-columns: ")?;
+                grid_template_columns.to_css(dest)?;
+                dest.write_char(';')
+            }
         }
     }
 }
 
-impl Parser for Property {
-    fn parse(input: &str) -> IResult<&str, Self> {
-        map(
-            terminated(
-                separated_pair(skip_sp(is_not(":;}")), tag(":"), skip_sp(is_not(";}"))),
-                alt((tag(";"), tag("}"))),
-            ),
-            |(k, v)| match k {
-                "background" => {
-                    let (_, background) = Background::parse(v).unwrap();
-                    Self::Background(background)
-                }
-                "height" => {
-                    let (_, height) = Height::parse(v).unwrap();
-                    Self::Height(height)
-                }
-                "width" => {
-                    let (_, width) = Width::parse(v).unwrap();
-                    Self::Width(width)
-                }
+pub fn width(i: &str) -> Option<Width> {
+    let (_, v) = opt(Width::parse)(i).unwrap_or_default();
+    v
+}
 
-                _ => panic!("Except!!!"),
-            },
-        )(input)
+pub fn height(i: &str) -> Option<Height> {
+    let (_, v) = opt(Height::parse)(i).unwrap_or_default();
+    v
+}
+
+pub fn background(i: &str) -> Option<Background> {
+    let (_, v) = opt(Background::parse)(i).unwrap_or_default();
+    v
+}
+
+pub fn background_color(i: &str) -> Option<BackgroundColor> {
+    let (_, v) = opt(BackgroundColor::parse)(i).unwrap_or_default();
+    v
+}
+
+pub fn background_image(i: &str) -> Option<BackgroundImage> {
+    let (_, v) = opt(BackgroundImage::parse)(i).unwrap_or_default();
+    v
+}
+
+pub fn background_position(i: &str) -> Option<BackgroundPosition> {
+    let (_, v) = opt(BackgroundPosition::parse)(i).unwrap_or_default();
+    v
+}
+
+pub fn grid_template_columns(i: &str) -> Option<GridTemplateColumns> {
+    let (_, v) = opt(GridTemplateColumns::parse)(i).unwrap_or_default();
+    v
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Width {
+    Length(Length),
+    Percentage(Percentage),
+}
+
+impl Parser for Width {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        alt((
+            map(Length::parse, |length| Self::Length(length)),
+            map(Percentage::parse, |percentage| Self::Percentage(percentage)),
+        ))(i)
     }
 }
 
-#[derive(Debug)]
+impl ToCss for Width {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        match self {
+            Self::Length(v) => v.to_css(dest),
+            Self::Percentage(v) => v.to_css(dest),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Height {
+    Length(Length),
+    Percentage(Percentage),
+}
+
+impl Parser for Height {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        alt((
+            map(Length::parse, |length| Self::Length(length)),
+            map(Percentage::parse, |percentage| Self::Percentage(percentage)),
+        ))(i)
+    }
+}
+
+impl ToCss for Height {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        match self {
+            Self::Length(v) => v.to_css(dest),
+            Self::Percentage(v) => v.to_css(dest),
+        }
+    }
+}
+
+#[derive(Debug, Default, PartialEq)]
 pub struct Background {
-    pub background_color: Color,
-    pub background_position_x: Float,
-    pub background_position_y: Float,
+    pub background_color: BackgroundColor,
+    pub background_image: BackgroundImage,
+    pub background_position: BackgroundPosition,
 }
 
 impl Parser for Background {
     fn parse(i: &str) -> IResult<&str, Self> {
-        let (_, background_color) = map(
-            permutation((
-                tag("background-color:"),
-                take_till(|c| c == ';'),
-                Color::parse,
+        let mut v = Self::default();
+        let (i, _) = pair(
+            alt((
+                map(BackgroundColor::parse, |background_color| {
+                    v.background_color = background_color;
+                }),
+                map(BackgroundImage::parse, |background_image| {
+                    v.background_image = background_image;
+                }),
             )),
-            |(_, _, background_color)| background_color,
-        )(i)
-        .unwrap();
-        let (_, background_position_x) = map(
-            permutation((
-                tag("background-position-x:"),
-                take_till(|c| c == ';'),
-                Float::parse,
-            )),
-            |(_, _, background_position_x)| background_position_x,
-        )(i)
-        .unwrap();
-        let (_, background_position_y) = map(
-            permutation((
-                tag("background-position-y:"),
-                take_till(|c| c == ';'),
-                Float::parse,
-            )),
-            |(_, _, background_position_y)| background_position_y,
-        )(i)
-        .unwrap();
-
-        Ok((
-            "",
-            Self {
-                background_color,
-                background_position_x,
-                background_position_y,
-            },
-        ))
+            map(
+                opt(map(BackgroundPosition::parse, |background_position| {
+                    v.background_position = background_position;
+                })),
+                |_| {},
+            ),
+        )(i)?;
+        Ok((i, v))
     }
 }
 
@@ -151,45 +226,116 @@ impl ToCss for Background {
     {
         self.background_color.to_css(dest)?;
         dest.write_char(' ')?;
-        self.background_position_x.to_css(dest)?;
+
+        self.background_image.to_css(dest)?;
         dest.write_char(' ')?;
-        self.background_position_y.to_css(dest)?;
+
+        self.background_position.to_css(dest)?;
+
         Ok(())
     }
 }
 
-#[derive(Debug)]
-pub struct Height(pub Float);
+#[derive(Debug, Default, PartialEq)]
+pub struct BackgroundColor {
+    pub color: Color,
+}
 
-impl Parser for Height {
+impl Parser for BackgroundColor {
     fn parse(i: &str) -> IResult<&str, Self> {
-        map(Float::parse, |height| Self(height))(i)
+        let mut v = Self::default();
+        let (i, _) = map(Color::parse, |color| {
+            v.color = color;
+        })(i)?;
+        Ok((i, v))
     }
 }
 
-impl ToCss for Height {
+impl ToCss for BackgroundColor {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
     {
-        self.0.to_css(dest)
+        self.color.to_css(dest)?;
+
+        Ok(())
     }
 }
 
-#[derive(Debug)]
-pub struct Width(pub Float);
+#[derive(Debug, Default, PartialEq)]
+pub struct BackgroundImage {
+    pub image: Image,
+}
 
-impl Parser for Width {
+impl Parser for BackgroundImage {
     fn parse(i: &str) -> IResult<&str, Self> {
-        map(Float::parse, |width| Self(width))(i)
+        let mut v = Self::default();
+        let (i, _) = map(Image::parse, |image| {
+            v.image = image;
+        })(i)?;
+        Ok((i, v))
     }
 }
 
-impl ToCss for Width {
+impl ToCss for BackgroundImage {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
     {
-        self.0.to_css(dest)
+        self.image.to_css(dest)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct BackgroundPosition {
+    pub position: Position,
+}
+
+impl Parser for BackgroundPosition {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let mut v = Self::default();
+        let (i, _) = map(Position::parse, |position| {
+            v.position = position;
+        })(i)?;
+        Ok((i, v))
+    }
+}
+
+impl ToCss for BackgroundPosition {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        self.position.to_css(dest)?;
+
+        Ok(())
+    }
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct GridTemplateColumns {
+    pub position: Position,
+}
+
+impl Parser for GridTemplateColumns {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let mut v = Self::default();
+        let (i, _) = map(Position::parse, |position| {
+            v.position = position;
+        })(i)?;
+        Ok((i, v))
+    }
+}
+
+impl ToCss for GridTemplateColumns {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        self.position.to_css(dest)?;
+
+        Ok(())
     }
 }

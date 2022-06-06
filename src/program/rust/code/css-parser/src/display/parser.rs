@@ -273,6 +273,80 @@ impl Display for RuleObject {
     }
 }
 
+#[derive(Debug, Default)]
+pub struct StructBuf {
+    struct_name: String,
+    variable_buf: String,
+    symbol_buf: String,
+}
+
+impl StructBuf {
+    pub fn set_struct_name(&mut self, struct_name: &str) {
+        self.struct_name = struct_name.to_string();
+    }
+
+    pub fn add_variable(&mut self, variable: &str) {
+        self.variable_buf
+            .write_fmt(format_args!(
+                "{}: {},",
+                variable.to_case(Case::Snake),
+                variable.to_case(Case::Pascal)
+            ))
+            .unwrap();
+    }
+
+    pub fn add_symbol(&mut self, symbol: &str) {
+        self.symbol_buf
+            .write_fmt(format_args!("{},", symbol.to_case(Case::Pascal)));
+    }
+
+    pub fn build(self) {
+
+    }
+}
+
+trait StructBuilder {
+    fn build_struct(&self, f: &mut StructBuf) -> Result<(), core::fmt::Error>;
+}
+
+impl StructBuilder for RuleObject {
+    fn build_struct(&self, f: &mut StructBuf) -> Result<(), core::fmt::Error> {
+        match self {
+            Self::Brackets(arg0, arg1) => arg0.build_struct(f),
+            Self::Item(arg0, arg1) => {
+                arg0.build_struct(f)?;
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f)?;
+                }
+                Ok(())
+            }
+            Self::DoubleAmpersand(arg0, arg1) => {
+                arg0.build_struct(f)?;
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f)?;
+                }
+                Ok(())
+            }
+            Self::DoubleBar(arg0, arg1) => {
+                arg0.build_struct(f)?;
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f)?;
+                }
+                Ok(())
+            }
+            Self::SingleBar(arg0, arg1) => {
+                arg0.build_struct(f)?;
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f)?;
+                }
+                Ok(())
+            }
+            Self::Variable(arg0, _arg1) => f.add_variable(arg0),
+            Self::Symbol(arg0, _arg1) => f.write_str(&arg0),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum QuantitySymbol {
     /// ? 0次或1次
@@ -491,6 +565,7 @@ mod test {
     use nom::{bytes::streaming::tag, character::complete::digit1, sequence::tuple, IResult};
     use serde_json::json;
 
+    use crate::display::parser::StructBuilder;
     use crate::{
         display::parser::{parse_double_bar, RuleObject},
         parse::Parser,
@@ -509,7 +584,7 @@ mod test {
 
         struct RuleBuilder {
             prop_builder: String,
-            rule_obj: RuleObject,
+            pub rule_obj: RuleObject,
         }
 
         impl RuleBuilder {
@@ -534,9 +609,15 @@ mod test {
         println!("raw:    {}", raw);
         println!("parser: {}", obj.parser("GridBuilder"));
         // alt((grid-template::parser(), alt((alt((grid-template-rows::parser(), alt((alt((auto-flow::parser(), opt(dense::parser()))), opt(grid-auto-columns::parser()))))), alt((alt((auto-flow::parser(), opt(dense::parser()))), alt((opt(grid-auto-rows::parser()), grid-template-columns::parser()))))))))
-
-        let parser = RuleBuilder::new("grid", "[ A && B ] <C>").build();
-        println!("output parser: {}", &parser);
+        let raw = "[ <A> && <B> ] <C> | D |E";
+        let obj = RuleBuilder::new("grid", raw).rule_obj;
+        println!("output: {:#?}", &obj);
+        println!("output: {}", &obj);
+        println!("raw:    {}", raw);
+        let mut struct_buf = String::new();
+        obj.build_struct(&mut struct_buf).unwrap();
+        println!("struct_buf: {}", &struct_buf);
+        let obj = RuleBuilder::new("grid", raw).build();
 
         // let builder = GridBuilder::default();
 

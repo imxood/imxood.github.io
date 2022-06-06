@@ -7,7 +7,7 @@ use nom::{
     error::{ContextError, Error as IError, ErrorKind, ParseError},
     multi::many0,
     number::complete::float,
-    sequence::{preceded, terminated, tuple},
+    sequence::{pair, preceded, terminated, tuple},
     IResult,
 };
 
@@ -61,34 +61,6 @@ impl ContextError<&str> for DebugError {
 impl Parser for Float {
     fn parse(input: &str) -> IResult<&str, Self> {
         float(input)
-    }
-}
-
-impl Parser for Color {
-    fn parse(i: &str) -> IResult<&str, Self> {
-        alt((
-            // rgb(255, 255 , 255)
-            map(
-                tuple((
-                    tag("rgb("),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(')'))),
-                )),
-                |(_, r, g, b)| Color::rgb(r, g, b),
-            ),
-            // rgba(255, 255, 255, 1.0)
-            map(
-                tuple((
-                    tag("rgba("),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(float), skip_sp(nom_char(')'))),
-                )),
-                |(_, r, g, b, a)| Color::rgba(r, g, b, a),
-            ),
-        ))(i)
     }
 }
 

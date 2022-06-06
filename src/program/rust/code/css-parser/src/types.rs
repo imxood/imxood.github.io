@@ -1,7 +1,18 @@
 use core::ops::{Add, Mul};
 use std::cmp::Ordering;
 
-use crate::{parse::Parser, serialize::ToCss, properties::Property};
+use nom::branch::alt;
+use nom::bytes::complete::{tag, take_till1};
+use nom::character::complete::multispace0;
+use nom::combinator::map;
+use nom::sequence::{preceded, tuple};
+use nom::IResult;
+use nom::{character::complete::digit1, sequence::pair};
+
+use crate::{
+    parse::{nom_char, Parser},
+    serialize::ToCss,
+};
 
 pub type Float = f32;
 
@@ -14,9 +25,9 @@ pub const AU_PER_CM: Float = AU_PER_IN / 2.54;
 /// 每一毫米 app units 的数量
 pub const AU_PER_MM: Float = AU_PER_IN / 25.4;
 
-struct StyleContext {
-    property: Property,
-}
+// struct StyleContext {
+//     property: Property,
+// }
 
 pub trait ToComputedValue {
     ///
@@ -29,7 +40,7 @@ pub trait ToComputedValue {
 
 /// 精确长度
 #[derive(Debug, PartialEq, Clone, Copy)]
-pub enum AbsoluteLength {
+pub enum Length {
     /// 像素
     Px(Float),
     /// 寸
@@ -38,152 +49,263 @@ pub enum AbsoluteLength {
     Cm(Float),
     /// 毫米
     Mm(Float),
+    /// 相对于父元素的倍数
+    Em(Float),
+    /// 相对于根元素的倍数
+    Rem(Float),
 }
 
-impl ToComputedValue for AbsoluteLength {
+impl ToComputedValue for Length {
     type ComputedValue = Float;
 
     fn to_computed_value(&self) -> Self::ComputedValue {
-        self.to_px()
-    }
-}
-
-impl AbsoluteLength {
-    /// 转换到像素值
-    #[inline]
-    pub fn to_px(&self) -> Float {
         let pixel = match *self {
-            AbsoluteLength::Px(value) => value,
-            AbsoluteLength::In(value) => value * (AU_PER_IN / AU_PER_PX),
-            AbsoluteLength::Cm(value) => value * (AU_PER_CM / AU_PER_PX),
-            AbsoluteLength::Mm(value) => value * (AU_PER_MM / AU_PER_PX),
+            Length::Px(value) => value,
+            Length::In(value) => Self::in_to_px(value),
+            Length::Cm(value) => Self::cm_to_px(value),
+            Length::Mm(value) => Self::mm_to_px(value),
+            Length::Em(v) => todo!(),
+            Length::Rem(v) => todo!(),
         };
         pixel.min(f32::MAX).max(f32::MIN)
     }
 }
 
-impl PartialOrd for AbsoluteLength {
+impl Length {
+    pub fn to_px(&self) -> Float {
+        let pixel = match *self {
+            Length::Px(value) => value,
+            Length::In(value) => value * (AU_PER_IN / AU_PER_PX),
+            Length::Cm(value) => value * (AU_PER_CM / AU_PER_PX),
+            Length::Mm(value) => value * (AU_PER_MM / AU_PER_PX),
+            Length::Em(v) => 0.0,
+            Length::Rem(v) => 0.0,
+        };
+        pixel.min(f32::MAX).max(f32::MIN)
+    }
+
+    #[inline]
+    pub fn in_to_px(value: Float) -> Float {
+        value * (AU_PER_IN / AU_PER_PX)
+    }
+
+    #[inline]
+    pub fn cm_to_px(value: Float) -> Float {
+        value * (AU_PER_CM / AU_PER_PX)
+    }
+
+    #[inline]
+    pub fn mm_to_px(value: Float) -> Float {
+        value * (AU_PER_MM / AU_PER_PX)
+    }
+
+    #[inline]
+    pub fn px_to_in(px: Float) -> Float {
+        px / (AU_PER_IN / AU_PER_PX)
+    }
+
+    #[inline]
+    pub fn px_to_cm(px: Float) -> Float {
+        px / (AU_PER_CM / AU_PER_PX)
+    }
+
+    #[inline]
+    pub fn px_to_mm(px: Float) -> Float {
+        px / (AU_PER_MM / AU_PER_PX)
+    }
+}
+
+impl PartialOrd for Length {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.to_px().partial_cmp(&other.to_px())
     }
 }
 
-impl Mul<Float> for AbsoluteLength {
-    type Output = AbsoluteLength;
+impl Mul<Float> for Length {
+    type Output = Length;
 
     #[inline]
-    fn mul(self, scalar: Float) -> AbsoluteLength {
+    fn mul(self, scalar: Float) -> Length {
         match self {
-            AbsoluteLength::Px(v) => AbsoluteLength::Px(v * scalar),
-            AbsoluteLength::In(v) => AbsoluteLength::In(v * scalar),
-            AbsoluteLength::Cm(v) => AbsoluteLength::Cm(v * scalar),
-            AbsoluteLength::Mm(v) => AbsoluteLength::Mm(v * scalar),
+            Length::Px(v) => Length::Px(v * scalar),
+            Length::In(v) => Length::In(v * scalar),
+            Length::Cm(v) => Length::Cm(v * scalar),
+            Length::Mm(v) => Length::Mm(v * scalar),
+            Length::Em(v) => Length::Em(v * scalar),
+            Length::Rem(v) => Length::Rem(v * scalar),
         }
     }
 }
 
-impl Add<AbsoluteLength> for AbsoluteLength {
+impl Add<Length> for Length {
     type Output = Self;
 
     #[inline]
-    fn add(self, rhs: Self) -> Self {
-        match (self, rhs) {
-            (AbsoluteLength::Px(x), AbsoluteLength::Px(y)) => AbsoluteLength::Px(x + y),
-            (AbsoluteLength::In(x), AbsoluteLength::In(y)) => AbsoluteLength::In(x + y),
-            (AbsoluteLength::Cm(x), AbsoluteLength::Cm(y)) => AbsoluteLength::Cm(x + y),
-            (AbsoluteLength::Mm(x), AbsoluteLength::Mm(y)) => AbsoluteLength::Mm(x + y),
-            _ => AbsoluteLength::Px(self.to_px() + rhs.to_px()),
+    fn add(self, other: Self) -> Self {
+        match (self, other) {
+            (Length::Px(x), Length::Px(y)) => Length::Px(x + y),
+            (Length::In(x), Length::In(y)) => Length::In(x + y),
+            (Length::Cm(x), Length::Cm(y)) => Length::Cm(x + y),
+            (Length::Mm(x), Length::Mm(y)) => Length::Mm(x + y),
+            (Length::Em(x), Length::Em(y)) => Length::Em(x + y),
+            (Length::Rem(x), Length::Rem(y)) => Length::Rem(x + y),
+            (Length::Px(x), y) => Length::Px(x + y.to_px()),
+            (Length::In(x), y) => Length::In(Self::px_to_in(Self::in_to_px(x) + y.to_px())),
+            (Length::Cm(x), y) => Length::Cm(Self::px_to_cm(Self::cm_to_px(x) + y.to_px())),
+            (Length::Mm(x), y) => Length::Mm(Self::px_to_mm(Self::mm_to_px(x) + y.to_px())),
+            (Length::Em(_), _) => self,
+            (Length::Rem(_), _) => self,
         }
     }
 }
 
-/// 字体长度
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum FontRelativeLength {
-    /// A "em" value: https://drafts.csswg.org/css-values/#em
-    /// 相对于父元素的倍数
-    Em(Float),
-    /// A "rem" value: https://drafts.csswg.org/css-values/#rem
-    /// 相对于根元素的倍数
-    Rem(Float),
+impl ToCss for Length {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        match self {
+            Length::Px(v) => dest.write_fmt(format_args!("{}px", v)),
+            Length::In(v) => dest.write_fmt(format_args!("{}in", v)),
+            Length::Cm(v) => dest.write_fmt(format_args!("{}cm", v)),
+            Length::Mm(v) => dest.write_fmt(format_args!("{}mm", v)),
+            Length::Em(v) => dest.write_fmt(format_args!("{}em", v)),
+            Length::Rem(v) => dest.write_fmt(format_args!("{}rem", v)),
+        }
+    }
 }
 
-impl ToComputedValue for FontRelativeLength {
+impl Parser for Length {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let (i, num) = preceded(multispace0, digit1)(i)?;
+        let num = str::parse::<Float>(num).unwrap();
+        if i.is_empty() {
+            return Ok((i, Self::Px(num)));
+        }
+        let v = alt((
+            map(tag("px"), |_| Self::Px(num)),
+            map(tag("in"), |_| Self::In(num)),
+            map(tag("cm"), |_| Self::Cm(num)),
+            map(tag("mm"), |_| Self::Mm(num)),
+            map(tag("em"), |_| Self::Em(num)),
+            map(tag("rem"), |_| Self::Rem(num)),
+        ))(i)?;
+        Ok(v)
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Percentage(Float);
+
+impl ToComputedValue for Percentage {
     type ComputedValue = Float;
 
     fn to_computed_value(&self) -> Self::ComputedValue {
-        match *self {
-            FontRelativeLength::Em(v) => todo!(),
-            FontRelativeLength::Rem(v) => todo!(),
-        }
+        self.0
     }
 }
 
-pub enum Length {
-    Absolute(AbsoluteLength),
-    FontLength(FontRelativeLength),
-}
-
-#[derive(Debug, Clone, Copy)]
-pub enum Number {
-    /// 具体数值
-    Specific(Float),
-    /// 百分比例
-    Percent(Float),
-    /// 内部值
-    Innner(NumberInnner),
-}
-
-impl Default for Number {
-    fn default() -> Self {
-        Number::Innner(NumberInnner::Auto)
+impl Parser for Percentage {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let (i, num) = preceded(multispace0, digit1)(i)?;
+        let num = str::parse::<Float>(num).unwrap();
+        let _ = nom_char('%')(i)?;
+        Ok((i, Self(num)))
     }
 }
 
-impl ToCss for Number {
+impl ToCss for Percentage {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
     {
-        match *self {
-            Number::Specific(v) => v.to_css(dest),
-            Number::Percent(v) => {
-                v.to_css(dest)?;
-                dest.write_char('%')
-            }
-            Number::Innner(v) => v.to_css(dest),
-        }
+        dest.write_fmt(format_args!("{}%", self.0))
     }
 }
 
-impl Parser<Number> for Number {
-    fn parse(i: &str) -> nom::IResult<&str, Number> {
-        todo!()
+#[derive(Debug, Default, PartialEq)]
+pub struct Position {
+    pub x: Float,
+    pub y: Float,
+}
+
+impl ToComputedValue for Position {
+    type ComputedValue = Float;
+
+    fn to_computed_value(&self) -> Self::ComputedValue {
+        self.x
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum NumberInnner {
-    /// 默认值
-    Default,
-    /// 自动值
-    Auto,
-    /// 继承父元素
-    Inherit,
-    /// 数值类型为 0, 非数值为 default
-    Unset,
+impl Parser for Position {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        map(
+            tuple((
+                multispace0,
+                nom_char('('),
+                multispace0,
+                digit1,
+                multispace0,
+                nom_char(','),
+                multispace0,
+                digit1,
+                multispace0,
+                nom_char(')'),
+            )),
+            |(_, _, _, x, _, _, _, y, _, _)| {
+                let x = str::parse::<Float>(x).unwrap();
+                let y = str::parse::<Float>(y).unwrap();
+                Self { x, y }
+            },
+        )(i)
+    }
 }
 
-impl ToCss for NumberInnner {
+impl ToCss for Position {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
     {
-        match *self {
-            NumberInnner::Default => dest.write_str("default"),
-            NumberInnner::Auto => dest.write_str("auto"),
-            NumberInnner::Inherit => dest.write_str("inherit"),
-            NumberInnner::Unset => dest.write_str("unset"),
-        }
+        dest.write_fmt(format_args!("({}, {})", self.x, self.y))
+    }
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct Image {
+    pub url: String,
+}
+
+impl ToComputedValue for Image {
+    type ComputedValue = String;
+
+    fn to_computed_value(&self) -> Self::ComputedValue {
+        self.url.clone()
+    }
+}
+
+impl Parser for Image {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        map(
+            tuple((
+                multispace0,
+                tag("url("),
+                multispace0,
+                take_till1(|c: char| c == ')'),
+                nom_char(')'),
+            )),
+            |(_, _, _, url, _): (_, _, _, &str, _)| {
+                let url = url.to_string();
+                Self { url }
+            },
+        )(i)
+    }
+}
+
+impl ToCss for Image {
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        dest.write_fmt(format_args!("url({})", &self.url))
     }
 }

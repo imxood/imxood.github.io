@@ -1,0 +1,702 @@
+use std::collections::HashMap;
+use std::fmt::{Debug, Display, Write};
+
+use convert_case::{Case, Casing};
+use derive_more::IsVariant;
+use nom::bytes::complete::tag;
+use nom::character::complete::{digit1, multispace0};
+use nom::combinator::{map, opt};
+use nom::multi::many0;
+use nom::sequence::{pair, preceded, tuple};
+use nom::IResult;
+use nom::{branch::alt, bytes::complete::take_till1};
+use serde::Serialize;
+
+use crate::parse::{nom_char, Parser};
+
+// 优先级: 数量描述 (QuantitySymbol) > 组合 ([]) > 并置 (一个或多个空格) > 与 (&&) > 或 (||) > 互斥 (|)
+
+/// 定义规则, 用于解析 属性描述, 生成 属性结构体 和 属性的解析器
+#[derive(Debug, PartialEq, IsVariant)]
+pub enum RuleObject {
+    /// [], 表示 多个规则的组合
+    /// bold [ thin && <length> ]
+    Brackets(Box<RuleObject>),
+
+    /// 并置项, 被 空格分离的不同的项, 有先后顺序
+    /// 如: A B  等效于 [A B]
+    Item(Box<RuleObject>, Option<Box<RuleObject>>),
+
+    /// &&, 各个选项必须出现, 但是顺序任意
+    /// 如: A && B && C
+    DoubleAmpersand(Box<RuleObject>, Option<Box<RuleObject>>),
+
+    /// ||, 至少一个 最多不超过 双杠参数值 的数量, 顺序任意
+    /// 如: A || B || C
+    DoubleBar(Box<RuleObject>, Option<Box<RuleObject>>),
+
+    /// |, 只能取 这些选项中的一个
+    /// 如: A | B | C
+    SingleBar(Box<RuleObject>, Option<Box<RuleObject>>),
+
+    /// 表示 一个特定的属性类型 的值
+    Variable(String, Option<QuantitySymbol>),
+
+    /// 符号, 常量字符串
+    Symbol(String, Option<QuantitySymbol>),
+}
+
+impl Display for RuleObject {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Brackets(arg0) => {
+                f.write_str("[ ")?;
+                Display::fmt(arg0, f)?;
+                f.write_str(" ]")
+            }
+            Self::Item(arg0, arg1) => {
+                Display::fmt(arg0, f)?;
+                if let Some(arg1) = arg1 {
+                    f.write_char(' ')?;
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+            Self::DoubleAmpersand(arg0, arg1) => {
+                Display::fmt(arg0, f)?;
+                if let Some(arg1) = arg1 {
+                    f.write_str(" && ")?;
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+            Self::DoubleBar(arg0, arg1) => {
+                Display::fmt(arg0, f)?;
+                if let Some(arg1) = arg1 {
+                    f.write_str(" || ")?;
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+            Self::SingleBar(arg0, arg1) => {
+                Display::fmt(arg0, f)?;
+                if let Some(arg1) = arg1 {
+                    f.write_str(" | ")?;
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+            Self::Variable(arg0, arg1) => {
+                f.write_char('<')?;
+                Display::fmt(arg0, f)?;
+                f.write_char('>')?;
+                if let Some(arg1) = arg1 {
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+            Self::Symbol(arg0, arg1) => {
+                Display::fmt(arg0, f)?;
+                if let Some(arg1) = arg1 {
+                    Display::fmt(arg1, f)?;
+                }
+                Ok(())
+            }
+        }
+    }
+}
+
+impl RuleObject {
+    pub fn parser(&self, prop_name: &str, struct_type: &str) -> String {
+        match self {
+            RuleObject::Brackets(obj) => obj.parser(prop_name, struct_type),
+            RuleObject::Item(left, right) => {
+                if let Some(right) = right {
+                    format!(
+                        "pair({}, {})",
+                        left.parser(prop_name, struct_type),
+                        right.parser(prop_name, struct_type)
+                    )
+                } else {
+                    left.parser(prop_name, struct_type)
+                }
+            }
+            RuleObject::DoubleAmpersand(left, right) => {
+                if let Some(right) = right {
+                    let one = left.parser(prop_name, struct_type);
+                    let two = right.parser(prop_name, struct_type);
+                    format!(
+                        "alt(( alt(({}, {})), alt(({}, {})) ))",
+                        &one, &two, &two, &one
+                    )
+                } else {
+                    left.parser(prop_name, struct_type)
+                }
+            }
+            RuleObject::DoubleBar(left, right) => {
+                if let Some(right) = right {
+                    let one = left.parser(prop_name, struct_type);
+                    let two = right.parser(prop_name, struct_type);
+                    // alt(( tuple(({}, {})), tuple(({}, {})) ))
+                    format!(
+                        "alt(( tuple(({}, {})), tuple(({}, {})) ))",
+                        &one, &two, &two, &one,
+                    )
+                } else {
+                    left.parser(prop_name, struct_type)
+                }
+            }
+            RuleObject::SingleBar(left, right) => {
+                if let Some(right) = right {
+                    format!(
+                        "alt(({}, {}))",
+                        // map(Length::parse, |length| Self::Length(length)),
+                        left.parser(prop_name, struct_type),
+                        right.parser(prop_name, struct_type)
+                    )
+                } else {
+                    left.parser(prop_name, struct_type)
+                }
+            }
+            RuleObject::Variable(variable, quantity) => {
+                let snake = variable.to_case(Case::Snake);
+                let pascal = variable.to_case(Case::Pascal);
+                if let Some(quantity) = quantity {
+                    if struct_type == "enum" {
+                        match quantity {
+                            QuantitySymbol::QuestionMark => {
+                                format!(
+                                    "map(opt(map({}::parse, |{}| Self::{}({}))), |_|{{}})",
+                                    &pascal, &snake, &pascal, &snake
+                                )
+                            }
+                        }
+                    } else if struct_type == "struct" {
+                        match quantity {
+                            QuantitySymbol::QuestionMark => {
+                                format!(
+                                    "map(opt(map({}::parse, |{}| {{ v.{} = {}; }})), |_|{{}})",
+                                    &pascal, &snake, &snake, &snake
+                                )
+                            }
+                        }
+                    } else {
+                        "".to_string()
+                    }
+                } else {
+                    if struct_type == "enum" {
+                        format!(
+                            "map({}::parse, |{}| Self::{}({}))",
+                            &pascal, &snake, &pascal, &snake,
+                        )
+                    } else if struct_type == "struct" {
+                        format!(
+                            "map({}::parse, |{}| {{ v.{} = {}; }})",
+                            &pascal, &snake, &snake, &snake
+                        )
+                    } else {
+                        "".to_string()
+                    }
+                }
+            }
+            RuleObject::Symbol(_, _) => todo!(), // RuleObject::Symbol(symbol, quantity) => {
+                                                 //     if let Some(quantity) = quantity {
+                                                 //         match quantity {
+                                                 //             QuantitySymbol::QuestionMark => {
+                                                 //                 format!("opt({}::parse_{})", prop_name, symbol.to_case(Case::Snake))
+                                                 //             }
+                                                 //             QuantitySymbol::Asterisk => {
+                                                 //                 format!("many0({}::parse_{})", prop_name, symbol.to_case(Case::Snake))
+                                                 //             }
+                                                 //             QuantitySymbol::Plus => {
+                                                 //                 format!("many1({}::parse_{})", prop_name, symbol.to_case(Case::Snake))
+                                                 //             }
+                                                 //             QuantitySymbol::CurlyBraces(min, max) => {
+                                                 //                 format!(
+                                                 //                     "many_m_n({}, {}, {}::parse_{})",
+                                                 //                     min,
+                                                 //                     max,
+                                                 //                     prop_name,
+                                                 //                     symbol.to_case(Case::Snake)
+                                                 //                 )
+                                                 //             }
+                                                 //         }
+                                                 //     } else {
+                                                 //         format!("{}::parse_{}", prop_name, symbol.to_case(Case::Snake))
+                                                 //     }
+                                                 // }
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+pub enum QuantitySymbol {
+    /// ? 0次或1次
+    QuestionMark,
+    // /// * 0次或多次
+    // Asterisk,
+    // /// + 1次或多次
+    // Plus,
+    // /// {m, n} 至少m次 最多n次
+    // CurlyBraces(usize, usize),
+    // // []! 方括号后面的叹号表示该组是必须的, 并且至少产生一个值, 即使组内项目全部允许忽略, 也至少保留一个
+    // // ExclamationPoint,
+}
+
+impl Display for QuantitySymbol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::QuestionMark => f.write_char('?'),
+            // Self::Asterisk => f.write_char('*'),
+            // Self::Plus => f.write_char('+'),
+            // // Self::ExclamationPoint => f.write_char('!'),
+            // Self::CurlyBraces(min, max) => f.write_fmt(format_args!("{{{}, {}}}", min, max)),
+        }
+    }
+}
+
+impl Parser for QuantitySymbol {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        map(preceded(multispace0, nom_char('?')), |_| Self::QuestionMark)(i)
+        // alt((
+        //     map(preceded(multispace0, nom_char('?')), |_| Self::QuestionMark),
+        //     map(preceded(multispace0, nom_char('*')), |_| Self::Asterisk),
+        //     map(preceded(multispace0, nom_char('+')), |_| Self::Plus),
+        //     map(preceded(multispace0, nom_char('!')), |_| {
+        //         Self::ExclamationPoint
+        //     }),
+        //     map(
+        //         tuple((
+        //             multispace0,
+        //             nom_char('{'),
+        //             multispace0,
+        //             digit1,
+        //             multispace0,
+        //             digit1,
+        //             multispace0,
+        //             nom_char('}'),
+        //         )),
+        //         |(_, _, _, min, _, max, _, _)| {
+        //             Self::CurlyBraces(
+        //                 str::parse::<usize>(min).unwrap(),
+        //                 str::parse::<usize>(max).unwrap(),
+        //             )
+        //         },
+        //     ),
+        // ))(i)
+    }
+}
+
+// <grid-template> | <grid-template-rows> / [ auto-flow && dense? ] <grid-auto-columns>?
+impl Parser for RuleObject {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        parse_single_bar(i)
+    }
+}
+
+// 解析 方括号
+// [ A && B || C ... ]
+fn parse_brackets(i: &str) -> IResult<&str, RuleObject> {
+    preceded(
+        multispace0,
+        map(
+            tuple((nom_char('['), RuleObject::parse, nom_char(']'))),
+            |(_, obj, _)| RuleObject::Brackets(Box::new(obj)),
+        ),
+    )(i)
+}
+
+// 解析 空格, 并置项
+// A && B && C || ...
+fn parse_continuous_item(i: &str) -> IResult<&str, RuleObject> {
+    let (i, obj1) = alt((parse_brackets, parse_variable, parse_string))(i)?;
+
+    let (i, mut obj2) = preceded(
+        multispace0,
+        many0(preceded(
+            multispace0,
+            // 解析优先级更高的选项, 若失败, 则自动降级 解析, 直到
+            parse_continuous_item,
+        )),
+    )(i)?;
+
+    if obj2.is_empty() {
+        return Ok((i, obj1));
+    }
+
+    Ok((
+        i,
+        RuleObject::Item(Box::new(obj1), obj2.pop().map(|v| Box::new(v))),
+    ))
+}
+
+// 解析 双与号
+// A && B && C || ...
+fn parse_double_ampersand(i: &str) -> IResult<&str, RuleObject> {
+    let (i, obj1) = alt((parse_continuous_item, parse_variable, parse_string))(i)?;
+
+    let (i, mut obj2) = preceded(
+        multispace0,
+        many0(preceded(
+            tag("&&"),
+            // 解析优先级更高的选项, 若失败, 则自动降级 解析, 直到
+            parse_double_ampersand,
+        )),
+    )(i)?;
+
+    if obj2.is_empty() {
+        return Ok((i, obj1));
+    }
+
+    Ok((
+        i,
+        RuleObject::DoubleAmpersand(Box::new(obj1), obj2.pop().map(|v| Box::new(v))),
+    ))
+}
+
+// 解析 双杠
+// A || B || C || ...
+fn parse_double_bar(i: &str) -> IResult<&str, RuleObject> {
+    let (i, obj1) = alt((parse_double_ampersand, parse_variable, parse_string))(i)?;
+
+    let (i, mut obj2) = preceded(
+        multispace0,
+        many0(preceded(
+            tag("||"),
+            // 解析优先级更高的选项, 若失败, 则自动降级 解析, 直到
+            parse_double_bar,
+        )),
+    )(i)?;
+
+    if obj2.is_empty() {
+        return Ok((i, obj1));
+    }
+
+    Ok((
+        i,
+        RuleObject::DoubleBar(Box::new(obj1), obj2.pop().map(|v| Box::new(v))),
+    ))
+}
+
+// 解析 单杠
+fn parse_single_bar(i: &str) -> IResult<&str, RuleObject> {
+    let (i, obj1) = alt((parse_double_bar, parse_variable, parse_string))(i)?;
+
+    let (i, mut obj2) = preceded(
+        multispace0,
+        many0(preceded(
+            tag("|"),
+            // 解析优先级更高的选项, 若失败, 则自动降级 解析, 直到
+            parse_single_bar,
+        )),
+    )(i)?;
+
+    if obj2.is_empty() {
+        return Ok((i, obj1));
+    }
+
+    Ok((
+        i,
+        RuleObject::SingleBar(Box::new(obj1), obj2.pop().map(|v| Box::new(v))),
+    ))
+}
+
+// 解析 可变的值
+fn parse_variable(i: &str) -> IResult<&str, RuleObject> {
+    // 如: <background_color>
+    preceded(
+        multispace0,
+        map(
+            tuple((
+                nom_char('<'),
+                take_till1(|c: char| !c.is_alphanumeric() && c != '-'),
+                nom_char('>'),
+                opt(QuantitySymbol::parse),
+            )),
+            |(_, i, _, quantity)| RuleObject::Variable(i.to_string(), quantity),
+        ),
+    )(i)
+}
+
+// 解析 符号
+// 字母 数字 和 下划线 组成的字符串
+fn parse_string(i: &str) -> IResult<&str, RuleObject> {
+    // 如: Bold
+    preceded(
+        multispace0,
+        map(
+            pair(
+                take_till1(|c: char| !c.is_alphanumeric() && c != '-'),
+                opt(QuantitySymbol::parse),
+            ),
+            |(i, quantity)| RuleObject::Symbol(i.to_string(), quantity),
+        ),
+    )(i)
+}
+
+pub struct PropDescriptor {
+    pub prop_objs: Vec<(String, String, Vec<String>, RuleObject)>,
+}
+
+impl PropDescriptor {
+    pub fn new(rule_desc_array: &serde_json::Value) -> Self {
+        let prop_objs = rule_desc_array
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| {
+                let prop_type = v["type"].as_str().unwrap().to_string();
+                let prop_list = v["list"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .map(|v| v.as_str().unwrap().to_string())
+                    .collect::<Vec<_>>();
+                let (_, rule_obj) = RuleObject::parse(v["desc"].as_str().unwrap()).unwrap();
+                (
+                    v["name"].as_str().unwrap().to_string(),
+                    prop_type,
+                    prop_list,
+                    rule_obj,
+                )
+            })
+            .collect::<Vec<_>>();
+        Self { prop_objs }
+    }
+
+    pub fn struct_infos(&self) -> Vec<StructInfo> {
+        self.prop_objs
+            .iter()
+            .map(|(name, prop_type, prop_list, rule_obj)| {
+                let mut info = StructInfo::new(
+                    name.clone(),
+                    prop_type.clone(),
+                    prop_list.clone(),
+                    rule_obj.parser(&name.to_case(Case::Pascal), prop_type),
+                );
+                rule_obj.build_struct(&mut info);
+                info
+            })
+            .collect::<Vec<_>>()
+    }
+
+    pub fn parser(&self) -> Vec<String> {
+        self.prop_objs
+            .iter()
+            .map(|(name, prop_type, prop_list, rule_obj)| rule_obj.parser(name, prop_type))
+            .collect::<Vec<_>>()
+    }
+}
+
+#[derive(Debug, Default, Serialize)]
+pub struct StructInfo {
+    name: String,
+    struct_type: String,
+    member_list: Vec<String>,
+    parse_list: Vec<String>,
+    symbols: Vec<String>,
+    parser: String,
+}
+
+impl StructInfo {
+    pub fn new(
+        name: String,
+        struct_type: String,
+        member_list: Vec<String>,
+        parser: String,
+    ) -> Self {
+        let name = name.to_string();
+        Self {
+            name,
+            symbols: vec![],
+            parser,
+            struct_type,
+            member_list,
+            parse_list: vec![],
+        }
+    }
+
+    pub fn add_variable(&mut self, variable: &str) {
+        self.parse_list.push(variable.to_string());
+    }
+
+    pub fn add_symbol(&mut self, symbol: &str) {
+        self.symbols.push(symbol.to_string());
+    }
+}
+
+trait StructBuilder {
+    fn build_struct(&self, f: &mut StructInfo);
+}
+
+impl StructBuilder for RuleObject {
+    fn build_struct(&self, f: &mut StructInfo) {
+        match self {
+            Self::Brackets(arg0) => arg0.build_struct(f),
+            Self::Item(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::DoubleAmpersand(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::DoubleBar(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::SingleBar(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::Variable(arg0, _arg1) => f.add_variable(arg0),
+            Self::Symbol(arg0, _arg1) => f.add_symbol(&arg0),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use nom::character::complete::{alpha1, multispace0};
+    use nom::combinator::map;
+    use nom::sequence::preceded;
+    use nom::{character::complete::digit1, IResult};
+
+    use crate::rule::{StructBuilder, StructInfo};
+    use crate::{
+        parse::Parser,
+        rule::{parse_double_bar, RuleObject},
+    };
+
+    use super::parse_double_ampersand;
+
+    #[test]
+    fn test_parse() {
+        println!(
+            "{:?}",
+            parse_double_ampersand("auto-flow && dense").unwrap()
+        );
+        // A | B C && D
+        let raw = "<grid-template> | <grid-template-rows> <grid-auto-columns>? | <grid-auto-rows>? <grid-template-columns>";
+
+        let (_, obj) = RuleObject::parse(raw).unwrap();
+        println!("output: {:#?}", &obj);
+        println!("output: {}", &obj);
+        println!("raw:    {}", raw);
+        println!("parser: {}", obj.parser("grid", "struct"));
+        // alt((grid-template::parser(), alt((alt((grid-template-rows::parser(), alt((alt((auto-flow::parser(), opt(dense::parser()))), opt(grid-auto-columns::parser()))))), alt((alt((auto-flow::parser(), opt(dense::parser()))), alt((opt(grid-auto-rows::parser()), grid-template-columns::parser()))))))))
+
+        #[derive(Debug)]
+        struct GridBuilder {
+            pub inner: Grid,
+            pub rule: RuleObject,
+        }
+
+        impl GridBuilder {
+            pub fn new() -> Self {
+                let (_, rule) = RuleObject::parse("[ A && B ] <C>").unwrap();
+                Self {
+                    inner: Grid::default(),
+                    rule,
+                }
+            }
+
+            pub fn update_a(&mut self, a: A) {
+                self.inner.a = a;
+            }
+            pub fn update_b(&mut self, b: B) {
+                self.inner.b = b;
+            }
+            pub fn update_c(&mut self, c: C) {
+                self.inner.c = c;
+            }
+
+            pub fn build(self) -> Grid {
+                self.inner
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct Grid {
+            pub a: A,
+            pub b: B,
+            pub c: C,
+        }
+
+        #[derive(Debug, Default)]
+        struct A(u8);
+
+        impl Parser for A {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, digit1), |s: &str| {
+                    Self(str::parse::<u8>(s).unwrap())
+                })(i)
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct B(String);
+
+        impl Parser for B {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, alpha1), |s: &str| Self(s.to_string()))(i)
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct C(u8);
+
+        impl Parser for C {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, digit1), |s: &str| {
+                    Self(str::parse::<u8>(s).unwrap())
+                })(i)
+            }
+        }
+
+        assert_eq!(
+            parse_double_bar("[ auto-flow && dense ] <grid-auto-rows>"),
+            Ok((
+                "",
+                RuleObject::Item(
+                    Box::new(RuleObject::Brackets(Box::new(RuleObject::DoubleAmpersand(
+                        Box::new(RuleObject::Symbol("auto-flow".into(), None)),
+                        Some(Box::new(RuleObject::Symbol("dense".into(), None)))
+                    )),)),
+                    Some(Box::new(RuleObject::Variable(
+                        "grid-auto-rows".into(),
+                        None
+                    )))
+                )
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_double_bar() {
+        assert_eq!(
+            parse_double_bar("auto-flow || bold && dense || big"),
+            Ok((
+                "",
+                RuleObject::DoubleBar(
+                    Box::new(RuleObject::Symbol("auto-flow".into(), None)),
+                    Some(Box::new(RuleObject::DoubleBar(
+                        Box::new(RuleObject::DoubleAmpersand(
+                            Box::new(RuleObject::Symbol("bold".into(), None)),
+                            Some(Box::new(RuleObject::Symbol("dense".into(), None))),
+                        )),
+                        Some(Box::new(RuleObject::Symbol("big".into(), None))),
+                    )))
+                )
+            ))
+        );
+    }
+}

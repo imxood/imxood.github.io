@@ -1,54 +1,41 @@
-use super::color::Color;
-use super::serialize::ToCss;
-use crate::parse::{Parser, skip_sp, nom_char, nom_u8};
-use crate::types::Float;
-use crate::display::{grid, flex};
-
-use nom::branch::{alt, permutation};
-use nom::bytes::complete::{is_not, tag, take_till};
-use nom::combinator::map;
-use nom::sequence::{separated_pair, terminated};
+use nom::branch::alt;
+use nom::bytes::complete::{is_not, take_till1};
+use nom::combinator::{map, opt};
+use nom::sequence::{pair, separated_pair};
 use nom::IResult;
 
-pub const PROPERTY_COUNT: usize = {{ properties | length }};
+use crate::{
+    color::Color,
+    parse::{nom_char, skip_useless, Parser},
+    serialize::ToCss,
+    types::{Image, Length, Percentage, Position},
+};
 
-pub struct PropertiesBuilder {
-    {% for key, value in properties -%}
-        pub {{ snake(text=key) }}: Option<{{ pascal(text=key) }}>,
-    {% endfor %}
-}
-
-impl PropertiesBuilder {
-    {% for key, value in properties -%}
-        pub fn {{ snake(text=key) }}(mut self, v: {{ pascal(text=key) }}) -> Self {
-            self.{{ snake(text=key) }} = Some(v);
-            self
-        }
-    {% endfor %}
-}
-
-pub struct ComputedProperties {
-    {% for key, value in properties -%}
-        pub {{ snake(text=key) }}: {{ pascal(text=key) }},
-    {% endfor %}
-}
-
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Property {
-    {% for key, value in properties -%}
-        {{ pascal(text=key) }}({{ pascal(text=key) }}),
+    {%- for info in struct_infos -%}
+        {{ pascal(text=info.name) }}({{ pascal(text=info.name) }}),
     {% endfor %}
 }
 
-impl Property {
-    pub fn name(&self) -> &str {
-        match *self {
-            {% for key, value in properties -%}
-                Self::{{ pascal(text=key) }}(_) => {
-                    "{{ kebab(text=key) }}"
-                },
+impl Parser for Property {
+    fn parse(i: &str) -> IResult<&str, Self> {
+        let (i, i0) = is_not(";}")(i)?;
+        let (_, (name, value)) = separated_pair(
+            skip_useless(take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
+            skip_useless(nom_char(':')),
+            skip_useless(take_till1(|c: char| c == ';')),
+        )(i0)?;
+        let (_, property) = match name {
+            {%- for info in struct_infos -%}
+                "{{ kebab(text=info.name) }}" => map(
+                        {{ pascal(text=info.name) }}::parse,
+                        |{{ snake(text=info.name) }}| Self::{{ pascal(text=info.name) }}({{ snake(text=info.name) }})
+                    )(value),
             {% endfor %}
-        }
+            _ => panic!("解析属性失败, property name: {}", name),
+        }?;
+        Ok((i, property))
     }
 }
 
@@ -58,195 +45,79 @@ impl ToCss for Property {
         W: core::fmt::Write,
     {
         match self {
-            {% for key, value in properties -%}
-                Self::{{ pascal(text=key) }}(v) => {
-                    v.to_css(dest)
+            {%- for info in struct_infos -%}
+                Self::{{ pascal(text=info.name) }}({{ snake(text=info.name) }}) => {
+                    dest.write_str("{{ kebab(text=info.name) }}: ")?;
+                    {{ snake(text=info.name) }}.to_css(dest)?;
+                    dest.write_char(';')
                 },
             {% endfor %}
         }
     }
 }
 
-impl Parser for Property {
-    fn parse(input: &str) -> IResult<&str, Self> {
-        map(terminated(
-            separated_pair(
-                skip_sp(is_not(":;}")),
-                tag(":"),
-                skip_sp(is_not(";}")),
-            ),
-            alt((tag(";"), tag("}"))),
-        ), |(k, v)|{
-            match k {
-            {% for key, value in properties -%}
-                "{{kebab(text=key)}}" => {
-                    let (_, {{ snake(text=key) }}) = {{ pascal(text=key) }}::parse(v).unwrap();
-                    Self::{{ pascal(text=key) }}({{ snake(text=key) }})
-                },
-            {% endfor %}
-            _ => panic!("Except!!!"),
-        }
-        })(input)
-        
+{% for info in struct_infos %}
+    pub fn {{ snake(text=info.name) }}(i: &str) -> Option<{{ pascal(text=info.name) }}> {
+        let (_, v) = opt({{ pascal(text=info.name) }}::parse)(i).unwrap_or_default();
+        v
     }
-}
-{% for key, value in properties -%}
-    {% if value is string %}
-        #[derive(Debug)]
-        pub struct {{ pascal(text=key) }}(pub {{ pascal(text=value) }});
+{% endfor %}
 
-        impl Parser for {{ pascal(text=key) }} {
-            fn parse(i: &str) -> IResult<&str, Self> {
-                map(
-                    {{ pascal(text=value) }}::parse,
-                    |{{ snake(text=key) }}| Self({{ snake(text=key) }}),
-                )(i)
-            }
+{% for info in struct_infos %}
+
+    {% set name = pascal(text=info.name) %}
+
+    {%- if info.struct_type == "enum" -%}
+        #[derive(Debug, PartialEq)]
+        pub enum {{ name }} {
+            {% for member in info.member_list -%}
+                {{ pascal(text=member) }}({{ pascal(text=member) }}),
+            {% endfor %}
         }
-
-        impl ToCss for {{ pascal(text=key) }} {
-            fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-            where
-                W: core::fmt::Write,
-            {
-                self.0.to_css(dest)
-            }
+    {% endif %}
+    {%- if info.struct_type == "struct" -%}
+        #[derive(Debug, Default, PartialEq)]
+        pub struct {{ name }} {
+            {% for member in info.member_list -%}
+                pub {{ snake(text=member) }}: {{ pascal(text=member) }},
+            {% endfor %}
         }
     {% endif %}
 
-    {# Background #}
-    {% if key == "background" %}
-        #[derive(Debug)]
-        pub struct {{ pascal(text=key) }} {
-            {% for key, value in value -%}
-                pub {{ snake(text=key) }}: {{ pascal(text=value) }},
-            {% endfor %}
+    impl Parser for {{ name }} {
+        fn parse(i: &str) -> IResult<&str, Self> {
+            {%- if info.struct_type == "struct" -%}
+                let mut v = Self::default();
+                let (i, _) = {{info.parser}}(i)?;
+                Ok((i, v))
+            {%- endif -%}
+            {%- if info.struct_type == "enum" -%}
+                {{info.parser}}(i)
+            {% endif %}
         }
+    }
 
-        impl Parser for {{ pascal(text=key) }} {
-            fn parse(i: &str) -> IResult<&str, Self> {
-                {% for key, value in value -%}
-                    let (_, {{ snake(text=key) }}) = map(
-                        permutation((
-                            tag("{{ kebab(text=key) }}:"),
-                            take_till(|c| c == ';'),
-                            {{ pascal(text=value) }}::parse
-                        )),
-                        |(_, _, {{ snake(text=key) }})| {{ snake(text=key) }},
-                    )(i).unwrap();
-                {% endfor %}
-                Ok(("", Self {
-                    {% for key, value in value -%}
-                        {{ snake(text=key) }},
+    impl ToCss for {{ name }} {
+        fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+        where
+            W: core::fmt::Write,
+        {
+            {%- if info.struct_type == "enum" -%}
+                match self {
+                    {%- for member in info.member_list -%}
+                        Self::{{ pascal(text=member) }}(v) => v.to_css(dest),
                     {% endfor %}
-                }))
-            }
-        }
-
-        impl ToCss for {{ pascal(text=key) }} {
-            fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-            where
-                W: core::fmt::Write,
-            {
-                {%- for key, value in value -%}
-                    self.{{ snake(text=key) }}.to_css(dest)?;
+                }
+            {% endif %}
+            {%- if info.struct_type == "struct" -%}
+                {%- for member in info.member_list -%}
+                    self.{{ snake(text=member) }}.to_css(dest)?;
                     {%- if not loop.last -%}
-                        dest.write_char(' ')?;
-                    {%- endif -%}
-                {%- endfor -%}
-                Ok(())
-            }
-        }
-    {% endif %}
-
-    {# Display #}
-    {% if key == "display" %}
-        #[derive(Debug)]
-        pub enum {{ pascal(text=key) }} {
-            {% for key, value in value -%}
-                {{ pascal(text=key) }}({{ pascal(text=key) }}),
-            {% endfor %}
-        }
-
-        impl Parser for {{ pascal(text=key) }} {
-            fn parse(i: &str) -> IResult<&str, Self> {
-                {% for key, value in value -%}
-                    let (_, {{ snake(text=key) }}) = map(
-                        permutation((
-                            tag("{{ kebab(text=key) }}:"),
-                            take_till(|c| c == ';'),
-                            {{ pascal(text=key) }}::parse
-                        )),
-                        |(_, _, {{ snake(text=key) }})| {{ snake(text=key) }},
-                    )(i).unwrap();
-                {% endfor %}
-                Ok(("", Self {
-                    {% for key, value in value -%}
-                        {{ snake(text=key) }},
-                    {% endfor %}
-                }))
-            }
-        }
-
-        impl ToCss for {{ pascal(text=key) }} {
-            fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-            where
-                W: core::fmt::Write,
-            {
-                {% for key, value in value -%}
-                    self.{{ snake(text=key) }}.to_css(dest)?;
-                    {% if not loop.last -%}
                         dest.write_char(' ')?;
                     {% endif %}
                 {% endfor %}
                 Ok(())
-            }
+            {% endif %}
         }
-
-        {% for key, value in value -%}
-            #[derive(Debug)]
-            pub struct {{ pascal(text=key) }} {
-                {% for type_name in value -%}
-                    pub {{ snake(text=type_name) }}: {{ pascal(text=type_name) }},
-                {% endfor %}
-            }
-
-            impl Parser for {{ pascal(text=key) }} {
-                fn parse(i: &str) -> IResult<&str, Self> {
-                    {% for type_name in value -%}
-                        let (_, {{ snake(text=type_name) }}) = map(
-                            permutation((
-                                skip_sp(tag("{{ kebab(text=type_name) }}")),
-                                skip_sp(nom_char(':')),
-                                take_till(|c| c == ';'),
-                                {{ pascal(text=type_name) }}::parse
-                            )),
-                            |(_, _, _, {{ snake(text=type_name) }})| {{ snake(text=type_name) }},
-                        )(i).unwrap();
-                    {% endfor %}
-                    Ok(("", Self {
-                        {% for type_name in value -%}
-                            {{ snake(text=type_name) }},
-                        {% endfor %}
-                    }))
-                }
-            }
-
-            impl ToCss for {{ pascal(text=key) }} {
-                fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-                where
-                    W: core::fmt::Write,
-                {
-                    {% for type_name in value -%}
-                        self.{{ snake(text=type_name) }}.to_css(dest)?;
-                        {% if not loop.last -%}
-                            dest.write_char(' ')?;
-                        {% endif %}
-                    {% endfor %}
-                    Ok(())
-                }
-            }
-        {% endfor %}
-
-    {% endif %}
+    }
 {% endfor %}

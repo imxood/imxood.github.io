@@ -2,17 +2,14 @@ use simplelog::*;
 
 use crate::selectors::parse_css;
 
-// use crate::build::build_properties;
-
 mod color;
 mod display;
 mod parse;
-mod properties;
 mod selectors;
-// mod build;
-// mod rule;
 mod serialize;
 mod types;
+
+use types::Property;
 
 fn main() {
     log_init();

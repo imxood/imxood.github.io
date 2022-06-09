@@ -9,6 +9,7 @@ use nom::IResult;
 use crate::parse::nom_char;
 use crate::parse::nom_u8;
 use crate::parse::Parser;
+use crate::serialize::CssCodec;
 
 // normalized
 
@@ -152,7 +153,7 @@ impl Into<[f32; 4]> for Color {
 //     }
 // }
 
-impl Parser for Color {
+impl CssCodec for Color {
     /// rgb(255, 255 , 255)
     /// rgba(255, 255, 255, 1.0)
     fn parse(i: &str) -> IResult<&str, Self> {
@@ -198,6 +199,16 @@ impl Parser for Color {
                 |(_, _, r, _, _, _, g, _, _, _, b, _, _, _, a, _, _)| Color::rgba(r, g, b, a),
             ),
         ))(i)
+    }
+
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        dest.write_fmt(format_args!(
+            "rgba({}, {}, {}, {})",
+            self.red, self.green, self.blue, self.alpha,
+        ))
     }
 }
 

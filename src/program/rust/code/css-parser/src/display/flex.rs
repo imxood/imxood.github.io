@@ -1,14 +1,13 @@
-use crate::{parse::Parser, serialize::ToCss};
+use crate::serialize::CssCodec;
 
 #[derive(Debug)]
 pub struct FlexDirection;
 
-impl Parser for FlexDirection {
+impl CssCodec for FlexDirection {
     fn parse(i: &str) -> nom::IResult<&str, Self> {
         todo!()
     }
-}
-impl ToCss for FlexDirection {
+
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
@@ -20,12 +19,11 @@ impl ToCss for FlexDirection {
 #[derive(Debug)]
 pub struct FlexWrap;
 
-impl Parser for FlexWrap {
+impl CssCodec for FlexWrap {
     fn parse(i: &str) -> nom::IResult<&str, Self> {
         todo!()
     }
-}
-impl ToCss for FlexWrap {
+
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
@@ -37,12 +35,11 @@ impl ToCss for FlexWrap {
 #[derive(Debug)]
 pub struct FlexFlow;
 
-impl Parser for FlexFlow {
+impl CssCodec for FlexFlow {
     fn parse(i: &str) -> nom::IResult<&str, Self> {
         todo!()
     }
-}
-impl ToCss for FlexFlow {
+
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,

@@ -1,19 +1,19 @@
 use core::fmt::{Display, Formatter};
 
 use nom::branch::alt;
-use nom::bytes::complete::take_till;
 use nom::character::complete::none_of;
 use nom::combinator::{all_consuming, map, peek};
 use nom::multi::{many0, separated_list1};
 use nom::sequence::terminated;
+use nom::IResult;
 use nom::{
     bytes::complete::{is_not, tag},
     sequence::{delimited, preceded, tuple},
 };
-use nom::{IResult, Parser as NomParser};
 
-use crate::parse::{nom_char, skip_useless, Parser};
-use crate::properties::Property;
+use crate::parse::{nom_char, skip_useless};
+use crate::serialize::CssCodec;
+use crate::types::Property;
 
 // #[path = "./def_properties.rs"]
 // pub mod properties;
@@ -155,10 +155,8 @@ fn parse_parameters(i: &str) -> IResult<&str, Properties> {
 
 #[cfg(test)]
 mod test {
-    use crate::{
-        parse::parse_comment,
-        properties::{height, width, Property},
-    };
+    use crate::parse::parse_comment;
+    use crate::types::{height, width, Property};
 
     use super::{
         parse_block, parse_css, parse_entities, parse_selector, parse_selectors, CssEntities,

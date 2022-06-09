@@ -6,7 +6,7 @@ use syn::LitStr;
 
 use crate::rule::{Parser, RuleObject};
 
-pub fn derive(input: proc_macro::TokenStream) -> TokenStream {
+pub fn define(input: proc_macro::TokenStream) -> TokenStream {
     let token_streams = input
         .into_iter()
         .filter(|item| match item {
@@ -37,7 +37,7 @@ pub fn derive(input: proc_macro::TokenStream) -> TokenStream {
     prop_infos.iter().for_each(|prop_info| {
         let name_pascal = format_ident!("{}", prop_info.name.to_case(Case::Pascal));
         tokens.extend(quote! {
-            #name_pascal(crate::types::#name_pascal),
+            #name_pascal(#name_pascal),
         });
     });
 
@@ -49,9 +49,10 @@ pub fn derive(input: proc_macro::TokenStream) -> TokenStream {
     });
 
     /*
-        impl Parser for Property
+        CssCodec::parse
     */
 
+    let mut parse_func = TokenStream::new();
     let mut tokens = TokenStream::new();
     prop_infos.iter().for_each(|prop_info| {
         let name_pascal = format_ident!("{}", prop_info.name.to_case(Case::Pascal));
@@ -59,41 +60,40 @@ pub fn derive(input: proc_macro::TokenStream) -> TokenStream {
         let name_kebab = LitStr::new(&prop_info.name.to_case(Case::Kebab), Span::call_site());
 
         tokens.extend(quote! {
-            #name_kebab => map(
+            #name_kebab => nom::combinator::map(
                 #name_pascal::parse,
                 |#name_snake| Self::#name_pascal(#name_snake)
             )(value),
         });
     });
 
-    token_stream.extend(quote! {
-        impl crate::parse::Parser for Property {
-            fn parse(i: &str) -> nom::IResult<&str, Self> {
-                let (i, i0) = is_not(";}")(i)?;
-                let (_, (name, value)) = separated_pair(
-                    skip_useless(take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
-                    skip_useless(nom_char(':')),
-                    skip_useless(take_till1(|c: char| c == ';')),
-                )(i0)?;
-                let (_, property) = match name {
-                    #tokens
-                    _ => panic!("解析属性失败, property name: {}", name),
-                }?;
-                Ok((i, property))
-            }
+    parse_func.extend(quote! {
+        fn parse(i: &str) -> nom::IResult<&str, Self> {
+            let (i, i0) = nom::bytes::complete::is_not(";}")(i)?;
+            let (_, (name, value)) = nom::sequence::separated_pair(
+                crate::parse::skip_useless(nom::bytes::complete::take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
+                crate::parse::skip_useless(crate::parse::nom_char(':')),
+                crate::parse::skip_useless(nom::bytes::complete::take_till1(|c: char| c == ';')),
+            )(i0)?;
+            let (_, property) = match name {
+                #tokens
+                _ => panic!("解析属性失败, property name: {}", name),
+            }?;
+            Ok((i, property))
         }
     });
 
     /*
-        impl ToCss for Property
+        CssCodec::to_css
     */
 
+    let mut to_css_func = TokenStream::new();
     let mut tokens = TokenStream::new();
     prop_infos.iter().for_each(|prop_info| {
         let name_pascal = format_ident!("{}", prop_info.name.to_case(Case::Pascal));
         let name_snake = format_ident!("{}", prop_info.name.to_case(Case::Snake));
         let name_str_kebab = LitStr::new(
-            &format!(": {}", prop_info.name.to_case(Case::Kebab)),
+            &format!("{}: ", prop_info.name.to_case(Case::Kebab)),
             Span::call_site(),
         );
 
@@ -106,16 +106,75 @@ pub fn derive(input: proc_macro::TokenStream) -> TokenStream {
         });
     });
 
-    token_stream.extend(quote! {
-        impl crate::serialize::ToCss for Property {
-            fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result
-            {
-                match self {
-                    #tokens
-                }
+    to_css_func.extend(quote! {
+        fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result
+        {
+            match self {
+                #tokens
             }
         }
     });
+
+    token_stream.extend(quote! {
+        impl CssCodec for Property {
+            #parse_func
+            #to_css_func
+        }
+    });
+
+    /*
+        生成 parse_*function*
+    */
+
+    let mut tokens = TokenStream::new();
+    prop_infos.iter().for_each(|prop_info| {
+        let name_pascal = format_ident!("{}", prop_info.name.to_case(Case::Pascal));
+        let parse_func_snake = format_ident!("parse_{}", prop_info.name.to_case(Case::Snake));
+        let parser: TokenStream = prop_info.parser.parse().unwrap();
+
+        let token = match prop_info.prop_type.as_str() {
+            "struct" => {
+                quote! {
+                    let mut v = #name_pascal::default();
+                    let (i, _) = #parser(i)?;
+                    Ok((i, v))
+                }
+            }
+            "enum" => {
+                quote! {
+                    #parser(i)
+                }
+            }
+            _ => {
+                panic!("parse_*function* args wrong");
+            }
+        };
+
+        tokens.extend(quote! {
+            pub fn #parse_func_snake(i: &str) -> IResult<&str, #name_pascal> {
+                #token
+            }
+        });
+    });
+    token_stream.extend(tokens);
+
+    /*
+        生成 基本类型的 function, 快速创建对象
+    */
+
+    let mut tokens = TokenStream::new();
+    prop_infos.iter().for_each(|prop_info| {
+        let name_pascal = format_ident!("{}", prop_info.name.to_case(Case::Pascal));
+        let name_snake = format_ident!("{}", prop_info.name.to_case(Case::Snake));
+
+        tokens.extend(quote! {
+            pub fn #name_snake(i: &str) -> Option<#name_pascal> {
+                let (_, v) = opt(#name_pascal::parse)(i).unwrap_or_default();
+                v
+            }
+        });
+    });
+    token_stream.extend(tokens);
 
     token_stream
 }
@@ -129,7 +188,6 @@ struct PropDesc {
 
 impl PropDesc {
     pub fn new(input: proc_macro::TokenStream) -> PropDesc {
-        println!("input: {:?}", &input);
         let items = input
             .into_iter()
             .filter(|item| match item {

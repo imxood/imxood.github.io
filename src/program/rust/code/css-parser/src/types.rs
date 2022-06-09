@@ -1,17 +1,19 @@
 use core::ops::{Add, Mul};
 use std::cmp::Ordering;
 
-use css_parser_macro::{Parser, ToCss};
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take_till1};
-use nom::character::complete::multispace0;
-use nom::combinator::map;
-use nom::sequence::{preceded, tuple};
+use nom::character::complete::{digit1, multispace0};
+use nom::combinator::{map, opt};
+use nom::number::complete::float;
+use nom::sequence::{pair, preceded, tuple};
 use nom::IResult;
-use nom::{character::complete::digit1, sequence::pair};
+
+use css_parser_macro::{define_property_list, CssCodec};
 
 use crate::color::Color;
-use crate::{parse::nom_char, serialize::ToCss};
+use crate::serialize::CssCodec;
+use crate::parse::nom_char;
 
 pub type Float = f32;
 
@@ -23,6 +25,20 @@ pub const AU_PER_IN: Float = AU_PER_PX * 96.;
 pub const AU_PER_CM: Float = AU_PER_IN / 2.54;
 /// 每一毫米 app units 的数量
 pub const AU_PER_MM: Float = AU_PER_IN / 25.4;
+
+
+define_property_list!(
+    [width, "<length> | <percentage>", "enum"],
+    [height, "<length> | <percentage>", "enum"],
+    [
+        background,
+        "[<background-color> | <background-image>] <background-position>?",
+        "struct"
+    ],
+    [background_color, "<color>", "struct"],
+    [background_image, "<image>", "struct"],
+    [background_position, "<position>", "struct"],
+);
 
 // struct StyleContext {
 //     property: Property,
@@ -37,9 +53,13 @@ pub trait ToComputedValue {
     fn to_computed_value(&self) -> Self::ComputedValue;
 }
 
-impl Parser for Float {
+impl CssCodec for Float {
     fn parse(input: &str) -> IResult<&str, Self> {
         float(input)
+    }
+
+    fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
+        dest.write_fmt(format_args!("{}", self))
     }
 }
 
@@ -164,23 +184,7 @@ impl Add<Length> for Length {
     }
 }
 
-impl ToCss for Length {
-    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-    where
-        W: core::fmt::Write,
-    {
-        match self {
-            Length::Px(v) => dest.write_fmt(format_args!("{}px", v)),
-            Length::In(v) => dest.write_fmt(format_args!("{}in", v)),
-            Length::Cm(v) => dest.write_fmt(format_args!("{}cm", v)),
-            Length::Mm(v) => dest.write_fmt(format_args!("{}mm", v)),
-            Length::Em(v) => dest.write_fmt(format_args!("{}em", v)),
-            Length::Rem(v) => dest.write_fmt(format_args!("{}rem", v)),
-        }
-    }
-}
-
-impl crate::parse::Parser for Length {
+impl CssCodec for Length {
     fn parse(i: &str) -> IResult<&str, Self> {
         let (i, num) = preceded(multispace0, digit1)(i)?;
         let num = str::parse::<Float>(num).unwrap();
@@ -197,6 +201,20 @@ impl crate::parse::Parser for Length {
         ))(i)?;
         Ok(v)
     }
+
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        match self {
+            Length::Px(v) => dest.write_fmt(format_args!("{}px", v)),
+            Length::In(v) => dest.write_fmt(format_args!("{}in", v)),
+            Length::Cm(v) => dest.write_fmt(format_args!("{}cm", v)),
+            Length::Mm(v) => dest.write_fmt(format_args!("{}mm", v)),
+            Length::Em(v) => dest.write_fmt(format_args!("{}em", v)),
+            Length::Rem(v) => dest.write_fmt(format_args!("{}rem", v)),
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -210,16 +228,14 @@ impl ToComputedValue for Percentage {
     }
 }
 
-impl crate::parse::Parser for Percentage {
+impl CssCodec for Percentage {
     fn parse(i: &str) -> IResult<&str, Self> {
         let (i, num) = preceded(multispace0, digit1)(i)?;
         let num = str::parse::<Float>(num).unwrap();
         let _ = nom_char('%')(i)?;
         Ok((i, Self(num)))
     }
-}
 
-impl ToCss for Percentage {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
@@ -242,7 +258,7 @@ impl ToComputedValue for Position {
     }
 }
 
-impl crate::parse::Parser for Position {
+impl CssCodec for Position {
     fn parse(i: &str) -> IResult<&str, Self> {
         map(
             tuple((
@@ -264,9 +280,7 @@ impl crate::parse::Parser for Position {
             },
         )(i)
     }
-}
 
-impl ToCss for Position {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
@@ -288,7 +302,7 @@ impl ToComputedValue for Image {
     }
 }
 
-impl crate::parse::Parser for Image {
+impl CssCodec for Image {
     fn parse(i: &str) -> IResult<&str, Self> {
         map(
             tuple((
@@ -304,9 +318,7 @@ impl crate::parse::Parser for Image {
             },
         )(i)
     }
-}
 
-impl ToCss for Image {
     fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
     where
         W: core::fmt::Write,
@@ -315,36 +327,42 @@ impl ToCss for Image {
     }
 }
 
-#[derive(Debug, PartialEq, Parser, ToCss)]
+#[derive(Debug, PartialEq, CssCodec)]
 pub enum Width {
     Length(Length),
     Percentage(Percentage),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, CssCodec)]
 pub enum Height {
     Length(Length),
     Percentage(Percentage),
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, CssCodec)]
 pub struct Background {
     pub background_color: BackgroundColor,
     pub background_image: BackgroundImage,
     pub background_position: BackgroundPosition,
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, CssCodec)]
 pub struct BackgroundColor {
     pub color: Color,
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, CssCodec)]
 pub struct BackgroundImage {
     pub image: Image,
 }
 
-#[derive(Debug, Default, PartialEq, Parser, ToCss)]
+#[derive(Debug, Default, PartialEq, CssCodec)]
 pub struct BackgroundPosition {
     pub position: Position,
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    pub fn test_func() {}
 }

@@ -1,9 +1,7 @@
 use crate::color::Color;
 
 pub trait ToCss {
-    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-    where
-        W: core::fmt::Write;
+    fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result;
 
     #[inline]
     fn to_css_string(&self) -> String {

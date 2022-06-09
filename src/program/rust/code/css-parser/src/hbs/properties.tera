@@ -4,11 +4,12 @@ use nom::combinator::{map, opt};
 use nom::sequence::{pair, separated_pair};
 use nom::IResult;
 
+use css_parser_macro::{ToCss, Parser};
+
 use crate::{
     color::Color,
-    parse::{nom_char, skip_useless, Parser},
-    serialize::ToCss,
-    types::{Image, Length, Percentage, Position},
+    parse::{nom_char, skip_useless},
+    types::*,
 };
 
 #[derive(Debug, PartialEq)]
@@ -18,7 +19,7 @@ pub enum Property {
     {% endfor %}
 }
 
-impl Parser for Property {
+impl crate::parse::Parser for Property {
     fn parse(i: &str) -> IResult<&str, Self> {
         let (i, i0) = is_not(";}")(i)?;
         let (_, (name, value)) = separated_pair(
@@ -39,10 +40,8 @@ impl Parser for Property {
     }
 }
 
-impl ToCss for Property {
-    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-    where
-        W: core::fmt::Write,
+impl crate::serialize::ToCss for Property {
+    fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result
     {
         match self {
             {%- for info in struct_infos -%}
@@ -67,40 +66,19 @@ impl ToCss for Property {
 
     {% set name = pascal(text=info.name) %}
 
-    {%- if info.struct_type == "enum" -%}
-        #[derive(Debug, PartialEq)]
-        pub enum {{ name }} {
-            {% for member in info.member_list -%}
-                {{ pascal(text=member) }}({{ pascal(text=member) }}),
-            {% endfor %}
-        }
-    {% endif %}
-    {%- if info.struct_type == "struct" -%}
-        #[derive(Debug, Default, PartialEq)]
-        pub struct {{ name }} {
-            {% for member in info.member_list -%}
-                pub {{ snake(text=member) }}: {{ pascal(text=member) }},
-            {% endfor %}
-        }
-    {% endif %}
-
-    impl Parser for {{ name }} {
-        fn parse(i: &str) -> IResult<&str, Self> {
-            {%- if info.struct_type == "struct" -%}
-                let mut v = Self::default();
-                let (i, _) = {{info.parser}}(i)?;
-                Ok((i, v))
-            {%- endif -%}
-            {%- if info.struct_type == "enum" -%}
-                {{info.parser}}(i)
-            {% endif %}
-        }
+    pub fn parse_{{ snake(text=info.name) }}(i: &str) -> IResult<&str, {{ name }}> {
+        {%- if info.struct_type == "struct" -%}
+            let mut v = {{ name }}::default();
+            let (i, _) = {{info.parser}}(i)?;
+            Ok((i, v))
+        {%- endif -%}
+        {%- if info.struct_type == "enum" -%}
+            {{info.parser}}(i)
+        {% endif %}
     }
 
-    impl ToCss for {{ name }} {
-        fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
-        where
-            W: core::fmt::Write,
+    {# impl crate::serialize::ToCss for {{ name }} {
+        fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result
         {
             {%- if info.struct_type == "enum" -%}
                 match self {
@@ -119,5 +97,5 @@ impl ToCss for Property {
                 Ok(())
             {% endif %}
         }
-    }
+    } #}
 {% endfor %}

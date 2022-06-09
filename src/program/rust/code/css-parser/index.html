@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        /* [ <length> | <percentage> | <fragment> | <repeat> | <fit-content> ]* */
         .wrapper {
             /* 声明一个容器 */
             display: grid;
             /*  声明列的宽度  */
-            grid-template-columns: repeat(3, 200px);
+            grid-template-columns: 50% repeat(8, 100px) 10px;
             /*  声明行间距和列间距  */
             grid-gap: 20px;
             /*  声明行的高度  */
@@ -58,6 +59,11 @@
         <div class="four item">Four</div>
         <div class="five item">Five</div>
         <div class="six item">Six</div>
+        <div class="six item">7</div>
+        <div class="six item">8</div>
+        <div class="six item">9</div>
+        <div class="six item">10</div>
+        <div class="six item">11</div>
     </div>
 </body>
 

@@ -1,6 +1,7 @@
 use core::ops::{Add, Mul};
 use std::cmp::Ordering;
 
+use css_parser_macro::{Parser, ToCss};
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take_till1};
 use nom::character::complete::multispace0;
@@ -9,10 +10,8 @@ use nom::sequence::{preceded, tuple};
 use nom::IResult;
 use nom::{character::complete::digit1, sequence::pair};
 
-use crate::{
-    parse::{nom_char, Parser},
-    serialize::ToCss,
-};
+use crate::color::Color;
+use crate::{parse::nom_char, serialize::ToCss};
 
 pub type Float = f32;
 
@@ -36,6 +35,12 @@ pub trait ToComputedValue {
     /// Convert a specified value to a computed value, using itself and the data
     /// inside the `Context`.
     fn to_computed_value(&self) -> Self::ComputedValue;
+}
+
+impl Parser for Float {
+    fn parse(input: &str) -> IResult<&str, Self> {
+        float(input)
+    }
 }
 
 /// 精确长度
@@ -175,7 +180,7 @@ impl ToCss for Length {
     }
 }
 
-impl Parser for Length {
+impl crate::parse::Parser for Length {
     fn parse(i: &str) -> IResult<&str, Self> {
         let (i, num) = preceded(multispace0, digit1)(i)?;
         let num = str::parse::<Float>(num).unwrap();
@@ -205,7 +210,7 @@ impl ToComputedValue for Percentage {
     }
 }
 
-impl Parser for Percentage {
+impl crate::parse::Parser for Percentage {
     fn parse(i: &str) -> IResult<&str, Self> {
         let (i, num) = preceded(multispace0, digit1)(i)?;
         let num = str::parse::<Float>(num).unwrap();
@@ -237,7 +242,7 @@ impl ToComputedValue for Position {
     }
 }
 
-impl Parser for Position {
+impl crate::parse::Parser for Position {
     fn parse(i: &str) -> IResult<&str, Self> {
         map(
             tuple((
@@ -283,7 +288,7 @@ impl ToComputedValue for Image {
     }
 }
 
-impl Parser for Image {
+impl crate::parse::Parser for Image {
     fn parse(i: &str) -> IResult<&str, Self> {
         map(
             tuple((
@@ -308,4 +313,38 @@ impl ToCss for Image {
     {
         dest.write_fmt(format_args!("url({})", &self.url))
     }
+}
+
+#[derive(Debug, PartialEq, Parser, ToCss)]
+pub enum Width {
+    Length(Length),
+    Percentage(Percentage),
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Height {
+    Length(Length),
+    Percentage(Percentage),
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct Background {
+    pub background_color: BackgroundColor,
+    pub background_image: BackgroundImage,
+    pub background_position: BackgroundPosition,
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct BackgroundColor {
+    pub color: Color,
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct BackgroundImage {
+    pub image: Image,
+}
+
+#[derive(Debug, Default, PartialEq, Parser, ToCss)]
+pub struct BackgroundPosition {
+    pub position: Position,
 }

@@ -144,7 +144,7 @@ fn parse_parameters(i: &str) -> IResult<&str, Properties> {
         skip_useless(tag("{")),
         map(
             many0(terminated(
-                skip_useless(parse_parameter),
+                skip_useless(Property::parse),
                 skip_useless(nom_char(';')),
             )),
             |properties| Properties(properties),
@@ -153,16 +153,11 @@ fn parse_parameters(i: &str) -> IResult<&str, Properties> {
     ))(i)
 }
 
-fn parse_parameter(input: &str) -> IResult<&str, Property> {
-    println!("parse_parameter input: {:?}", input);
-    Property::parse(input)
-}
-
 #[cfg(test)]
 mod test {
     use crate::{
         parse::parse_comment,
-        properties::{height, width, Property, Width},
+        properties::{height, width, Property},
     };
 
     use super::{
@@ -172,21 +167,6 @@ mod test {
 
     #[test]
     fn test_selector() {
-        assert_eq!(
-            parse_selector_id("#hello"),
-            Ok(("", Selector::Id("hello".into())))
-        );
-
-        assert_eq!(
-            parse_selector_class(".hello"),
-            Ok(("", Selector::Class("hello".into())))
-        );
-
-        assert_eq!(
-            parse_selector_tag("div"),
-            Ok(("", Selector::Tag("div".into())))
-        );
-
         assert_eq!(parse_selector("div"), Ok(("", Selector::Tag("div".into()))));
 
         assert_eq!(
@@ -309,13 +289,13 @@ mod test {
                     CssEntity::Block {
                         selectors: Selectors(vec![Selector::Id("content".into())]),
                         properties: Properties(vec![
-                            Property::Display(Display(1.0)),
-                            Property::Height(Height(500.0)),
+                            // Property::Display(Display(1.0)),
+                            Property::Height(height("500.0").unwrap()),
                         ])
                     },
                     CssEntity::Block {
                         selectors: Selectors(vec![Selector::Class("first".into())]),
-                        properties: Properties(vec![Property::Height(Height(50.0)),])
+                        properties: Properties(vec![Property::Height(height("50.0").unwrap()),])
                     },
                     CssEntity::Block {
                         selectors: Selectors(vec![
@@ -328,7 +308,7 @@ mod test {
                                 Selector::Class("second".into())
                             ])
                         ]),
-                        properties: Properties(vec![Property::Height(Height(50.0))])
+                        properties: Properties(vec![Property::Height(height("50.0").unwrap())])
                     }
                 ])
             ))

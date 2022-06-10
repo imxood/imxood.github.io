@@ -71,9 +71,9 @@ pub fn define(input: proc_macro::TokenStream) -> TokenStream {
         fn parse(i: &str) -> nom::IResult<&str, Self> {
             let (i, i0) = nom::bytes::complete::is_not(";}")(i)?;
             let (_, (name, value)) = nom::sequence::separated_pair(
-                crate::parse::parse::skip_useless(nom::bytes::complete::take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
-                crate::parse::parse::skip_useless(crate::parse::parse::nom_char(':')),
-                crate::parse::parse::skip_useless(nom::bytes::complete::take_till1(|c: char| c == ';')),
+                skip_useless(nom::bytes::complete::take_till1(|c: char| !c.is_alphanumeric() && c != '-')),
+                skip_useless(nom_char(':')),
+                skip_useless(nom::bytes::complete::take_till1(|c: char| c == ';')),
             )(i0)?;
             let (_, property) = match name {
                 #tokens
@@ -116,7 +116,7 @@ pub fn define(input: proc_macro::TokenStream) -> TokenStream {
     });
 
     token_stream.extend(quote! {
-        impl crate::parse::CssCodec for Property {
+        impl CssCodec for Property {
             #parse_func
             #to_css_func
         }

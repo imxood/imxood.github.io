@@ -1,7 +1,6 @@
 use core::fmt::{Display, Formatter};
 
-use crate::parse::{skip_sp, CssCodec};
-use crate::properties::Property;
+use crate::properties::{CssCodec, Property};
 use crate::utils::nom::*;
 
 // #[path = "./def_properties.rs"]
@@ -68,21 +67,21 @@ impl Display for Selector {
 }
 
 pub fn parse_css(i: &str) -> IResult<&str, CssEntities> {
-    all_consuming(parse_entities)(i)
+    skip_useless(all_consuming(parse_entities))(i)
 }
 
 fn parse_entities(i: &str) -> IResult<&str, CssEntities> {
-    map(skip_sp(many0(parse_entity)), |e| CssEntities(e))(i)
+    map(many0(parse_entity), |e| CssEntities(e))(i)
 }
 
 fn parse_entity(i: &str) -> IResult<&str, CssEntity> {
-    parse_block(i)
+    skip_useless(parse_block)(i)
 }
 
 /// 解析 Block
 fn parse_block(i: &str) -> IResult<&str, CssEntity> {
     map(
-        tuple((skip_sp(parse_selectors), parameter_block(parse_parameters))),
+        tuple((parse_selectors, parse_parameters)),
         |(selectors, properties)| CssEntity::Block {
             selectors,
             properties,
@@ -93,7 +92,11 @@ fn parse_block(i: &str) -> IResult<&str, CssEntity> {
 /// 解析 选择器列表
 fn parse_selectors(i: &str) -> IResult<&str, Selectors> {
     map(
-        is_not_block_ending(separated_list1(tag(","), skip_sp(parse_selector))),
+        preceded(
+            // 预取一个字符, 如果不是 { 就继续执行
+            skip_useless(peek(none_of("{"))),
+            separated_list1(tag(","), skip_useless(parse_selector)),
+        ),
         |selectors| Selectors(selectors),
     )(i)
 }
@@ -104,10 +107,14 @@ fn parse_selector(i: &str) -> IResult<&str, Selector> {
     let mut selector = Vec::<Selector>::new();
     for i in output.split_ascii_whitespace().into_iter() {
         let (_, s) = alt((
-            parse_selector_id,
-            parse_selector_class,
-            parse_selector_tag,
-            parse_selector_all,
+            map(preceded(tag("#"), is_not(",{")), |i: &str| {
+                Selector::Id(i.trim().into())
+            }),
+            map(preceded(tag("."), is_not(",{")), |i: &str| {
+                Selector::Class(i.trim().into())
+            }),
+            map(is_not(",{"), |i: &str| Selector::Tag(i.trim().into())),
+            map(tag("*"), |_| Selector::All),
         ))(i)?;
         selector.push(s);
     }
@@ -119,58 +126,17 @@ fn parse_selector(i: &str) -> IResult<&str, Selector> {
     Ok((i, selector))
 }
 
-/// 解析 Selector::Id
-fn parse_selector_id(i: &str) -> IResult<&str, Selector> {
-    map(preceded(tag("#"), is_not(",{")), |i: &str| {
-        Selector::Id(i.trim().into())
-    })(i)
-}
-
-/// 解析 Selector::Class
-fn parse_selector_class(i: &str) -> IResult<&str, Selector> {
-    map(preceded(tag("."), is_not(",{")), |i: &str| {
-        Selector::Class(i.trim().into())
-    })(i)
-}
-
-/// 解析 Selector::Tag
-fn parse_selector_tag(i: &str) -> IResult<&str, Selector> {
-    map(is_not(",{"), |i: &str| Selector::Tag(i.trim().into()))(i)
-}
-
-/// 解析 Selector::All
-fn parse_selector_all(i: &str) -> IResult<&str, Selector> {
-    map(tag("*"), |_| Selector::All)(i)
-}
-
 /// 解析 选择器列表
 fn parse_parameters(i: &str) -> IResult<&str, Properties> {
-    map(
-        many0(skip_sp(is_not_block_ending(parse_parameter))),
-        |properties| Properties(properties),
-    )(i)
-}
-
-fn parse_parameter(input: &str) -> IResult<&str, Property> {
-    Property::parse(input)
-}
-
-/*
-    utils
-*/
-
-fn parameter_block<'a, O, P>(parser: P) -> impl FnMut(&'a str) -> IResult<&'a str, O>
-where
-    P: NomParser<&'a str, O, nom::error::Error<&'a str>>,
-{
-    delimited(tag("{"), parser, tag("}"))
-}
-
-/// 判断 下一个字符 不是 { 和 }
-fn is_not_block_ending<'a, O, P>(parser: P) -> impl FnMut(&'a str) -> IResult<&'a str, O>
-where
-    P: NomParser<&'a str, O, nom::error::Error<&'a str>>,
-{
-    // 如果下一个字符 不是{} 任意的一个, 则执行 parser, 使用peek, 不会对 preceded 的 input 产生影响
-    preceded(peek(none_of("{}")), parser)
+    skip_useless(delimited(
+        skip_useless(tag("{")),
+        map(
+            many0(terminated(
+                skip_useless(Property::parse),
+                skip_useless(nom_char(';')),
+            )),
+            |properties| Properties(properties),
+        ),
+        skip_useless(tag("}")),
+    ))(i)
 }

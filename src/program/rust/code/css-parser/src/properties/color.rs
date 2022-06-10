@@ -1,4 +1,13 @@
-use std::fmt::Write;
+use nom::branch::alt;
+use nom::bytes::streaming::tag;
+use nom::character::complete::multispace0;
+use nom::combinator::map;
+use nom::number::complete::float;
+use nom::sequence::tuple;
+use nom::IResult;
+
+use crate::properties::CssCodec;
+use crate::utils::nom::*;
 
 // normalized
 
@@ -141,6 +150,65 @@ impl Into<[f32; 4]> for Color {
 //         Self::default()
 //     }
 // }
+
+impl CssCodec for Color {
+    /// rgb(255, 255 , 255)
+    /// rgba(255, 255, 255, 1.0)
+    fn parse(i: &str) -> IResult<&str, Self> {
+        alt((
+            map(
+                tuple((
+                    tag("rgb("),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(','),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(','),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(')'),
+                )),
+                |(_, _, r, _, _, _, g, _, _, _, b, _, _)| Color::rgb(r, g, b),
+            ),
+            map(
+                tuple((
+                    tag("rgba("),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(','),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(','),
+                    multispace0,
+                    nom_u8,
+                    multispace0,
+                    nom_char(','),
+                    multispace0,
+                    float,
+                    multispace0,
+                    nom_char(')'),
+                )),
+                |(_, _, r, _, _, _, g, _, _, _, b, _, _, _, a, _, _)| Color::rgba(r, g, b, a),
+            ),
+        ))(i)
+    }
+
+    fn to_css<W>(&self, dest: &mut W) -> core::fmt::Result
+    where
+        W: core::fmt::Write,
+    {
+        dest.write_fmt(format_args!(
+            "rgba({}, {}, {}, {})",
+            self.red, self.green, self.blue, self.alpha,
+        ))
+    }
+}
 
 /// 从u32数据中获取Rgba
 /// 如: 1.00000ff

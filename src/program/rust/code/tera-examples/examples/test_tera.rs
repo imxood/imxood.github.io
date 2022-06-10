@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
 use convert_case::{Case, Casing};
 use serde_json::{json, Value};

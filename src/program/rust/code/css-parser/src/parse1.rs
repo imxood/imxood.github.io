@@ -1,95 +1,20 @@
+use std::fmt::Write;
+
 pub use nom::character::complete::{char as nom_char, u8 as nom_u8};
 use nom::{
     branch::alt,
-    bytes::complete::{tag, take_until},
-    character::complete::{multispace0, multispace1},
+    bytes::complete::{tag, take, take_until},
+    character::complete::{alphanumeric0, alphanumeric1, anychar, multispace0, multispace1},
     combinator::map,
     error::{ContextError, Error as IError, ErrorKind, ParseError},
     multi::many0,
     number::complete::float,
-    sequence::{preceded, terminated, tuple},
+    sequence::{pair, preceded, terminated, tuple},
     IResult,
 };
 
-use crate::{color::Color, types::Float};
-
 pub trait Parser<T = Self> {
     fn parse(i: &str) -> IResult<&str, T>;
-}
-
-#[derive(Debug)]
-pub struct DebugError {
-    message: String,
-}
-
-impl ParseError<&str> for DebugError {
-    // on one line, we show the error code and the input that caused it
-    fn from_error_kind(input: &str, kind: ErrorKind) -> Self {
-        let message = format!("{:?}:\t{:?}\n", kind, input);
-        println!("{}", message);
-        Self { message }
-    }
-
-    // if combining multiple errors, we show them one after the other
-    fn append(input: &str, kind: ErrorKind, other: Self) -> Self {
-        let message = format!("{}{:?}:\t{:?}\n", other.message, kind, input);
-        println!("{}", message);
-        Self { message }
-    }
-
-    fn from_char(input: &str, c: char) -> Self {
-        let message = format!("'{}':\t{:?}\n", c, input);
-        println!("{}", message);
-        Self { message }
-    }
-
-    fn or(self, other: Self) -> Self {
-        let message = format!("{}\tOR\n{}\n", self.message, other.message);
-        println!("{}", message);
-        Self { message }
-    }
-}
-
-impl ContextError<&str> for DebugError {
-    fn add_context(input: &str, ctx: &'static str, other: Self) -> Self {
-        let message = format!("{}\"{}\":\t{:?}\n", other.message, ctx, input);
-        println!("{}", message);
-        Self { message }
-    }
-}
-
-impl Parser for Float {
-    fn parse(input: &str) -> IResult<&str, Self> {
-        float(input)
-    }
-}
-
-impl Parser for Color {
-    fn parse(i: &str) -> IResult<&str, Self> {
-        alt((
-            // rgb(255, 255 , 255)
-            map(
-                tuple((
-                    tag("rgb("),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(')'))),
-                )),
-                |(_, r, g, b)| Color::rgb(r, g, b),
-            ),
-            // rgba(255, 255, 255, 1.0)
-            map(
-                tuple((
-                    tag("rgba("),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(nom_u8), skip_sp(nom_char(','))),
-                    terminated(skip_sp(float), skip_sp(nom_char(')'))),
-                )),
-                |(_, r, g, b, a)| Color::rgba(r, g, b, a),
-            ),
-        ))(i)
-    }
 }
 
 /// 解析 空符号 和 注释

@@ -1,6 +1,8 @@
+use std::collections::HashMap;
 use std::fmt::{Debug, Display, Write};
 
 use convert_case::{Case, Casing};
+use derive_more::IsVariant;
 use nom::bytes::complete::tag;
 use nom::character::complete::{digit1, multispace0};
 use nom::combinator::{map, opt};
@@ -8,17 +10,14 @@ use nom::multi::many0;
 use nom::sequence::{pair, preceded, tuple};
 use nom::IResult;
 use nom::{branch::alt, bytes::complete::take_till1};
+use serde::Serialize;
 
-use crate::parse::{nom_char, skip_useless};
-
-pub trait Parser<T = Self> {
-    fn parse(i: &str) -> IResult<&str, T>;
-}
+use crate::parse::{nom_char, skip_useless, Parser};
 
 // 优先级: 数量描述 (QuantitySymbol) > 组合 ([]) > 并置 (一个或多个空格) > 与 (&&) > 或 (||) > 互斥 (|)
 
 /// 定义规则, 用于解析 属性描述, 生成 属性结构体 和 属性的解析器
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, IsVariant)]
 pub enum RuleObject {
     /// [], 表示 多个规则的组合
     /// bold [ thin && <length> ]
@@ -493,4 +492,274 @@ fn parse_string(i: &str) -> IResult<&str, RuleObject> {
             |(i, quantity)| RuleObject::Symbol(i.to_string(), quantity),
         ),
     )(i)
+}
+
+pub struct PropDescriptor {
+    pub prop_objs: Vec<(String, String, Vec<String>, RuleObject)>,
+}
+
+impl PropDescriptor {
+    pub fn new(rule_desc_array: &serde_json::Value) -> Self {
+        let prop_objs = rule_desc_array
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|v| {
+                let prop_type = v["type"].as_str().unwrap().to_string();
+                let prop_list = v["list"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .map(|v| v.as_str().unwrap().to_string())
+                    .collect::<Vec<_>>();
+                let (_, rule_obj) = RuleObject::parse(v["desc"].as_str().unwrap()).unwrap();
+                (
+                    v["name"].as_str().unwrap().to_string(),
+                    prop_type,
+                    prop_list,
+                    rule_obj,
+                )
+            })
+            .collect::<Vec<_>>();
+        Self { prop_objs }
+    }
+
+    pub fn struct_infos(&self) -> Vec<StructInfo> {
+        self.prop_objs
+            .iter()
+            .map(|(name, prop_type, prop_list, rule_obj)| {
+                let mut info = StructInfo::new(
+                    name.clone(),
+                    prop_type.clone(),
+                    prop_list.clone(),
+                    rule_obj.parser(&name.to_case(Case::Pascal), prop_type),
+                );
+                rule_obj.build_struct(&mut info);
+                info
+            })
+            .collect::<Vec<_>>()
+    }
+
+    pub fn parser(&self) -> Vec<String> {
+        self.prop_objs
+            .iter()
+            .map(|(name, prop_type, prop_list, rule_obj)| rule_obj.parser(name, prop_type))
+            .collect::<Vec<_>>()
+    }
+}
+
+#[derive(Debug, Default, Serialize)]
+pub struct StructInfo {
+    name: String,
+    struct_type: String,
+    member_list: Vec<String>,
+    parse_list: Vec<String>,
+    symbols: Vec<String>,
+    parser: String,
+}
+
+impl StructInfo {
+    pub fn new(
+        name: String,
+        struct_type: String,
+        member_list: Vec<String>,
+        parser: String,
+    ) -> Self {
+        let name = name.to_string();
+        Self {
+            name,
+            symbols: vec![],
+            parser,
+            struct_type,
+            member_list,
+            parse_list: vec![],
+        }
+    }
+
+    pub fn add_variable(&mut self, variable: &str) {
+        self.parse_list.push(variable.to_string());
+    }
+
+    pub fn add_symbol(&mut self, symbol: &str) {
+        self.symbols.push(symbol.to_string());
+    }
+}
+
+trait StructBuilder {
+    fn build_struct(&self, f: &mut StructInfo);
+}
+
+impl StructBuilder for RuleObject {
+    fn build_struct(&self, f: &mut StructInfo) {
+        match self {
+            Self::Brackets(arg0, _arg1) => arg0.build_struct(f),
+            Self::Item(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::DoubleAmpersand(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::DoubleBar(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::SingleBar(arg0, arg1) => {
+                arg0.build_struct(f);
+                if let Some(arg1) = arg1 {
+                    arg1.build_struct(f);
+                }
+            }
+            Self::Variable(arg0, _arg1) => f.add_variable(arg0),
+            Self::Symbol(arg0, _arg1) => f.add_symbol(&arg0),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use nom::character::complete::{alpha1, multispace0};
+    use nom::combinator::map;
+    use nom::sequence::preceded;
+    use nom::{character::complete::digit1, IResult};
+
+    use crate::rule::{StructBuilder, StructInfo};
+    use crate::{
+        parse::Parser,
+        rule::{parse_double_bar, RuleObject},
+    };
+
+    use super::parse_double_ampersand;
+
+    #[test]
+    fn test_parse() {
+        println!(
+            "{:?}",
+            parse_double_ampersand("auto-flow && dense").unwrap()
+        );
+        // A | B C && D
+        let raw = "<grid-template> | <grid-template-rows> <grid-auto-columns>? | <grid-auto-rows>? <grid-template-columns>";
+
+        let (_, obj) = RuleObject::parse(raw).unwrap();
+        println!("output: {:#?}", &obj);
+        println!("output: {}", &obj);
+        println!("raw:    {}", raw);
+        println!("parser: {}", obj.parser("grid", "struct"));
+        // alt((grid-template::parser(), alt((alt((grid-template-rows::parser(), alt((alt((auto-flow::parser(), opt(dense::parser()))), opt(grid-auto-columns::parser()))))), alt((alt((auto-flow::parser(), opt(dense::parser()))), alt((opt(grid-auto-rows::parser()), grid-template-columns::parser()))))))))
+
+        #[derive(Debug)]
+        struct GridBuilder {
+            pub inner: Grid,
+            pub rule: RuleObject,
+        }
+
+        impl GridBuilder {
+            pub fn new() -> Self {
+                let (_, rule) = RuleObject::parse("[ A && B ] <C>").unwrap();
+                Self {
+                    inner: Grid::default(),
+                    rule,
+                }
+            }
+
+            pub fn update_a(&mut self, a: A) {
+                self.inner.a = a;
+            }
+            pub fn update_b(&mut self, b: B) {
+                self.inner.b = b;
+            }
+            pub fn update_c(&mut self, c: C) {
+                self.inner.c = c;
+            }
+
+            pub fn build(self) -> Grid {
+                self.inner
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct Grid {
+            pub a: A,
+            pub b: B,
+            pub c: C,
+        }
+
+        #[derive(Debug, Default)]
+        struct A(u8);
+
+        impl Parser for A {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, digit1), |s: &str| {
+                    Self(str::parse::<u8>(s).unwrap())
+                })(i)
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct B(String);
+
+        impl Parser for B {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, alpha1), |s: &str| Self(s.to_string()))(i)
+            }
+        }
+
+        #[derive(Debug, Default)]
+        struct C(u8);
+
+        impl Parser for C {
+            fn parse(i: &str) -> IResult<&str, Self> {
+                map(preceded(multispace0, digit1), |s: &str| {
+                    Self(str::parse::<u8>(s).unwrap())
+                })(i)
+            }
+        }
+
+        assert_eq!(
+            parse_double_bar("[ auto-flow && dense ] <grid-auto-rows>"),
+            Ok((
+                "",
+                RuleObject::Item(
+                    Box::new(RuleObject::Brackets(
+                        Box::new(RuleObject::DoubleAmpersand(
+                            Box::new(RuleObject::Symbol("auto-flow".into(), None)),
+                            Some(Box::new(RuleObject::Symbol("dense".into(), None)))
+                        )),
+                        None
+                    )),
+                    Some(Box::new(RuleObject::Variable(
+                        "grid-auto-rows".into(),
+                        None
+                    )))
+                )
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_double_bar() {
+        assert_eq!(
+            parse_double_bar("auto-flow || bold && dense || big"),
+            Ok((
+                "",
+                RuleObject::DoubleBar(
+                    Box::new(RuleObject::Symbol("auto-flow".into(), None)),
+                    Some(Box::new(RuleObject::DoubleBar(
+                        Box::new(RuleObject::DoubleAmpersand(
+                            Box::new(RuleObject::Symbol("bold".into(), None)),
+                            Some(Box::new(RuleObject::Symbol("dense".into(), None))),
+                        )),
+                        Some(Box::new(RuleObject::Symbol("big".into(), None))),
+                    )))
+                )
+            ))
+        );
+    }
 }

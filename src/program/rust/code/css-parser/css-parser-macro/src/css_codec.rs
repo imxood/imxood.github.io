@@ -71,7 +71,7 @@ pub fn derive(input: syn::DeriveInput) -> proc_macro::TokenStream {
         }
     );
     tokenstream.extend(quote! {
-        impl crate::parse::CssCodec for #ident {
+        impl crate::properties::CssCodec for #ident {
             #parse_func
             #to_css_func
         }

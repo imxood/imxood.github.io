@@ -21,7 +21,6 @@ pub fn derive(input: syn::DeriveInput) -> proc_macro::TokenStream {
             eprintln!("len: {:?}", &len);
 
             named.iter().enumerate().for_each(|(i, f)| {
-                eprintln!("i: {:?}", &i);
                 let ident = f.ident.as_ref();
                 tokens.extend(quote! {
                     self.#ident.to_css(dest)?;

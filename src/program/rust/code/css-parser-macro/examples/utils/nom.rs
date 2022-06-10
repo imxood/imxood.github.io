@@ -1,21 +1,19 @@
-use std::fmt::Write;
+pub use nom::{
+    branch::alt,
+    bytes::complete::{is_not, tag, take_till1},
+    character::complete::{digit1, multispace0, none_of},
+    combinator::{all_consuming, map, opt, peek},
+    multi::{many0, separated_list1},
+    sequence::{delimited, pair, preceded, terminated, tuple},
+    IResult, Parser as NomParser,
+};
 
 pub use nom::character::complete::{char as nom_char, u8 as nom_u8};
 use nom::{
-    branch::alt,
-    bytes::complete::{tag, take, take_until},
-    character::complete::{alphanumeric0, alphanumeric1, anychar, multispace0, multispace1},
-    combinator::map,
-    error::{ContextError, Error as IError, ErrorKind, ParseError},
-    multi::many0,
-    number::complete::float,
-    sequence::{pair, preceded, terminated, tuple},
-    IResult,
+    bytes::complete::take_until,
+    character::complete::multispace1,
+    error::{Error as IError, ParseError},
 };
-
-pub trait Parser<T = Self> {
-    fn parse(i: &str) -> IResult<&str, T>;
-}
 
 /// 解析 空符号 和 注释
 pub fn parse_useless(i: &str) -> IResult<&str, Vec<&str>> {

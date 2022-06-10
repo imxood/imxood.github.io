@@ -1,5 +1,6 @@
-use crate::parse::CssCodec;
 use crate::utils::nom::*;
+
+use super::CssCodec;
 
 pub type Float = f32;
 

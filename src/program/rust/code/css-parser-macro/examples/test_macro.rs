@@ -2,7 +2,7 @@ mod parse;
 mod properties;
 mod utils;
 
-use parse::CssCodec;
+use crate::properties::CssCodec;
 use properties::{parse_width, Width};
 
 fn main() {

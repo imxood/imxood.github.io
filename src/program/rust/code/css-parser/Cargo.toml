@@ -13,7 +13,4 @@ derive_more = "0.99.17"
 itoa = "1.0.2"
 nom = "7.1.1"
 thiserror = "1.0.31"
-css-parser-macro = { path = "./css-parser-macro" }
-
-[workspace]
-members = ["css-parser-macro"]
+css-parser-macro = { path = "../css-parser-macro" }

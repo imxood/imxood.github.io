@@ -1,3 +1,14 @@
+mod length;
+pub use length::*;
+
+mod width;
+pub use width::*;
+
+use crate::utils::nom::*;
+use css_parser_macro::define_property_list;
+
+define_property_list!([width, "<length>", "enum"]);
+
 pub trait CssCodec<T = Self> {
     fn parse(i: &str) -> nom::IResult<&str, T>;
 

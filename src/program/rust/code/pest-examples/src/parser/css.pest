@@ -1,0 +1,61 @@
+WHITESPACE = _{ " " | "\r"? ~ "\n" }
+COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+
+// css = _{ SOI ~ (object | array) ~ EOI }
+
+/* 基本的数值 */
+uint8 = @{"0" | "1" ~ ASCII_DIGIT ~ ASCII_DIGIT | "2" ~ '0'..'4' ~ ASCII_DIGIT | "25" ~ '0'..'5' | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT? }
+hex_u8 = @{ ASCII_HEX_DIGIT ~ ASCII_HEX_DIGIT }
+int = @{ "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
+float = @{ int ~ ("." ~ ASCII_DIGIT*)? }
+
+px = ${ float ~ "px" }
+em = ${ float ~ "em" }
+rem = ${ float ~ "rem" }
+mm = ${ float ~ "mm" }
+cm = ${ float ~ "cm" }
+inch = ${ float ~ "in" }
+
+length  = ${ px | em | rem| mm | cm  | inch }
+percentage = ${ float ~ "%" }
+length_percentage = ${ length | percentage }
+
+none = { "none" }
+dotted = { "dotted" }
+dashed = { "dashed" }
+solid = { "solid" }
+double = { "double" }
+groove = { "groove" }
+ridge = { "ridge" }
+inset = { "inset" }
+outset = { "outset" }
+
+thin = { "thin" }
+medium = { "medium" }
+thick = { "thick" }
+
+/* 颜色 */
+rgb = { "rgb(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ ")" }
+rgba = { "rgba(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ "," ~ float  ~ ")" }
+hex = { "#" ~ hex_u8{3}  }
+color = { rgb | rgba | hex }
+
+/* 线宽 */
+line_width = { length | thin | medium | thick }
+
+
+/* 边框 */
+
+border_width = { line_width{1, 4} }
+border_style = { none | dotted | dashed | solid | double | groove | ridge | inset | outset }
+
+/* 
+    盒子模型
+*/
+
+width = ${ length_percentage }
+height = ${ length_percentage }
+padding = ${ length_percentage{1, 4} }
+margin = ${ length_percentage{1, 4} }
+border = ${ (border_style | border_width | color)+ }
+

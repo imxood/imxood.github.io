@@ -1,7 +1,6 @@
 use crate::parser::css::*;
 use pest::iterators::Pair;
 
-pub mod border;
 mod number;
 mod box_model;
 mod color;

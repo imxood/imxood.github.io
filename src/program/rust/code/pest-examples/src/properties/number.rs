@@ -84,6 +84,7 @@ impl CssProp for HexU8 {
     }
 }
 
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum LengthPercentage {
     Length(Length),
     Percentage(Percentage),
@@ -99,11 +100,16 @@ impl CssProp for LengthPercentage {
     }
 
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        match pair.as_rule() {
-            CssRule::length => Length::parse(pair).map(|v| Self::Length(v)),
-            CssRule::percentage => Percentage::parse(pair).map(|v| Self::Percentage(v)),
-            _ => None,
+        println!("rule: {:?}, str: {}", pair.as_rule(), pair.as_str());
+        for pair in pair.into_inner() {
+            let v = match pair.as_rule() {
+                CssRule::length => Length::parse(pair).map(|v| Self::Length(v)),
+                CssRule::percentage => Percentage::parse(pair).map(|v| Self::Percentage(v)),
+                _ => None,
+            };
+            return v;
         }
+        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -114,6 +120,7 @@ impl CssProp for LengthPercentage {
     }
 }
 
+#[derive(Debug, PartialEq, Clone, Copy, Constructor)]
 pub struct Percentage(Float);
 
 impl CssProp for Percentage {

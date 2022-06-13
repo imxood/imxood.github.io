@@ -72,7 +72,6 @@ impl CssProp for Rgb {
         println!("rule: {:?}, str: {}", pair.as_rule(), pair.as_str());
         let colors = pair
             .into_inner()
-            .into_iter()
             .filter_map(|v| u8::parse(v))
             .collect::<Vec<_>>();
         if colors.len() != 3 {
@@ -161,7 +160,6 @@ impl CssProp for Hex {
     fn parse(pair: pest::iterators::Pair<crate::parser::CssRule>) -> Option<Self> {
         let colors = pair
             .into_inner()
-            .into_iter()
             .filter_map(|v| HexU8::parse(v))
             .collect::<Vec<_>>();
         if colors.len() != 3 {

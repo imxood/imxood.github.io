@@ -11,6 +11,32 @@ use derive_more::{Add, Constructor, Div, Mul, Sub};
 pub type Float = f32;
 pub type Int = i32;
 
+impl CssProp for bool {
+    fn parse_str(i: &str) -> Option<Self> {
+        if let Some(pairs) = CssParser::parse(CssRule::boolean, i).ok() {
+            Self::parse(pairs.last().unwrap())
+        } else {
+            None
+        }
+    }
+
+    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+        for pair in pair.into_inner() {
+            let v = match pair.as_rule() {
+                CssRule::bool_true => Some(true),
+                CssRule::bool_false => Some(false),
+                _ => None,
+            };
+            return v;
+        }
+        None
+    }
+
+    fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
+        dest.write_fmt(format_args!("{}", self))
+    }
+}
+
 impl CssProp for u8 {
     fn parse_str(i: &str) -> Option<Self> {
         if let Some(pairs) = CssParser::parse(CssRule::uint8, i).ok() {
@@ -532,6 +558,19 @@ fn test_uint8() {
 
     let v = u8::parse_str("0");
     assert_eq!(v, Some(0));
+}
+
+
+#[test]
+fn test_boolean() {
+    let v = bool::parse_str("true");
+    assert_eq!(v, Some(true));
+
+    let v = bool::parse_str("false");
+    assert_eq!(v, Some(false));
+
+    let v = bool::parse_str("hello");
+    assert_eq!(v, None);
 }
 
 #[test]

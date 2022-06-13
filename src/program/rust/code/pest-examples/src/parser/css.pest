@@ -3,11 +3,16 @@ COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 
 // css = _{ SOI ~ (object | array) ~ EOI }
 
-/* 基本的数值 */
+/* number */
+
 uint8 = @{"0" | "1" ~ ASCII_DIGIT ~ ASCII_DIGIT | "2" ~ '0'..'4' ~ ASCII_DIGIT | "25" ~ '0'..'5' | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT? }
 hex_u8 = @{ ASCII_HEX_DIGIT ~ ASCII_HEX_DIGIT }
 int = @{ "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
 float = @{ int ~ ("." ~ ASCII_DIGIT*)? }
+positive_number = @{ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~ ("." ~ ASCII_DIGIT*)? }
+bool_true = @{ "true" }
+bool_false = @{ "false" }
+boolean = ${ bool_true | bool_false }
 
 px = ${ float ~ "px" }
 em = ${ float ~ "em" }
@@ -20,6 +25,21 @@ length  = ${ px | em | rem| mm | cm  | inch }
 percentage = ${ float ~ "%" }
 length_percentage = ${ length | percentage }
 
+/* color */
+
+rgb = { "rgb(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ ")" }
+rgba = { "rgba(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ "," ~ float  ~ ")" }
+hex = { "#" ~ hex_u8{3}  }
+color = { rgb | rgba | hex }
+
+/* border */
+
+thin = { "thin" }
+medium = { "medium" }
+thick = { "thick" }
+
+line_width = { length | thin | medium | thick }
+
 none = { "none" }
 dotted = { "dotted" }
 dashed = { "dashed" }
@@ -30,32 +50,56 @@ ridge = { "ridge" }
 inset = { "inset" }
 outset = { "outset" }
 
-thin = { "thin" }
-medium = { "medium" }
-thick = { "thick" }
-
-/* 颜色 */
-rgb = { "rgb(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ ")" }
-rgba = { "rgba(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ "," ~ float  ~ ")" }
-hex = { "#" ~ hex_u8{3}  }
-color = { rgb | rgba | hex }
-
-/* 线宽 */
-line_width = { length | thin | medium | thick }
-
-
-/* 边框 */
-
 border_width = { line_width{1, 4} }
 border_style = { none | dotted | dashed | solid | double | groove | ridge | inset | outset }
 
-/* 
-    盒子模型
-*/
+/* box model */
 
 width = ${ length_percentage }
 height = ${ length_percentage }
 padding = ${ length_percentage{1, 4} }
 margin = ${ length_percentage{1, 4} }
-border = ${ (border_style | border_width | color)+ }
+border = { (border_width | border_style | color)+ }
 
+/* display */
+
+inline = ${ "inline" }
+
+center = @{ "center" }
+start = @{ "start" }
+end = @{ "end" }
+flex_start = @{ "flex_start" }
+flex_end = @{ "flex_end" }
+self_start = @{ "self_start" }
+self_end = @{ "self_end" }
+stretch = @{ "stretch" }
+space_around = @{ "space_around" }
+space_between = @{ "space_between" }
+baseline = @{ "baseline" }
+
+align = ${ start | center | end }
+
+row = @{ "row" }
+row_reverse = @{ "row_reverse" }
+column = @{ "column" }
+column_reverse = @{ "column_reverse" }
+
+direction = @{ row | row_reverse | column | column_reverse }
+
+nowrap = @{ "nowrap" }
+wrap = @{ "wrap" }
+wrap_reverse = @{ "wrap_reverse" }
+
+// wrap_type 主轴方向上的子元素铺满时, 自动换行
+wrap_type = ${ nowrap | wrap | wrap_reverse }
+
+// main_flow 主轴方向 及 自动换行
+main_flow = { "main_flow:" ~ direction ~ wrap_type ~ ";"? }
+main_items = { "main_items:" ~ align ~ ";"? }
+main_content = { "main_content:" ~ align ~ ";"? }
+cross_items = { "cross_items:" ~ align ~ ";"? }
+cross_content = { "cross_content:" ~ align ~ ";"? }
+
+flex_layout = { "flex(" ~ (main_flow | main_items | main_content | cross_items | cross_content)* ~ ")" }
+
+display = { inline? ~ flex_layout }

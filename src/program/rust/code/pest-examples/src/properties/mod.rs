@@ -4,6 +4,7 @@ use pest::iterators::Pair;
 mod number;
 mod box_model;
 mod color;
+mod display;
 
 pub use number::*;
 

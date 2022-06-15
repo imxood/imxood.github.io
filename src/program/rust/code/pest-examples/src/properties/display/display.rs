@@ -62,21 +62,21 @@ impl Default for Layout {
 #[test]
 fn test_display() {
     let display = Display::parse_str(
-        "inline flex(main_flow: row wrap; cross_items: center; main_content: end;)",
+        "inline flex(flow: row wrap; align_items: center; justify_content: end;)",
     );
     assert_eq!(
         display,
         Some(Display {
             inline: true,
             layout: Layout::FlexLayout(FlexLayout {
-                main_flow: MainFlow {
+                flow: Flow {
                     direction: Direction::Row,
                     wrap_type: WrapType::Wrap
                 },
-                cross_items: CrossItems(Align::Center),
-                main_content: MainContent(Align::End),
+                align_items: AlignItems(Align::Center),
+                justify_content: JustifyContent(Align::End),
                 ..Default::default()
             })
         })
-    )
+    );
 }

@@ -21,11 +21,6 @@ impl CssProp for Color {
 
     fn parse(pair: Pair<Rule>) -> Option<Self> {
         for pair in pair.into_inner() {
-            println!(
-                "Color inner rule: {:?}, str: {}",
-                pair.as_rule(),
-                pair.as_str()
-            );
             let v = match pair.as_rule() {
                 CssRule::rgb => Rgb::parse(pair).map(|v| Self::Rgb(v)),
                 CssRule::rgba => Rgba::parse(pair).map(|v| Self::Rgba(v)),
@@ -69,7 +64,6 @@ impl CssProp for Rgb {
     }
 
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        println!("rule: {:?}, str: {}", pair.as_rule(), pair.as_str());
         let colors = pair
             .into_inner()
             .filter_map(|v| u8::parse(v))

@@ -5,6 +5,9 @@ mod number;
 mod box_model;
 mod color;
 mod display;
+mod selector;
+mod property;
+pub mod entry;
 
 pub use number::*;
 

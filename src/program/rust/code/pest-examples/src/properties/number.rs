@@ -45,9 +45,11 @@ impl CssProp for u8 {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         pair.as_str().parse::<u8>().map(|v| v).ok()
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}", self))
     }
@@ -61,12 +63,11 @@ impl CssProp for Int {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        match pair.as_rule() {
-            CssRule::int => pair.as_str().parse::<Int>().map(|v| v).ok(),
-            _ => None,
-        }
+        pair.as_str().parse::<Int>().map(|v| v).ok()
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}", self))
     }
@@ -80,12 +81,11 @@ impl CssProp for Float {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        match pair.as_rule() {
-            CssRule::float => pair.as_str().parse::<Float>().map(|v| v).ok(),
-            _ => None,
-        }
+        pair.as_str().parse::<Float>().map(|v| v).ok()
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}", self))
     }
@@ -102,9 +102,32 @@ impl CssProp for HexU8 {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         u8::from_str_radix(pair.as_str(), 16).map(|v| Self(v)).ok()
     }
+
+    fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
+        dest.write_fmt(format_args!("{}", self.0))
+    }
+}
+
+#[derive(Debug, PartialEq, Default, Clone, Copy)]
+pub struct PositiveNumber(pub f32);
+
+impl CssProp for PositiveNumber {
+    fn parse_str(i: &str) -> Option<Self> {
+        if let Some(pairs) = CssParser::parse(CssRule::positive_number, i).ok() {
+            Self::parse(pairs.last().unwrap())
+        } else {
+            None
+        }
+    }
+
+    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+        pair.as_str().parse::<f32>().ok().map(|v| Self(v))
+    }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}", self.0))
     }
@@ -126,7 +149,6 @@ impl CssProp for LengthPercentage {
     }
 
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        println!("rule: {:?}, str: {}", pair.as_rule(), pair.as_str());
         for pair in pair.into_inner() {
             let v = match pair.as_rule() {
                 CssRule::length => Length::parse(pair).map(|v| Self::Length(v)),
@@ -157,22 +179,19 @@ impl CssProp for Percentage {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        match pair.as_rule() {
-            CssRule::percentage => {
-                for inner_pair in pair.into_inner() {
-                    match inner_pair.as_rule() {
-                        CssRule::float => {
-                            return inner_pair.as_str().parse::<Float>().map(|v| Self(v)).ok()
-                        }
-                        _ => break,
-                    }
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                CssRule::float => {
+                    return inner_pair.as_str().parse::<Float>().map(|v| Self(v)).ok()
                 }
-                None
+                _ => break,
             }
-            _ => None,
         }
+        None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}", self.0))
     }
@@ -264,38 +283,34 @@ impl CssProp for Length {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        // println!("rule: {:?} text: {}", pair.as_rule(), pair.as_str());
-        match pair.as_rule() {
-            CssRule::length => {
-                for inner_pair in pair.into_inner() {
-                    match inner_pair.as_rule() {
-                        CssRule::px => {
-                            return Px::parse(inner_pair).map(|px| Self::Px(px));
-                        }
-                        CssRule::em => {
-                            return Em::parse(inner_pair).map(|em| Self::Em(em));
-                        }
-                        CssRule::rem => {
-                            return Rem::parse(inner_pair).map(|rem| Self::Rem(rem));
-                        }
-                        CssRule::cm => {
-                            return Cm::parse(inner_pair).map(|cm| Self::Cm(cm));
-                        }
-                        CssRule::mm => {
-                            return Mm::parse(inner_pair).map(|mm| Self::Mm(mm));
-                        }
-                        CssRule::inch => {
-                            return In::parse(inner_pair).map(|inch| Self::In(inch));
-                        }
-                        _ => {}
-                    };
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                CssRule::px => {
+                    return Px::parse(inner_pair).map(|px| Self::Px(px));
                 }
-                None
-            }
-            _ => None,
+                CssRule::em => {
+                    return Em::parse(inner_pair).map(|em| Self::Em(em));
+                }
+                CssRule::rem => {
+                    return Rem::parse(inner_pair).map(|rem| Self::Rem(rem));
+                }
+                CssRule::cm => {
+                    return Cm::parse(inner_pair).map(|cm| Self::Cm(cm));
+                }
+                CssRule::mm => {
+                    return Mm::parse(inner_pair).map(|mm| Self::Mm(mm));
+                }
+                CssRule::inch => {
+                    return In::parse(inner_pair).map(|inch| Self::In(inch));
+                }
+                _ => {}
+            };
         }
+        None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         match self {
             Length::Px(px) => px.to_css(dest),
@@ -385,12 +400,14 @@ impl CssProp for Px {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}px", self.0))
     }
@@ -414,13 +431,14 @@ impl CssProp for Em {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        // println!("rule: {:?} text: {}", pair.as_rule(), pair.as_str());
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}em", self.0))
     }
@@ -444,12 +462,14 @@ impl CssProp for Rem {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}rem", self.0))
     }
@@ -472,12 +492,14 @@ impl CssProp for Mm {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}mm", self.0))
     }
@@ -500,12 +522,14 @@ impl CssProp for Cm {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}cm", self.0))
     }
@@ -528,12 +552,14 @@ impl CssProp for In {
             None
         }
     }
+
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         for pair in pair.into_inner() {
             return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
         }
         None
     }
+
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         dest.write_fmt(format_args!("{}in", self.0))
     }
@@ -559,7 +585,6 @@ fn test_uint8() {
     let v = u8::parse_str("0");
     assert_eq!(v, Some(0));
 }
-
 
 #[test]
 fn test_boolean() {

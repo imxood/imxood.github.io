@@ -25,20 +25,11 @@ length  = ${ px | em | rem| mm | cm  | inch }
 percentage = ${ float ~ "%" }
 length_percentage = ${ length | percentage }
 
-/* color */
-
-rgb = { "rgb(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ ")" }
-rgba = { "rgba(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ "," ~ float  ~ ")" }
-hex = { "#" ~ hex_u8{3}  }
-color = { rgb | rgba | hex }
-
-/* border */
+/* some symbols */
 
 thin = { "thin" }
 medium = { "medium" }
 thick = { "thick" }
-
-line_width = { length | thin | medium | thick }
 
 none = { "none" }
 dotted = { "dotted" }
@@ -50,9 +41,62 @@ ridge = { "ridge" }
 inset = { "inset" }
 outset = { "outset" }
 
+inline = ${ "inline" }
+
+center = @{ "center" }
+start = @{ "start" }
+end = @{ "end" }
+
+row = @{ "row" }
+row_reverse = @{ "row_reverse" }
+column = @{ "column" }
+column_reverse = @{ "column_reverse" }
+
+nowrap = @{ "nowrap" }
+wrap = @{ "wrap" }
+wrap_reverse = @{ "wrap_reverse" }
+
+/* some functions */
+
+rgb = { "rgb(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ ")" }
+rgba = { "rgba(" ~ uint8 ~ "," ~ uint8 ~ "," ~ uint8 ~ "," ~ float  ~ ")" }
+hex = { "#" ~ hex_u8{3}  }
+
+line_width = { length | thin | medium | thick }
 border_width = { line_width{1, 4} }
 border_style = { none | dotted | dashed | solid | double | groove | ridge | inset | outset }
 
+align = ${ start | center | end }
+
+flex_grow = { positive_number }
+direction = @{ row | row_reverse | column | column_reverse }
+wrap_type = ${ nowrap | wrap | wrap_reverse }
+
+// 颜色
+color = { rgb | rgba | hex }
+
+// 主轴的方向
+flow = { "flow:" ~ direction ~ wrap_type ~ ";"? }
+
+// 每一个元素 在主轴上的对齐方式
+justify_items = { "justify_items:" ~ align ~ ";"? }
+
+// 所有元素作为整体 在主轴上的对齐方式
+justify_content = { "justify_content:" ~ align ~ ";"? }
+
+// 每一个元素 在纵轴上的对齐方式
+align_items = { "align_items:" ~ align ~ ";"? }
+
+// 所有元素作为整体 在纵轴上的对齐方式
+align_content = { "align_content:" ~ align ~ ";"? }
+
+// 单个子元素 在纵轴上的对齐方式
+align_item = { align }
+
+// flex布局
+flex_layout = { "flex(" ~ (flow | justify_items | justify_content | align_items | align_content)* ~ ")" }
+// flex(flow: row wrap; align_items: center; justify_content: end;)
+// "flex(flow: row wrap; align_items: center; justify_content: end;)"
 /* box model */
 
 width = ${ length_percentage }
@@ -61,45 +105,38 @@ padding = ${ length_percentage{1, 4} }
 margin = ${ length_percentage{1, 4} }
 border = { (border_width | border_style | color)+ }
 
-/* display */
-
-inline = ${ "inline" }
-
-center = @{ "center" }
-start = @{ "start" }
-end = @{ "end" }
-flex_start = @{ "flex_start" }
-flex_end = @{ "flex_end" }
-self_start = @{ "self_start" }
-self_end = @{ "self_end" }
-stretch = @{ "stretch" }
-space_around = @{ "space_around" }
-space_between = @{ "space_between" }
-baseline = @{ "baseline" }
-
-align = ${ start | center | end }
-
-row = @{ "row" }
-row_reverse = @{ "row_reverse" }
-column = @{ "column" }
-column_reverse = @{ "column_reverse" }
-
-direction = @{ row | row_reverse | column | column_reverse }
-
-nowrap = @{ "nowrap" }
-wrap = @{ "wrap" }
-wrap_reverse = @{ "wrap_reverse" }
-
-// wrap_type 主轴方向上的子元素铺满时, 自动换行
-wrap_type = ${ nowrap | wrap | wrap_reverse }
-
-// main_flow 主轴方向 及 自动换行
-main_flow = { "main_flow:" ~ direction ~ wrap_type ~ ";"? }
-main_items = { "main_items:" ~ align ~ ";"? }
-main_content = { "main_content:" ~ align ~ ";"? }
-cross_items = { "cross_items:" ~ align ~ ";"? }
-cross_content = { "cross_content:" ~ align ~ ";"? }
-
-flex_layout = { "flex(" ~ (main_flow | main_items | main_content | cross_items | cross_content)* ~ ")" }
+/* layouts */
 
 display = { inline? ~ flex_layout }
+
+flex = { (flex_grow | align_item)* }
+
+/* css file */
+name = @{ (ASCII_ALPHA | ASCII_DIGIT | "_")+ }
+id = @{ name }
+class_name = @{ name }
+tagname = @{ name }
+star = @{ "*" }
+selector = { (("#" ~ id) | (".") ~ class_name | tagname | star)+ }
+selectors = { selector ~ ("," ~ selector)* }
+properties = {
+    "{" ~ (
+        // box model
+        "width:" ~ width ~ ";"? |
+        "height:" ~ height ~ ";"? |
+        "padding:" ~ padding ~ ";"? |
+        "margin:" ~ margin ~ ";"? |
+        "border:" ~ border ~ ";"? |
+        // layout
+        "display:" ~ display ~ ";"? |
+        "flex:" ~ flex ~ ";"?
+    )+  ~ "}"
+}
+
+entity = {
+    selectors ~ properties
+}
+
+entities = {
+    SOI ~ entity+ ~ EOI
+}

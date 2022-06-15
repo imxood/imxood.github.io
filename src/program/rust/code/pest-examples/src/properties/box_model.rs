@@ -2,7 +2,7 @@ use super::{color::Color, number::*, CssProp};
 use crate::parser::*;
 use derive_more::Constructor;
 
-#[derive(Debug, Constructor, PartialEq)]
+#[derive(Debug, Constructor, PartialEq, Clone, Copy)]
 pub struct Width(LengthPercentage);
 
 impl CssProp for Width {
@@ -26,7 +26,7 @@ impl CssProp for Width {
     }
 }
 
-#[derive(Debug, Constructor, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy, Constructor)]
 pub struct Height(LengthPercentage);
 
 impl CssProp for Height {
@@ -50,6 +50,7 @@ impl CssProp for Height {
     }
 }
 
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Padding(LengthPercentage);
 
 impl CssProp for Padding {
@@ -70,6 +71,7 @@ impl CssProp for Padding {
     }
 }
 
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Margin(LengthPercentage);
 
 impl CssProp for Margin {
@@ -221,7 +223,6 @@ impl CssProp for BorderWidth {
             .into_inner()
             .filter_map(|pair| LineWidth::parse(pair))
             .collect::<Vec<_>>();
-        println!("line_widths: {:?}", &line_widths);
         let len = line_widths.len();
         match len {
             1 => {
@@ -304,8 +305,6 @@ impl CssProp for Border {
     fn parse(pair: Pair<CssRule>) -> Option<Self> {
         let mut border = Border::default();
         for pair in pair.into_inner() {
-            println!("rule: {:?}, str: {}", pair.as_rule(), pair.as_str());
-            // border_style | border_width | color
             match pair.as_rule() {
                 CssRule::border_style => BorderStyle::parse(pair).map(|v| {
                     border.border_style = v;
@@ -388,18 +387,22 @@ fn test_height() {
 
 #[test]
 fn test_border_width() {
-    let border_width = BorderWidth::parse_str("100px thin 300em").unwrap();
-    let border_width_css = border_width.to_css_string();
-    println!("border_width_css: {:?}", &border_width_css);
-    assert_eq!(&border_width_css, "100px thin 300em thin");
+    let border_width = BorderWidth::parse_str("100px thin 300em");
+    assert_eq!(
+        border_width,
+        Some(BorderWidth {
+            top: LineWidth::Length(Length::Px(Px::new(100.0))),
+            right: LineWidth::Thin,
+            bottom: LineWidth::Length(Length::Em(Em::new(300.0))),
+            left: LineWidth::Thin,
+        })
+    );
 }
 
 #[test]
 fn test_border_style() {
-    let border_style = BorderStyle::parse_str("solid").unwrap();
-    let border_style_css = border_style.to_css_string();
-    println!("border_style_css: {:?}", &border_style_css);
-    assert_eq!(&border_style_css, "solid");
+    let border_style = BorderStyle::parse_str("solid");
+    assert_eq!(border_style, Some(BorderStyle::Solid));
 }
 
 #[test]

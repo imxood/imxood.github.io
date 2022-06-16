@@ -10,6 +10,9 @@ hex_u8 = @{ ASCII_HEX_DIGIT ~ ASCII_HEX_DIGIT }
 int = @{ "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
 float = @{ int ~ ("." ~ ASCII_DIGIT*)? }
 positive_number = @{ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~ ("." ~ ASCII_DIGIT*)? }
+bool_true = @{ "true" }
+bool_false = @{ "false" }
+boolean = ${ bool_true | bool_false }
 
 px = ${ float ~ "px" }
 em = ${ float ~ "em" }

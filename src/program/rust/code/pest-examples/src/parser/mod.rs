@@ -1,6 +1,4 @@
-pub mod json;
-pub mod css;
+mod css;
 
+pub use css::{CssError, CssParser, CssResult, CssRule};
 pub use pest::{iterators::Pair, Parser};
-pub use css::Rule as CssRule;
-pub use css::CssParser;

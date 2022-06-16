@@ -20,60 +20,41 @@ pub enum Property {
 pub struct Properties(pub Vec<Property>);
 
 impl CssProp for Properties {
-    fn parse_str(i: &str) -> Option<Self> {
-        match CssParser::parse(CssRule::properties, i) {
-            Ok(pairs) => Self::parse(pairs.last().unwrap()),
-            Err(e) => {
-                panic!("error: {:?}", &e);
-            }
-        }
+    fn rule() -> CssRule {
+        CssRule::properties
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut properties = Self::default();
         for pair in pair.into_inner() {
             match pair.as_rule() {
                 /* box model */
                 CssRule::width => {
-                    Width::parse(pair).map(|v| {
-                        properties.0.push(Property::Width(v));
-                    });
+                    properties.0.push(Property::Width(Width::parse(pair)));
                 }
                 CssRule::height => {
-                    Height::parse(pair).map(|v| {
-                        properties.0.push(Property::Height(v));
-                    });
+                    properties.0.push(Property::Height(Height::parse(pair)));
                 }
                 CssRule::margin => {
-                    Margin::parse(pair).map(|v| {
-                        properties.0.push(Property::Margin(v));
-                    });
+                    properties.0.push(Property::Margin(Margin::parse(pair)));
                 }
                 CssRule::padding => {
-                    Padding::parse(pair).map(|v| {
-                        properties.0.push(Property::Padding(v));
-                    });
+                    properties.0.push(Property::Padding(Padding::parse(pair)));
                 }
                 CssRule::border => {
-                    Border::parse(pair).map(|v| {
-                        properties.0.push(Property::Border(v));
-                    });
+                    properties.0.push(Property::Border(Border::parse(pair)));
                 }
                 /* layout */
                 CssRule::display => {
-                    Display::parse(pair).map(|v| {
-                        properties.0.push(Property::Display(v));
-                    });
+                    properties.0.push(Property::Display(Display::parse(pair)));
                 }
                 CssRule::flex => {
-                    Flex::parse(pair).map(|v| {
-                        properties.0.push(Property::Flex(v));
-                    });
+                    properties.0.push(Property::Flex(Flex::parse(pair)));
                 }
-                _ => {}
+                _ => unreachable!(),
             }
         }
-        Some(properties)
+        properties
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -126,7 +107,7 @@ fn test_properties() {
     let properties = Properties::parse_str("{width: 100px; height: 200em}");
     assert_eq!(
         properties,
-        Some(Properties::new(vec![
+        Ok(Properties::new(vec![
             Property::Width(Width::new(LengthPercentage::Length(Length::Px(Px::new(
                 100.0
             ))))),

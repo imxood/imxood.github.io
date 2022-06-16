@@ -17,33 +17,29 @@ pub enum Selector {
 }
 
 impl CssProp for Selector {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::selector, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::selector
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut v = pair
             .into_inner()
-            .filter_map(|v| match v.as_rule() {
-                CssRule::id => Some(Self::Id(v.as_str().to_string())),
-                CssRule::class_name => Some(Self::Class(v.as_str().to_string())),
-                CssRule::tagname => Some(Self::Tag(v.as_str().to_string())),
-                CssRule::star => Some(Self::All),
-                _ => None,
+            .map(|v| match v.as_rule() {
+                CssRule::id => Self::Id(v.as_str().to_string()),
+                CssRule::class_name => Self::Class(v.as_str().to_string()),
+                CssRule::tagname => Self::Tag(v.as_str().to_string()),
+                CssRule::star => Self::All,
+                _ => unreachable!(),
             })
             .collect::<Vec<_>>();
         let len = v.len();
         if len == 1 {
-            return v.pop();
+            return v.pop().unwrap();
         }
         if len > 1 {
-            return Some(Self::Combinator(v));
+            return Self::Combinator(v);
         }
-        None
+        unreachable!()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -69,12 +65,12 @@ impl CssProp for Selector {
 #[test]
 fn test_selector() {
     let selector = Selector::parse_str("#id1");
-    assert_eq!(selector, Some(Selector::Id("id1".to_string()),));
+    assert_eq!(selector, Ok(Selector::Id("id1".to_string()),));
 
     let selector = Selector::parse_str("#id1 .user div");
     assert_eq!(
         selector,
-        Some(Selector::Combinator(vec![
+        Ok(Selector::Combinator(vec![
             Selector::Id("id1".to_string()),
             Selector::Class("user".to_string()),
             Selector::Tag("div".to_string())

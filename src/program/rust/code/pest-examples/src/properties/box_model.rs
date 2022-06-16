@@ -6,19 +6,13 @@ use derive_more::Constructor;
 pub struct Width(LengthPercentage);
 
 impl CssProp for Width {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::width, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::width
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return LengthPercentage::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(LengthPercentage::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -30,19 +24,13 @@ impl CssProp for Width {
 pub struct Height(LengthPercentage);
 
 impl CssProp for Height {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::height, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::height
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return LengthPercentage::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(LengthPercentage::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -54,16 +42,13 @@ impl CssProp for Height {
 pub struct Padding(LengthPercentage);
 
 impl CssProp for Padding {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::padding, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::padding
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        LengthPercentage::parse(pair).map(|v| Self(v))
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(LengthPercentage::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -75,16 +60,13 @@ impl CssProp for Padding {
 pub struct Margin(LengthPercentage);
 
 impl CssProp for Margin {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::margin, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::margin
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        LengthPercentage::parse(pair).map(|v| Self(v))
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(LengthPercentage::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -112,31 +94,24 @@ impl Default for BorderStyle {
 }
 
 impl CssProp for BorderStyle {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::border_style, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::border_style
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::none => Some(Self::None),
-                CssRule::dotted => Some(Self::Dotted),
-                CssRule::dashed => Some(Self::Dashed),
-                CssRule::solid => Some(Self::Solid),
-                CssRule::double => Some(Self::Double),
-                CssRule::groove => Some(Self::Groove),
-                CssRule::ridge => Some(Self::Ridge),
-                CssRule::inset => Some(Self::Inset),
-                CssRule::outset => Some(Self::Outset),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::none => Self::None,
+            CssRule::dotted => Self::Dotted,
+            CssRule::dashed => Self::Dashed,
+            CssRule::solid => Self::Solid,
+            CssRule::double => Self::Double,
+            CssRule::groove => Self::Groove,
+            CssRule::ridge => Self::Ridge,
+            CssRule::inset => Self::Inset,
+            CssRule::outset => Self::Outset,
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -169,26 +144,19 @@ impl Default for LineWidth {
 }
 
 impl CssProp for LineWidth {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::line_width, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::line_width
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::length => Length::parse(pair).map(|v| Self::Length(v)),
-                CssRule::thin => Some(Self::Thin),
-                CssRule::medium => Some(Self::Medium),
-                CssRule::thick => Some(Self::Thick),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::length => Self::Length(Length::parse(pair)),
+            CssRule::thin => Self::Thin,
+            CssRule::medium => Self::Medium,
+            CssRule::thick => Self::Thick,
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -210,64 +178,60 @@ pub struct BorderWidth {
 }
 
 impl CssProp for BorderWidth {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::border_width, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::border_width
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut line_widths = pair
             .into_inner()
-            .filter_map(|pair| LineWidth::parse(pair))
+            .map(|pair| LineWidth::parse(pair))
             .collect::<Vec<_>>();
         let len = line_widths.len();
         match len {
             1 => {
                 let v0 = line_widths.pop().unwrap();
-                Some(Self {
+                Self {
                     top: v0,
                     right: v0,
                     bottom: v0,
                     left: v0,
-                })
+                }
             }
             2 => {
                 let v1 = line_widths.pop().unwrap();
                 let v0 = line_widths.pop().unwrap();
-                Some(Self {
+                Self {
                     top: v0,
                     right: v1,
                     bottom: v0,
                     left: v1,
-                })
+                }
             }
             3 => {
                 let v2 = line_widths.pop().unwrap();
                 let v1 = line_widths.pop().unwrap();
                 let v0 = line_widths.pop().unwrap();
-                Some(Self {
+                Self {
                     top: v0,
                     right: v1,
                     bottom: v2,
                     left: v1,
-                })
+                }
             }
             4 => {
                 let v3 = line_widths.pop().unwrap();
                 let v2 = line_widths.pop().unwrap();
                 let v1 = line_widths.pop().unwrap();
                 let v0 = line_widths.pop().unwrap();
-                Some(Self {
+                Self {
                     top: v0,
                     right: v1,
                     bottom: v2,
                     left: v3,
-                })
+                }
             }
-            _ => None,
+            _ => unreachable!(),
         }
     }
 
@@ -291,34 +255,27 @@ pub struct Border {
 }
 
 impl CssProp for Border {
-    fn parse_str(i: &str) -> Option<Self> {
-        let ret = CssParser::parse(CssRule::border, i);
-        match ret {
-            Ok(pairs) => Self::parse(pairs.last().unwrap()),
-            Err(e) => {
-                println!("error: {:?}", &e);
-                panic!("error!")
-            }
-        }
+    fn rule() -> CssRule {
+        CssRule::border
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut border = Border::default();
         for pair in pair.into_inner() {
             match pair.as_rule() {
-                CssRule::border_style => BorderStyle::parse(pair).map(|v| {
-                    border.border_style = v;
-                }),
-                CssRule::border_width => BorderWidth::parse(pair).map(|v| {
-                    border.border_width = v;
-                }),
-                CssRule::color => Color::parse(pair).map(|v| {
-                    border.color = v;
-                }),
-                _ => None,
+                CssRule::border_style => {
+                    border.border_style = BorderStyle::parse(pair);
+                }
+                CssRule::border_width => {
+                    border.border_width = BorderWidth::parse(pair);
+                }
+                CssRule::color => {
+                    border.color = Color::parse(pair);
+                }
+                _ => unreachable!(),
             };
         }
-        Some(border)
+        border
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -336,7 +293,7 @@ fn test_width() {
     let v = Width::parse_str("90%");
     assert_eq!(
         v,
-        Some(Width::new(LengthPercentage::Percentage(Percentage::new(
+        Ok(Width::new(LengthPercentage::Percentage(Percentage::new(
             90.0
         ))))
     );
@@ -344,7 +301,7 @@ fn test_width() {
     let v = Width::parse_str("100px");
     assert_eq!(
         v,
-        Some(Width::new(LengthPercentage::Length(Length::Px(Px::new(
+        Ok(Width::new(LengthPercentage::Length(Length::Px(Px::new(
             100.0
         )))))
     );
@@ -352,7 +309,7 @@ fn test_width() {
     let v = Width::parse_str("100em");
     assert_eq!(
         v,
-        Some(Width::new(LengthPercentage::Length(Length::Em(Em::new(
+        Ok(Width::new(LengthPercentage::Length(Length::Em(Em::new(
             100.0
         )))))
     );
@@ -363,7 +320,7 @@ fn test_height() {
     let v = Height::parse_str("90%");
     assert_eq!(
         v,
-        Some(Height::new(LengthPercentage::Percentage(Percentage::new(
+        Ok(Height::new(LengthPercentage::Percentage(Percentage::new(
             90.0
         ))))
     );
@@ -371,7 +328,7 @@ fn test_height() {
     let v = Height::parse_str("100px");
     assert_eq!(
         v,
-        Some(Height::new(LengthPercentage::Length(Length::Px(Px::new(
+        Ok(Height::new(LengthPercentage::Length(Length::Px(Px::new(
             100.0
         )))))
     );
@@ -379,7 +336,7 @@ fn test_height() {
     let v = Height::parse_str("100em");
     assert_eq!(
         v,
-        Some(Height::new(LengthPercentage::Length(Length::Em(Em::new(
+        Ok(Height::new(LengthPercentage::Length(Length::Em(Em::new(
             100.0
         )))))
     );
@@ -390,7 +347,7 @@ fn test_border_width() {
     let border_width = BorderWidth::parse_str("100px thin 300em");
     assert_eq!(
         border_width,
-        Some(BorderWidth {
+        Ok(BorderWidth {
             top: LineWidth::Length(Length::Px(Px::new(100.0))),
             right: LineWidth::Thin,
             bottom: LineWidth::Length(Length::Em(Em::new(300.0))),
@@ -402,7 +359,7 @@ fn test_border_width() {
 #[test]
 fn test_border_style() {
     let border_style = BorderStyle::parse_str("solid");
-    assert_eq!(border_style, Some(BorderStyle::Solid));
+    assert_eq!(border_style, Ok(BorderStyle::Solid));
 }
 
 #[test]
@@ -410,7 +367,7 @@ fn test_border() {
     let border = Border::parse_str("solid");
     assert_eq!(
         border,
-        Some(Border {
+        Ok(Border {
             border_style: BorderStyle::Solid,
             ..Default::default()
         })
@@ -419,7 +376,7 @@ fn test_border() {
     let border = Border::parse_str("100rem 200px thin 300em solid");
     assert_eq!(
         border,
-        Some(Border {
+        Ok(Border {
             border_style: BorderStyle::Solid,
             border_width: BorderWidth {
                 top: LineWidth::Length(Length::Rem(Rem::new(100.0))),

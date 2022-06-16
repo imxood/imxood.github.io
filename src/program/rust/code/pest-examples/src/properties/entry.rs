@@ -10,25 +10,27 @@ use derive_more::Constructor;
 pub struct Entities(pub Vec<Entity>);
 
 impl CssProp for Entities {
-    fn parse_str(i: &str) -> Option<Self> {
-        match CssParser::parse(CssRule::entities, i) {
-            Ok(pairs) => Self::parse(pairs.last().unwrap()),
-            Err(e) => panic!("error: {:?}", e),
-        }
+    fn rule() -> CssRule {
+        CssRule::entities
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut entities = Entities::default();
         for pair in pair.into_inner() {
-            Entity::parse(pair).map(|v| entities.0.push(v));
+            match pair.as_rule() {
+                CssRule::entity => {
+                    entities.0.push(Entity::parse(pair));
+                }
+                _ => {}
+            }
         }
-        Some(entities)
+        entities
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
         for entity in self.0.iter() {
             entity.to_css(dest)?;
-            dest.write_str("\r\n")?;
+            dest.write_char('\n')?;
         }
         Ok(())
     }
@@ -41,39 +43,26 @@ pub struct Entity {
 }
 
 impl CssProp for Entity {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::entity, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::entity
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut entity = Self::default();
-        let mut changed = false;
         for pair in pair.into_inner() {
             match pair.as_rule() {
                 CssRule::selectors => {
                     for pair in pair.into_inner() {
-                        Selector::parse(pair).map(|v| entity.selectors.push(v));
+                        entity.selectors.push(Selector::parse(pair));
                     }
-                    changed = true;
                 }
                 CssRule::properties => {
-                    Properties::parse(pair).map(|v| {
-                        entity.properties = v;
-                    });
-                    changed = true;
+                    entity.properties = Properties::parse(pair);
                 }
-                _ => {}
+                _ => unreachable!(),
             }
         }
-        if changed {
-            Some(entity)
-        } else {
-            None
-        }
+        entity
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -99,7 +88,7 @@ fn test_entity() {
     let entity = Entity::parse_str("#id1 .user div, #id2 .user div { width: 100px; height: 200em}");
     assert_eq!(
         entity,
-        Some(Entity::new(
+        Ok(Entity::new(
             vec![
                 Selector::Combinator(vec![
                     Selector::Id("id1".to_string()),
@@ -123,7 +112,7 @@ fn test_entity() {
         ))
     );
 
-    println!("entity: {:?}", entity.unwrap().to_css_string());
+    println!("entity: {}", entity.unwrap().to_css_string());
 }
 
 #[test]
@@ -135,7 +124,7 @@ fn test_entities() {
         Entities::parse_str("#id0 .user div, #id1 .user div { width: 100px; height: 200em} #id2 .user div, #id3 .user div { width: 100px; height: 200em}");
     assert_eq!(
         entity,
-        Some(Entities(vec![
+        Ok(Entities(vec![
             Entity::new(
                 vec![
                     Selector::Combinator(vec![

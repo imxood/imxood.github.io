@@ -10,15 +10,11 @@ pub struct Display {
 }
 
 impl CssProp for Display {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::display, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::display
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut inline = false;
         for pair in pair.into_inner() {
             match pair.as_rule() {
@@ -26,15 +22,15 @@ impl CssProp for Display {
                     inline = true;
                 }
                 CssRule::flex_layout => {
-                    return FlexLayout::parse(pair).map(|v| Self {
+                    return Self {
                         inline,
-                        layout: Layout::FlexLayout(v),
-                    });
+                        layout: Layout::FlexLayout(FlexLayout::parse(pair)),
+                    };
                 }
                 _ => {}
             }
         }
-        None
+        Self::default()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -66,7 +62,7 @@ fn test_display() {
     );
     assert_eq!(
         display,
-        Some(Display {
+        Ok(Display {
             inline: true,
             layout: Layout::FlexLayout(FlexLayout {
                 flow: Flow {

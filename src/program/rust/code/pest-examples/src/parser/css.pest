@@ -10,9 +10,6 @@ hex_u8 = @{ ASCII_HEX_DIGIT ~ ASCII_HEX_DIGIT }
 int = @{ "-"? ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) }
 float = @{ int ~ ("." ~ ASCII_DIGIT*)? }
 positive_number = @{ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*) ~ ("." ~ ASCII_DIGIT*)? }
-bool_true = @{ "true" }
-bool_false = @{ "false" }
-boolean = ${ bool_true | bool_false }
 
 px = ${ float ~ "px" }
 em = ${ float ~ "em" }
@@ -68,8 +65,8 @@ border_style = { none | dotted | dashed | solid | double | groove | ridge | inse
 
 align = ${ start | center | end }
 
-flex_grow = { positive_number }
-direction = @{ row | row_reverse | column | column_reverse }
+flex_grow = ${ positive_number }
+direction = ${ row | row_reverse | column | column_reverse }
 wrap_type = ${ nowrap | wrap | wrap_reverse }
 
 // 颜色
@@ -95,8 +92,7 @@ align_item = { align }
 
 // flex布局
 flex_layout = { "flex(" ~ (flow | justify_items | justify_content | align_items | align_content)* ~ ")" }
-// flex(flow: row wrap; align_items: center; justify_content: end;)
-// "flex(flow: row wrap; align_items: center; justify_content: end;)"
+
 /* box model */
 
 width = ${ length_percentage }
@@ -109,7 +105,7 @@ border = { (border_width | border_style | color)+ }
 
 display = { inline? ~ flex_layout }
 
-flex = { (flex_grow | align_item)* }
+flex = { (flex_grow | align_item)+ }
 
 /* css file */
 name = @{ (ASCII_ALPHA | ASCII_DIGIT | "_")+ }

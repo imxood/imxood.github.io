@@ -12,24 +12,18 @@ pub type Float = f32;
 pub type Int = i32;
 
 impl CssProp for bool {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::boolean, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::boolean
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::bool_true => Some(true),
-                CssRule::bool_false => Some(false),
-                _ => None,
-            };
-            return v;
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        let v = match pair.as_rule() {
+            CssRule::bool_true => true,
+            CssRule::bool_false => false,
+            _ => unreachable!(),
+        };
+        return v;
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -38,16 +32,12 @@ impl CssProp for bool {
 }
 
 impl CssProp for u8 {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::uint8, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::uint8
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        pair.as_str().parse::<u8>().map(|v| v).ok()
+    fn parse(pair: Pair<CssRule>) -> Self {
+        pair.as_str().parse::<u8>().unwrap()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -56,16 +46,12 @@ impl CssProp for u8 {
 }
 
 impl CssProp for Int {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::int, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::int
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        pair.as_str().parse::<Int>().map(|v| v).ok()
+    fn parse(pair: Pair<CssRule>) -> Self {
+        pair.as_str().parse::<Int>().unwrap()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -74,16 +60,12 @@ impl CssProp for Int {
 }
 
 impl CssProp for Float {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::float, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::float
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        pair.as_str().parse::<Float>().map(|v| v).ok()
+    fn parse(pair: Pair<CssRule>) -> Self {
+        pair.as_str().parse::<Float>().unwrap()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -95,16 +77,14 @@ impl CssProp for Float {
 pub struct HexU8(pub u8);
 
 impl CssProp for HexU8 {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::hex_u8, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::hex_u8
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        u8::from_str_radix(pair.as_str(), 16).map(|v| Self(v)).ok()
+    fn parse(pair: Pair<CssRule>) -> Self {
+        u8::from_str_radix(pair.as_str(), 16)
+            .map(|v| Self(v))
+            .unwrap()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -116,16 +96,12 @@ impl CssProp for HexU8 {
 pub struct PositiveNumber(pub f32);
 
 impl CssProp for PositiveNumber {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::positive_number, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::positive_number
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        pair.as_str().parse::<f32>().ok().map(|v| Self(v))
+    fn parse(pair: Pair<CssRule>) -> Self {
+        pair.as_str().parse::<f32>().map(|v| Self(v)).unwrap()
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -140,24 +116,17 @@ pub enum LengthPercentage {
 }
 
 impl CssProp for LengthPercentage {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::length_percentage, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::length_percentage
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::length => Length::parse(pair).map(|v| Self::Length(v)),
-                CssRule::percentage => Percentage::parse(pair).map(|v| Self::Percentage(v)),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::length => Self::Length(Length::parse(pair)),
+            CssRule::percentage => Self::Percentage(Percentage::parse(pair)),
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -172,24 +141,16 @@ impl CssProp for LengthPercentage {
 pub struct Percentage(Float);
 
 impl CssProp for Percentage {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::percentage, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::percentage
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                CssRule::float => {
-                    return inner_pair.as_str().parse::<Float>().map(|v| Self(v)).ok()
-                }
-                _ => break,
-            }
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::float => Self(pair.as_str().parse::<Float>().unwrap()),
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -276,39 +237,21 @@ impl Length {
 }
 
 impl CssProp for Length {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::length, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::length
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                CssRule::px => {
-                    return Px::parse(inner_pair).map(|px| Self::Px(px));
-                }
-                CssRule::em => {
-                    return Em::parse(inner_pair).map(|em| Self::Em(em));
-                }
-                CssRule::rem => {
-                    return Rem::parse(inner_pair).map(|rem| Self::Rem(rem));
-                }
-                CssRule::cm => {
-                    return Cm::parse(inner_pair).map(|cm| Self::Cm(cm));
-                }
-                CssRule::mm => {
-                    return Mm::parse(inner_pair).map(|mm| Self::Mm(mm));
-                }
-                CssRule::inch => {
-                    return In::parse(inner_pair).map(|inch| Self::In(inch));
-                }
-                _ => {}
-            };
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::px => Self::Px(Px::parse(pair)),
+            CssRule::em => Self::Em(Em::parse(pair)),
+            CssRule::rem => Self::Rem(Rem::parse(pair)),
+            CssRule::cm => Self::Cm(Cm::parse(pair)),
+            CssRule::mm => Self::Mm(Mm::parse(pair)),
+            CssRule::inch => Self::In(In::parse(pair)),
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -393,19 +336,13 @@ impl Px {
 }
 
 impl CssProp for Px {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::px, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::px
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -424,19 +361,13 @@ impl Em {
 }
 
 impl CssProp for Em {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::em, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::em
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -455,19 +386,13 @@ impl Rem {
 }
 
 impl CssProp for Rem {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::rem, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::rem
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -485,19 +410,13 @@ impl Mm {
 }
 
 impl CssProp for Mm {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::mm, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::mm
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -515,19 +434,13 @@ impl Cm {
 }
 
 impl CssProp for Cm {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::cm, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::cm
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -545,19 +458,13 @@ impl In {
 }
 
 impl CssProp for In {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pairs) = CssParser::parse(CssRule::inch, i).ok() {
-            Self::parse(pairs.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::inch
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return pair.as_str().parse::<f32>().map(|v| Self::new(v)).ok();
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self::new(pair.as_str().parse::<f32>().unwrap())
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -568,68 +475,68 @@ impl CssProp for In {
 #[test]
 fn test_uint8() {
     let v = u8::parse_str("230");
-    assert_eq!(v, Some(230));
+    assert_eq!(v, Ok(230));
 
     let v = u8::parse_str("255");
-    assert_eq!(v, Some(255));
+    assert_eq!(v, Ok(255));
 
     let v = u8::parse_str("100");
-    assert_eq!(v, Some(100));
+    assert_eq!(v, Ok(100));
 
     let v = u8::parse_str("10");
-    assert_eq!(v, Some(10));
+    assert_eq!(v, Ok(10));
 
     let v = u8::parse_str("5");
-    assert_eq!(v, Some(5));
+    assert_eq!(v, Ok(5));
 
     let v = u8::parse_str("0");
-    assert_eq!(v, Some(0));
+    assert_eq!(v, Ok(0));
 }
 
 #[test]
 fn test_boolean() {
     let v = bool::parse_str("true");
-    assert_eq!(v, Some(true));
+    assert_eq!(v, Ok(true));
 
     let v = bool::parse_str("false");
-    assert_eq!(v, Some(false));
+    assert_eq!(v, Ok(false));
 
     let v = bool::parse_str("hello");
-    assert_eq!(v, None);
+    assert_eq!(v.is_err(), true);
 }
 
 #[test]
 fn test_int() {
     let v = Int::parse_str("128");
-    assert_eq!(v, Some(128));
+    assert_eq!(v, Ok(128));
 
     let v = Int::parse_str("0");
-    assert_eq!(v, Some(0));
+    assert_eq!(v, Ok(0));
 
     let v = Int::parse_str("100000000");
-    assert_eq!(v, Some(100000000));
+    assert_eq!(v, Ok(100000000));
 }
 
 #[test]
 fn test_float() {
     let v = Float::parse_str("0.0");
-    assert_eq!(v, Some(0.0));
+    assert_eq!(v, Ok(0.0));
 
     let v = Float::parse_str("-1.0");
-    assert_eq!(v, Some(-1.0));
+    assert_eq!(v, Ok(-1.0));
 
     let v = Float::parse_str("1.0");
-    assert_eq!(v, Some(1.0));
+    assert_eq!(v, Ok(1.0));
 }
 
 #[test]
 fn test_hex_u8() {
     let v = HexU8::parse_str("fa");
-    assert_eq!(v, Some(HexU8::new(0xfa)));
+    assert_eq!(v, Ok(HexU8::new(0xfa)));
 
     let v = HexU8::parse_str("faa");
-    assert_eq!(v, Some(HexU8::new(0xfa)));
+    assert_eq!(v, Ok(HexU8::new(0xfa)));
 
     let v = HexU8::parse_str("00");
-    assert_eq!(v, Some(HexU8::new(0)));
+    assert_eq!(v, Ok(HexU8::new(0)));
 }

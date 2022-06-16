@@ -8,35 +8,24 @@ pub struct Flex {
 }
 
 impl CssProp for Flex {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::flex, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::flex
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut flex = Self::default();
-        let mut changed = false;
         for pair in pair.into_inner() {
             match pair.as_rule() {
                 CssRule::flex_grow => {
-                    changed = true;
-                    FlexGrow::parse(pair).map(|v| flex.flex_grow = v);
+                    flex.flex_grow = FlexGrow::parse(pair);
                 }
                 CssRule::align_item => {
-                    changed = true;
-                    AlignItem::parse(pair).map(|v| flex.align_item = v);
+                    flex.align_item = AlignItem::parse(pair);
                 }
                 _ => {}
             };
         }
-        if changed {
-            Some(flex)
-        } else {
-            None
-        }
+        flex
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -51,23 +40,13 @@ impl CssProp for Flex {
 pub struct FlexGrow(pub PositiveNumber);
 
 impl CssProp for FlexGrow {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::flex_grow, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::flex_grow
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::positive_number => PositiveNumber::parse(pair).map(|v| Self(v)),
-                _ => None,
-            };
-            return v;
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(PositiveNumber::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -79,19 +58,13 @@ impl CssProp for FlexGrow {
 pub struct AlignItem(pub Align);
 
 impl CssProp for AlignItem {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::align_item, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::align_item
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return Align::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(Align::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -109,48 +82,35 @@ pub struct FlexLayout {
 }
 
 impl CssProp for FlexLayout {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::flex_layout, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::flex_layout
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut layout = Self::default();
-        println!("rule: {:?} str: {}", pair.as_rule(), pair.as_str());
         for pair in pair.into_inner() {
             match pair.as_rule() {
                 CssRule::flow => {
-                    Flow::parse(pair).map(|v| {
-                        layout.flow = v;
-                    });
+                    layout.flow = Flow::parse(pair);
                 }
                 CssRule::justify_items => {
-                    JustifyItems::parse(pair).map(|v| {
-                        layout.justify_items = v;
-                    });
+                    layout.justify_items = JustifyItems::parse(pair);
                 }
                 CssRule::justify_content => {
-                    JustifyContent::parse(pair).map(|v| {
-                        layout.justify_content = v;
-                    });
+                    layout.justify_content = JustifyContent::parse(pair);
                 }
                 CssRule::align_items => {
-                    AlignItems::parse(pair).map(|v| {
-                        layout.align_items = v;
-                    });
+                    layout.align_items = AlignItems::parse(pair);
                 }
                 CssRule::align_content => {
-                    AlignContent::parse(pair).map(|v| {
-                        layout.align_content = v;
-                    });
+                    layout.align_content = AlignContent::parse(pair);
                 }
-                _ => {}
+                _ => {
+                    unreachable!()
+                }
             }
         }
-        Some(layout)
+        layout
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -172,32 +132,24 @@ pub struct Flow {
 }
 
 impl CssProp for Flow {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::flow, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::flow
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
+    fn parse(pair: Pair<CssRule>) -> Self {
         let mut flow = Self::default();
         for pair in pair.into_inner() {
             match pair.as_rule() {
                 CssRule::direction => {
-                    Direction::parse(pair).map(|v| {
-                        flow.direction = v;
-                    });
+                    flow.direction = Direction::parse(pair);
                 }
                 CssRule::wrap_type => {
-                    WrapType::parse(pair).map(|v| {
-                        flow.wrap_type = v;
-                    });
+                    flow.wrap_type = WrapType::parse(pair);
                 }
                 _ => {}
             }
         }
-        Some(flow)
+        flow
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -223,26 +175,19 @@ impl Default for Direction {
 }
 
 impl CssProp for Direction {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::direction, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::direction
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::row => Some(Self::Row),
-                CssRule::row_reverse => Some(Self::RowReverse),
-                CssRule::column => Some(Self::Column),
-                CssRule::column_reverse => Some(Self::ColumnReverse),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::row => Self::Row,
+            CssRule::column => Self::Column,
+            CssRule::row_reverse => Self::RowReverse,
+            CssRule::column_reverse => Self::ColumnReverse,
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -269,25 +214,18 @@ impl Default for WrapType {
 }
 
 impl CssProp for WrapType {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::wrap_type, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::wrap_type
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::wrap => Some(Self::Wrap),
-                CssRule::nowrap => Some(Self::NoWrap),
-                CssRule::wrap_reverse => Some(Self::WrapReverse),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::wrap => Self::Wrap,
+            CssRule::nowrap => Self::NoWrap,
+            CssRule::wrap_reverse => Self::WrapReverse,
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -303,19 +241,13 @@ impl CssProp for WrapType {
 pub struct JustifyItems(pub Align);
 
 impl CssProp for JustifyItems {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::justify_items, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::justify_items
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return Align::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(Align::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -327,19 +259,13 @@ impl CssProp for JustifyItems {
 pub struct JustifyContent(pub Align);
 
 impl CssProp for JustifyContent {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::justify_content, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::justify_content
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return Align::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(Align::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -351,19 +277,13 @@ impl CssProp for JustifyContent {
 pub struct AlignItems(pub Align);
 
 impl CssProp for AlignItems {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::align_items, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::align_items
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return Align::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(Align::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -375,19 +295,13 @@ impl CssProp for AlignItems {
 pub struct AlignContent(pub Align);
 
 impl CssProp for AlignContent {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::align_content, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::align_content
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            return Align::parse(pair).map(|v| Self(v));
-        }
-        None
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        Self(Align::parse(pair))
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -409,25 +323,18 @@ impl Default for Align {
 }
 
 impl CssProp for Align {
-    fn parse_str(i: &str) -> Option<Self> {
-        if let Some(pair) = CssParser::parse(CssRule::align, i).ok() {
-            Self::parse(pair.last().unwrap())
-        } else {
-            None
-        }
+    fn rule() -> CssRule {
+        CssRule::align
     }
 
-    fn parse(pair: Pair<CssRule>) -> Option<Self> {
-        for pair in pair.into_inner() {
-            let v = match pair.as_rule() {
-                CssRule::start => Some(Align::Start),
-                CssRule::center => Some(Align::Center),
-                CssRule::end => Some(Align::End),
-                _ => None,
-            };
-            return v;
+    fn parse(pair: Pair<CssRule>) -> Self {
+        let pair = pair.into_inner().next().unwrap();
+        match pair.as_rule() {
+            CssRule::start => Align::Start,
+            CssRule::center => Align::Center,
+            CssRule::end => Align::End,
+            _ => unreachable!(),
         }
-        None
     }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result {
@@ -444,7 +351,7 @@ fn test_flex() {
     let flex = Flex::parse_str("1.0");
     assert_eq!(
         flex,
-        Some(Flex {
+        Ok(Flex {
             flex_grow: FlexGrow(PositiveNumber(1.0)),
             ..Default::default()
         })
@@ -454,18 +361,19 @@ fn test_flex() {
     assert_eq!(flex.to_css_string().as_str(), "1 start");
 
     let flex = Flex::parse_str("-1.0");
-    assert_eq!(flex, None);
+    println!("flex: {:?}", &flex);
+    assert_eq!(flex.is_err(), true);
 }
 
 #[test]
 fn test_flex_layout() {
     let layout = FlexLayout::parse_str("flex()");
-    assert_eq!(layout, Some(FlexLayout::default()));
+    assert_eq!(layout, Ok(FlexLayout::default()));
 
     let layout = FlexLayout::parse_str("flex(flow: row wrap;)");
     assert_eq!(
         layout,
-        Some(FlexLayout {
+        Ok(FlexLayout {
             flow: Flow {
                 direction: Direction::Row,
                 wrap_type: WrapType::Wrap
@@ -478,7 +386,7 @@ fn test_flex_layout() {
         FlexLayout::parse_str("flex(flow: row wrap; align_items: center; justify_content: end;)");
     assert_eq!(
         layout,
-        Some(FlexLayout {
+        Ok(FlexLayout {
             flow: Flow {
                 direction: Direction::Row,
                 wrap_type: WrapType::Wrap

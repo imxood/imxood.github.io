@@ -1,5 +1,4 @@
-use crate::parser::css::*;
-use pest::iterators::Pair;
+use crate::parser::*;
 
 mod number;
 mod box_model;
@@ -12,9 +11,16 @@ pub mod entry;
 pub use number::*;
 
 pub trait CssProp<T = Self> {
-    fn parse_str(i: &str) -> Option<T>;
+    fn rule() -> CssRule;
 
-    fn parse(pair: Pair<Rule>) -> Option<T>;
+    fn parse(pair: Pair<CssRule>) -> T;
+
+    fn parse_str(i: &str) -> CssResult<T> {
+        match CssParser::parse(Self::rule(), i) {
+            Ok(pairs) => Ok(Self::parse(pairs.last().unwrap())),
+            Err(e) => Err(CssError::ParseError(e)),
+        }
+    }
 
     fn to_css<W: core::fmt::Write>(&self, dest: &mut W) -> core::fmt::Result;
 

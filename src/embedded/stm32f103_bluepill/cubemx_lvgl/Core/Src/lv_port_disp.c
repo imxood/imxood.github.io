@@ -11,6 +11,7 @@
  *********************/
 #include <lv_port_disp.h>
 #include <stdbool.h>
+#include <lcd.h>
 
 /*********************
  *      DEFINES
@@ -21,6 +22,7 @@
 /**********************
  *      TYPEDEFS
  **********************/
+extern LCD_DrvTypeDef  *lcd_drv;
 
 /**********************
  *  STATIC PROTOTYPES
@@ -42,10 +44,6 @@ static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
-
-void lv_user_gui_init(void)
-{
-}
 
 void lv_port_disp_init(void)
 {
@@ -122,7 +120,7 @@ void lv_port_disp_init(void)
 /*Initialize your display and the required peripherals.*/
 static void disp_init(void)
 {
-    /*You code here*/
+    lcd_drv->Init();
 }
 
 volatile bool disp_flush_enabled = true;
@@ -158,6 +156,7 @@ static void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_
             {
                 /*Put a pixel to the display. For example:*/
                 /*put_px(x, y, *color_p)*/
+                lcd_drv->WritePixel(x, y, color_p->full);
                 color_p++;
             }
         }

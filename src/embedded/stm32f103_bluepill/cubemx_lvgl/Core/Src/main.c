@@ -18,11 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "lv_port_disp.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <lvgl/lvgl.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -89,16 +88,28 @@ int main(void)
   lv_init();
   lv_port_disp_init();
   // lv_port_indev_init();
-  lv_user_gui_init();
+
+  lv_obj_t *btn = lv_btn_create(lv_scr_act()); /*Add a button the current screen*/
+  lv_obj_set_pos(btn, 10, 10);                 /*Set its position*/
+  lv_obj_set_size(btn, 120, 50);               /*Set its size*/
+  // lv_obj_add_event_cb(btn, btn_event_cb, LV_EVENT_ALL, NULL); /*Assign a callback to the button*/
+
+  lv_obj_t *label = lv_label_create(btn); /*Add a label to the button*/
+  lv_label_set_text(label, "你好");     /*Set the labels text*/
+  lv_obj_center(label);
+
   /* USER CODE END 2 */
 
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    lv_task_handler();
-    HAL_Delay(LV_DISP_DEF_REFR_PERIOD);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    lv_task_handler();
+    lv_tick_inc(LV_DISP_DEF_REFR_PERIOD);
+    HAL_Delay(LV_DISP_DEF_REFR_PERIOD);
   }
   /* USER CODE END 3 */
 }

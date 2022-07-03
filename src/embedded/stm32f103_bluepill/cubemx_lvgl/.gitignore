@@ -1,0 +1,6 @@
+lvgl
+
+build
+*.d
+.vscode/**
+!.vscode/launch.json

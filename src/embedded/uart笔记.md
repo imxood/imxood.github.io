@@ -1,5 +1,9 @@
 # uart笔记
 
+协议分析
+
+https://blog.csdn.net/weixin_44625313/article/details/120015565
+
 ## 配置过程
 
 ### 中断模式

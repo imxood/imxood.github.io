@@ -1,0 +1,7 @@
+*.d
+build
+.vscode/**
+!.vscode/launch.json
+lvgl
+lv_drivers
+stm32-st7735

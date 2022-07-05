@@ -7,8 +7,6 @@ sudo apt install libasound2-dev libpulse-dev
 sudo apt install libsdl2-dev
 ```
 
-
-
 ## ubuntu 编译
 
 [参考](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu)

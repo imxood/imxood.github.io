@@ -11,7 +11,7 @@
     - [ESP32]()
         - [nanoESP32-C3](./embedded/esp32/nanoESP32-C3.md)
     - [STM32]()
-        - [Stm32 开发环境](./embedded/stm32%20开发环境.md)
+        - [Stm32 开发环境](./embedded/stm32f103_bluepill/stm32开发环境.md)
     - [RT-thread]()
         - [rt-thread](./embedded/rt-thread/art-pi.md)
     - [Rust嵌入式](./embedded/Rust嵌入式.md)

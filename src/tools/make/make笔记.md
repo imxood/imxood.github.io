@@ -2,10 +2,20 @@
 
 ps: 命令中的[..]代表是可选项, 加了后意义自然有了不同
 
-## 打印变量
+## 变量
 
-    $(warning $(XXX))
-    $(error $(XXX))
+    赋值
+        x = yes
+        x ?= yes, 如果 x 未定义 则 x = yes, 否则 不处理
+
+        x = $(y) yes, y的值会根据前文或后文推导, 即这一行代码后面如果更新了 y 的值, 则 x 的值也会变化 (即: x变量的值将会在整个makefile的最后被确定)
+        x := $(y) yes, y的值只能使用前面定义的变量
+
+        x += yes, 追加新的值, 作为一个列表了, 如: a b c
+
+    打印变量
+        $(warning $(XXX))
+        $(error $(XXX))
 
 ## 判断
 
@@ -33,15 +43,6 @@ ps: 命令中的[..]代表是可选项, 加了后意义自然有了不同
     clean :
         [-]rm *.o *.bin *.lst a.out
 
-## 变量定义
-
-    x = yes
-    x ?= yes, 如果 x 未定义, 则 x = yes
-
-    x := $(y) yes, y只能使用前面定义的变量, 如果不要冒号, 则y的值会根据后文推导
-
-    x += no, 追加
-
 ## 自动变量
 
     foo.o : foo.c
@@ -52,7 +53,18 @@ ps: 命令中的[..]代表是可选项, 加了后意义自然有了不同
 
 # make 函数
 
-    $(filter-out a.cpp, $(SRC)), 从SRC中排除指定的内容
+    从SRC中排除指定的内容:
+        $(filter-out a.cpp, $(SRC)), 从 SRC 中排除 a.cpp
+
+    子字符串替换:
+        TARGETS=111.cpp 222.cpp 333.cpp
+        OTARGETS=$(subst cpp,o,$(TARGETS)), 把 TARGETS变量 中的值中的 "cpp" 替换为 "o"
+
+    保留文件名, 去除路径:
+        $(notdir "a/b.c"), 得到 "b.c"
+
+    保留路径, 去除文件名:
+        $(dir "a/b.c"), 得到 "a/"
 
 
 ## 自动变量
@@ -99,5 +111,7 @@ ps: 命令中的[..]代表是可选项, 加了后意义自然有了不同
 ## 模式替换
 
 变量中的模式替换
+
+    OBJS := $(CSRCS:%.c=$(OBJODIR)/$(subdir_path)/%.o)
 
 规则中的模式替换

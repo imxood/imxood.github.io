@@ -1,3 +1,25 @@
+2022.07.14
+
+    cargo install tauri-cli --version "^1.0.0"
+
+    cargo tauri --help
+
+    mkdir tauri_started && cd tauri_started
+
+    cargo tauri init
+
+    根据提示:
+
+    ✔ What is your app name? · tauri_started
+    ✔ What should the window title be? · hello world
+    ✔ Where are your web assets (HTML/CSS/JS) located, relative to the "<current dir>/src-tauri/tauri.conf.json" file that will be created? · ../web
+    ✔ What is the url of your dev server? · ../web
+
+    cargo tauri dev
+
+    遇到一个错误 libpang.. 啥的 undefined 的错误.
+
+    临时解决方法: cp /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 src-tauri/target/debug/deps/
 
 ## 安装 tauri 环境
 

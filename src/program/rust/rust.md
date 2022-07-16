@@ -1,5 +1,81 @@
 # Rust in action
 
+## TAB键 自动补全
+
+参考: https://rust-lang.github.io/rustup/installation/index.html#enable-tab-completion-for-bash-fish-zsh-or-powershell
+
+### for linux
+
+mkdir -p ~/.local/share/bash-completion/completions
+rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
+
+
+## cargo 命令
+
+    安装常用的工具:
+
+        # 扩展cargo, 允许对 dependencies 的增删改
+        # 查看依赖关系
+        # 基于模板生成项目
+        # 宏展开
+        cargo install cargo-edit cargo-tree cargo-generate cargo-expand
+
+        ps:
+            cargo-edit 部分命令:
+                cargo add <crate>
+                cargo add <crate> --allow-prerelease, 允许使用beta版本的库
+                cargo rm <crate>
+                cargo upgrade
+
+            cargo-tree 部分命令:
+                cargo tree
+                cargo tree -e features
+                cargo tree -f "{p} {f}"
+
+        # 文档生成, 及插件: 用于数学表达式, 生成流程图表
+        cargo install mdbook mdbook-katex mdbook-mermaid
+
+    # 创建项目
+    cargo new hello_cargo
+
+    # 编译 并生成可执行程序
+    cd hello_cargo
+    cargo build
+    cargo build --release
+    cargo build --target thumbv7m-none-eabi
+
+    # 编译 但不生成 可执行程序
+    cargo check
+
+    # 运行目标程序 (也可以一步构建项目)
+    cargo run
+
+    # 创建
+    cargo new hello_world <--bin>, 创建一个二进制程序
+    cargo new hello_world --lib, 创建一个库
+
+    # 参数
+
+    不使用默认的features:
+        --no-default-features
+
+        指定features:
+            --features="FEATURE1 FEATURE2 ..."
+
+    # 显示详细的编译信息, 包括 build.rs 中的 print
+    cargo build -vv
+
+    # 安装 binutils 工具
+    cargo install cargo-binutils
+    rustup component add llvm-tools-preview
+
+## vscode 中 rust 的插件
+
+    1. rust-analyzer
+    2. Crates
+    3. Even Better TOML
+    4. CodeLLDB
+
 ## Ownership
 
     1. Rust 中的每一个变量都有一个 owner
@@ -95,7 +171,6 @@
     cargo build --target thumbv7m-none-eabi
 
 
-
 ## vscode 中 rust 的插件
 
     1. rust-analyzer
@@ -117,6 +192,14 @@
 
     运行:
         ./main
+
+## Rust 编译过程
+
+![](./images/rust编译过程.png)
+
+Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步编译到LLVM中间码(LLVM IR), 再交给LLVM, 最终生成机器码, 所以LLVM是编译器后端.
+
+宏展开 --> 语法语义分析 --> 生成抽象语法树 --> LLVM IR (LLVM中间语言) --> 通过LLVM生成机器码
 
 ## 使用 Cargo 创建项目
 
@@ -268,3 +351,13 @@
                 }),
             ],
         });
+
+## 异步
+
+    impl Future for Server
+
+    Server实例就可以直接使用 .await 了
+
+## 汇编
+
+    https://godbolt.org/ 二进制浏览器

@@ -17,7 +17,7 @@
 
     cargo tauri dev
 
-    遇到一个错误 libpang.. 啥的 undefined 的错误.
+    遇到一个错误 libpangoft2: undefined reference to `pango_font_get_hb_font'
 
     临时解决方法: cp /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 src-tauri/target/debug/deps/
 

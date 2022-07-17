@@ -1,0 +1,27 @@
+{
+  "name": "tauri-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.0.2",
+    "tdesign-vue-next": "^0.17.5",
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.0.4",
+    "@types/node": "^18.0.5",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "typescript": "^4.6.4",
+    "unplugin-auto-import": "^0.9.3",
+    "unplugin-vue-components": "^0.21.1",
+    "vite": "^3.0.0",
+    "vue-tsc": "^0.38.4"
+  }
+}

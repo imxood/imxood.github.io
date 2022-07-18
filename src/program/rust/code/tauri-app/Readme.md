@@ -9,3 +9,5 @@ cargo install tauri-cli --version "^1.0.0"
 yarn create tauri-app
 
 yarn tauri dev
+
+npm create svelte@latest svelte-web

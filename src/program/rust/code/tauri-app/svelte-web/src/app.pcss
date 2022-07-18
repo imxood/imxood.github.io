@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        @apply m-0 p-0 border-0 align-baseline;
+    }
+
+    html,
+    body {
+        @apply flex relative w-full h-full m-0 box-border text-gray-900;
+    }
+
+    body {
+        @apply overflow-y-hidden;
+    }
+}

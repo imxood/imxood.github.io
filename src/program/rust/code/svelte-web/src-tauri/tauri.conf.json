@@ -1,13 +1,13 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "yarn build",
+    "beforeBuildCommand": "",
     "beforeDevCommand": "yarn dev",
-    "devPath": "http://localhost:3000",
-    "distDir": "../dist"
+    "devPath": "http://127.0.0.1:5173/",
+    "distDir": "../public"
   },
   "package": {
-    "productName": "tauri-app",
+    "productName": "svelte-web",
     "version": "0.1.0"
   },
   "tauri": {
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "Tauri App",
+        "title": "svelte-web",
         "width": 800
       }
     ]

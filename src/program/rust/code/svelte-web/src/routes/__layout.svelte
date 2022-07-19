@@ -1,6 +1,9 @@
 <script>
     import "../app.pcss";
+    import Titlebar from "./titlebar.svelte"
 </script>
+
+<Titlebar />
 
 <nav>
     <a href="/">Home</a>

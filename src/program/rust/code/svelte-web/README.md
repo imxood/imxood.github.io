@@ -1,5 +1,9 @@
 # create-svelte
 
+## svelte kit
+
+npm create svelte@latest svelte-web
+
 ## 安装 daisyui
 
 yarn add -D tailwindcss postcss autoprefixer daisyui

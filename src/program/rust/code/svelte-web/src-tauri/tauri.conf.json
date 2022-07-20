@@ -4,7 +4,7 @@
     "beforeBuildCommand": "",
     "beforeDevCommand": "yarn dev",
     "devPath": "http://127.0.0.1:5173/",
-    "distDir": "../public"
+    "distDir": "../build"
   },
   "package": {
     "productName": "svelte-web",
@@ -12,7 +12,9 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "window": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -29,7 +31,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.mx.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -59,7 +61,8 @@
         "height": 600,
         "resizable": true,
         "title": "svelte-web",
-        "width": 800
+        "width": 800,
+        "decorations": false
       }
     ]
   }

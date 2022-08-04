@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "3.2.16", features = ["derive"] }
+event-listener = "2.5.3"
 notify = "5.0.0-pre.15"

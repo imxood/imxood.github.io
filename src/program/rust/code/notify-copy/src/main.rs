@@ -3,6 +3,7 @@
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
+use std::path::Path;
 use std::path::PathBuf;
 use std::sync::mpsc::RecvTimeoutError;
 use std::time::Duration;
@@ -18,17 +19,14 @@ use clap::Parser;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-#[clap(group(
-    ArgGroup::new("monitor source type")
-        .required(true)
-        .args(&["dir", "files"]),
-))]
 struct Cli {
-    #[clap(short, long)]
-    dir: Option<String>,
-
+    /// 要监控的源文件, 文件或目录, 可以设置多个
     #[clap(short, long, multiple_values(true))]
-    files: Option<Vec<String>>,
+    sources: Vec<String>,
+
+    /// 复制源文件 到 这个参数指定的目录
+    #[clap(short, long)]
+    target_dir: String,
 }
 
 fn main() {
@@ -36,58 +34,62 @@ fn main() {
 
     let cli = Cli::parse();
 
-    if cli.dir.is_none() && cli.files.is_none() {}
+    for source in &cli.sources {
+        println!("{}", source);
+    }
 
-    println!("{cli:?}");
+    println!("work_dir: {:?}", std::env::current_dir().unwrap());
 
-    // println!("current_dir: {:?}", std::env::current_dir().unwrap());
+    let (tx, rx) = std::sync::mpsc::channel();
+    let mut watcher = RecommendedWatcher::new(tx).unwrap();
 
-    // let log_file = PathBuf::from("test.log");
+    for source in &cli.sources {
+        watcher
+            .watch(Path::new(source), RecursiveMode::Recursive)
+            .unwrap();
+    }
 
-    // // 如果文件存在 则清空文件内容, 否则 创建新文件
-    // File::create(&log_file).unwrap();
+    let mut file_changed = false;
 
-    // let (tx, rx) = std::sync::mpsc::channel();
-    // let mut watcher = RecommendedWatcher::new(tx).unwrap();
-
-    // watcher.watch(&log_file, RecursiveMode::Recursive).unwrap();
-
-    // let mut file_changed = false;
-
-    // loop {
-    //     let e = rx.recv_timeout(Duration::from_secs(30));
-    //     match e {
-    //         Ok(Ok(Event {
-    //             kind: EventKind::Modify(modify),
-    //             paths,
-    //             attrs,
-    //         })) => {
-    //             if let Some(filename) = paths.get(0) {
-    //                 let abs_filepath = std::path::absolute(&log_file).unwrap();
-    //                 println!("{:?} 文件已修改", filename);
-    //                 if filename == &abs_filepath {
-    //                     file_changed = true;
-    //                     break;
-    //                 }
-    //             }
-    //             println!(
-    //                 "watch event -- modify: {:?}, paths: {:?}, attrs: {:?}",
-    //                 modify, paths, attrs
-    //             );
-    //         }
-    //         Ok(e) => {
-    //             println!("ignore watch event -- {:?}", e);
-    //         }
-    //         Err(RecvTimeoutError::Timeout) => {
-    //             println!("watch error -- timeout");
-    //             break;
-    //         }
-    //         Err(RecvTimeoutError::Disconnected) => {
-    //             println!("watch error -- {:?}", e);
-    //             break;
-    //         }
-    //     }
-    // }
+    loop {
+        let e = rx.recv();
+        match e {
+            Ok(Ok(Event {
+                kind: EventKind::Modify(modify),
+                paths,
+                attrs,
+            })) => {
+                if let Some(filename) = paths.get(0) {
+                    println!("{}", filename.to_str().unwrap());
+                    // let abs_filepath = std::path::absolute(&log_file).unwrap();
+                    // println!("{:?} 文件已修改", filename);
+                    // if filename == &abs_filepath {
+                    //     file_changed = true;
+                    //     break;
+                    // }
+                }
+                println!(
+                    "watch event -- modify: {:?}, paths: {:?}, attrs: {:?}",
+                    modify, paths, attrs
+                );
+            }
+            Ok(e) => {
+                println!("ignore watch event -- {:?}", e);
+            }
+            // Err(RecvTimeoutError::Timeout) => {
+            //     println!("watch error -- timeout");
+            //     break;
+            // }
+            // Err(RecvTimeoutError::Disconnected) => {
+            //     println!("watch error -- {:?}", e);
+            //     break;
+            // }
+            Err(e) => {
+                println!("watch error -- {:?}", e);
+                break;
+            }
+        }
+    }
 
     // if file_changed {
     //     let logfile = File::open(&log_file).expect("Error in reading file");

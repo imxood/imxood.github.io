@@ -29,7 +29,7 @@
 
 		stm32cubemx:
 			https://www.st.com/zh/development-tools/stm32cubemx.html
-			
+
 		stlink 驱动, 调试使用
 			https://my.st.com/content/my_st_com/zh/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-utilities/stsw-link009.html
 
@@ -67,8 +67,8 @@
 
 硬件接口:
 
-![](docs/stm32开发环境/2022-06-24-22-00-42.png)
-![](docs/stm32开发环境/2022-06-24-21-59-08.png)
+![](images/stm32开发环境/2022-06-24-22-00-42.png)
+![](images/stm32开发环境/2022-06-24-21-59-08.png)
 
 openocd 调试命令:
 
@@ -76,7 +76,7 @@ openocd -f interface/stlink.cfg -f board/stm32f103c8_blue_pill.cfg
 
 ## bluepill
 
-![](docs/stm32开发环境/2022-06-24-23-55-59.png)
+![](images/stm32开发环境/2022-06-24-23-55-59.png)
 
 ## 使用 rt-thread
 

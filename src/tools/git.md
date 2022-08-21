@@ -68,10 +68,13 @@ git push --set-upstream origin main
 ```
 ### 创建没有提交记录的新分支 并用这个分支 覆盖主分支
 
-    git checkout --orphan master, 创建没有commits的孤儿分支
+    git checkout --orphan main, 创建没有commits的孤儿分支
+    // rm * -rf && touch Readme.md, 做出一些修改
     git add . && git commit -m "."
 
-    git reset --hard master
+    git branch -d master 删除分支
+    git branch -m master 修改当前分支为master.
+
     git push -f, 强制提交本地记录
 
 

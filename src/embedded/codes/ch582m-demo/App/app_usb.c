@@ -12,12 +12,13 @@
  * INCLUDES
  */
 
-#include "app_usb.h"
 #include "CONFIG.h"
 #include "ble_usb_service.h"
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "stdint.h"
+
+#include "app_usb.h"
 
 /*********************************************************************
  * MACROS
@@ -32,25 +33,70 @@ UINT16 SetupReqLen;
 const uint8_t *pDescr;
 
 #define DevEP0SIZE 0x40
-// …Ë±∏√Ë ˆ∑˚
-const uint8_t MyDevDescr[] = {0x12, 0x01, 0x10, 0x01, 0xFF, 0x00, 0x00, DevEP0SIZE, 0x86,
-							  0x1A, 0x23, 0x75, 0x63, 0x02, 0x00, 0x02, 0x00, 0x01};
-// ≈‰÷√√Ë ˆ∑˚
-const uint8_t MyCfgDescr[] = {0x09, 0x02, 0x27, 0x00, 0x01, 0x01, 0x00, 0x80,
-							  0xf0, //≈‰÷√√Ë ˆ∑˚£¨Ω”ø⁄√Ë ˆ∑˚,∂Àµ„√Ë ˆ∑˚
-							  0x09, 0x04, 0x00, 0x00, 0x03, 0xff, 0x01, 0x02,
-							  0x00, 0x07, 0x05, 0x82, 0x02, 0x20, 0x00, 0x00, //≈˙¡ø…œ¥´∂Àµ„
-							  0x07, 0x05, 0x02, 0x02, 0x20, 0x00, 0x00,		  //≈˙¡øœ¬¥´∂Àµ„
-							  0x07, 0x05, 0x81, 0x03, 0x08, 0x00, 0x01};	  //÷–∂œ…œ¥´∂Àµ„
-// ”Ô—‘√Ë ˆ∑˚
+
+// ËÆæÂ§áÊèèËø∞Á¨¶
+const uint8_t MyDevDescr[] = {
+    0x12,        // ËÆæÂ§áÊèèËø∞Á¨¶ÁöÑÈïøÂ∫¶
+    0x01,        // Á±ªÂûã, ËÆæÂ§áÊèèËø∞Á¨¶
+    0x10, 0x01,  // 0110, USB ÁâàÊú¨Âè∑ 1.1
+    0xFF,        // ËÆæÂ§áÁ±ª‰ª£Á†Å, ff ‰∏∫ÂéÇÂïÜËá™ÂÆö‰πâÁ±ªÂûã
+    0x00,        // ËÆæÂ§áÂ≠êÁ±ª‰ª£Á†Å
+    0x00,        // ËÆæÂ§áÂçèËÆÆ
+    DevEP0SIZE,  // Á´ØÁÇπÊúÄÂ§ßÂåÖÂ§ßÂ∞è
+    0x86, 0x1A,  // ÂéÇÂïÜÁºñÂè∑
+    0x23, 0x75,  // ‰∫ßÂìÅÁºñÂè∑
+    0x63, 0x02,  // ËÆæÂ§áÂá∫ÂéÇÁºñÂè∑
+    0x00,        // ÊèèËø∞ÂéÇÂïÜÂ≠óÁ¨¶‰∏≤ÁöÑÁ¥¢Âºï
+    0x02,        // ÊèèËø∞‰∫ßÂìÅÂ≠óÁ¨¶‰∏≤ÁöÑÁ¥¢Âºï
+    0x00,        // ÊèèËø∞ËÆæÂ§áÂ∫èÂàóÂè∑Â≠óÁ¨¶‰∏≤ÁöÑÁ¥¢Âºï
+    0x01,        // ÈÖçÁΩÆÊï∞Èáè
+};
+
+// ÈÖçÁΩÆÊèèËø∞Á¨¶
+const uint8_t MyCfgDescr[] = {
+    0x09, 0x02, 0x27, 0x00, 0x01, 0x01, 0x00, 0x80, 0xf0,  // 09 ‰∏∫ÊèèËø∞Á¨¶ÈïøÂ∫¶
+                                                           // 02 ÈÖçÁΩÆÊèèËø∞Á¨¶
+                                                           // 0027 ‰∏∫ÊèèËø∞Á¨¶Ëá™Ë∫´ Âèä ÂÖ∂‰∏ãÁöÑÊâÄÊúâÊé•Âè£ Âíå ÊâÄÊúâÁ´ØÁÇπÁöÑÈïøÂ∫¶
+                                                           // 01 ËØ•ÈÖçÁΩÆ‰∏ÄÂÖ±ÂåÖÂê´1‰∏™Êé•Âè£, ‰∏çÂåÖÂê´0Á´ØÂè£
+                                                           // 01 Set_ConfigurationÂëΩ‰ª§ÈúÄË¶ÅÁöÑÂèÇÊï∞
+                                                           // 00 ÊèèËø∞ËØ•ÈÖçÁΩÆÂ≠óÁ¨¶‰∏≤ÁöÑÁ¥¢ÂºïÂÄº
+                                                           // 80 ‰æõÁîµÊ®°ÂºèÁöÑÈÄâÊã©, ‰æõÁîµÊ®°ÂºèÈÄâÊã©ÔºéBit4-0‰øùÁïôÔºåD7:ÊÄªÁ∫ø‰æõÁîµÔºåD6:Ëá™‰æõÁîµÔºåD5:ËøúÁ®ãÂî§ÈÜí
+                                                           // f0 ÊúÄÂ§ßÊ∂àËÄóÁîµÊµÅ, ‰ª•2mA‰∏∫Âçï‰Ωç. 2*0xf0 = 180mA
+
+    0x09, 0x04, 0x00, 0x00, 0x03, 0xff, 0x01, 0x02, 0x00,  // 09 ‰∏∫ÊèèËø∞Á¨¶ÈïøÂ∫¶
+                                                           // 04 Êé•Âè£ÊèèËø∞Á¨¶
+                                                           // 00 Êé•Âè£ÁºñÂè∑
+                                                           // 00 Â§áÁî®ÁöÑÊé•Âè£ÁºñÂè∑
+                                                           // 03 ËØ•Êé•Âè£‰ΩøÁî®ÁöÑÁ´ØÁÇπÂè∑, ‰∏çÂåÖÊã¨Á´ØÁÇπ0
+                                                           // ff Êé•Âè£Á±ªÂûã, Ê≠§Â§ÑË°®Á§∫ ÂéÇÂïÜÂÆö‰πâÁöÑËÆæÂ§áÁ±ª
+                                                           // 01 Êé•Âè£Â≠êÁ±ªÂûã, XX
+                                                           // 02 Êé•Âè£ÂçèËÆÆ
+                                                           // 00 ÊèèËø∞ËØ•Êé•Âè£ÁöÑÂ≠óÁ¨¶‰∏≤Á¥¢ÂºïÂÄº
+
+    0x07, 0x05, 0x82, 0x02, 0x20, 0x00, 0x00,  // 09 ‰∏∫ÊèèËø∞Á¨¶ÈïøÂ∫¶
+                                               // 05 Á´ØÁÇπÊèèËø∞Á¨¶, ÊâπÈáè‰∏ä‰º†Á´ØÁÇπ
+
+    0x07, 0x05, 0x02, 0x02, 0x20, 0x00, 0x00,  // 09 ‰∏∫ÊèèËø∞Á¨¶ÈïøÂ∫¶
+                                               // 05 Á´ØÁÇπÊèèËø∞Á¨¶, ÊâπÈáè‰∏ã‰º†Á´ØÁÇπ
+
+    0x07, 0x05, 0x81, 0x03, 0x08, 0x00, 0x01,  // 09 ‰∏∫ÊèèËø∞Á¨¶ÈïøÂ∫¶
+                                               // 05 Á´ØÁÇπÊèèËø∞Á¨¶, ‰∏≠Êñ≠‰∏ä‰º†Á´ØÁÇπ
+};
+
+// ËØ≠Ë®ÄÊèèËø∞Á¨¶
 const uint8_t MyLangDescr[] = {0x04, 0x03, 0x09, 0x04};
-// ≥ßº“–≈œ¢
-const uint8_t MyManuInfo[] = {0x0E, 0x03, 'm', 0, 'x', 0, '_', 0, 'd', 0, 'e', 0, 'v', 0};
-// ≤˙∆∑–≈œ¢
+
+// ÂéÇÂÆ∂‰ø°ÊÅØ
+const uint8_t MyManuInfo[] = {
+    0x0E,  // 0e ‰∏∫ÊèèËø∞Á¨¶ÁöÑÈïøÂ∫¶
+    0x03,  // 03 Â≠óÁ¨¶‰∏≤ÊèèËø∞Á¨¶
+    'm', 0, 'x', 0, '_', 0, 'd', 0, 'e', 0, 'v', 0};
+
+// ‰∫ßÂìÅ‰ø°ÊÅØ
 const uint8_t MyProdInfo[] = {0x0C, 0x03, 'C', 0, 'H', 0, '5', 0, '8', 0, '2', 0};
-/*≤˙∆∑√Ë ˆ∑˚*/
-const uint8_t StrDesc[28] = {0x1C, 0x03, 0x55, 0x00, 0x53, 0x00, 0x42, 0x00, 0x32, 0x00, 0x2E, 0x00, 0x30, 0x00,
-							 0x2D, 0x00, 0x53, 0x00, 0x65, 0x00, 0x72, 0x00, 0x69, 0x00, 0x61, 0x00, 0x6C, 0x00};
+
+/*‰∫ßÂìÅÊèèËø∞Á¨¶*/
+const uint8_t StrDesc[] = {0x15, 0x03, 'm', 0, 'x', 0, '-', 0, 'p', 0, 'r', 0, 'o', 0, 'd', 0, 'u', 0, 'c', 0, 't'};
 
 const uint8_t Return1[2] = {0x31, 0x00};
 const uint8_t Return2[2] = {0xC3, 0x00};
@@ -60,11 +106,11 @@ const uint8_t Return3[2] = {0x9F, 0xEE};
  * LOCAL VARIABLES
  */
 
-/******** ”√ªß◊‘∂®“Â∑÷≈‰∂Àµ„RAM ****************************************/
-__attribute__((aligned(4))) uint8_t EP0_Databuf[64 + 64 + 64]; // ep0(64)+ep4_out(64)+ep4_in(64)
-__attribute__((aligned(4))) uint8_t EP1_Databuf[64 + 64];	   // ep1_out(64)+ep1_in(64)
-__attribute__((aligned(4))) uint8_t EP2_Databuf[64 + 64];	   // ep2_out(64)+ep2_in(64)
-__attribute__((aligned(4))) uint8_t EP3_Databuf[64 + 64];	   // ep3_out(64)+ep3_in(64)
+/******** Áî®Êà∑Ëá™ÂÆö‰πâÂàÜÈÖçÁ´ØÁÇπRAM ****************************************/
+__attribute__((aligned(4))) uint8_t EP0_Databuf[64 + 64 + 64];  // ep0(64)+ep4_out(64)+ep4_in(64)
+__attribute__((aligned(4))) uint8_t EP1_Databuf[64 + 64];       // ep1_out(64)+ep1_in(64)
+__attribute__((aligned(4))) uint8_t EP2_Databuf[64 + 64];       // ep2_out(64)+ep2_in(64)
+__attribute__((aligned(4))) uint8_t EP3_Databuf[64 + 64];       // ep3_out(64)+ep3_in(64)
 
 /*********************************************************************
  * PUBLIC FUNCTIONS
@@ -73,463 +119,412 @@ __attribute__((aligned(4))) uint8_t EP3_Databuf[64 + 64];	   // ep3_out(64)+ep3_
 /*********************************************************************
  * @fn      app_usb_init
  *
- * @brief   ≥ı ºªØusb
+ * @brief   ÂàùÂßãÂåñusb
  *
  * @return  none
  */
-void app_usb_init()
-{
-	pEP0_RAM_Addr = EP0_Databuf;
-	pEP1_RAM_Addr = EP1_Databuf;
-	pEP2_RAM_Addr = EP2_Databuf;
-	pEP3_RAM_Addr = EP3_Databuf;
+void app_usb_init() {
+    pEP0_RAM_Addr = EP0_Databuf;
+    pEP1_RAM_Addr = EP1_Databuf;
+    pEP2_RAM_Addr = EP2_Databuf;
+    pEP3_RAM_Addr = EP3_Databuf;
 
-	USB_DeviceInit();
-	PFIC_EnableIRQ(USB_IRQn);
+    USB_DeviceInit();
+    PFIC_EnableIRQ(USB_IRQn);
 }
 
 /*********************************************************************
  * @fn      USBSendData
  *
- * @brief   ∑¢ÀÕ ˝æ›∏¯÷˜ª˙
+ * @brief   ÂèëÈÄÅÊï∞ÊçÆÁªô‰∏ªÊú∫
  *
  * @return  none
  */
-void USBSendData(uint8_t *SendBuf, uint8_t l)
-{
-	memcpy(pEP2_IN_DataBuf, SendBuf, l);
-	DevEP2_IN_Deal(l);
+void USBSendData(uint8_t *SendBuf, uint8_t l) {
+    memcpy(pEP2_IN_DataBuf, SendBuf, l);
+    DevEP2_IN_Deal(l);
 }
 
 /*********************************************************************
  * @fn      DevEP1_OUT_Deal
  *
- * @brief   ∂Àµ„1 ˝æ›¥¶¿Ì
+ * @brief   Á´ØÁÇπ1Êï∞ÊçÆÂ§ÑÁêÜ
  *
  * @return  none
  */
-void DevEP1_OUT_Deal(uint8_t l)
-{ /* ”√ªßø…◊‘∂®“Â */
+void DevEP1_OUT_Deal(uint8_t l) { /* Áî®Êà∑ÂèØËá™ÂÆö‰πâ */
 }
 
 /*********************************************************************
  * @fn      DevEP2_OUT_Deal
  *
- * @brief   ∂Àµ„2 ˝æ›¥¶¿Ì
+ * @brief   Á´ØÁÇπ2Êï∞ÊçÆÂ§ÑÁêÜ
  *
  * @return  none
  */
-void DevEP2_OUT_Deal(uint8_t l)
-{ /* ”√ªßø…◊‘∂®“Â */
-	uint8_t i;
+void DevEP2_OUT_Deal(uint8_t l) { /* Áî®Êà∑ÂèØËá™ÂÆö‰πâ */
+    uint8_t i;
 
-	app_usb_notify(pEP2_OUT_DataBuf, l);
+    app_usb_notify(pEP2_OUT_DataBuf, l);
 }
 
 /*********************************************************************
  * @fn      DevEP3_OUT_Deal
  *
- * @brief   ∂Àµ„3 ˝æ›¥¶¿Ì
+ * @brief   Á´ØÁÇπ3Êï∞ÊçÆÂ§ÑÁêÜ
  *
  * @return  none
  */
-void DevEP3_OUT_Deal(uint8_t l)
-{ /* ”√ªßø…◊‘∂®“Â */
+void DevEP3_OUT_Deal(uint8_t l) { /* Áî®Êà∑ÂèØËá™ÂÆö‰πâ */
 }
 
 /*********************************************************************
  * @fn      DevEP4_OUT_Deal
  *
- * @brief   ∂Àµ„4 ˝æ›¥¶¿Ì
+ * @brief   Á´ØÁÇπ4Êï∞ÊçÆÂ§ÑÁêÜ
  *
  * @return  none
  */
-void DevEP4_OUT_Deal(uint8_t l)
-{ /* ”√ªßø…◊‘∂®“Â */
+void DevEP4_OUT_Deal(uint8_t l) { /* Áî®Êà∑ÂèØËá™ÂÆö‰πâ */
 }
 
 /*********************************************************************
  * @fn      USB_DevTransProcess
  *
- * @brief   USB ¥´ ‰¥¶¿Ì∫Ø ˝
+ * @brief   USB ‰º†ËæìÂ§ÑÁêÜÂáΩÊï∞
  *
  * @return  none
  */
-void USB_DevTransProcess(void)
-{
-	uint8_t len, chtype;
-	uint8_t intflag, errflag = 0;
+void USB_DevTransProcess(void) {
+    uint8_t len, chtype;
+    uint8_t intflag, errflag = 0;
 
-	intflag = R8_USB_INT_FG;
+    intflag = R8_USB_INT_FG;
 
-	// “ª∏ˆ∞¸¥´ ‰Ω· ¯, –Ë“™∏˘æ›≤ªÕ¨µƒ∞¸¿‡–Õ, ¥¶¿Ì∫Õªÿ”¶
-	if (intflag & RB_UIF_TRANSFER)
-	{
-		// IN∞¸ / OUT∞¸ / SOF∞¸
-		if ((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN) // ∑«ø’œ–
-		{
-			// switch (¡Ó≈∆∞¸ & ∂Àµ„)
-			switch (R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))
-			// ∑÷Œˆ≤Ÿ◊˜¡Ó≈∆∫Õ∂Àµ„∫≈
-			{
-			// IN∞¸,∂Àµ„Œ™0 (SETUP∞¸)
-			case UIS_TOKEN_IN:
-			{
-				switch (SetupReqCode)
-				{
-				// ªÒ»°√Ë ˆ∑˚
-				case USB_GET_DESCRIPTOR:
-					// ∂Àµ„0 ˝æ›∞¸µƒ◊Ó¥Û≥§∂»Œ™ DevEP0SIZE, º¥64∏ˆ◊÷Ω⁄
-					len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen; // ±æ¥Œ¥´ ‰≥§∂»
-					memcpy(pEP0_DataBuf, pDescr, len);							/* º”‘ÿ…œ¥´ ˝æ› */
-					SetupReqLen -= len;
-					pDescr += len;
-					R8_UEP0_T_LEN = len;
-					R8_UEP0_CTRL ^= RB_UEP_T_TOG; // ∑≠◊™
-					break;
-					// …Ë÷√√Ë ˆ∑˚
-				case USB_SET_ADDRESS:
-					R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
-					R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-					break;
-				default:
-					R8_UEP0_T_LEN = 0; // ◊¥Ã¨Ω◊∂ŒÕÍ≥…÷–∂œªÚ’ﬂ ««ø÷∆…œ¥´0≥§∂» ˝æ›∞¸Ω· ¯øÿ÷∆¥´ ‰
-					R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-					break;
-				}
-			}
-			break;
-				// OUT∞¸,∂Àµ„Œ™0
-			case UIS_TOKEN_OUT:
-			{
-				len = R8_USB_RX_LEN;
-			}
-			break;
+    // ‰∏Ä‰∏™ÂåÖ‰º†ËæìÁªìÊùü, ÈúÄË¶ÅÊ†πÊçÆ‰∏çÂêåÁöÑÂåÖÁ±ªÂûã, Â§ÑÁêÜÂíåÂõûÂ∫î
+    if (intflag & RB_UIF_TRANSFER) {
+        // INÂåÖ / OUTÂåÖ / SOFÂåÖ
+        if ((R8_USB_INT_ST & MASK_UIS_TOKEN) != MASK_UIS_TOKEN)  // ÈùûÁ©∫Èó≤
+        {
+            // switch (‰ª§ÁâåÂåÖ & Á´ØÁÇπ)
+            switch (R8_USB_INT_ST & (MASK_UIS_TOKEN | MASK_UIS_ENDP))
+            // ÂàÜÊûêÊìç‰Ωú‰ª§ÁâåÂíåÁ´ØÁÇπÂè∑
+            {
+                // INÂåÖ,Á´ØÁÇπ‰∏∫0 (SETUPÂåÖ)
+                case UIS_TOKEN_IN: {
+                    switch (SetupReqCode) {
+                        // Ëé∑ÂèñÊèèËø∞Á¨¶
+                        case USB_GET_DESCRIPTOR:
+                            // Á´ØÁÇπ0Êï∞ÊçÆÂåÖÁöÑÊúÄÂ§ßÈïøÂ∫¶‰∏∫ DevEP0SIZE, Âç≥64‰∏™Â≠óËäÇ
+                            len = SetupReqLen >= DevEP0SIZE ? DevEP0SIZE : SetupReqLen;  // Êú¨Ê¨°‰º†ËæìÈïøÂ∫¶
+                            memcpy(pEP0_DataBuf, pDescr, len);                           /* Âä†ËΩΩ‰∏ä‰º†Êï∞ÊçÆ */
+                            SetupReqLen -= len;
+                            pDescr += len;
+                            R8_UEP0_T_LEN = len;
+                            R8_UEP0_CTRL ^= RB_UEP_T_TOG;  // ÁøªËΩ¨
+                            break;
+                            // ËÆæÁΩÆÊèèËø∞Á¨¶
+                        case USB_SET_ADDRESS:
+                            R8_USB_DEV_AD = (R8_USB_DEV_AD & RB_UDA_GP_BIT) | SetupReqLen;
+                            R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
+                            break;
+                        default:
+                            R8_UEP0_T_LEN = 0;  // Áä∂ÊÄÅÈò∂ÊÆµÂÆåÊàê‰∏≠Êñ≠ÊàñËÄÖÊòØÂº∫Âà∂‰∏ä‰º†0ÈïøÂ∫¶Êï∞ÊçÆÂåÖÁªìÊùüÊéßÂà∂‰º†Ëæì
+                            R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
+                            break;
+                    }
+                    break;
+                }
+                    // OUTÂåÖ,Á´ØÁÇπ‰∏∫0
+                case UIS_TOKEN_OUT: {
+                    len = R8_USB_RX_LEN;
+                    break;
+                }
 
-				// OUT∞¸,∂Àµ„Œ™1
-			case UIS_TOKEN_OUT | 1:
-			{
-				if (R8_USB_INT_ST & RB_UIS_TOG_OK)
-				{ // ≤ªÕ¨≤Ωµƒ ˝æ›∞¸Ω´∂™∆˙
-					len = R8_USB_RX_LEN;
-					DevEP1_OUT_Deal(len);
-				}
-			}
-			break;
+                    // OUTÂåÖ,Á´ØÁÇπ‰∏∫1
+                case UIS_TOKEN_OUT | 1: {
+                    if (R8_USB_INT_ST & RB_UIS_TOG_OK) {  // ‰∏çÂêåÊ≠•ÁöÑÊï∞ÊçÆÂåÖÂ∞Ü‰∏¢ÂºÉ
+                        len = R8_USB_RX_LEN;
+                        DevEP1_OUT_Deal(len);
+                    }
+                    break;
+                }
 
-				// IN∞¸,∂Àµ„Œ™1
-			case UIS_TOKEN_IN | 1:
-				R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
-				break;
+                    // INÂåÖ,Á´ØÁÇπ‰∏∫1
+                case UIS_TOKEN_IN | 1:
+                    R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
+                    break;
 
-				// OUT∞¸,∂Àµ„Œ™2
-			case UIS_TOKEN_OUT | 2:
-			{
-				if (R8_USB_INT_ST & RB_UIS_TOG_OK)
-				{ // ≤ªÕ¨≤Ωµƒ ˝æ›∞¸Ω´∂™∆˙
-					len = R8_USB_RX_LEN;
-					DevEP2_OUT_Deal(len);
-				}
-			}
-			break;
+                    // OUTÂåÖ,Á´ØÁÇπ‰∏∫2
+                case UIS_TOKEN_OUT | 2: {
+                    if (R8_USB_INT_ST & RB_UIS_TOG_OK) {  // ‰∏çÂêåÊ≠•ÁöÑÊï∞ÊçÆÂåÖÂ∞Ü‰∏¢ÂºÉ
+                        len = R8_USB_RX_LEN;
+                        DevEP2_OUT_Deal(len);
+                    }
+                    break;
+                }
 
-				// IN∞¸,∂Àµ„Œ™2
-			case UIS_TOKEN_IN | 2:
-				R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
-				break;
+                    // INÂåÖ,Á´ØÁÇπ‰∏∫2
+                case UIS_TOKEN_IN | 2:
+                    R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
+                    break;
 
-				// OUT∞¸,∂Àµ„Œ™2
-			case UIS_TOKEN_OUT | 3:
-			{
-				if (R8_USB_INT_ST & RB_UIS_TOG_OK)
-				{ // ≤ªÕ¨≤Ωµƒ ˝æ›∞¸Ω´∂™∆˙
-					len = R8_USB_RX_LEN;
-					DevEP3_OUT_Deal(len);
-				}
-			}
-			break;
+                    // OUTÂåÖ,Á´ØÁÇπ‰∏∫2
+                case UIS_TOKEN_OUT | 3: {
+                    if (R8_USB_INT_ST & RB_UIS_TOG_OK) {  // ‰∏çÂêåÊ≠•ÁöÑÊï∞ÊçÆÂåÖÂ∞Ü‰∏¢ÂºÉ
+                        len = R8_USB_RX_LEN;
+                        DevEP3_OUT_Deal(len);
+                    }
+                    break;
+                }
 
-				// IN∞¸,∂Àµ„Œ™3
-			case UIS_TOKEN_IN | 3:
-				R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
-				break;
+                    // INÂåÖ,Á´ØÁÇπ‰∏∫3
+                case UIS_TOKEN_IN | 3:
+                    R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
+                    break;
 
-				// OUT∞¸,∂Àµ„Œ™4
-			case UIS_TOKEN_OUT | 4:
-			{
-				if (R8_USB_INT_ST & RB_UIS_TOG_OK)
-				{
-					R8_UEP4_CTRL ^= RB_UEP_R_TOG;
-					len = R8_USB_RX_LEN;
-					DevEP4_OUT_Deal(len);
-				}
-			}
-			break;
+                    // OUTÂåÖ,Á´ØÁÇπ‰∏∫4
+                case UIS_TOKEN_OUT | 4: {
+                    if (R8_USB_INT_ST & RB_UIS_TOG_OK) {
+                        R8_UEP4_CTRL ^= RB_UEP_R_TOG;
+                        len = R8_USB_RX_LEN;
+                        DevEP4_OUT_Deal(len);
+                    }
+                    break;
+                }
 
-				// IN∞¸,∂Àµ„Œ™4
-			case UIS_TOKEN_IN | 4:
-				R8_UEP4_CTRL ^= RB_UEP_T_TOG;
-				R8_UEP4_CTRL = (R8_UEP4_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
-				break;
+                    // INÂåÖ,Á´ØÁÇπ‰∏∫4
+                case UIS_TOKEN_IN | 4:
+                    R8_UEP4_CTRL ^= RB_UEP_T_TOG;
+                    R8_UEP4_CTRL = (R8_UEP4_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
+                    break;
 
-			default:
-				break;
-			}
-			R8_USB_INT_FG = RB_UIF_TRANSFER;
-		}
-		// SETUP∞¸
-		if (R8_USB_INT_ST & RB_UIS_SETUP_ACT) // Setup∞¸¥¶¿Ì
-		{
-			R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
-			// »∑∂®¡À–Ë“™«Î«Ûµƒ ˝æ›≥§∂»
-			SetupReqLen = pSetupReqPak->wLength;
-			// Ãÿ∂®π¶ƒ‹µƒ…Ë±∏«Î«Û, »Á: GET_DESCRIPTION, SET_DESCRIPTION
-			SetupReqCode = pSetupReqPak->bRequest;
-			// «Î«Û¿‡–Õ, »Á: 0 ÷˜ª˙µΩ…Ë±∏
-			chtype = pSetupReqPak->bRequestType;
+                default:
+                    break;
+            }
+            R8_USB_INT_FG = RB_UIF_TRANSFER;
+        }
+        // SETUPÂåÖ
+        if (R8_USB_INT_ST & RB_UIS_SETUP_ACT)  // SetupÂåÖÂ§ÑÁêÜ
+        {
+            R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_NAK;
+            // Á°ÆÂÆö‰∫ÜÈúÄË¶ÅËØ∑Ê±ÇÁöÑÊï∞ÊçÆÈïøÂ∫¶
+            SetupReqLen = pSetupReqPak->wLength;
+            // ÁâπÂÆöÂäüËÉΩÁöÑËÆæÂ§áËØ∑Ê±Ç, Â¶Ç: GET_DESCRIPTION, SET_DESCRIPTION
+            SetupReqCode = pSetupReqPak->bRequest;
+            // ËØ∑Ê±ÇÁ±ªÂûã, Â¶Ç: 0 ‰∏ªÊú∫Âà∞ËÆæÂ§á, 1 ËÆæÂ§áÂà∞‰∏ªÊú∫
+            chtype = pSetupReqPak->bRequestType;
 
-			len = 0;
-			errflag = 0;
-			// Setup ˝æ›Œª”Úµƒ5~6Œª: 0 ±Í◊º…Ë±∏«Î«Û  1 ¿‡«Î«Û  2 ÷∆‘Ï…Ã, µ⁄7Œª  ˝æ›¥´ ‰∑ΩœÚ: 0 ÷˜ª˙µΩ…Ë±∏, 1 …Ë±∏µΩ÷˜ª˙
-			// 0110 0000
-			// »Áπ˚ ≤ª « ±Í◊º…Ë±∏«Î«Û
-			if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD)
-			{
-				// 1100 0000, »Áπ˚  «¿‡«Î«Û «“ …Ë±∏œÚ÷˜ª˙«Î«Û
-				if (pSetupReqPak->bRequestType == 0xC0)
-				{
-					if (SetupReqCode == 0x5F)
-					{
-						pDescr = Return1;
-						len = sizeof(Return1);
-					}
-					else if (SetupReqCode == 0x95)
-					{
-						if ((pSetupReqPak->wValue) == 0x18)
-						{
-							pDescr = Return2;
-							len = sizeof(Return2);
-						}
-						else if ((pSetupReqPak->wValue) == 0x06)
-						{
-							pDescr = Return3;
-							len = sizeof(Return3);
-						}
-					}
-					else
-					{
-						errflag = 0xFF;
-					}
-					memcpy(pEP0_DataBuf, pDescr, len);
-				}
-				else
-				{
-					len = 0;
-				}
-			}
-			else /*  «±Í◊º«Î«Û */
-			{
-				switch (SetupReqCode)
-				{
-				// ªÒ»°√Ë ˆ∑˚
-				case USB_GET_DESCRIPTOR:
-				{
-					// wValue ∏ﬂŒª: √Ë ˆ∑˚¿‡–Õ
-					switch (((pSetupReqPak->wValue) >> 8))
-					{
-					// …Ë±∏√Ë ˆ∑˚
-					case USB_DESCR_TYP_DEVICE:
-					{
-						pDescr = MyDevDescr;
-						len = sizeof(MyDevDescr);
-					}
-					break;
-					// ≈‰÷√√Ë ˆ∑˚
-					case USB_DESCR_TYP_CONFIG:
-					{
-						pDescr = MyCfgDescr;
-						len = sizeof(MyCfgDescr);
-					}
-					break;
+            len = 0;
+            errflag = 0;
+            // SetupÊï∞ÊçÆ‰ΩçÂüüÁöÑ5~6‰Ωç: 0 Ê†áÂáÜËÆæÂ§áËØ∑Ê±Ç  1 Á±ªËØ∑Ê±Ç  2 Âà∂ÈÄ†ÂïÜ, Á¨¨7‰Ωç Êï∞ÊçÆ‰º†ËæìÊñπÂêë: 0 ‰∏ªÊú∫Âà∞ËÆæÂ§á, 1 ËÆæÂ§áÂà∞‰∏ªÊú∫
+            // 0110 0000
+            // Â¶ÇÊûú ‰∏çÊòØ Ê†áÂáÜËÆæÂ§áËØ∑Ê±Ç
+            if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD) {
+                // 1100 0000, Â¶ÇÊûú ÊòØÁ±ªËØ∑Ê±Ç ‰∏î ËÆæÂ§áÂêë‰∏ªÊú∫ËØ∑Ê±Ç
+                if (pSetupReqPak->bRequestType == 0xC0) {
+                    if (SetupReqCode == 0x5F) {
+                        pDescr = Return1;
+                        len = sizeof(Return1);
+                    } else if (SetupReqCode == 0x95) {
+                        if ((pSetupReqPak->wValue) == 0x18) {
+                            pDescr = Return2;
+                            len = sizeof(Return2);
+                        } else if ((pSetupReqPak->wValue) == 0x06) {
+                            pDescr = Return3;
+                            len = sizeof(Return3);
+                        }
+                    } else {
+                        errflag = 0xFF;
+                    }
+                    memcpy(pEP0_DataBuf, pDescr, len);
+                } else {
+                    len = 0;
+                }
+            } else /* ÊòØÊ†áÂáÜËØ∑Ê±Ç */
+            {
+                switch (SetupReqCode) {
+                    // Ëé∑ÂèñÊèèËø∞Á¨¶
+                    case USB_GET_DESCRIPTOR: {
+                        // wValue È´ò‰Ωç: ÊèèËø∞Á¨¶Á±ªÂûã
+                        switch (((pSetupReqPak->wValue) >> 8)) {
+                            // ËÆæÂ§áÊèèËø∞Á¨¶
+                            case USB_DESCR_TYP_DEVICE: {
+                                pDescr = MyDevDescr;
+                                len = sizeof(MyDevDescr);
+                                break;
+                            }
+                            // ÈÖçÁΩÆÊèèËø∞Á¨¶
+                            case USB_DESCR_TYP_CONFIG: {
+                                pDescr = MyCfgDescr;
+                                len = sizeof(MyCfgDescr);
+                                break;
+                            }
 
-					// ±®±Ì√Ë ˆ∑˚
-					case USB_DESCR_TYP_REPORT:
-						//              {
-						//                if ( ( ( pSetupReqPak->wIndex ) & 0xff ) == 0 ) //Ω”ø⁄0±®±Ì√Ë ˆ∑˚
-						//                {
-						//                  pDescr = KeyRepDesc;                                  // ˝æ›◊º±∏…œ¥´
-						//                  len = sizeof( KeyRepDesc );
-						//                }
-						//                else if ( ( ( pSetupReqPak->wIndex ) & 0xff ) == 1 ) //Ω”ø⁄1±®±Ì√Ë ˆ∑˚
-						//                {
-						//                  pDescr = MouseRepDesc;                                // ˝æ›◊º±∏…œ¥´
-						//                  len = sizeof( MouseRepDesc );
-						//                  Ready = 1; //»Áπ˚”–∏¸∂‡Ω”ø⁄£¨∏√±Í◊ºŒª”¶∏√‘⁄◊Ó∫Û“ª∏ˆΩ”ø⁄≈‰÷√ÕÍ≥…∫Û”––ß
-						//                }
-						//                else
-						//                  len = 0xff; //±æ≥Ã–Ú÷ª”–2∏ˆΩ”ø⁄£¨’‚æ‰ª∞’˝≥£≤ªø…ƒ‹÷¥––
-						//              }
-						break;
+                            // Êä•Ë°®ÊèèËø∞Á¨¶
+                            case USB_DESCR_TYP_REPORT:
+                                //              {
+                                //                if ( ( ( pSetupReqPak->wIndex ) & 0xff ) == 0 ) //Êé•Âè£0Êä•Ë°®ÊèèËø∞Á¨¶
+                                //                {
+                                //                  pDescr = KeyRepDesc;                                  //Êï∞ÊçÆÂáÜÂ§á‰∏ä‰º†
+                                //                  len = sizeof( KeyRepDesc );
+                                //                }
+                                //                else if ( ( ( pSetupReqPak->wIndex ) & 0xff ) == 1 ) //Êé•Âè£1Êä•Ë°®ÊèèËø∞Á¨¶
+                                //                {
+                                //                  pDescr = MouseRepDesc;                                //Êï∞ÊçÆÂáÜÂ§á‰∏ä‰º†
+                                //                  len = sizeof( MouseRepDesc );
+                                //                  Ready = 1; //Â¶ÇÊûúÊúâÊõ¥Â§öÊé•Âè£ÔºåËØ•Ê†áÂáÜ‰ΩçÂ∫îËØ•Âú®ÊúÄÂêé‰∏Ä‰∏™Êé•Âè£ÈÖçÁΩÆÂÆåÊàêÂêéÊúâÊïà
+                                //                }
+                                //                else
+                                //                  len = 0xff; //Êú¨Á®ãÂ∫èÂè™Êúâ2‰∏™Êé•Âè£ÔºåËøôÂè•ËØùÊ≠£Â∏∏‰∏çÂèØËÉΩÊâßË°å
+                                //              }
+                                break;
 
-					// ◊÷∑˚¥Æ√Ë ˆ∑˚
-					case USB_DESCR_TYP_STRING:
-					{
-						// wValue µÕŒª: √Ë ˆ∑˚À˜“˝
-						switch ((pSetupReqPak->wValue) & 0xff)
-						{
-						case 1:
-							pDescr = MyManuInfo;
-							len = MyManuInfo[0];
-							break;
-						case 2:
-							pDescr = StrDesc;
-							len = StrDesc[0];
-							break;
-						case 0:
-							pDescr = MyLangDescr;
-							len = MyLangDescr[0];
-							break;
-						default:
-							errflag = 0xFF; // ≤ª÷ß≥÷µƒ◊÷∑˚¥Æ√Ë ˆ∑˚
-							break;
-						}
-					}
-					break;
+                            // Â≠óÁ¨¶‰∏≤ÊèèËø∞Á¨¶
+                            case USB_DESCR_TYP_STRING: {
+                                // wValue ‰Ωé‰Ωç: ÊèèËø∞Á¨¶Á¥¢Âºï
+                                switch ((pSetupReqPak->wValue) & 0xff) {
+                                    case 1:
+                                        pDescr = MyManuInfo;
+                                        len = MyManuInfo[0];
+                                        break;
+                                    case 2:
+                                        pDescr = StrDesc;
+                                        len = StrDesc[0];
+                                        break;
+                                    case 0:
+                                        pDescr = MyLangDescr;
+                                        len = MyLangDescr[0];
+                                        break;
+                                    default:
+                                        errflag = 0xFF;  // ‰∏çÊîØÊåÅÁöÑÂ≠óÁ¨¶‰∏≤ÊèèËø∞Á¨¶
+                                        break;
+                                }
+                                break;
+                            }
 
-					default:
-						errflag = 0xff;
-						break;
-					}
-					// «Î«Ûµƒ ˝æ›≥§∂» ¥Û”⁄  µº –Ë“™µƒ ˝æ›≥§∂» ∏¸¥Û
-					if (SetupReqLen > len)
-						SetupReqLen = len; // “‘ µº –Ë“™Œ™◊º, ◊˜Œ™–Ë…œ¥´◊‹≥§∂»
-					len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
-					memcpy(pEP0_DataBuf, pDescr, len);
-					pDescr += len;
-				}
-				break;
+                            default:
+                                errflag = 0xff;
+                                break;
+                        }
+                        // ËØ∑Ê±ÇÁöÑÊï∞ÊçÆÈïøÂ∫¶ Â§ß‰∫é ÂÆûÈôÖÈúÄË¶ÅÁöÑÊï∞ÊçÆÈïøÂ∫¶ Êõ¥Â§ß
+                        if (SetupReqLen > len)
+                            SetupReqLen = len;  // ‰ª•ÂÆûÈôÖÈúÄË¶Å‰∏∫ÂáÜ, ‰Ωú‰∏∫ÈúÄ‰∏ä‰º†ÊÄªÈïøÂ∫¶
+                        len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
+                        memcpy(pEP0_DataBuf, pDescr, len);
+                        pDescr += len;
+                        break;
+                    }
 
-				case USB_SET_ADDRESS:
-					SetupReqLen = (pSetupReqPak->wValue) & 0xff;
-					break;
+                    case USB_SET_ADDRESS:
+                        SetupReqLen = (pSetupReqPak->wValue) & 0xff;
+                        break;
 
-				case USB_GET_CONFIGURATION:
-					pEP0_DataBuf[0] = DevConfig;
-					if (SetupReqLen > 1)
-						SetupReqLen = 1;
-					break;
+                    case USB_GET_CONFIGURATION:
+                        pEP0_DataBuf[0] = DevConfig;
+                        if (SetupReqLen > 1)
+                            SetupReqLen = 1;
+                        break;
 
-				case USB_SET_CONFIGURATION:
-					DevConfig = (pSetupReqPak->wValue) & 0xff;
-					break;
+                    case USB_SET_CONFIGURATION:
+                        DevConfig = (pSetupReqPak->wValue) & 0xff;
+                        break;
 
-				case USB_CLEAR_FEATURE:
-				{
-					if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP) // ∂Àµ„
-					{
-						switch ((pSetupReqPak->wIndex) & 0xff)
-						{
-						case 0x82:
-							R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
-							break;
-						case 0x02:
-							R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
-							break;
-						case 0x81:
-							R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
-							break;
-						case 0x01:
-							R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
-							break;
-						default:
-							errflag = 0xFF; // ≤ª÷ß≥÷µƒ∂Àµ„
-							break;
-						}
-					}
-					else
-						errflag = 0xFF;
-				}
-				break;
+                    case USB_CLEAR_FEATURE: {
+                        if ((pSetupReqPak->bRequestType & USB_REQ_RECIP_MASK) == USB_REQ_RECIP_ENDP)  // Á´ØÁÇπ
+                        {
+                            switch ((pSetupReqPak->wIndex) & 0xff) {
+                                case 0x82:
+                                    R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
+                                    break;
+                                case 0x02:
+                                    R8_UEP2_CTRL = (R8_UEP2_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
+                                    break;
+                                case 0x81:
+                                    R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_T_TOG | MASK_UEP_T_RES)) | UEP_T_RES_NAK;
+                                    break;
+                                case 0x01:
+                                    R8_UEP1_CTRL = (R8_UEP1_CTRL & ~(RB_UEP_R_TOG | MASK_UEP_R_RES)) | UEP_R_RES_ACK;
+                                    break;
+                                default:
+                                    errflag = 0xFF;  // ‰∏çÊîØÊåÅÁöÑÁ´ØÁÇπ
+                                    break;
+                            }
+                        } else
+                            errflag = 0xFF;
+                        break;
+                    }
 
-				case USB_GET_INTERFACE:
-					pEP0_DataBuf[0] = 0x00;
-					if (SetupReqLen > 1)
-						SetupReqLen = 1;
-					break;
+                    case USB_GET_INTERFACE:
+                        pEP0_DataBuf[0] = 0x00;
+                        if (SetupReqLen > 1)
+                            SetupReqLen = 1;
+                        break;
 
-				case USB_GET_STATUS:
-					pEP0_DataBuf[0] = 0x00;
-					pEP0_DataBuf[1] = 0x00;
-					if (SetupReqLen > 2)
-						SetupReqLen = 2;
-					break;
+                    case USB_GET_STATUS:
+                        pEP0_DataBuf[0] = 0x00;
+                        pEP0_DataBuf[1] = 0x00;
+                        if (SetupReqLen > 2)
+                            SetupReqLen = 2;
+                        break;
 
-				default:
-					errflag = 0xff;
-					break;
-				}
-			}
-			if (errflag == 0xff) // ¥ÌŒÛªÚ≤ª÷ß≥÷
-			{
-				//                  SetupReqCode = 0xFF;
-				R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL; // STALL
-			}
-			else
-			{
-				if (chtype & 0x80) // …œ¥´
-				{
-					len = (SetupReqLen > DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
-					SetupReqLen -= len;
-				}
-				else
-					len = 0; // œ¬¥´
-				R8_UEP0_T_LEN = len;
-				R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK; // ƒ¨»œ ˝æ›∞¸ «DATA1
-			}
+                    default:
+                        errflag = 0xff;
+                        break;
+                }
+            }
+            if (errflag == 0xff)  // ÈîôËØØÊàñ‰∏çÊîØÊåÅ
+            {
+                //                  SetupReqCode = 0xFF;
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL;  // STALL
+            } else {
+                if (chtype & 0x80)  // ‰∏ä‰º†, 1 ËÆæÂ§áÂà∞‰∏ªÊú∫
+                {
+                    len = (SetupReqLen > DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
+                    SetupReqLen -= len;
+                } else
+                    len = 0;  // ‰∏ã‰º†
+                R8_UEP0_T_LEN = len;
+                R8_UEP0_CTRL = RB_UEP_R_TOG | RB_UEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK;  // ÈªòËÆ§Êï∞ÊçÆÂåÖÊòØDATA1
+            }
 
-			R8_USB_INT_FG = RB_UIF_TRANSFER;
-		}
-	}
-	// ∏¥Œª
-	else if (intflag & RB_UIF_BUS_RST)
-	{
-		R8_USB_DEV_AD = 0;
-		R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
-		R8_UEP1_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
-		R8_UEP2_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
-		R8_UEP3_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
-		R8_USB_INT_FG = RB_UIF_BUS_RST;
-	}
-	// –›√ﬂ
-	else if (intflag & RB_UIF_SUSPEND)
-	{
-		if (R8_USB_MIS_ST & RB_UMS_SUSPEND)
-		{
-			;
-		} // π“∆
-		else
-		{
-			;
-		} // ªΩ–—
-		R8_USB_INT_FG = RB_UIF_SUSPEND;
-	}
-	else
-	{
-		R8_USB_INT_FG = intflag;
-	}
+            R8_USB_INT_FG = RB_UIF_TRANSFER;
+        }
+    }
+    // Â§ç‰Ωç
+    else if (intflag & RB_UIF_BUS_RST) {
+        R8_USB_DEV_AD = 0;
+        R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
+        R8_UEP1_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
+        R8_UEP2_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
+        R8_UEP3_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK | RB_UEP_AUTO_TOG;
+        R8_USB_INT_FG = RB_UIF_BUS_RST;
+    }
+    // ‰ºëÁú†
+    else if (intflag & RB_UIF_SUSPEND) {
+        if (R8_USB_MIS_ST & RB_UMS_SUSPEND) {
+            ;
+        }  // ÊåÇËµ∑
+        else {
+            ;
+        }  // Âî§ÈÜí
+        R8_USB_INT_FG = RB_UIF_SUSPEND;
+    } else {
+        R8_USB_INT_FG = intflag;
+    }
 }
 
 /*********************************************************************
  * @fn      USB_IRQHandler
  *
- * @brief   USB÷–∂œ∫Ø ˝
+ * @brief   USB‰∏≠Êñ≠ÂáΩÊï∞
  *
  * @return  none
  */
 __attribute__((interrupt("WCH-Interrupt-fast"))) __attribute__((section(".highcode"))) void USB_IRQHandler(
-	void) /* USB÷–∂œ∑˛ŒÒ≥Ã–Ú, π”√ºƒ¥Ê∆˜◊È1 */
+    void) /* USB‰∏≠Êñ≠ÊúçÂä°Á®ãÂ∫è,‰ΩøÁî®ÂØÑÂ≠òÂô®ÁªÑ1 */
 {
-	USB_DevTransProcess();
+    USB_DevTransProcess();
 }
 
 /*********************************************************************

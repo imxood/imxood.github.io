@@ -43,7 +43,7 @@ const uint8_t MyDevDescr[] = {
     0x00,        // 设备子类代码
     0x00,        // 设备协议
     DevEP0SIZE,  // 端点最大包大小
-    0x86, 0x1A,  // 厂商编号
+    0x85, 0x1A,  // 厂商编号
     0x23, 0x75,  // 产品编号
     0x63, 0x02,  // 设备出厂编号
     0x00,        // 描述厂商字符串的索引
@@ -385,14 +385,17 @@ void USB_DevTransProcess(void) {
                                 // wValue 低位: 描述符索引
                                 switch ((pSetupReqPak->wValue) & 0xff) {
                                     case 1:
+                                        printf("MyManuInfo: %s\n", MyManuInfo);
                                         pDescr = MyManuInfo;
                                         len = MyManuInfo[0];
                                         break;
                                     case 2:
+                                        printf("StrDesc: %s\n", StrDesc);
                                         pDescr = StrDesc;
                                         len = StrDesc[0];
                                         break;
                                     case 0:
+                                        printf("MyLangDescr: %s\n", MyLangDescr);
                                         pDescr = MyLangDescr;
                                         len = MyLangDescr[0];
                                         break;

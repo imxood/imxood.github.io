@@ -38,28 +38,28 @@ const uint8_t *pDescr;
 const uint8_t MyDevDescr[] = {
     0x12,        // 设备描述符的长度
     0x01,        // 类型, 设备描述符
-    0x10, 0x01,  // 0110, USB 版本号 1.1
-    0xFF,        // 设备类代码, ff 为厂商自定义类型
+    0x00, 0x02,  // 0200, USB 版本号 2.0
+    0xFF,        // 设备类代码, ff 为用户自定义类型
     0x00,        // 设备子类代码
     0x00,        // 设备协议
-    DevEP0SIZE,  // 端点最大包大小
-    0x85, 0x1A,  // 厂商编号
-    0x23, 0x75,  // 产品编号
-    0x63, 0x02,  // 设备出厂编号
-    0x00,        // 描述厂商字符串的索引
+    DevEP0SIZE,  // 端点0最大包大小
+    0xFF, 0xFF,  // FFFF 供应商ID
+    0xFF, 0xFD,  // FFFF 产品ID
+    0x63, 0x02,  // 0.02, USB设备的版本号
+    0x01,        // 描述厂商字符串的索引
     0x02,        // 描述产品字符串的索引
-    0x00,        // 描述设备序列号字符串的索引
+    0x03,        // 描述设备序列号字符串的索引
     0x01,        // 配置数量
 };
 
 // 配置描述符
 const uint8_t MyCfgDescr[] = {
-    0x09, 0x02, 0x27, 0x00, 0x01, 0x01, 0x00, 0x80, 0xf0,  // 09 为描述符长度
+    0x09, 0x02, 0x27, 0x00, 0x01, 0x01, 0x13, 0x80, 0xf0,  // 09 为描述符长度
                                                            // 02 配置描述符
                                                            // 0027 为描述符自身 及 其下的所有接口 和 所有端点的长度
                                                            // 01 该配置一共包含1个接口, 不包含0端口
                                                            // 01 Set_Configuration命令需要的参数
-                                                           // 00 描述该配置字符串的索引值
+                                                           // 13 描述该配置字符串的索引值
                                                            // 80 供电模式的选择, 供电模式选择．Bit4-0保留，D7:总线供电，D6:自供电，D5:远程唤醒
                                                            // f0 最大消耗电流, 以2mA为单位. 2*0xf0 = 180mA
 
@@ -84,19 +84,133 @@ const uint8_t MyCfgDescr[] = {
 };
 
 // 语言描述符
-const uint8_t MyLangDescr[] = {0x04, 0x03, 0x09, 0x04};
+const uint8_t MyLangDescr[] = {
+    0x04,        // 描述符长度
+    0x03,        // 03 字符串描述符
+    0x09, 0x04,  // 0409 表示语言为 英语
+};
 
-// 厂家信息
+// 厂家信息字符串
 const uint8_t MyManuInfo[] = {
-    0x0E,  // 0e 为描述符的长度
-    0x03,  // 03 字符串描述符
-    'm', 0, 'x', 0, '_', 0, 'd', 0, 'e', 0, 'v', 0};
+    0x10,    // 0e 为描述符的长度
+    0x03,    // 03 字符串描述符
+    'm', 0,  // Unicode 编码
+    'x', 0,  //
+    '-', 0,  //
+    't', 0,  //
+    'e', 0,  //
+    'c', 0,  //
+    'h', 0,  //
+};
 
-// 产品信息
-const uint8_t MyProdInfo[] = {0x0C, 0x03, 'C', 0, 'H', 0, '5', 0, '8', 0, '2', 0};
+// 产品字符串
+const uint8_t MyProdInfo[] = {
+    0x10,
+    0x03,
+    'm', 0,  //
+    'x', 0,  //
+    '-', 0,  //
+    'p', 0,  //
+    'r', 0,  //
+    'o', 0,  //
+    'd', 0,  //
+};
 
-/*产品描述符*/
-const uint8_t StrDesc[] = {0x15, 0x03, 'm', 0, 'x', 0, '-', 0, 'p', 0, 'r', 0, 'o', 0, 'd', 0, 'u', 0, 'c', 0, 't'};
+// 设备序列号
+const uint8_t MyDevSerial[] = {
+    0x12,
+    0x03,
+    'm', 0,  //
+    'x', 0,  //
+    '-', 0,  //
+    '0', 0,  //
+    '0', 0,  //
+    '0', 0,  //
+    '0', 0,  //
+    '1', 0,  //
+};
+
+// Cfg 字符串
+const uint8_t CfgInfo[] = {
+    0x12,
+    0x03,
+    'c', 0,  //
+    'f', 0,  //
+    'g', 0,  //
+    '-', 0,  //
+    'i', 0,  //
+    'n', 0,  //
+    'f', 0,  //
+    '0', 0,  //
+};
+
+#define WCID_VENDOR_CODE 0x17
+
+// WCID, 微软 WinUSB
+const uint8_t WCID[] = {
+    0x12,
+    0x03,
+    'M', 0x00,        /* wcChar0 */
+    'S', 0x00,        /* wcChar1 */
+    'F', 0x00,        /* wcChar2 */
+    'T', 0x00,        /* wcChar3 */
+    '1', 0x00,        /* wcChar4 */
+    '0', 0x00,        /* wcChar5 */
+    '0', 0x00,        /* wcChar6 */
+    WCID_VENDOR_CODE, /* bVendorCode */
+    0x00,             /* bReserved */
+};
+
+uint8_t WINUSB_ExtendedCompatId_Descritpor[] = {
+    0x28, 0x00, 0x00, 0x00, /* dwLength */
+    0x00, 0x01,             /* bcdVersion */
+    0x04, 0x00,             /* wIndex */
+    0x01,                   /* bCount */
+    0, 0, 0, 0, 0, 0, 0,    /* Reserved */
+    /* WCID Function  */
+    0x00, /* bFirstInterfaceNumber */
+    0x01, /* bReserved */
+    /* CID */
+    'W', 'I', 'N', 'U', 'S', 'B', 0x00, 0x00,
+    /* sub CID */
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0, 0, 0, 0, 0, 0, /* Reserved */
+};
+
+uint8_t WINUSB_ExtendedProperty_InterfaceGUID_Descritpor[] = {
+    ///////////////////////////////////////
+    /// WCID property descriptor
+    ///////////////////////////////////////
+    0x8e, 0x00, 0x00, 0x00, /* dwLength */
+    0x00, 0x01,             /* bcdVersion */
+    0x05, 0x00,             /* wIndex */
+    0x01, 0x00,             /* wCount */
+
+    ///////////////////////////////////////
+    /// registry propter descriptor
+    ///////////////////////////////////////
+    0x84, 0x00, 0x00, 0x00, /* dwSize */
+    0x01, 0x00, 0x00, 0x00, /* dwPropertyDataType */
+    0x28, 0x00,             /* wPropertyNameLength */
+    /* DeviceInterfaceGUID */
+    'D', 0x00, 'e', 0x00, 'v', 0x00, 'i', 0x00,  /* wcName_20 */
+    'c', 0x00, 'e', 0x00, 'I', 0x00, 'n', 0x00,  /* wcName_20 */
+    't', 0x00, 'e', 0x00, 'r', 0x00, 'f', 0x00,  /* wcName_20 */
+    'a', 0x00, 'c', 0x00, 'e', 0x00, 'G', 0x00,  /* wcName_20 */
+    'U', 0x00, 'I', 0x00, 'D', 0x00, 0x00, 0x00, /* wcName_20 */
+    0x4e, 0x00, 0x00, 0x00,                      /* dwPropertyDataLength */
+    /* {1D4B2365-4749-48EA-B38A-7C6FDDDD7E26} */
+    '{', 0x00, '1', 0x00, 'D', 0x00, '4', 0x00, /* wcData_39 */
+    'B', 0x00, '2', 0x00, '3', 0x00, '6', 0x00, /* wcData_39 */
+    '5', 0x00, '-', 0x00, '4', 0x00, '7', 0x00, /* wcData_39 */
+    '4', 0x00, '9', 0x00, '-', 0x00, '4', 0x00, /* wcData_39 */
+    '8', 0x00, 'E', 0x00, 'A', 0x00, '-', 0x00, /* wcData_39 */
+    'B', 0x00, '3', 0x00, '8', 0x00, 'A', 0x00, /* wcData_39 */
+    '-', 0x00, '7', 0x00, 'C', 0x00, '6', 0x00, /* wcData_39 */
+    'F', 0x00, 'D', 0x00, 'D', 0x00, 'D', 0x00, /* wcData_39 */
+    'D', 0x00, '7', 0x00, 'E', 0x00, '2', 0x00, /* wcData_39 */
+    '6', 0x00, '}', 0x00, 0x00, 0x00,           /* wcData_39 */
+};
 
 const uint8_t Return1[2] = {0x31, 0x00};
 const uint8_t Return2[2] = {0xC3, 0x00};
@@ -189,6 +303,9 @@ void DevEP4_OUT_Deal(uint8_t l) { /* 用户可自定义 */
 }
 
 /*********************************************************************
+ *
+ * 这个函数应该在包(package 不是transfer)被接收到时执行, 还未触发ACK, 在它的内部根据应用状态 执行不同的ACK/DATA0/DATA1等等状态.
+ *
  * @fn      USB_DevTransProcess
  *
  * @brief   USB 传输处理函数
@@ -213,6 +330,8 @@ void USB_DevTransProcess(void) {
                 // IN包,端点为0 (SETUP包)
                 case UIS_TOKEN_IN: {
                     switch (SetupReqCode) {
+                        // WCID WinUSB
+                        case WCID_VENDOR_CODE:
                         // 获取描述符
                         case USB_GET_DESCRIPTOR:
                             // 端点0数据包的最大长度为 DevEP0SIZE, 即64个字节
@@ -222,6 +341,7 @@ void USB_DevTransProcess(void) {
                             pDescr += len;
                             R8_UEP0_T_LEN = len;
                             R8_UEP0_CTRL ^= RB_UEP_T_TOG;  // 翻转
+                            printf("IN len: %u\n", len);
                             break;
                             // 设置描述符
                         case USB_SET_ADDRESS:
@@ -317,10 +437,37 @@ void USB_DevTransProcess(void) {
 
             len = 0;
             errflag = 0;
+            if (SetupReqCode == WCID_VENDOR_CODE) {
+                printf("WCID_VENDOR_CODE\n");
+                switch (pSetupReqPak->wIndex) {
+                    case 0x04:
+                        pDescr = WINUSB_ExtendedCompatId_Descritpor;
+                        len = WINUSB_ExtendedCompatId_Descritpor[0];
+                        printf("0x04, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                        break;
+
+                    case 0x05:
+                        pDescr = WINUSB_ExtendedProperty_InterfaceGUID_Descritpor;
+                        len = WINUSB_ExtendedProperty_InterfaceGUID_Descritpor[0];
+                        printf("0x05, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                        break;
+
+                    default:
+                        errflag = 0xff;
+                        break;
+                }
+
+                // 请求的数据长度 大于 实际需要的数据长度 更大
+                if (SetupReqLen > len)
+                    SetupReqLen = len;
+                len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
+                memcpy(pEP0_DataBuf, pDescr, len);
+                pDescr += len;
+            }
             // Setup数据位域的5~6位: 0 标准设备请求  1 类请求  2 制造商, 第7位 数据传输方向: 0 主机到设备, 1 设备到主机
             // 0110 0000
             // 如果 不是 标准设备请求
-            if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD) {
+            else if ((pSetupReqPak->bRequestType & USB_REQ_TYP_MASK) != USB_REQ_TYP_STANDARD) {
                 // 1100 0000, 如果 是类请求 且 设备向主机请求
                 if (pSetupReqPak->bRequestType == 0xC0) {
                     if (SetupReqCode == 0x5F) {
@@ -352,12 +499,14 @@ void USB_DevTransProcess(void) {
                             case USB_DESCR_TYP_DEVICE: {
                                 pDescr = MyDevDescr;
                                 len = sizeof(MyDevDescr);
+                                printf("USB_DESCR_TYP_DEVICE, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                 break;
                             }
                             // 配置描述符
                             case USB_DESCR_TYP_CONFIG: {
                                 pDescr = MyCfgDescr;
                                 len = sizeof(MyCfgDescr);
+                                printf("USB_DESCR_TYP_CONFIG, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                 break;
                             }
 
@@ -385,19 +534,34 @@ void USB_DevTransProcess(void) {
                                 // wValue 低位: 描述符索引
                                 switch ((pSetupReqPak->wValue) & 0xff) {
                                     case 1:
-                                        printf("MyManuInfo: %s\n", MyManuInfo);
                                         pDescr = MyManuInfo;
                                         len = MyManuInfo[0];
+                                        printf("USB_DESCR_TYP_STRING MyManuInfo, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                         break;
                                     case 2:
-                                        printf("StrDesc: %s\n", StrDesc);
-                                        pDescr = StrDesc;
-                                        len = StrDesc[0];
+                                        pDescr = MyProdInfo;
+                                        len = MyProdInfo[0];
+                                        printf("USB_DESCR_TYP_STRING MyProdInfo, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                                        break;
+                                    case 3:
+                                        pDescr = MyDevSerial;
+                                        len = MyDevSerial[0];
+                                        printf("USB_DESCR_TYP_STRING MyDevSerial, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                                        break;
+                                    case 13:
+                                        pDescr = CfgInfo;
+                                        len = CfgInfo[0];
+                                        printf("USB_DESCR_TYP_STRING CfgInfo, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                         break;
                                     case 0:
-                                        printf("MyLangDescr: %s\n", MyLangDescr);
                                         pDescr = MyLangDescr;
                                         len = MyLangDescr[0];
+                                        printf("USB_DESCR_TYP_STRING MyLangDescr, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                                        break;
+                                    case 0xEE:
+                                        pDescr = WCID;
+                                        len = WCID[0];
+                                        printf("USB_DESCR_TYP_STRING WCID, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                         break;
                                     default:
                                         errflag = 0xFF;  // 不支持的字符串描述符
@@ -412,7 +576,7 @@ void USB_DevTransProcess(void) {
                         }
                         // 请求的数据长度 大于 实际需要的数据长度 更大
                         if (SetupReqLen > len)
-                            SetupReqLen = len;  // 以实际需要为准, 作为需上传总长度
+                            SetupReqLen = len;
                         len = (SetupReqLen >= DevEP0SIZE) ? DevEP0SIZE : SetupReqLen;
                         memcpy(pEP0_DataBuf, pDescr, len);
                         pDescr += len;

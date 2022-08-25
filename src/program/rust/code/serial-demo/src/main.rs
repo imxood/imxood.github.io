@@ -1,104 +1,115 @@
-use std::io::{self, Write};
+#![feature(panic_info_message)]
+#![feature(buf_read_has_data_left)]
+
 use std::time::Duration;
 
-use clap::{Arg, Command};
+use custom::{mc19_burning, mc19_reboot, rf_single_tone, serial_monitor, test_io};
+use step::{AtDevice, Step};
 
-use serialport::{DataBits, StopBits};
+use clap::Parser;
 
-fn main() {
-    let matches = Command::new("Serialport Example - Heartbeat")
-        .about("Write bytes to a serial port at 1Hz")
-        .disable_version_flag(true)
-        .arg(
-            Arg::new("port")
-                .help("The device path to a serial port")
-                .required(true),
-        )
-        .arg(
-            Arg::new("baud")
-                .help("The baud rate to connect at")
-                .use_value_delimiter(false)
-                .required(true)
-                .validator(valid_baud),
-        )
-        .arg(
-            Arg::new("stop-bits")
-                .long("stop-bits")
-                .help("Number of stop bits to use")
-                .takes_value(true)
-                .possible_values(&["1", "2"])
-                .default_value("1"),
-        )
-        .arg(
-            Arg::new("data-bits")
-                .long("data-bits")
-                .help("Number of data bits to use")
-                .takes_value(true)
-                .possible_values(&["5", "6", "7", "8"])
-                .default_value("8"),
-        )
-        .arg(
-            Arg::new("rate")
-                .long("rate")
-                .help("Frequency (Hz) to repeat transmission of the pattern (0 indicates sending only once")
-                .takes_value(true)
-                .default_value("1"),
-        )
-        .arg(
-            Arg::new("string")
-                .long("string")
-                .help("String to transmit")
-                .takes_value(true)
-                .default_value("."),
-        )
-        .get_matches();
+mod custom;
+mod error;
+mod step;
 
-    let port_name = matches.value_of("port").unwrap();
-    let baud_rate = matches.value_of("baud").unwrap().parse::<u32>().unwrap();
-    let stop_bits = match matches.value_of("stop-bits") {
-        Some("2") => StopBits::Two,
-        _ => StopBits::One,
-    };
-    let data_bits = match matches.value_of("data-bits") {
-        Some("5") => DataBits::Five,
-        Some("6") => DataBits::Six,
-        Some("7") => DataBits::Seven,
-        _ => DataBits::Eight,
-    };
-    let rate = matches.value_of("rate").unwrap().parse::<u32>().unwrap();
-    let string = matches.value_of("string").unwrap();
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Cli {
+    /// 被测模块
+    #[clap(short, long)]
+    target: String,
 
-    let builder = serialport::new(port_name, baud_rate)
-        .stop_bits(stop_bits)
-        .data_bits(data_bits);
-    println!("{:?}", &builder);
-    let mut port = builder.open().unwrap_or_else(|e| {
-        eprintln!("Failed to open \"{}\". Error: {}", port_name, e);
-        ::std::process::exit(1);
-    });
+    /// 烧写测试固件
+    #[clap(short, long)]
+    burning: bool,
 
-    println!(
-        "Writing '{}' to {} at {} baud at {}Hz",
-        &string, &port_name, &baud_rate, &rate
-    );
-    loop {
-        match port.write(string.as_bytes()) {
-            Ok(_) => {
-                print!("{}", &string);
-                std::io::stdout().flush().unwrap();
-            }
-            Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
-            Err(e) => eprintln!("{:?}", e),
-        }
-        if rate == 0 {
-            return;
-        }
-        std::thread::sleep(Duration::from_millis((1000.0 / (rate as f32)) as u64));
-    }
+    /// 重启
+    #[clap(short, long)]
+    reboot: bool,
+
+    /// IO测试
+    #[clap(short, long)]
+    io: bool,
+
+    /// 发射单音信号
+    #[clap(short, long)]
+    single_tone: bool,
+
+    /// 串口监视器
+    #[clap(short, long)]
+    monitor: bool,
+
+    /// 工作模式
+    #[clap(short, long)]
+    work: bool,
+
+    /// workspace目录
+    #[clap(long, default_value_t = String::from(r"E:\develop\genie-bt-mesh-stack-mc19-mp\EH-MC19-TestCase"))]
+    work_dir: String,
+
+    #[clap(long)]
+    fw: Option<String>,
 }
 
-fn valid_baud(val: &str) -> std::result::Result<(), String> {
-    val.parse::<u32>()
-        .map(|_| ())
-        .map_err(|_| format!("Invalid baud rate '{}' specified", val))
+fn main() {
+    let cli = Cli::parse();
+
+    std::env::set_current_dir(&cli.work_dir);
+
+    let test_module_port_name = "COM15";
+    let test_module_baudrate = 115200;
+
+    let test_board_port_name = "COM16";
+    let test_board_baudrate = 115200;
+
+    let mut test_module = AtDevice::new(test_module_port_name, test_module_baudrate, "测试模块")
+        .expect(&format!("访问端口{}", test_module_port_name));
+
+    let mut test_board = AtDevice::new(test_board_port_name, test_board_baudrate, "测试板")
+        .expect(&format!("访问端口{}", test_board_port_name));
+
+    let mut fw = "E:/develop/eh-mc19/ehong-test/EH-MC19-TestCase/tool/total_image.hexf";
+
+    if &cli.target == "tmy" {
+        if cli.burning {
+            mc19_burning(&mut test_board, &mut test_module, fw);
+        }
+
+        if cli.reboot {
+            mc19_reboot(&mut test_board, &mut test_module);
+        }
+    }
+
+    if &cli.target == "mc19" {
+        let fw = if let Some(fw) = &cli.fw {
+            fw
+        } else {
+            r"fw\total_image.hexf"
+        };
+        if cli.burning {
+            mc19_burning(&mut test_board, &mut test_module, fw);
+        }
+
+        if cli.reboot {
+            mc19_reboot(&mut test_board, &mut test_module);
+        }
+
+        if cli.io {
+            test_io(&mut test_module);
+        }
+
+        if cli.single_tone {
+            rf_single_tone(&mut test_module);
+        }
+
+        if cli.single_tone {
+            loop {
+                rf_single_tone(&mut test_module);
+            }
+        }
+
+        if cli.monitor {
+            serial_monitor(&mut test_module);
+        }
+    }
 }

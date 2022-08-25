@@ -36,51 +36,125 @@ const uint8_t *pDescr;
 
 // 设备描述符
 const uint8_t MyDevDescr[] = {
-    0x12,        // 设备描述符的长度
-    0x01,        // 类型, 设备描述符
-    0x00, 0x02,  // 0200, USB 版本号 2.0
-    0xFF,        // 设备类代码, ff 为用户自定义类型
-    0x00,        // 设备子类代码
-    0x00,        // 设备协议
-    DevEP0SIZE,  // 端点0最大包大小
-    0xFF, 0xFF,  // FFFF 供应商ID
-    0xFF, 0xFD,  // FFFF 产品ID
-    0x63, 0x02,  // 0.02, USB设备的版本号
-    0x01,        // 描述厂商字符串的索引
-    0x02,        // 描述产品字符串的索引
-    0x03,        // 描述设备序列号字符串的索引
-    0x01,        // 配置数量
+    0x12,                  // 设备描述符的长度
+    USB_DESCR_TYP_DEVICE,  // 类型, 设备描述符
+    0x00, 0x02,            // 0200, USB 版本号 2.0
+    0xFF,                  // 设备类代码, ff 为用户自定义类型
+    0x00,                  // 设备子类代码
+    0x00,                  // 设备协议
+    DevEP0SIZE,            // 端点0最大包大小
+    0x86, 0x1A,            // 1A86 供应商ID
+    0xFF, 0xFD,            // FFFF 产品ID
+    0x63, 0x02,            // 0.02, USB设备的版本号
+    0x01,                  // 描述厂商字符串的索引
+    0x02,                  // 描述产品字符串的索引
+    0x03,                  // 描述设备序列号字符串的索引
+    0x01,                  // 配置数量
 };
 
 // 配置描述符
 const uint8_t MyCfgDescr[] = {
-    0x09, 0x02, 0x27, 0x00, 0x01, 0x01, 0x13, 0x80, 0xf0,  // 09 为描述符长度
-                                                           // 02 配置描述符
-                                                           // 0027 为描述符自身 及 其下的所有接口 和 所有端点的长度
-                                                           // 01 该配置一共包含1个接口, 不包含0端口
-                                                           // 01 Set_Configuration命令需要的参数
-                                                           // 13 描述该配置字符串的索引值
-                                                           // 80 供电模式的选择, 供电模式选择．Bit4-0保留，D7:总线供电，D6:自供电，D5:远程唤醒
-                                                           // f0 最大消耗电流, 以2mA为单位. 2*0xf0 = 180mA
+    0x09,
+    USB_DESCR_TYP_CONFIG,
+    0x43,
+    0x00, /* wTotalLength: 0027 为描述符自身 及 其下的所有接口 和 所有端点的长度 */
+    0x02, /* bNumInterfaces: 该配置一共包含2个接口, 不包含0端口 */
+    0x01, /* bConfigurationValue: 当支持多个配置时, 是Set_Configuration命令需要的参数 */
+    0x13, /* iConfiguration: 描述该配置字符串的索引值 */
+    0x80, /* bmAttributes: 供电模式的选择, 供电模式选择．Bit4-0保留, D7:总线供电, D6:自供电, D5:远程唤醒 */
+    0xf0, /* MaxPower: 最大消耗电流, 以2mA为单位. 2*0xf0 = 180mA */
 
-    0x09, 0x04, 0x00, 0x00, 0x03, 0xff, 0x01, 0x02, 0x00,  // 09 为描述符长度
-                                                           // 04 接口描述符
-                                                           // 00 接口编号
-                                                           // 00 备用的接口编号
-                                                           // 03 该接口使用的端点号, 不包括端点0
-                                                           // ff 接口类型, 此处表示 厂商定义的设备类
-                                                           // 01 接口子类型, XX
-                                                           // 02 接口协议
-                                                           // 00 描述该接口的字符串索引值
+    0x09,
+    USB_DESCR_TYP_INTERF,
+    0x00,
+    0x00,
+    0x03,
+    USB_DEV_CLASS_COMMUNIC, /* bInterfaceClass: CDC接口类 */
+    0x02,                   /* bInterfaceSubClass: 实现USB转串口, 就必须使用Abstract Control Model(抽象控制模型)子类 */
+    0x01,                   /* bInterfaceProtocol: Common AT commands (通用AT命令协议) */
+    0x00,
 
-    0x07, 0x05, 0x82, 0x02, 0x20, 0x00, 0x00,  // 09 为描述符长度
-                                               // 05 端点描述符, 批量上传端点
+    /*
+        在CDC类中, 不再有HID描述符和报告描述符, 而是功能描述符的类特殊接口描述符,
+        它们主要用来描述接口的功能, 功能描述符放在CDC接口 (主接口) 之后, 功能描述符完毕之后就是主接口的端点描述符,
+        再接下来是其它接口以及他们的端点描述符 */
 
-    0x07, 0x05, 0x02, 0x02, 0x20, 0x00, 0x00,  // 09 为描述符长度
-                                               // 05 端点描述符, 批量下传端点
+    /* 功能描述符 */
 
-    0x07, 0x05, 0x81, 0x03, 0x08, 0x00, 0x01,  // 09 为描述符长度
-                                               // 05 端点描述符, 中断上传端点
+    /* Header Functional Descriptor */
+    0x05, /* bLength: Endpoint Descriptor size 该描述符长度为5字节 */
+    0x24, /* bDescriptorType: CS_INTERFACE 描述符类型为类特殊接口(CS_INTERFACE), 编号为0x24 */
+
+    /*
+        抽象控制模型中需要用到的功能描述符有:
+        Header Functional Descriptor : 0x00
+        Call Management Functional Descriptor:0x01
+        ACM Functional Descriptor:0x02
+        Union Functional Descriptor:0x06
+        接下来会对这4个功能分别进行描述 */
+
+    /* Header Functional Descriptor */
+    0x00, /* bDescriptorSubtype: Header Func Desc（0x00 0x01 0x02 0x06） */
+    0x10, /* bcdCDC: spec release number CDC版本号, 低字节在前 */
+    0x01,
+
+    /* Call Management Functional Descriptor */
+    0x05, /* bFunctionLength */
+    0x24, /* bDescriptorType: CS_INTERFACE */
+    0x01, /* bDescriptorSubtype: Call Management Func Desc */
+    0x00, /* bmCapabilities: D0+D1: 设备自己不处理调用管理 */
+    0x01, /* bDataInterface: 1 用来做调用管理的数据类接口编号 */
+
+    /* ACM Functional Descriptor */
+    0x04,                  /* bFunctionLength */
+    USB_DESCR_TYP_CS_INTF, /* bDescriptorType: CS_INTERFACE */
+    0x02,                  /* bDescriptorSubtype: Abstract Control Management desc */
+    0x02,                  /* bmCapabilities */
+
+    /* Union Functional Descriptor */
+    0x05,                  /* bFunctionLength */
+    USB_DESCR_TYP_CS_INTF, /* bDescriptorType: CS_INTERFACE */
+    0x06,                  /* bDescriptorSubtype: Union func desc */
+    0x00,                  /* bMasterInterface: Communication class interface */
+    0x01,                  /* bSlaveInterface0: Data Class Interface */
+
+    /* Endpoint 2 Descriptor */
+    0x07,               /* bLength: Endpoint Descriptor size */
+    USB_DESCR_TYP_ENDP, /* bDescriptorType: Endpoint 端点描述符编号为0x05 */
+    0x82,               /* bEndpointAddress: (IN2) 7bit表示数据方向, 1表示输入, 端点为2 */
+    0x03,               /* bmAttributes: Interrupt 中断端点: 0x03, 批量端点: 0x02 */
+    0x40,               /* wMaxPacketSize: 该端点的最大包长, 端点2的最大包长为64字节 */
+    0x00,
+    0xFF, /* bInterval: 端点的查询时间 */
+
+    /* Data class interface descriptor */
+    0x09,                 /* bLength: Endpoint Descriptor size */
+    USB_DESCR_TYP_INTERF, /* bDescriptorType: 接口描述符的编号为0x04 */
+    0x01,                 /* bInterfaceNumber: Number of Interface 该接口的编号, 这里是第二个接口, 所以编号为1 */
+    0x00,                 /* bAlternateSetting: Alternate setting 该接口的备用编号为0 */
+    0x02,                 /* bNumEndpoints: Two endpoints used 非0端点的数目, 这里使用端点1和端点3两个端点 */
+    0x0A,                 /* bInterfaceClass: CDC 该接口所使用的类, 数据类接口的代码为0x0A */
+    0x00,                 /* bInterfaceSubClass: 该接口所使用的子类为0 */
+    0x00,                 /* bInterfaceProtocol: 该接口所使用的协议为0 */
+    0x00,                 /* iInterface: 该接口的字符串索引值, 这里没有为0 */
+
+    /* Endpoint 3 Descriptor */
+    0x07,               /* bLength: Endpoint Descriptor size */
+    USB_DESCR_TYP_ENDP, /* bDescriptorType: Endpoint */
+    0x03,               /* bEndpointAddress: (OUT3) */
+    0x02,               /* bmAttributes: Bulk 批量端点:0x02 */
+    0x40,               /* wMaxPacketSize: */
+    0x00,
+    0x00, /* bInterval: ignore for Bulk transfer 查询端点的时间, 这里对批量端点无效 */
+
+    /* Endpoint 1 Descriptor */
+    0x07,               /* bLength: Endpoint Descriptor size */
+    USB_DESCR_TYP_ENDP, /* bDescriptorType: Endpoint */
+    0x81,               /* bEndpointAddress: (IN1) */
+    0x02,               /* bmAttributes: Bulk 批量端点, 0x02 */
+    0x40,               /* wMaxPacketSize: */
+    0x00,
+    0x00 /* bInterval */
 };
 
 // 语言描述符
@@ -522,16 +596,16 @@ void USB_DevTransProcess(void) {
                                 //                {
                                 //                  pDescr = MouseRepDesc;                                //数据准备上传
                                 //                  len = sizeof( MouseRepDesc );
-                                //                  Ready = 1; //如果有更多接口，该标准位应该在最后一个接口配置完成后有效
+                                //                  Ready = 1; //如果有更多接口, 该标准位应该在最后一个接口配置完成后有效
                                 //                }
                                 //                else
-                                //                  len = 0xff; //本程序只有2个接口，这句话正常不可能执行
+                                //                  len = 0xff; //本程序只有2个接口, 这句话正常不可能执行
                                 //              }
                                 break;
 
                             // 字符串描述符
                             case USB_DESCR_TYP_STRING: {
-                                // wValue 低位: 描述符索引
+                                // 描述符索引
                                 switch ((pSetupReqPak->wValue) & 0xff) {
                                     case 1:
                                         pDescr = MyManuInfo;
@@ -558,11 +632,11 @@ void USB_DevTransProcess(void) {
                                         len = MyLangDescr[0];
                                         printf("USB_DESCR_TYP_STRING MyLangDescr, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
                                         break;
-                                    case 0xEE:
-                                        pDescr = WCID;
-                                        len = WCID[0];
-                                        printf("USB_DESCR_TYP_STRING WCID, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
-                                        break;
+                                    // case 0xEE:
+                                    //     pDescr = WCID;
+                                    //     len = WCID[0];
+                                    //     printf("USB_DESCR_TYP_STRING WCID, SetupReqLen: %u, len: %u\n", SetupReqLen, len);
+                                    //     break;
                                     default:
                                         errflag = 0xFF;  // 不支持的字符串描述符
                                         break;

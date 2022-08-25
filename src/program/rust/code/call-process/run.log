@@ -1,0 +1,253 @@
+Begin parsing the input parameters......   
+Check complete, now start writing the image
+Current port: COM15
+Current baudrate: 115200
+Current stopBits: 1
+Current parity: No
+Serial opened!! 
+*******************************
+=== PHY6212 === 
+Send erase successfully!
+Receive #OK!
+Erase successfully!
+Skipping the write of configuration file
+=== PHY6212 === 
+Send cpnum successfully!
+Receive #OK!
+QTime("15:26:33.793") startTime
+Receive >>: successful!
+
+============Write hexf File [01/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [02/09]============
+Send cpbin successfully!
+UART RX ASCII:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [03/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [04/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [05/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [06/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [07/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [08/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [09/09]============
+Send cpbin successfully!
+UART RX ASCII: 
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: 
+Receive #OK!
+QTime("15:26:53.704") endTime
+QTime.currentTime = 19911 ms
+Write images successfully!
+Write registers successfully!
+Save log file successfully!
+
+Press Enter to continue...
+"E:\\develop\\eh-mc19\\EH-MC19-TestCase\\zPhyPlusKit.log" 文件已修改
+Name: COM15
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Name: COM3
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Name: COM17
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Name: COM18
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Name: COM16
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Name: COM19
+Description:USB Serial Port
+Manufacturer: FTDI
+*******************************
+Current port: COM15
+Current baudrate: 115200
+Current stopBits: 1
+Current parity: No
+Serial opened!!
+*******************************
+=== PHY6212 ===
+Send erase successfully!
+Receive #OK!
+Erase successfully!
+=== PHY6212 ===
+Send cpnum successfully!
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [01/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x000001d1
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [02/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x001cebae
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [03/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x00000000
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [04/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x001e4e70
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [05/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x0016547f
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [06/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x0034a4db
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [07/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x0010ea5a
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [08/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x005ef44c
+#OK>>:
+Receive #OK!
+Receive >>: successful!
+
+============Write hexf File [09/09]============
+Send cpbin successfully!
+UART RX ASCII: by hex mode:
+Receive image request!
+Send image successful! Waiting to receive checksum...
+Send checksum successfully!
+UART RX ASCII: checksum is: 0x003c77f5
+#OK>>:
+Receive #OK!
+Write images successfully!
+Write registers successfully!

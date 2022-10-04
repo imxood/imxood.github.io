@@ -1,3 +1,39 @@
+2022.0927
+
+    yarn create tauri-app, 使用 yarn + svelte 开发
+
+    运行:
+        yarn
+        yarn tauri dev
+
+
+    unocss:
+
+        参考 vite 中配置 unocss: https://github.com/unocss/unocss/tree/main/packages/vite
+
+        1. 使用了 https://uno.antfu.me/ 提供的 默认配置 unocss.config.js (点击 顶部的设置图标)
+        2. yarn add -D unocss
+        3. 在 vite.config.ts 中配置:
+
+            import Unocss from 'unocss/vite'
+
+            export default {
+                plugins: [
+                    Unocss({ /* options */ }),
+                ],
+            }
+
+        4. 在 main.ts 中使用
+
+            import 'uno.css'
+
+
+2022.0827
+
+    yarn create tauri-app
+
+    选择 yarn, svelte-ts
+
 2022.07.14
 
     cargo install tauri-cli --version "^1.0.0"

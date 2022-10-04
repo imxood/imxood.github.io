@@ -10,4 +10,4 @@ git clone https://github.com/microsoft/vcpkg
 
 vcpkg help triplet
 
-vcpkg install libusb --triplet=x64-windows
+.\vcpkg\vcpkg install libusb --triplet=x64-windows-static-md

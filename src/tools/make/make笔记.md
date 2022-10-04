@@ -2,6 +2,13 @@
 
 ps: 命令中的[..]代表是可选项, 加了后意义自然有了不同
 
+## 查看所有的targets
+
+.PHONY: no_targets__ list
+no_targets__:
+list:
+	sh -c "$(MAKE) -p no_targets__ | awk -F':' '/^[a-zA-Z0-9][^\$$#\/\\t=]*:([^=]|$$)/ {split(\$$1,A,/ /);for(i in A)print A[i]}' | grep -v '__\$$' | sort"
+
 ## 变量
 
     赋值

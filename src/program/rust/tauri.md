@@ -109,3 +109,17 @@
     nvs add lts
 
     echo 'nvs use latest' >> ~/.bashrc
+
+
+## 问题
+
+`__tauri_message__` does not live long enough
+
+https://github.com/tauri-apps/tauri/discussions/4317
+
+解决方法: https://github.com/tauri-apps/tauri/issues/2533
+
+
+## release 默认启用 dev tools 功能
+
+给 tauri crate 添加  devtools features, 就可以了

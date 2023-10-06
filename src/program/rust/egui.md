@@ -8,14 +8,14 @@
 
 如果是垂直布局 水平居中对齐 或 水平布局 垂直居中对齐, 则 frame_rect 的宽或高是满的
 
-拉伸边界线 无法让panel变宽, 原因是 拉伸改变了 ui.placer.region 的 max_rect, 但是最终生成的 Shape 是根据当前ui 的 ui.placer.region.min_rect，（根据代码中min_rect的注释, 有点难理解它的意思） 
-每一次分配一个新空间 (最终调用 allocate_space_impl), 会根据布局计算出需要的Rect, 然后修改 ui.placer.region的 min_rect 和 max_rect， 再移动 cursor 以确定下一次分配空间的位置. 
+拉伸边界线 无法让panel变宽, 原因是 拉伸改变了 ui.placer.region 的 max_rect, 但是最终生成的 Shape 是根据当前ui 的 ui.placer.region.min_rect，（根据代码中min_rect的注释, 有点难理解它的意思）
+每一次分配一个新空间 (最终调用 allocate_space_impl), 会根据布局计算出需要的Rect, 然后修改 ui.placer.region的 min_rect 和 max_rect， 再移动 cursor 以确定下一次分配空间的位置.
 
 ### 2022 4.12 笔记
 
 当实际分配的宽度不够某个窗口时, 窗口就会收缩, 而不管窗口有多大的宽度
 
-关于 frame_rect 和 widget_rect, 
+关于 frame_rect 和 widget_rect,
 
 frame_rect 表示: 根据布局得到一个空间, 用于放置 widget.
 widget_rect 表示: 一个 widget 的实际形状.
@@ -27,11 +27,11 @@ widget_rect 表示: 一个 widget 的实际形状.
 
 当执行 App 的 update时, CtxRef对象 已经从Input得到了足够的数据, 比如获取到了 屏幕尺寸 鼠标移动 按键 等等.
 
-当执行 ``` egui::SidePanel::right("side_panel").min_width(250.0) ``` 时, 只是构建了一个基本的 Panel对象, 
+当执行 ``` egui::SidePanel::right("side_panel").min_width(250.0) ``` 时, 只是构建了一个基本的 Panel对象,
 当执行 ``` panel.show(ctx, |ui|{}) ``` 时, 会根据 当前有效区域 和 屏幕尺寸 构建一个 Ui 对象. panel 的layer_id 是 LayerId::background()
 Ui对象中, 会构建一个 Painter对象, Placer对象
 
-``` Placer::new(max_rect, Layout::default()) ``` 根据当前有效区域， 默认布局是 从上到下, 向左对齐, 
+``` Placer::new(max_rect, Layout::default()) ``` 根据当前有效区域， 默认布局是 从上到下, 向左对齐,
 
 Layout
 
@@ -64,10 +64,16 @@ Layout
 
 ### Ui对象
 
-    每次创建Ui对象时, ui的有效区域已经确定好了, 
+    每次创建Ui对象时, ui的有效区域已经确定好了,
 
         ui.max_rect() 表示 ui的有效区域
 
     layout, 包含了 组件的排列方式, 比如: 从上到下? 超出截断? 高度或宽度铺满?
 
     placer, 包含了 min_
+
+## 选中时 显示边框
+
+参考 crates\egui\src\widgets\selected_label.rs
+
+

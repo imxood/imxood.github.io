@@ -1,5 +1,20 @@
 # Rust in action
 
+## 在 .config/config.toml 中设置默认编译目标
+
+    # out-dir 需要添加编译选项 cargo build -Z unstable-options
+
+    [build]
+    target = "i686-pc-windows-msvc"
+    out-dir = "D:/programs/ehTestCore_V1.2.1.13/plugin"
+
+## 在 Cargo.toml 中指定 target, nightly
+
+    cargo-features = ["per-package-target"]d
+
+    [package]
+    default-target = "i686-pc-windows-msvc"
+
 ## TAB键 自动补全
 
 参考: https://rust-lang.github.io/rustup/installation/index.html#enable-tab-completion-for-bash-fish-zsh-or-powershell
@@ -293,6 +308,9 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
 
 ## libusb, usb库
 
+    https://stackoverflow.com/questions/1710922/how-to-install-pkg-config-in-windows
+
+
     在windows上找不到libusb库, 在 ~/.cargo/config 中添加:
 
     [target.x86_64-pc-windows-msvc.'usb-1.0']
@@ -361,3 +379,66 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
 ## 汇编
 
     https://godbolt.org/ 二进制浏览器
+
+## rust编译选项
+
+在 build.rs 中
+
+``` rust
+println!("cargo:rustc-link-arg=-fPIC");
+```
+
+在 .config/config.toml 中
+
+``` toml
+[target.arm-unknown-linux-gnueabihf]
+rustflags = [
+    # "-Clink-arg=-Tsrc/linker.ld",
+    # "-Cforce-frame-pointers=yes"
+
+    # "-C", "linker=arm-linux-gnueabihf-ld",
+    "-C", "linker=arm-linux-gnueabihf-gcc",
+    "-C", "relocation-model=pic",
+    "-C", "target-feature=+crt-static",
+
+    # LLD (shipped with the Rust toolchain) is used as the default linker
+    # "-C", "link-arg=-Tlink.x",
+]
+```
+
+## 调试 rust dll
+
+.vscode\launch.json
+
+``` json
+{
+    "type": "lldb",
+    "request": "launch",
+    "name": "ehTestCore",
+    "program": "xxx.exe",
+    "args": [],
+    "cwd": "xxx",
+    "stopOnEntry": false,
+    "sourceLanguages": [
+        "rust"
+    ],
+    "sourceMap": {
+        "/rustc/73c9eaf21454b718e7c549984d9eb6e1f75e995c": "C:/Users/maxu/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/lib/rustlib/src/rust"
+    }
+},
+```
+
+rust 的标准库 调试, 需要添加下面的内容, 其中 rustc 后面的 commit-hash 可以通过命令获得:
+
+``` json
+"sourceMap": {
+    "/rustc/73c9eaf21454b718e7c549984d9eb6e1f75e995c": "C:/Users/maxu/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/lib/rustlib/src/rust"
+}
+```
+
+``` rustc -Vv | grep commit-hash | cut -d' ' -f 2 ```
+
+## 静态 c++ 运行时库
+
+[build-dependencies]
+static_vcruntime = "2.0"

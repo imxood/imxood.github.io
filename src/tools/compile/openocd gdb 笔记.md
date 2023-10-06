@@ -70,7 +70,7 @@
 
 ## 使用gdb和openocd实现远程下载
 
-    arm-none-eabi-gdb -q --readnow -ex "target remote 127.0.0.1:3333" -ex "b main" -ex "monitor halt" -ex "load" -ex "c" -ex "monitor resume" -ex "echo ok\n" -ex "disconnect" -ex "q"
+    arm-none-eabi-gdb -q --readnow -ex "target extended-remote 3333" -ex "b main" -ex "monitor halt" -ex "load" -ex "c" -ex "monitor resume" -ex "echo ok\n" -ex "disconnect" -ex "q"
     为了远程的下载程序到sram中, 我发现用gdb在load后自动设置的pc, 用i r看是对的, 用'continue'是可以的, 但是阻塞的, 用了'monitor resume', 但是用monitor reg pc查看pc, 却是每2次中1对1错, 很有规律,,,,,,,,,,用上面的命令: 先给程序加断点,'c', 自动走到断点处, 执行'monitor resume', 退出, 就解决了
 
 

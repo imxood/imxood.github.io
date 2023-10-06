@@ -1,11 +1,17 @@
+## cmake 命令
+
+cmake -B build                                                          配置 编译目录
+cmake --build build                                                     运行 指定的编译路径
+cmake --build build --target clean                                      清除编译目录
+
+windows平台下指定架构:
+    -A Win32 或 Win64 或 x64, 2019开始 无法使用 x86
+
+cmake --trace-expand --loglevel=VERBOSE ...
+    --trace-expand 可以使变量值显示
+    --loglevel=VERBOSE 可以使message(VERBOSE ...)有输出
+
 # cmake常用语法
-
-    cmake -B build                                                          配置 编译目录
-    cmake --build build                                                     运行 指定的编译路径
-
-    cmake --trace-expand --loglevel=VERBOSE ...
-        --trace-expand 可以使变量值显示
-        --loglevel=VERBOSE 可以使message(VERBOSE ...)有输出
 
     include_directories(include)                                            设置头文件路径
     link_directories(/usr/lib)                                              设置库路径
@@ -73,15 +79,15 @@
 
     -DCMAKE_INSTALL_RPATH=/usr 编译期与运行期的rpath都会多一条
     -DCMAKE_SKIP_RPATH=FALSE 编译期与运行期都不忽略RPATH
-    
-    
+
+
     # cmake 获取所有的 include_directories
     get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
     foreach(dir ${dirs})
       message(STATUS "dir='${dir}'")
     endforeach()
-    
-    
+
+
     # cmake 获取target所有的属性
     # Get all propreties that cmake supports
     execute_process(COMMAND cmake --help-property-list OUTPUT_VARIABLE CMAKE_PROPERTY_LIST)

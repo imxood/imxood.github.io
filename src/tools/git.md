@@ -2,7 +2,18 @@
 
 ## 可用的国内镜像
 
-​https://hub.fastgit.xyz​
+来自: https://juejin.cn/post/7210744398640595005
+
+github.com 前加一个 k
+
+如: https://kgithub.com/midoks/mdserver-web
+
+
+## 取消 git commit
+
+git reset --soft HEAD^
+
+git reset HEAD 指定文件或目录
 
 ## 第一次提交代码
 
@@ -150,3 +161,10 @@ git merge upstream/master
 # 提交
 git push origin master
 ```
+
+## 更新子模块
+
+### 不包含 .submodule 时
+
+git submodule init
+git submodule update

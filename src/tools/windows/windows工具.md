@@ -3,7 +3,7 @@
 ## 终端工具
 
     CMDER, http://cmder.net
-    
+
     Windows Terminal
 
 ## 杀死指定进程
@@ -20,3 +20,7 @@
 
     $p = Start-Process ".\putty-64bit-0.74-installer.msi" -ArgumentList '/passive INSTALLDIR=$putty_dir' -PassThru -Wait
     Print-Status "putty" $p.ExitCode $p.StandardError
+
+## 包管理工具
+
+    vcpkg choco

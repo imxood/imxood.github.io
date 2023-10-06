@@ -15,7 +15,7 @@
 
 ## issue
 
-    maxu@maxu-pc:/media/maxu$ sudo mount -t ntfs-3g /dev/sdb4 /mnt/A/
+    xxx@xxx-pc:/media/xxx$ sudo mount -t ntfs-3g /dev/sdb4 /mnt/A/
     The disk contains an unclean file system (0, 0).
     Metadata kept in Windows cache, refused to mount.
     Falling back to read-only mount because the NTFS partition is in an
@@ -183,25 +183,41 @@ REJECT 拒绝数据包通过，必要时会给数据发送端一个响应的信�
 
 ### 用户管理
 
-    先给个例子:
-    sudo useradd -m  -s /bin/bash maxu 添加用户maxu, 设置home目录, home模板来自/etc/skel, -s 指定bash, 若不指定, 则默认是/bin/sh, 没有tab自动补全及当前路径
-    sudo userdel maxu, 删除用户, 不删除用户目录, 若加上-r会把用户目录一起删掉
+#### 添加用户
 
-    useradd 注：添加用户
-    passwd 注：为用户设置密码
-    usermod 注：修改用户命令，可以通过usermod 来修改登录名、用户的家目录等等；
-    id 注：查看用户的UID、GID及所归属的用户组
-    groupadd 注：添加用户组；
-    groupdel 注：删除用户组；
-    groupmod 注：修改用户组信息
-    groups 注：显示用户所属的用户组
+sudo useradd -m -s /bin/bash xxx 添加用户 xxx
 
-    usermod -a -G sudo,adm,dialout peak 给peak zhui加sudo,adm,dialout组
+-m 自动创建home目录, home模板来自/etc/skel
+
+-s 指定bash, 若不指定, 则默认是/bin/sh, 没有tab自动补全及当前路径
+
+#### 修改用户组
+
+sudo usermod -a -G sudo,adm,dialout xxx 给用户 xxx 追加sudo,adm,dialout组
+
+-a, 追加, 与 -G 一起使用, 追加组
+
+#### 删除用户
+
+sudo userdel xxx, 删除用户, 不删除用户目录, 若加上-r会把用户目录一起删掉
+
+useradd 注：添加用户
+passwd 注：为用户设置密码
+usermod 注：修改用户命令，可以通过usermod 来修改登录名、用户的家目录等等；
+id 注：查看用户的UID、GID及所归属的用户组
+groupadd 注：添加用户组；
+groupdel 注：删除用户组；
+groupmod 注：修改用户组信息
+groups 注：显示用户所属的用户组
+
+
+#### 查询永续信息
+
     <!-- peak adm dialout cdrom sudo dip plugdev netdev lpadmin -->
 
     cat /etc/passwd 查看Linux下所有用户
         root:x:0:0:root:/root:/bin/bash
-        maxu:x:1001:0::/home/maxu:/bin/bash
+        xxx:x:1001:0::/home/xxx:/bin/bash
         ...
         username:password:uid:gid:allname:homedir:shell
 
@@ -294,7 +310,7 @@ REJECT 拒绝数据包通过，必要时会给数据发送端一个响应的信�
 
         添加：
             ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", MODE:="0666", SYMLINK+="esp32c3"
-    
+
         MODE:="0666" 设置每个人都有读写权限
 
         sudo service udev reload
@@ -1010,7 +1026,7 @@ eyJoaXN0b3J5IjpbMTc2NDcwMTI1NV19
 ## ldd, list dynamic dependencyies, 列出动态依赖, 动态库
 
     比如:
-        maxu@maxu-pc:/develop/sources/stlink/build$ ldd /usr/local/bin/st-info
+        xxx@xxx-pc:/develop/sources/stlink/build$ ldd /usr/local/bin/st-info
         linux-vdso.so.1 (0x00007ffe16f92000)
         libstlink.so.1 => not found
         libusb-1.0.so.0 => /lib/x86_64-linux-gnu/libusb-1.0.so.0 (0x00007f469507d000)

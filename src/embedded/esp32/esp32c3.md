@@ -16,7 +16,7 @@
     make clean
     make
     sudo make install
-    
+
 ### 编译 openocd-esp32
 
     git clone https://github.com/espressif/openocd-esp32.git

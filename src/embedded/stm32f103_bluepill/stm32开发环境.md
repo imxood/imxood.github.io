@@ -22,6 +22,8 @@
 
 	choco install make openocd gcc-arm-embedded
 
+	需要设置环境变量?
+
 
 ### 安装非choco管理的软件
 

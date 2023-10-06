@@ -1,3 +1,30 @@
+## USB 实践
+
+## libusb
+
+端点地址: 0~3 位是端点号, 第 7 位是方向(0-OUT,1-IN)
+
+如 0x81 表示 EP0x01 的 In 端点
+如 0x1 表示 EP0x01 的输出
+
+libusb:
+
+    当执行读操作时, 端口如: 0x81 0x82 0x83 ...
+    当执行写操作时, 端口如: 0x1   0x2  0x3 ...
+
+数据包的最大长度, 是设置在 配置描述符中的, 最大值不能超过 1024
+
+libusb 当使用 bulk 传输 读取数据时, 读取的 size 时, 可以设置很大, 如 10240, 根据 bulk 传输 的定义:
+
+1. 当传输的数据长度 小于 数据包的最大长度时, 认为传输结束, bulk 传输的回调函数被执行
+2. 当传输的数据长度 大于 数据包的最大长度时, 需要多次传输数据包, 只有最后传输结束时, bulk 传输的回调函数才会执行
+
+USB 从机 发送数据到主机的过程:
+
+1. 复制数据到 EP 对应的缓冲区中
+2. 设置 EP 的发送长度
+3. 发送 ACK 给主机
+
 # USB 用法笔记
 
 1. 写好各种描述符后, 设备正常运行
@@ -10,12 +37,11 @@
 
     3> 上面是我喜欢的方式, 其它的, 不知道..., 略.
 
-
 ## WinCID
 
 关键是三个描述符的解析, 就可以实现:
 
-``` c
+```c
 #define WCID_VENDOR_CODE 0x17
 
 // WCID, 微软 WinUSB
@@ -87,7 +113,7 @@ uint8_t WINUSB_ExtendedProperty_InterfaceGUID_Descritpor[] = {
 
 请求:
 
-``` c
+```c
 // Setup包的处理
 if (SetupReqCode == WCID_VENDOR_CODE) {
     printf("WCID_VENDOR_CODE\n");
@@ -140,9 +166,9 @@ case USB_DESCR_TYP_STRING: {
 
 需要什么可以在官方文档上搜索关键字: https://www.usb.org/documents
 
-下面很多截图来自: USB中文网 https://www.usbzh.com
+下面很多截图来自: USB 中文网 https://www.usbzh.com
 
-### USB标准请求、类特定请求总结
+### USB 标准请求、类特定请求总结
 
 ![](images/usb/20220824215804.png)
 
@@ -172,7 +198,7 @@ case USB_DESCR_TYP_STRING: {
 
 ![](images/usb/20220821164348.png)
 
-#### HID描述符
+#### HID 描述符
 
 ![](images/usb/20220825003914.png)
 

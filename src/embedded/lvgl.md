@@ -9,7 +9,7 @@ https://docs.lvgl.io/master/overview/index.html
 模拟器是为了方便在电脑端开发并验证效果
 
 1. 下载 Eclipse CDT IDE 环境
-    
+
     https://github.com/gnu-mcu-eclipse/org.eclipse.epp.packages/releases/
 
 2. 安装 SDL2
@@ -66,9 +66,13 @@ disp_drv.ver_res = LV_VER_RES_MAX;
 2. 硬件实现, 速度快, 消耗小
 
     disp_drv.rotated = LV_DISP_ROT_90; // 这种情况, 这个只用来 确定 分辨率
-    
+
     并设置 CONFIG_LV_DISPLAY_ORIENTATION
 
     硬件调用:
     st7735s_set_orientation(uint8_t orientation)
     可能需要 设置屏幕 X.Y对调, X方向从上到下, Y方向从下到上 等等
+
+## GUI Guider
+
+https://www.nxp.com/design/software/development-software/gui-guider:GUI-GUIDER

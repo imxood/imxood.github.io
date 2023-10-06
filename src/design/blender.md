@@ -54,3 +54,9 @@ dpkg-deb: 错误: 粘贴 子进程被信号(断开的管道) 终止了
 sudo dpkg -i --force-overwrite /var/cache/apt/archives/firmware-amd-graphics_20190114-2_all.deb
 
 
+## CAD Sketcher
+
+https://hlorus.github.io/CAD_Sketcher/installation/
+
+## screencast_keys
+

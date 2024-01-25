@@ -1,9 +1,9 @@
 ## 系统清理
 
-AppData\Local\Yarn\Cache 6个多G
+AppData\Local\Yarn\Cache 6 个多 G
 清理: yarn cache clean
 
-AppData\Local\Temp 6个G
+AppData\Local\Temp 6 个 G
 删除目录
 
 AppData\Roaming\Tencent 2.02G
@@ -87,7 +87,7 @@ http://dependencywalker.com/
 
 https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 
-上面的办法都没什么用, 我遇到的问题, 64位dll与32位dll
+上面的办法都没什么用, 我遇到的问题, 64 位 dll 与 32 位 dll
 
 ## 环境变量
 
@@ -115,6 +115,10 @@ https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 
 打开 regedit
 输入: 计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\COM Name Arbiter\Devices
-删除 你不想要的所有用过的COM端口
+删除 你不想要的所有用过的 COM 端口
 
 ![](images/windows/2023-07-24-10-55-06.png)
+
+## 删除 virtual box 网卡
+
+启用需要删除的 virtual box 网卡, 在 virtual box 的虚拟网卡中(不启用的话, 这个列表中看不到), 删除

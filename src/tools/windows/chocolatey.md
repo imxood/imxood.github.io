@@ -24,7 +24,7 @@ ChocolateyToolsLocation: D:\choco-pkgs
 
 ### 基本环境
 
-choco install cmake git llvm python notepadplusplus
+choco install cmake git llvm python notepadplusplus 7zip everything clash
 
 ### stm32 环境环境
 

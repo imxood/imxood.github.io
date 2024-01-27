@@ -168,3 +168,13 @@ git push origin master
 
 git submodule init
 git submodule update
+
+## git 代理
+
+git config --global http.proxy http://127.0.0.1:1080
+
+git config --global https.proxy http://127.0.0.1:1080
+
+git config --global --get http.proxy
+
+git config --global --get https.proxy

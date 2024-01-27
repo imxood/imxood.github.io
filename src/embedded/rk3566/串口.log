@@ -1,0 +1,531 @@
+DDR Version V1.13 20220218
+ln
+ddrconfig:7
+LPDDR4X, 324MHz
+BW=32 Col=10 Bk=8 CS0 Row=17 CS1 Row=17 CS=2 Die BW=8 Size=8192MB
+tdqss: cs0 dqs0: 24ps, dqs1: -96ps, dqs2: -24ps, dqs3: -96ps,
+tdqss: cs1 dqs0: -24ps, dqs1: -96ps, dqs2: -24ps, dqs3: -96ps,
+
+change to: 324MHz
+PHY drv:clk:36,ca:36,DQ:29,odt:0
+vrefinner:24%, vrefout:41%
+dram drv:40,odt:0
+clk skew:0x61
+
+change to: 528MHz
+PHY drv:clk:36,ca:36,DQ:29,odt:0
+vrefinner:24%, vrefout:41%
+dram drv:40,odt:0
+clk skew:0x58
+
+change to: 780MHz
+PHY drv:clk:36,ca:36,DQ:29,odt:0
+vrefinner:24%, vrefout:41%
+dram drv:40,odt:0
+clk skew:0x58
+
+change to: 1056MHz(final freq)
+PHY drv:clk:36,ca:36,DQ:29,odt:60
+vrefinner:16%, vrefout:22%
+dram drv:40,odt:80
+vref_ca:00000071
+clk skew:0x3c
+cs 0:
+the read training result:
+DQS0:0x41, DQS1:0x3e, DQS2:0x44, DQS3:0x3f,
+min  : 0xc  0xa  0xc  0xd  0x2  0x4  0x6  0x6 , 0x6  0x5  0x2  0x1  0x8  0xf 0x10 0x10 ,
+       0x5  0x1  0xf  0xe  0xb  0xa  0xa  0xa , 0x8  0x6  0xa  0x1  0xe  0xd  0xd  0xb ,
+mid  :0x2a 0x29 0x2b 0x2b 0x1f 0x22 0x22 0x25 ,0x22 0x23 0x20 0x1e 0x27 0x2c 0x2d 0x2d ,
+      0x21 0x20 0x2d 0x2c 0x28 0x29 0x28 0x28 ,0x26 0x24 0x28 0x1f 0x2b 0x2b 0x2b 0x2a ,
+max  :0x49 0x48 0x4b 0x49 0x3d 0x40 0x3f 0x44 ,0x3e 0x42 0x3f 0x3c 0x46 0x49 0x4b 0x4b ,
+      0x3e 0x3f 0x4b 0x4b 0x46 0x49 0x46 0x46 ,0x45 0x42 0x47 0x3e 0x48 0x49 0x4a 0x49 ,
+range:0x3d 0x3e 0x3f 0x3c 0x3b 0x3c 0x39 0x3e ,0x38 0x3d 0x3d 0x3b 0x3e 0x3a 0x3b 0x3b ,
+      0x39 0x3e 0x3c 0x3d 0x3b 0x3f 0x3c 0x3c ,0x3d 0x3c 0x3d 0x3d 0x3a 0x3c 0x3d 0x3e ,
+the write training result:
+DQS0:0x3f, DQS1:0x30, DQS2:0x39, DQS3:0x30,
+min  :0x59 0x59 0x5a 0x59 0x50 0x51 0x53 0x58 0x57 ,0x4a 0x4a 0x47 0x42 0x4d 0x53 0x53 0x55 0x4e ,
+      0x49 0x48 0x52 0x50 0x4f 0x52 0x53 0x52 0x52 ,0x49 0x4a 0x4b 0x43 0x4f 0x4f 0x50 0x50 0x48 ,
+mid  :0x76 0x76 0x77 0x76 0x6b 0x6c 0x6f 0x74 0x73 ,0x66 0x66 0x63 0x5f 0x68 0x6f 0x6f 0x72 0x6b ,
+      0x65 0x62 0x6e 0x6e 0x6b 0x6c 0x6d 0x6d 0x6d ,0x65 0x65 0x67 0x5e 0x6b 0x6c 0x6c 0x6c 0x65 ,
+max  :0x94 0x94 0x94 0x94 0x86 0x87 0x8c 0x90 0x8f ,0x83 0x82 0x80 0x7c 0x84 0x8b 0x8b 0x8f 0x88 ,
+      0x82 0x7c 0x8b 0x8c 0x88 0x87 0x87 0x89 0x89 ,0x82 0x81 0x84 0x7a 0x88 0x89 0x89 0x89 0x82 ,
+range:0x3b 0x3b 0x3a 0x3b 0x36 0x36 0x39 0x38 0x38 ,0x39 0x38 0x39 0x3a 0x37 0x38 0x38 0x3a 0x3a ,
+      0x39 0x34 0x39 0x3c 0x39 0x35 0x34 0x37 0x37 ,0x39 0x37 0x39 0x37 0x39 0x3a 0x39 0x39 0x3a ,
+cs 1:
+the read training result:
+DQS0:0x40, DQS1:0x3f, DQS2:0x44, DQS3:0x3e,
+min  : 0xc  0xa  0xc  0xc  0x1  0x2  0x5  0x5 , 0x7  0x6  0x3  0x1  0x8  0xf 0x10 0x11 ,
+       0x5  0x2  0xe  0xe  0xc  0xb  0xb  0xb , 0x7  0x5  0x9  0x1  0xe  0xd  0xc  0xa ,
+mid  :0x29 0x29 0x2a 0x29 0x1e 0x20 0x21 0x23 ,0x23 0x24 0x22 0x1e 0x27 0x2c 0x2d 0x2f ,
+      0x22 0x20 0x2c 0x2b 0x29 0x29 0x28 0x28 ,0x26 0x23 0x27 0x1f 0x2a 0x2a 0x2a 0x29 ,
+max  :0x47 0x48 0x49 0x47 0x3b 0x3e 0x3e 0x42 ,0x40 0x43 0x41 0x3c 0x46 0x4a 0x4b 0x4d ,
+      0x3f 0x3f 0x4b 0x49 0x46 0x48 0x46 0x45 ,0x45 0x42 0x46 0x3e 0x47 0x48 0x48 0x48 ,
+range:0x3b 0x3e 0x3d 0x3b 0x3a 0x3c 0x39 0x3d ,0x39 0x3d 0x3e 0x3b 0x3e 0x3b 0x3b 0x3c ,
+      0x3a 0x3d 0x3d 0x3b 0x3a 0x3d 0x3b 0x3a ,0x3e 0x3d 0x3d 0x3d 0x39 0x3b 0x3c 0x3e ,
+the write training result:
+DQS0:0x3f, DQS1:0x30, DQS2:0x39, DQS3:0x30,
+min  :0x53 0x54 0x54 0x53 0x4a 0x4a 0x4e 0x52 0x51 ,0x48 0x49 0x46 0x41 0x4b 0x51 0x53 0x54 0x4e ,
+      0x46 0x47 0x50 0x4f 0x4e 0x4f 0x52 0x51 0x51 ,0x49 0x49 0x4a 0x43 0x4e 0x4f 0x4f 0x50 0x47 ,
+mid  :0x70 0x70 0x71 0x70 0x63 0x65 0x6a 0x6e 0x6d ,0x65 0x65 0x62 0x5e 0x68 0x6e 0x6f 0x71 0x6b ,
+      0x63 0x61 0x6c 0x6d 0x6a 0x6a 0x6c 0x6c 0x6c ,0x65 0x65 0x67 0x5f 0x6b 0x6c 0x6c 0x6c 0x64 ,
+max  :0x8d 0x8d 0x8e 0x8d 0x7d 0x81 0x86 0x8b 0x89 ,0x83 0x82 0x7e 0x7c 0x85 0x8c 0x8c 0x8e 0x88 ,
+      0x80 0x7c 0x89 0x8b 0x87 0x85 0x86 0x87 0x88 ,0x82 0x81 0x84 0x7b 0x88 0x89 0x89 0x89 0x82 ,
+range:0x3a 0x39 0x3a 0x3a 0x33 0x37 0x38 0x39 0x38 ,0x3b 0x39 0x38 0x3b 0x3a 0x3b 0x39 0x3a 0x3a ,
+      0x3a 0x35 0x39 0x3c 0x39 0x36 0x34 0x36 0x37 ,0x39 0x38 0x3a 0x38 0x3a 0x3a 0x3a 0x39 0x3b ,
+CA Training result:
+cs:0 min  :0x45 0x43 0x3f 0x41 0x3d 0x3c 0x42 ,0x46 0x45 0x42 0x3f 0x40 0x3c 0x42 ,
+cs:0 mid  :0x84 0x82 0x7e 0x7f 0x7c 0x7b 0x72 ,0x85 0x84 0x81 0x7e 0x7f 0x7b 0x72 ,
+cs:0 max  :0xc4 0xc1 0xbe 0xbd 0xbb 0xba 0xa3 ,0xc4 0xc3 0xc0 0xbd 0xbf 0xbb 0xa2 ,
+cs:0 range:0x7f 0x7e 0x7f 0x7c 0x7e 0x7e 0x61 ,0x7e 0x7e 0x7e 0x7e 0x7f 0x7f 0x60 ,
+cs:1 min  :0x41 0x45 0x3c 0x43 0x3b 0x3d 0x40 ,0x43 0x47 0x3f 0x42 0x3f 0x3f 0x42 ,
+cs:1 mid  :0x83 0x82 0x7d 0x7f 0x7b 0x7a 0x72 ,0x85 0x83 0x80 0x7e 0x7f 0x7d 0x73 ,
+cs:1 max  :0xc5 0xbf 0xbf 0xbb 0xbc 0xb8 0xa5 ,0xc7 0xc0 0xc2 0xbb 0xc0 0xbb 0xa4 ,
+cs:1 range:0x84 0x7a 0x83 0x78 0x81 0x7b 0x65 ,0x84 0x79 0x83 0x79 0x81 0x7c 0x62 ,
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-gaaca6ffec1-211203 #zzz (Dec 03 2021 - 18:42:16)
+unrecognized JEDEC id bytes: 20, 41, 18
+Trying to boot from MMC2
+No misc partition
+spl: partition error
+Trying fit image at 0x4000 sector
+## Verified-boot: 0
+## Checking atf-1 0x00040000 ... sha256(2f01bd8955...) + OK
+## Checking uboot 0x00a00000 ... sha256(46618c990d...) + OK
+## Checking fdt 0x00b44da8 ... sha256(c92ef3591c...) + OK
+## Checking atf-2 0xfdcc9000 ... sha256(f1fecab971...) + OK
+## Checking atf-3 0xfdcd0000 ... sha256(d7aa45eb18...) + OK
+Jumping to U-Boot(0x00a00000) via ARM Trusted Firmware(0x00040000)
+Total: 768.332 ms
+
+INFO:    Preloader serial: 2
+NOTICE:  BL31: v2.3():v2.3-152-g4e725b15f:cl
+NOTICE:  BL31: Built : 10:51:13, Jul 15 2021
+INFO:    GICv3 without legacy support detected.
+INFO:    ARM GICv3 driver initialized in EL3
+INFO:    pmu v1 is valid
+INFO:    dfs DDR fsp_param[0].freq_mhz= 1056MHz
+INFO:    dfs DDR fsp_param[1].freq_mhz= 324MHz
+INFO:    dfs DDR fsp_param[2].freq_mhz= 528MHz
+INFO:    dfs DDR fsp_param[3].freq_mhz= 780MHz
+INFO:    Using opteed sec cpu_context!
+INFO:    boot cpu mask: 0
+INFO:    BL31: Initializing runtime services
+WARNING: No OPTEE provided by BL2 boot loader, Booting device without OPTEE initialization. SMC`s destined for OPTEE will return SMC_UNK
+ERROR:   Error initializing runtime service opteed_fast
+INFO:    BL31: Preparing for EL3 exit to normal world
+INFO:    Entry point address = 0xa00000
+INFO:    SPSR = 0x3c9
+
+
+U-Boot 2017.09-orangepi (Sep 21 2023 - 16:55:11 +0800)
+
+Model: Orange Pi 3B
+PreSerial: 2, raw, 0xfe660000
+DRAM:  7.7 GiB
+Sysmem: init
+Relocation Offset: ed234000
+Relocation fdt: eb9f6a70 - eb9fecc8
+CR: M/C/I
+Using default environment
+
+no mmc device at slot 1
+Card did not respond to voltage select!
+do_rkimg_test: dev_desc is NULL!
+dwmmc@fe2b0000: 0, dwmmc@fe2c0000: 2, sdhci@fe310000: 1
+Card did not respond to voltage select!
+PCIe-0 Link Fail
+
+Device 0: unknown device
+Card did not respond to voltage select!
+switch to partitions #0, OK
+mmc0 is current device
+Bootdev(scan): mmc 0
+MMC0: Legacy, 52Mhz
+PartType: EFI
+DM: v1
+boot mode: None
+I2c0 speed: 100000Hz
+vsel-gpios- not found! Error: -2
+vdd_cpu 643750 uV
+PMIC:  RK8090 (on=0x80, off=0x80)
+vdd_logic init 900000 uV
+vdd_gpu init 900000 uV
+vdd_npu init 900000 uV
+of_get_regulator: Get (vccio3-supply) regulator: 0 failed, ret=-19
+of_get_regulator: Get (vccio5-supply) regulator: 0 failed, ret=-19
+of_get_regulator: Get (vccio6-supply) regulator: 0 failed, ret=-19
+of_get_regulator: Get (vccio7-supply) regulator: 0 failed, ret=-19
+io-domain: OK
+Failed to get scmi clk dev
+dmc_fsp failed, ret=-19
+Model: Orange Pi 3B
+CLK: (sync kernel. arm: enter 816000 KHz, init 816000 KHz, kernel 0N/A)
+  apll 816000 KHz
+  dpll 528000 KHz
+  gpll 1188000 KHz
+  cpll 1000000 KHz
+  npll 24000 KHz
+  vpll 24000 KHz
+  hpll 24000 KHz
+  ppll 200000 KHz
+  armclk 816000 KHz
+  aclk_bus 150000 KHz
+  pclk_bus 50000 KHz
+  aclk_top_high 300000 KHz
+  aclk_top_low 200000 KHz
+  hclk_top 150000 KHz
+  pclk_top 50000 KHz
+  aclk_perimid 300000 KHz
+  hclk_perimid 150000 KHz
+  pclk_pmu 100000 KHz
+Net:   No ethernet found.
+Hit key to stop autoboot('CTRL+C'):  0
+switch to partitions #0, OK
+mmc0 is current device
+dwmmc@fe2b0000: 0 (SD)
+dwmmc@fe2c0000: 2
+sdhci@fe310000: 1
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+Found U-Boot script /boot.scr
+reading /boot.scr
+3411 bytes read in 3 ms (1.1 MiB/s)
+## Executing script at 00c00000
+Boot script loaded from mmc 0
+reading /orangepiEnv.txt
+223 bytes read in 3 ms (72.3 KiB/s)
+reading /uInitrd
+18599888 bytes read in 1546 ms (11.5 MiB/s)
+reading /Image
+34933248 bytes read in 2902 ms (11.5 MiB/s)
+reading /dtb/rockchip/rk3566-orangepi-3b.dtb
+163964 bytes read in 19 ms (8.2 MiB/s)
+reading /dtb/rockchip/overlay/rk356x-fixup.scr
+2756 bytes read in 6 ms (448.2 KiB/s)
+Applying kernel provided DT fixup script (rk356x-fixup.scr)
+## Executing script at 09000000
+Fdt Ramdisk skip relocation
+## Loading init Ramdisk from Legacy Image at 0a200000 ...
+   Image Name:   uInitrd
+   Image Type:   AArch64 Linux RAMDisk Image (gzip compressed)
+   Data Size:    18599824 Bytes = 17.7 MiB
+   Load Address: 00000000
+   Entry Point:  00000000
+   Verifying Checksum ... OK
+## Flattened Device Tree blob at 0x08300000
+   Booting using the fdt blob at 0x08300000
+   reserving fdt memory region: addr=8300000 size=8e000
+  'reserved-memory' ramoops@110000: addr=110000 size=f0000
+   Using Device Tree in place at 0000000008300000, end 0000000008390fff
+Adding bank: 0x00200000 - 0xf0000000 (size: 0xefe00000)
+Adding bank: 0x100000000 - 0x200000000 (size: 0x100000000)
+== DO RELOCATE == Kernel from 0x00280000 to 0x00400000
+Total: 6084.172 ms
+
+Starting kernel ...
+
+done.
+Begin: Mounting root file system ... Begin: Running /scripts/local-top ... done.
+Begin: Running /scripts/local-premount ... Scanning for Btrfs filesystems
+done.
+Begin: Will now check root file system ... fsck from util-linux 2.34
+[/usr/sbin/fsck.ext4 (1) -- /dev/mmcblk1p2] fsck.ext4 -a -C0 /dev/mmcblk1p2
+opi_root: clean, 47763/3711408 files, 626442/15163904 blocks
+done.
+done.
+Begin: Running /scripts/local-bottom ... done.
+Begin: Running /scripts/init-bottom ... done.
+
+Welcome to Orange Pi 1.0.2 Focal!
+
+-.mount
+[  OK  ] Created slice system-modprobe.slice.
+[  OK  ] Created slice system-serial\x2dgetty.slice.
+[  OK  ] Created slice system-systemd\x2dfsck.slice.
+[  OK  ] Created slice User and Session Slice.
+[  OK  ] Started Forward Password R鈥ests to Wall Directory Watch.
+[  OK  ] Set up automount Arbitrary鈥 File System Automount Point.
+[  OK  ] Reached target Slices.
+[  OK  ] Reached target Swap.
+[  OK  ] Reached target System Time Set.
+[  OK  ] Listening on RPCbind Server Activation Socket.
+[  OK  ] Listening on Syslog Socket.
+[  OK  ] Listening on fsck to fsckd communication Socket.
+[  OK  ] Listening on initctl Compatibility Named Pipe.
+[  OK  ] Listening on Journal Audit Socket.
+[  OK  ] Listening on Journal Socket (/dev/log).
+[  OK  ] Listening on Journal Socket.
+[  OK  ] Listening on udev Control Socket.
+[  OK  ] Listening on udev Kernel Socket.
+         Mounting Huge Pages File System...
+         Mounting POSIX Message Queue File System...
+         Mounting NFSD configuration filesystem...
+         Mounting RPC Pipe File System...
+         Mounting Kernel Debug File System...
+         Mounting Kernel Trace File System...
+         Starting Restore / save the current clock...
+         Starting Set the console keyboard layout...
+         Starting Create list of st鈥des for the current kernel...
+         Starting Load Kernel Module chromeos_pstore...
+         Starting Load Kernel Module pstore_blk...
+         Starting Load Kernel Module pstore_zone...
+[  OK  ] Started Nameserver information manager.
+resolvconf.service
+[  OK  ] Reached target Network (Pre).
+         Starting Load Kernel Modules...
+         Starting Remount Root and Kernel File Systems...
+         Starting udev Coldplug all Devices...
+[  OK  ] Mounted Huge Pages File System.
+dev-hugepages.mount
+[  OK  ] Mounted POSIX Message Queue File System.
+dev-mqueue.mount
+[  OK  ] Mounted NFSD configuration filesystem.
+proc-fs-nfsd.mount
+[  OK  ] Mounted RPC Pipe File System.
+run-rpc_pipefs.mount
+[  OK  ] Mounted Kernel Debug File System.
+sys-kernel-debug.mount
+sys-kernel-tracing.mount
+[  OK  ] Mounted Kernel Trace File System.
+[  OK  ] Finished Restore / save the current clock.
+fake-hwclock.service
+[  OK  ] Finished Create list of st鈥nodes for the current kernel.
+kmod-static-nodes.service
+[  OK  ] Finished Load Kernel Module chromeos_pstore.
+[  OK  ] Finished Load Kernel Module pstore_blk.
+[  OK  ] Finished Load Kernel Module pstore_zone.
+         Starting pNFS block layout mapping daemon...
+systemd-remount-fs.service
+[  OK  ] Finished Remount Root and Kernel File Systems.
+         Starting Load/Save Random Seed...
+nfs-blkmap.service
+         Starting Create System Users...
+[  OK  ] Started pNFS block layout mapping daemon.
+[  OK  ] Finished Load/Save Random Seed.
+systemd-random-seed.service
+[  OK  ] Finished Create System Users.
+systemd-sysusers.service
+         Starting Create Static Device Nodes in /dev...
+[  OK  ] Finished Set the console keyboard layout.
+keyboard-setup.service
+[  OK  ] Finished Create Static Device Nodes in /dev.
+systemd-tmpfiles-setup-dev.service
+[  OK  ] Reached target Local File Systems (Pre).
+         Mounting /tmp...
+         Starting udev Kernel Device Manager...
+[  OK  ] Mounted /tmp.
+tmp.mount
+[  OK  ] Started udev Kernel Device Manager.
+systemd-udevd.service
+[  OK  ] Finished udev Coldplug all Devices.
+systemd-udev-trigger.service
+         Starting Helper to synchronize boot up for ifupdown...
+         Starting Show Plymouth Boot Screen...
+[  OK  ] Finished Helper to synchronize boot up for ifupdown.
+ifupdown-pre.service
+[  OK  ] Started Show Plymouth Boot Screen.
+[  OK  ] Started Forward Password R鈥 to Plymouth Directory Watch.
+[  OK  ] Reached target Local Encrypted Volumes.
+         Starting Load Kernel Module chromeos_pstore...
+         Starting Load Kernel Module pstore_blk...
+         Starting Load Kernel Module pstore_zone...
+         Starting Show Plymouth Boot Screen...
+[  OK  ] Finished Load Kernel Module chromeos_pstore.
+[  OK  ] Finished Load Kernel Module pstore_blk.
+[  OK  ] Finished Load Kernel Module pstore_zone.
+[  OK  ] Found device /dev/ttyFIQ0.
+[  OK  ] Started Show Plymouth Boot Screen.
+[  OK  ] Found device /dev/disk/by-uuid/6589-CA20.
+         Starting Load Kernel Module chromeos_pstore...
+         Starting Load Kernel Module pstore_blk...
+         Starting Load Kernel Module pstore_zone...
+         Starting File System Check鈥dev/disk/by-uuid/6589-CA20...
+[  OK  ] Finished Load Kernel Module pstore_blk.
+[  OK  ] Finished Load Kernel Module chromeos_pstore.
+[  OK  ] Finished Load Kernel Module pstore_zone.
+[  OK  ] Started File System Check Daemon to report status.
+systemd-fsckd.service
+[  OK  ] Listening on Load/Save RF 鈥tch Status /dev/rfkill Watch.
+         Starting Load/Save RF Kill Switch Status...
+[  OK  ] Finished File System Check鈥 /dev/disk/by-uuid/6589-CA20.
+systemd-fsck@dev-disk-by\x2duuid-6589\x2dCA20.service
+         Mounting /boot...
+[  OK  ] Started Load/Save RF Kill Switch Status.
+systemd-rfkill.service
+[  OK  ] Mounted /boot.
+boot.mount
+[  OK  ] Reached target Local File Systems.
+         Starting Set console font and keymap...
+         Starting Preprocess NFS configuration...
+         Starting Orange Pi ZRAM config...
+         Starting Tell Plymouth To Write Out Runtime Data...
+[  OK  ] Finished Preprocess NFS configuration.
+[  OK  ] Finished Set console font and keymap.
+console-setup.service
+         Starting NFSv4 ID-name mapping service...
+[  OK  ] Reached target NFS client services.
+[  OK  ] Finished Tell Plymouth To Write Out Runtime Data.
+[  OK  ] Finished Load Kernel Modules.
+systemd-modules-load.service
+         Mounting Kernel Configuration File System...
+         Starting Apply Kernel Variables...
+[  OK  ] Mounted Kernel Configuration File System.
+sys-kernel-config.mount
+systemd-sysctl.service
+[  OK  ] Finished Apply Kernel Variables.
+         Starting Raise network interfaces...
+[FAILED] Failed to start NFSv4 ID-name mapping service.
+See 'systemctl status nfs-idmapd.service' for details.
+dev-zram0.swap
+[  OK  ] Finished Raise network interfaces.
+networking.service
+[  OK  ] Finished Orange Pi ZRAM config.
+orangepi-zram-config.service
+         Starting Orange Pi memory supported logging...
+var-log.hdd.mount
+var-log.mount
+[  OK  ] Finished Orange Pi memory supported logging.
+orangepi-ramlog.service
+         Starting Journal Service...
+[  OK  ] Started Journal Service.
+systemd-journald.service
+         Starting Flush Journal to Persistent Storage...
+[  OK  ] Finished Flush Journal to Persistent Storage.
+systemd-journal-flush.service
+         Starting Create Volatile Files and Directories...
+[  OK  ] Finished Create Volatile Files and Directories.
+systemd-tmpfiles-setup.service
+[  OK  ] Started Entropy daemon using the HAVEGE algorithm.
+haveged.service
+         Starting RPC bind portmap service...
+         Starting Network Name Resolution...
+         Starting Update UTMP about System Boot/Shutdown...
+[  OK  ] Finished Update UTMP about System Boot/Shutdown.
+systemd-update-utmp.service
+[  OK  ] Reached target System Initialization.
+[  OK  ] Started resolvconf-pull-resolved.path.
+[  OK  ] Started Daily Cleanup of Temporary Directories.
+[  OK  ] Reached target Paths.
+[  OK  ] Listening on D-Bus System Message Bus Socket.
+[  OK  ] Reached target Sockets.
+         Starting Orange Pi hardware monitoring...
+         Starting Orange Pi hardware optimization...
+[  OK  ] Finished Orange Pi hardware optimization.
+orangepi-hardware-optimize.service
+[  OK  ] Started RPC bind portmap service.
+[  OK  ] Finished Orange Pi hardware monitoring.
+[  OK  ] Reached target Basic System.
+[  OK  ] Reached target Remote File Systems (Pre).
+[  OK  ] Reached target Remote File Systems.
+[  OK  ] Reached target RPC Port Mapper.
+rpcbind.service
+orangepi-hardware-monitor.service
+         Starting Save/Restore Sound Card State...
+[  OK  ] Started Regular background program processing daemon.
+cron.service
+[  OK  ] Started D-Bus System Message Bus.
+dbus.service
+         Starting Network Manager...
+[  OK  ] Started Save initial kernel messages after boot.
+dmesg.service
+         Starting Remove Stale Onli鈥4 Metadata Check Snapshots...
+         Starting Initialize hardware monitoring sensors...
+         Starting LSB: Load kernel 鈥 to enable cpufreq scaling...
+         Starting Dispatcher daemon for systemd-networkd...
+         Starting System Logging Service...
+         Starting Self Monitoring a鈥 Technology (SMART) Daemon...
+         Starting Resets System Activity Data Collector...
+         Starting Login Service...
+         Starting WPA supplicant...
+sysstat.service
+[  OK  ] Finished Resets System Activity Data Collector.
+[  OK  ] Finished Save/Restore Sound Card State.
+alsa-restore.service
+[  OK  ] Reached target Sound Card.
+[  OK  ] Finished Remove Stale Onli鈥xt4 Metadata Check Snapshots.
+[  OK  ] Finished Initialize hardware monitoring sensors.
+lm-sensors.service
+[  OK  ] Started LSB: Load kernel m鈥ed to enable cpufreq scaling.
+loadcpufreq.service
+         Starting LSB: set CPUFreq kernel parameters...
+[  OK  ] Started LSB: set CPUFreq kernel parameters.
+cpufrequtils.service
+         Starting LSB: Set sysfs variables from /etc/sysfs.conf...
+[  OK  ] Started Login Service.
+systemd-logind.service
+[  OK  ] Started System Logging Service.
+rsyslog.service
+[  OK  ] Started LSB: Set sysfs variables from /etc/sysfs.conf.
+sysfsutils.service
+[  OK  ] Started Self Monitoring an鈥ng Technology (SMART) Daemon.
+smartmontools.service
+[  OK  ] Started WPA supplicant.
+wpa_supplicant.service
+[  OK  ] Started Network Name Resolution.
+systemd-resolved.service
+         Starting resolvconf-pull-resolved.service...
+         Starting Load/Save RF Kill Switch Status...
+sys-kernel-debug-tracing.mount
+systemd-rfkill.service
+[  OK  ] Started Load/Save RF Kill Switch Status.
+         Starting Bluetooth service...
+[  OK  ] Finished resolvconf-pull-resolved.service.
+bluetooth.service
+[  OK  ] Started Bluetooth service.
+[  OK  ] Reached target Bluetooth.
+         Starting Hostname Service...
+[  OK  ] Started Network Manager.
+NetworkManager.service
+[  OK  ] Reached target Network.
+[  OK  ] Reached target Network is Online.
+         Starting chrony, an NTP client/server...
+         Starting dnsmasq - A light鈥HCP and caching DNS server...
+         Starting LSB: Advanced IEEE 802.11 management daemon...
+         Starting NFS Mount Daemon...
+         Starting OpenVPN service...
+         Starting /etc/rc.local Compatibility...
+         Starting OpenBSD Secure Shell server...
+         Starting Permit User Sessions...
+[  OK  ] Started Unattended Upgrades Shutdown.
+unattended-upgrades.service
+[  OK  ] Started vnStat network traffic monitor.
+vnstat.service
+[  OK  ] Started LSB: Advanced IEEE 802.11 management daemon.
+hostapd.service
+[  OK  ] Finished OpenVPN service.
+openvpn.service
+[  OK  ] Started /etc/rc.local Compatibility.
+rc-local.service
+[  OK  ] Finished Permit User Sessions.
+systemd-user-sessions.service
+         Starting Hold until boot process finishes up...
+         Starting Terminate Plymouth Boot Screen...
+[  OK  ] Started NFS Mount Daemon.
+nfs-mountd.service
+
+orangepi3b login: orangepi (automatic login)
+
+  ___  ____ ___   _____ ____
+ / _ \|  _ \_ _| |___ /| __ )
+| | | | |_) | |    |_ \|  _ \
+| |_| |  __/| |   ___) | |_) |
+ \___/|_|  |___| |____/|____/
+
+Welcome to Orange Pi 1.0.2 Focal with Linux 5.10.160-rockchip-rk356x
+
+System load:   32%              Up time:       0 min
+Memory usage:  3% of 7.51G      IP:
+CPU temp:      42掳C            Usage of /:    3% of 57G
+
+[ 32 security updates available, 38 updates total: apt upgrade ]
+Last check: 2023-09-21 10:25
+
+[ General system configuration (beta): orangepi-config ]
+
+Last login: Thu Sep 21 10:25:47 UTC 2023 on ttyFIQ0
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+orangepi@orangepi3b:~$

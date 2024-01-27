@@ -27,13 +27,13 @@ yarn tauri android dev (最好先设置代理, 不然速度特别慢)
 修改 src-tauri\gen\android\test_tauri_v2\gradle.properties, 添加:
 
 systemProp.socks.proxyHost=127.0.0.1
-systemProp.socks.proxyPort=7890
+systemProp.socks.proxyPort=1080
 
 systemProp.http.proxyHost=127.0.0.1
-systemProp.http.proxyPort=7890
+systemProp.http.proxyPort=1080
 
 systemProp.https.proxyHost=127.0.0.1
-systemProp.https.proxyPort=7890
+systemProp.https.proxyPort=1080
 
 ### 全局生效
 

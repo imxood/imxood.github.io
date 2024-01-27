@@ -10,7 +10,7 @@
 
 ## 在 Cargo.toml 中指定 target, nightly
 
-    cargo-features = ["per-package-target"]d
+    cargo-features = ["per-package-target"]
 
     [package]
     default-target = "i686-pc-windows-msvc"

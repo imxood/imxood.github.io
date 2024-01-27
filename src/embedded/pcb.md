@@ -35,3 +35,7 @@ i2c 上拉电阻: 3.3v与5v, 2.2k 4.7k 10k
 [极好的模拟/数字混合信号的电路板布局布线注意事项](https://www.mr-wu.cn/mixed-signal-circuit-board-layout-considerations/)
 
 [PCB常用走线宽度](https://www.wpgdadatong.com/cn/blog/detail/70216)
+
+## PCB 线宽
+
+![1699709127840](image/pcb/1699709127840.png)

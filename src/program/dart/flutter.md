@@ -3,11 +3,19 @@
     export PUB_HOSTED_URL=https://pub.flutter-io.cn
     export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 
-    安装SDK
-        https://flutter.dev/docs/get-started/install
+    安装环境
+
+        https://flutter.cn/docs/get-started/install
 
         解压后, 添加bin目录到环境变量, 就有了 dart 和 flutter 命令了
 
+    flutter config --no-analytics
+
+    flutter --disable-telemetry
+
+     dart --disable-analytics
+
+    flutter doctor
 
 ## 桌面开发
 
@@ -17,7 +25,7 @@
         export PUB_HOSTED_URL=https://mirrors.tuna.tsinghua.edu.cn/dart-pub
         export FLUTTER_STORAGE_BASE_URL=https://mirrors.tuna.tsinghua.edu.cn/flutter
 
-    flutter channel dev
+    <!-- flutter channel dev -->
     flutter upgrade
 
     flutter config --enable-<platform>-desktop
@@ -25,8 +33,9 @@
     // flutter config --enable-linux-desktop
     // flutter config --enable-macos-desktop
     // flutter config --enable-windows-desktop
-	// flutter config --enable-web
-	// flutter create .
+    // flutter config --enable-web
+    // flutter config --enable-android
+    // flutter create .
 
     linux 桌面开发 配置:
         sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev liblzma-dev
@@ -55,3 +64,28 @@
         flutter screenshot -d linux --type=skia --observatory-uri=<Observatory-URI>
 
         打开https://debugger.skia.org/ (被墙了), 上传 上一个命令 到这个网站, 分析
+
+## 安卓环境
+
+### 添加到 PATH 环境变量
+
+D:\programs\Android\Sdk\platform-tools
+<!-- D:\programs\Android\Sdk\tools\bin -->
+
+### 设置 flutter for android 环境
+
+flutter doctor --android-licenses
+
+### 创建项目
+
+flutter create start_flutter_android
+
+### 编译项目
+
+flutter build apk
+
+flutter build apk --debug
+
+## IOS
+
+flutter build ios

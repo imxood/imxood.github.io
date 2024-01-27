@@ -3,6 +3,7 @@
 cmake -B build                                                          配置 编译目录
 cmake --build build                                                     运行 指定的编译路径
 cmake --build build --target clean                                      清除编译目录
+cmake -E remove_directory build
 
 windows平台下指定架构:
     -A Win32 或 Win64 或 x64, 2019开始 无法使用 x86
@@ -12,6 +13,8 @@ cmake --trace-expand --loglevel=VERBOSE ...
     --loglevel=VERBOSE 可以使message(VERBOSE ...)有输出
 
 # cmake常用语法
+
+    set(ENV{WCHEVT_SDK_BASE} ${CMAKE_CURRENT_LIST_DIR})                     设置环境变量
 
     include_directories(include)                                            设置头文件路径
     link_directories(/usr/lib)                                              设置库路径

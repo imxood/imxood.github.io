@@ -24,7 +24,7 @@ ChocolateyToolsLocation: D:\choco-pkgs
 
 ### 基本环境
 
-choco install cmake git llvm notepadplusplus 7zip everything clash-for-windows
+choco install cmake git llvm notepadplusplus 7zip everything clash-for-windows windhawk
 
 ### stm32 环境环境
 

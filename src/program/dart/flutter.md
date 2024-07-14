@@ -67,10 +67,19 @@
 
 ## 安卓环境
 
+### 下载 并安装 android studio
+
+https://developer.android.com/studio
+
 ### 添加到 PATH 环境变量
+
+安装 SDK / NDK / Command line tools
 
 D:\programs\Android\Sdk\platform-tools
 <!-- D:\programs\Android\Sdk\tools\bin -->
+
+ANDROID_SDK_ROOT=D:\programs\Android\Sdk
+ANDROID_NDK_ROOT=%ANDROID_SDK_ROOT%\ndk\26.3.11579264
 
 ### 设置 flutter for android 环境
 
@@ -86,6 +95,39 @@ flutter build apk
 
 flutter build apk --debug
 
+### 网络不好的话, 需要配置代理
+
+编辑 gradle.properties 文件, 追加内容:
+
+```conf
+systemProp.socks.proxyHost=127.0.0.1
+systemProp.socks.proxyPort=1080
+
+systemProp.http.proxyHost=127.0.0.1
+systemProp.http.proxyPort=1080
+
+systemProp.https.proxyHost=127.0.0.1
+systemProp.https.proxyPort=1080
+```
+
+### gradle 下载失败
+
+https://github.com/whichow/Notebook/blob/master/Development/Android/Build/%E8%A7%A3%E5%86%B3Gradle%E4%B8%8B%E8%BD%BD%E8%B6%85%E6%97%B6%E9%97%AE%E9%A2%98.md
+
+gradle/wrapper/gradle-wrapper.properties
+
+找到: `distributionUrl=https\://services.gradle.org/distributions/gradle-2.4-all.zip`
+
+下载到本地, 并设置成本地文件: `distributionUrl=file:///D:/programs/gradle/gradle-7.6.3-all.zip`
+
+```sh
+./gradlew build
+```
+
 ## IOS
 
 flutter build ios
+
+## flutter 升级
+
+flutter upgrade

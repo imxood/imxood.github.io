@@ -24,11 +24,7 @@ ChocolateyToolsLocation: D:\choco-pkgs
 
 ### 基本环境
 
-choco install cmake git llvm notepadplusplus 7zip everything clash-for-windows
-
-### stm32 环境环境
-
-choco install make openocd gcc-arm-embedded
+choco install cmake git make llvm notepadplusplus 7zip everything clash-for-windows protoc openocd gcc-arm-embedded
 
 ## 缩小任务栏图标
 

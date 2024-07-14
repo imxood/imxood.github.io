@@ -1,6 +1,14 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+        // 绑定一个选择的进程 执行调试
+        {
+            "type": "lldb",
+            "request": "attach",
+            "pid": "${command:pickProcess}",
+            "name": "Hello Debug Rust"
+        },
+        // 调试 arduino固件
         {
             "name": "Cortex Debug",
             "cwd": "${workspaceRoot}",

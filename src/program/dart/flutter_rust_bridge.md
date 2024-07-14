@@ -45,3 +45,8 @@ flutter pub add --dev ffigen build_runner freezed
 ## 生成 dart 代码
 
 flutter_rust_bridge_codegen --rust-input native/src/api.rs --dart-output lib/bridge_generated.dart
+
+## flutter 依赖
+
+flutter pub add --dev freezed build_runner
+flutter pub add freezed_annotation

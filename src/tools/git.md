@@ -1,4 +1,48 @@
-# git笔记
+# git 笔记
+
+## 子模块
+
+### 添加
+
+git submodule add -b <BranchName> <Url>
+
+### 同步
+
+git submodule update --init --recursive
+
+### 删除
+
+rm -rf 子模块目录
+
+vi .gitmodules 删除相关子模块条目
+
+vi .git/config 删除相关子模块条目
+
+rm .git/module/<Sub Module Dir> 删除子模块目录
+
+git rm --cached <Sub Module Name>
+
+## 分支
+
+## Tag
+
+### 创建 Tag
+
+git tag <TagName>
+
+## 推送 Tag
+
+git push origin --tags
+
+### 删除 Tag
+
+```sh
+git tag -d $(git tag -l)
+
+git fetch
+
+git push origin --delete $(git tag -l)
+```
 
 ## 可用的国内镜像
 
@@ -7,7 +51,6 @@
 github.com 前加一个 k
 
 如: https://kgithub.com/midoks/mdserver-web
-
 
 ## 取消 git commit
 
@@ -30,23 +73,21 @@ git commit -m "."
 git push
 ```
 
-## 远程url变更, 更新本地 origin
+## 远程 url 变更, 更新本地 origin
 
-``` git remote set-url origin  GIT_URL ```
-
+`git remote set-url origin  GIT_URL`
 
 ## warning: CRLF will be replaced by LF
 
-``` git config --global core.autocrlf false ```
-
+`git config --global core.autocrlf false`
 
 ## 执行 git status 时 中文路径乱码解决:
 
-``` git config --global core.quotepath false ```
+`git config --global core.quotepath false`
 
 ## 分支管理
 
-### Pr修改
+### Pr 修改
 
 ```sh
 # 提交了Pr, 有错误, 你想修改, 那么可以先在你的分支上, 回退之前的一个版本:
@@ -77,6 +118,7 @@ git checkout --orphan main, 创建没有commits的孤儿分支
 git add . && git commit -m "."
 git push --set-upstream origin main
 ```
+
 ### 创建没有提交记录的新分支 并用这个分支 覆盖主分支
 
     git checkout --orphan main, 创建没有commits的孤儿分支
@@ -87,7 +129,6 @@ git push --set-upstream origin main
     git branch -m master 修改当前分支为master.
 
     git push -f, 强制提交本地记录
-
 
 ## git remote
 
@@ -101,7 +142,6 @@ git remote set-url origin https://github.com/imxood/mdbook-katex.git, 设置远�
 参考: [GitHub Actions 的元数据语法](https://docs.github.com/cn/actions/creating-actions/metadata-syntax-for-github-actions)
 
 参考: [GitHub Actions 的工作流程语法](https://docs.github.com/cn/actions/reference/workflow-syntax-for-github-actions)
-
 
 ## github reset api
 
@@ -119,6 +159,7 @@ curl -i -u username:$token https://api.github.com/users/octocat
 # Shell - Get latest release from GitHub
 curl --silent "https://api.github.com/repos/$1/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")'
 ```
+
 ## github actions
 
 ### 环境文件
@@ -137,7 +178,7 @@ curl --silent "https://api.github.com/repos/$1/releases/latest" | grep -Po '"tag
     echo "{name}={value}" >> \$GITHUB_ENV
 ```
 
-## 同步fork上游的代码
+## 同步 fork 上游的代码
 
 ```sh
 # 查看远程状态

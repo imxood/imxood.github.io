@@ -1,0 +1,1 @@
+cargo install cargo-generate cargo-binutils cargo-tree cargo-expand cargo-edit cargo-wix cargo-bundle

@@ -168,6 +168,25 @@ rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
     # 对所有项目使用 nightly
     rustup default nightly
 
+## 指定 默认编译器
+
+创建 rust-toolchain.toml 文件, 添加:
+
+```toml
+[toolchain]
+channel = "nightly-2024-01-05"
+components = [
+  "cargo",
+]
+```
+
+## cargo 指定编译器 报错:
+
+`'cargo.exe' binary, normally provided by the 'cargo' component, is not applicable to ..`
+
+    rustup component remove cargo
+    rustup component add cargo
+
 ## 一些额外的命令
 
 输出 详细的编译命令

@@ -122,3 +122,16 @@ https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 ## 删除 virtual box 网卡
 
 启用需要删除的 virtual box 网卡, 在 virtual box 的虚拟网卡中(不启用的话, 这个列表中看不到), 删除
+
+## 关闭防火墙后 禁用通知
+
+https://www.disktool.cn/content-center/win11-turn-off-firewall-2111.html
+
+## 性能优化
+
+游戏模式 / 关闭
+
+建议我如何设置 / 关闭
+
+实时防护 / 关闭
+

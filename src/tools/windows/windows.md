@@ -127,6 +127,10 @@ https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 
 https://www.disktool.cn/content-center/win11-turn-off-firewall-2111.html
 
+## windows 彻底关闭 实时保护
+
+https://blog.csdn.net/COCO56/article/details/128613164
+
 ## 性能优化
 
 游戏模式 / 关闭

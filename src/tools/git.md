@@ -219,3 +219,12 @@ git config --global https.proxy http://127.0.0.1:1080
 git config --global --get http.proxy
 
 git config --global --get https.proxy
+
+## 修复 "Not possible to fast-forward, aborting"
+
+<!-- master指的是当前修改的分支，一定要是当前修改的分支！！！ -->
+git pull origin master --rebase
+
+修复冲突后,
+
+执行: git rebase --continue

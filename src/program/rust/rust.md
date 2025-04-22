@@ -15,7 +15,7 @@
     [package]
     default-target = "i686-pc-windows-msvc"
 
-## TAB键 自动补全
+## TAB 键 自动补全
 
 参考: https://rust-lang.github.io/rustup/installation/index.html#enable-tab-completion-for-bash-fish-zsh-or-powershell
 
@@ -23,7 +23,6 @@
 
 mkdir -p ~/.local/share/bash-completion/completions
 rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
-
 
 ## cargo 命令
 
@@ -119,7 +118,6 @@ rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
 
     第三条规则是如果方法有多个输入生命周期参数并且其中一个参数是 &self 或 &mut self, 那么所有输出生命周期参数被赋予 self 的生命周期
 
-
 ## Rust 的 安装与卸载
 
     参考链接:
@@ -146,7 +144,6 @@ rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
 
     卸载:
         rustup self uninstall
-
 
 ## 使用特定的 rust 版本
 
@@ -193,7 +190,6 @@ components = [
 
     cargo build --build-plan -- -Z unstable-options > build.json
 
-
 ## riscv
 
     rustup target add riscv32imac-unknown-none-elf
@@ -203,7 +199,6 @@ components = [
     rustc install thumbv7m-none-eabi
     rustup target install thumbv7m-none-eabi
     cargo build --target thumbv7m-none-eabi
-
 
 ## vscode 中 rust 的插件
 
@@ -231,9 +226,9 @@ components = [
 
 ![](./images/rust编译过程.png)
 
-Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步编译到LLVM中间码(LLVM IR), 再交给LLVM, 最终生成机器码, 所以LLVM是编译器后端.
+Rust 编译器(rustc)是一个编译器前端, 它负责把文本代码一步步编译到 LLVM 中间码(LLVM IR), 再交给 LLVM, 最终生成机器码, 所以 LLVM 是编译器后端.
 
-宏展开 --> 语法语义分析 --> 生成抽象语法树 --> LLVM IR (LLVM中间语言) --> 通过LLVM生成机器码
+宏展开 --> 语法语义分析 --> 生成抽象语法树 --> LLVM IR (LLVM 中间语言) --> 通过 LLVM 生成机器码
 
 ## 使用 Cargo 创建项目
 
@@ -255,7 +250,6 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
     创建:
         cargo new hello_world <--bin>, 创建一个二进制程序
         cargo new hello_world --lib, 创建一个库
-
 
 ## 库
 
@@ -309,7 +303,6 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
         cargo run --verbose --package $example
     done
 
-
 ### iced 例子
 
     学习基本的布局:
@@ -319,13 +312,12 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
     学习canvas:
         examples/clock
 
-
 ### bevy, 游戏引擎
 
     git clone https://github.com/bevyengine/bevy
     cargo run --example breakout
 
-## libusb, usb库
+## libusb, usb 库
 
     https://stackoverflow.com/questions/1710922/how-to-install-pkg-config-in-windows
 
@@ -359,7 +351,6 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
 
     cd ../www
     yarn link "wasm-app"
-
 
 ## vue vite rust wasm
 
@@ -399,17 +390,17 @@ Rust编译器(rustc)是一个编译器前端, 它负责把文本代码一步步�
 
     https://godbolt.org/ 二进制浏览器
 
-## rust编译选项
+## rust 编译选项
 
 在 build.rs 中
 
-``` rust
+```rust
 println!("cargo:rustc-link-arg=-fPIC");
 ```
 
 在 .config/config.toml 中
 
-``` toml
+```toml
 [target.arm-unknown-linux-gnueabihf]
 rustflags = [
     # "-Clink-arg=-Tsrc/linker.ld",
@@ -429,7 +420,7 @@ rustflags = [
 
 .vscode\launch.json
 
-``` json
+```json
 {
     "type": "lldb",
     "request": "launch",
@@ -449,15 +440,37 @@ rustflags = [
 
 rust 的标准库 调试, 需要添加下面的内容, 其中 rustc 后面的 commit-hash 可以通过命令获得:
 
-``` json
+```json
 "sourceMap": {
     "/rustc/73c9eaf21454b718e7c549984d9eb6e1f75e995c": "C:/Users/maxu/.rustup/toolchains/nightly-x86_64-pc-windows-msvc/lib/rustlib/src/rust"
 }
 ```
 
-``` rustc -Vv | grep commit-hash | cut -d' ' -f 2 ```
+`rustc -Vv | grep commit-hash | cut -d' ' -f 2`
 
 ## 静态 c++ 运行时库
 
 [build-dependencies]
 static_vcruntime = "2.0"
+
+## rust-toolchain.toml
+
+```toml
+[toolchain]
+channel = "1.77.2-x86_64-pc-windows-msvc"
+```
+
+windows 系统编译报错, `#![cfg_attr(feature = "stdsimd", feature(stdsimd))]`
+
+```toml
+[toolchain]
+channel = "nightly-2024-02-04"
+```
+
+## 打印配置
+
+rustc --print cfg
+
+## 显示版本
+
+cargo --version --verbose

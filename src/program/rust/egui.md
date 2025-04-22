@@ -76,4 +76,6 @@ Layout
 
 参考 crates\egui\src\widgets\selected_label.rs
 
+##
 
+ScrollArea::vertical(), 宽度是自适应的, 如果需要父容器

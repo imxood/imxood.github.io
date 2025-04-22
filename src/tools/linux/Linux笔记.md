@@ -1035,3 +1035,7 @@ eyJoaXN0b3J5IjpbMTc2NDcwMTI1NV19
         libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f4694e75000)
         /lib64/ld-linux-x86-64.so.2 (0x00007f46950be000)
         librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f4694e6b000)
+
+## Ubuntu 18.04 出现GLIBC_2.28 not found的解决方法
+
+https://blog.csdn.net/Youning_Yim/article/details/129343107

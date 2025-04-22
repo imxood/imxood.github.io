@@ -40,3 +40,11 @@ portpicker 选择可用网络端口
 clap
 
 structopt
+
+## virtual-serialport
+
+进程内 串口模拟
+
+##
+
+![](images/rust%20crate%20工具集/2025-04-16-16-17-12.png)

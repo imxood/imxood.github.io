@@ -131,6 +131,15 @@ https://www.disktool.cn/content-center/win11-turn-off-firewall-2111.html
 
 https://blog.csdn.net/COCO56/article/details/128613164
 
+### windows11 威胁防护 "此设置由管理员进行管理"
+
+关闭该功能:
+
+计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender
+
+把这一项删除
+
+
 ## 性能优化
 
 游戏模式 / 关闭
@@ -139,3 +148,46 @@ https://blog.csdn.net/COCO56/article/details/128613164
 
 实时防护 / 关闭
 
+## 桌面图标变得特别宽
+
+1. 打开注册表
+2. 找到 HKEY_CURRENT_USER\HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics
+3. 把 IconSpacing 和 IconVerticalSpacing 改成 -1130, 保存后重启电脑
+
+## windows 虚拟串口
+
+https://github.com/microsoft/windows-driver-samples/tree/main/serial/VirtualSerial2
+
+[com0com](https://github.com/tanvir-ahmed-m4/com0com)
+
+## edge 浏览器
+
+禁止 http 重定向到 https
+
+edge://net-internals/#hsts
+
+Delete domain security policies
+
+### 批量修改文件后缀
+
+Get-ChildItem -Filter \*.ino | Rename-Item -NewName { $\_.BaseName + ".cpp" }
+
+### 查看进程占用网络端口
+
+netstat -ano | grep 6220, 6220 为进程 pid
+
+### 进程异常退出排查
+
+打开 eventvwr.msc
+
+左侧选择: Windows 日志 -> 应用程序
+
+右边的 "操作" -> 筛选当前日志... ->
+
+    设置记录时间: 近7天
+
+    事件级别: 错误
+
+    事件来源: Application Error, Windows Error Reporting
+
+可以找到 目标进程 异常退出

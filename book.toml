@@ -1,7 +1,7 @@
 [book]
 authors = ["maxu"]
 language = "en"
-multilingual = false
+# multilingual = false
 src = "src"
 title = "学习笔记"
 
@@ -10,15 +10,20 @@ create-missing = false
 
 [output.html]
 default-theme = "rust"
-site-url = "/note/"
-no-section-label = true
-git-repository-url = "https://github.com/imxood/imxood.github.io"
-additional-js =["theme/custom/mermaid.min.js", "theme/custom/mermaid-init.js"]
-additional-css = ["theme/custom/custom.css"]
+smart-punctuation = true
+mathjax-support = true
+# site-url = "/note/"
+# no-section-label = true
+# git-repository-url = "https://github.com/imxood/imxood.github.io"
+# additional-js =["theme/custom/mermaid.min.js", "theme/custom/mermaid-init.js"]
+# additional-css = ["theme/custom/custom.css"]
 
-[output.html.fold]
-enable = true
-level = 1
+# [output.html.fold]
+# enable = true
+# level = 1
+
+[output.html.code.hidelines]
+python = "~"
 
 [output.html.playground]
 editable = true

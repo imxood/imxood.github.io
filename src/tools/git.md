@@ -119,16 +119,28 @@ git add . && git commit -m "."
 git push --set-upstream origin main
 ```
 
-### 创建没有提交记录的新分支 并用这个分支 覆盖主分支
+### 删除历史记录
 
-    git checkout --orphan main, 创建没有commits的孤儿分支
-    // rm * -rf && touch Readme.md, 做出一些修改
+创建没有提交记录的新分支 并用这个分支 覆盖主分支
+
+    git checkout --orphan one, 创建没有commits的孤儿分支
+
     git add . && git commit -m "."
 
-    git branch -d master 删除分支
-    git branch -m master 修改当前分支为master.
+    git branch -d main 删除分支
+    git branch -m main 修改当前分支为 main
 
     git push -f, 强制提交本地记录
+
+    可能报错: failed to push some refs to
+
+    可能解决办法:
+
+        git fetch origin
+
+        git merge origin/master
+
+    可能需要: git config --global --add --bool push.autoSetupRemote true
 
 ## git remote
 
@@ -205,6 +217,8 @@ git push origin master
 
 ## 更新子模块
 
+git submodule update --init --recursive
+
 ### 不包含 .submodule 时
 
 git submodule init
@@ -223,8 +237,85 @@ git config --global --get https.proxy
 ## 修复 "Not possible to fast-forward, aborting"
 
 <!-- master指的是当前修改的分支，一定要是当前修改的分支！！！ -->
+
 git pull origin master --rebase
 
 修复冲突后,
 
 执行: git rebase --continue
+
+## git submodule
+
+git clone xxx.git
+
+cd xxx
+
+git submodule add zzz.git 将自动拉取该项目到当前目录下
+
+## 本地项目 子模块
+
+添加 Tag 并提交
+
+## git 使用 第 2 个帐号
+
+cd ~/.ssh
+
+```sh
+ssh-keygen -t rsa
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (C:\Users\maxu/.ssh/id_rsa):id_rsa_用户名
+
+...
+```
+
+ssh-add id_rsa_zzgood25
+
+在 ~/.ssh/config 中添加
+
+```
+Host github.com-用户名
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_用户名
+```
+
+clone 项目:
+
+原本是: git clone git@github.com:xxx/xxxxxx.git
+
+现在是: git clone git@github.com-用户名:xxx/xxxxxx.git
+
+是否需要开启 "OpenSSH Authentication Agent" 服务?
+
+验证服务:
+
+ssh -T git@github.com-用户名
+
+## 修改端口
+
+~/.ssh/config
+
+```
+Host gitea
+    HostName gitea.example.com
+    Port 222
+    User root
+    IdentityFile ~/.ssh/id_rsa
+```
+
+## 自动保存 https 认证密码
+
+git config --global credential.helper store
+
+linux 中似乎是明文, 位于 ~/.git-credentials
+
+mac 和 windows 不是?
+
+## 在 git中 使用 ssh 代理
+
+### windows
+
+在 ~/.ssh/config 文件的开头 添加
+
+ProxyCommand connect -S 127.0.0.1:1080 %h %p

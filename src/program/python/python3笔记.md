@@ -1,14 +1,14 @@
 # python3 笔记
 
-## python库
+## python 库
 
-- readchar, 读取键盘输入的通用库
-- fabric, paramiko
+-   readchar, 读取键盘输入的通用库
+-   fabric, paramiko
     execute shell commands remotely over SSH
 
-## python环境
+## python 环境
 
-### vscode调试python多进程
+### vscode 调试 python 多进程
 
     multiprocessing.set_start_method('spawn', True)
 
@@ -41,7 +41,7 @@
     make
     make install
 
-### 使用pyenv管理python
+### 使用 pyenv 管理 python
 
     sudo apt-get install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
@@ -55,20 +55,20 @@
 
 ### 搜索包是否被安装
 
-方法1:
+方法 1:
 
     try:
         from pip._internal.utils.misc import get_installed_distributions
     except ImportError:  # pip<10
         from pip import get_installed_distributions
 
-方法2:
+方法 2:
 
     import pkg_resources
 
     dists = [d for d in pkg_resources.working_set]
 
-## python开发笔记
+## python 开发笔记
 
 len(obj), 计算字符串, 列表, 元组, 字典等类型的长度
 
@@ -113,8 +113,6 @@ isinstance(obj, class_name), 判断是否是指定类型的变量
 
     platform.uname(), 包含上面所有的信息汇总
 
-
-
 ## 报错
 
     Run: python3 get-pip.py --user
@@ -142,3 +140,8 @@ isinstance(obj, class_name), 判断是否是指定类型的变量
 
     pkg_resources.VersionConflict: (setuptools 20.7.0 (/usr/lib/python3/dist-packages), Requirement.parse('setuptools>=40.0'))
     pip3 install -U --user setuptools
+
+## 使用 matplotlib 时 报错
+
+UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+plt.show()

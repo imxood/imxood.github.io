@@ -16,12 +16,12 @@
 ## 修改软件源, 并更新源
 
     /etc/apt/sources.list
-    
+
     # deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
     deb http://mirrors.aliyun.com/raspbian/raspbian/ buster main contrib non-free rpi
-    
+
     /etc/apt/sources.list.d/raspi.list
-    
+
     # deb http://archive.raspberrypi.org/debian/ buster main
     deb http://mirrors.ustc.edu.cn/archive.raspberrypi.org/debian/ buster main
 
@@ -31,10 +31,16 @@
 
     在树莓派上安装OMV:
     https://github.com/OpenMediaVault-Plugin-Developers/docs
-    
+
 ## reboot
-    
+
 ## issues
+
+- 当前如果需要直接下载安装脚本, 优先使用 canonical raw 链接:
+
+  https://raw.githubusercontent.com/OpenMediaVault-Plugin-Developers/installScript/master/install
+
+- 下面保留的是 2020 年访问失败时的历史输出, 用于说明 GitHub 重定向链路和代理问题.
 
     1. 不知为何刚安装好的树莓派上无法访问github上的资源
 
@@ -47,9 +53,9 @@
     Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 0.0.0.0, ::
     Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|0.0.0.0|:443... failed: Connection refused.
     Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|::|:443... failed: Connection refused.
-    
+
     处理方法: 使用代理, 配置 http_proxy, https_proxy
-    
+
 ## 挂载硬盘, 设置共享, 添加用户权限
 
 

@@ -75,7 +75,7 @@ rm -rf SogouPY SogouPY.users sogou-qimpanel fcitx
 
 ```sh
 sudo pacman -S zsh
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 sudo usermod -s /bin/zsh USERNAME
 ```
 

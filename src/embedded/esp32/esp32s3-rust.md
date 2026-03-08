@@ -5,6 +5,8 @@
 - 本页记录在 Windows 上为 ESP32-S3 搭建 Rust + ESP-IDF 开发环境的过程.
 - 内容包含离线工具链安装, `espup` 使用和模板工程编译烧写, 但版本记录偏旧, 实操时需结合当前工具链核对.
 
+- 本页提到的 master 版本是当时 ESP-IDF 上游分支记录, 不是默认分支命名建议.
+
 1. 安装 esp32 的 toolchain
 
     https://dl.espressif.cn/dl/esp-idf/

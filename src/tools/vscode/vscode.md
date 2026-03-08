@@ -1,3 +1,16 @@
+# VSCode 笔记
+
+## 说明
+
+- 本页整理 `VSCode` 的常用配置, 插件开发, 编码设置和常见问题排查片段.
+- 适合作为编辑器使用经验和工作流技巧的长期速记页.
+
+## 使用建议
+
+- 查通用编辑器配置时, 先从本页顶部开始快速定位问题关键词.
+- 若问题更偏插件开发, 可结合 `VSCode 插件开发` 专题页一起阅读.
+- 本页保留较多历史片段, 后续可继续按主题拆成更清晰的小节.
+
 # VSCode
 
 # 使用技巧
@@ -11,7 +24,7 @@ aabbccdd
 
 结果为: \xaa\xbb\xcc\xdd
 
-## install vscode
+## 安装 VSCode
 
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
 
@@ -54,7 +67,7 @@ sudo sysctl -p
     set-ExecutionPolicy RemoteSigned
     get-ExecutionPolicy, 就显示RemoteSigned
 
-## vscode 中 python multiprocessing
+## VSCode 中 Python multiprocessing
 
     import multiprocessing
     multiprocessing.set_start_method('spawn', True)

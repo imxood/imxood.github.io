@@ -1,10 +1,16 @@
 # Rust 总览
 
-## 文档整理说明
+## 说明
 
 - 本文档作为 Rust 语言与常用开发流程的总览入口.
 - 旧版零散 Rust 记录中关于 `Pin` / `Unpin` 的内容已并入本文.
 - 更偏概念速记的内容可参考 [Rust 要点](./rust要点.md), 工具类内容可参考 [Rust 工具](./rust工具.md), 调试排错可参考 [Rust 调试技巧](./rust调试技巧.md).
+
+## 建议阅读路径
+
+- 初学语法和所有权问题时, 先看 `Rust 要点` 与当前总览页.
+- 需要工具链, 构建和排错时, 优先看 `Rust 工具`, `Rust 调试技巧`, `Rust 问题汇总`.
+- 需要框架或平台专题时, 再进入 `egui`, `Dioxus`, `Tauri`, `Rust for Android`, `wasm` 等专题页.
 
 ## 专题入口
 
@@ -21,6 +27,12 @@
 - 运行型实验工程可参考 [Rust 代码示例归档](./code/README.md).
 - 其中网络方向可继续看 [libp2p relay 示例运行记录](./code/libp2p-learn/Readmd.md).
 - USB 方向可继续看 [rusb](./library_usage/rusb.md) 和 [test_usb 实验目录说明](./test_usb/README.md).
+
+## 目录边界
+
+- `program/rust/` 主要承载语言知识, 框架使用和工具链专题.
+- 可运行型历史实验工程集中放在 `program/rust/code/` 和 `program/rust/test_usb/`.
+- 若内容更偏前端 UI 或 Web 工程归档, 应回到 `frontend/` 或 `program/web/`.
 
 ## 在 .config/config.toml 中设置默认编译目标
 
@@ -105,7 +117,7 @@ rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
     cargo install cargo-binutils
     rustup component add llvm-tools-preview
 
-## vscode 中 rust 的插件
+## VSCode 中 Rust 插件
 
     1. rust-analyzer
     2. Crates

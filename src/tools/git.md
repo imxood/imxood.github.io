@@ -24,6 +24,12 @@ vi .git/config 删除相关子模块条目
 
 ## 分支
 
+### 默认分支命名
+
+当前大多数仓库默认分支已从 master 迁移为 main.
+
+整理笔记和新建仓库时, 优先使用 main. 如果目标仓库仍然使用 master, 再按实际分支名替换命令中的 main.
+
 ## Tag
 
 ### 创建 Tag
@@ -68,9 +74,9 @@ git reset HEAD 指定文件或目录
 git init
 
 git remote add origin git@gitee.com:imxood/stm32h750_rt_app.git
-git pull origin master
+git pull origin main
 
-git branch --set-upstream-to=origin/master
+git branch --set-upstream-to=origin/main
 
 git add .
 git commit -m "."
@@ -142,7 +148,7 @@ git push --set-upstream origin main
 
         git fetch origin
 
-        git merge origin/master
+        git merge origin/main
 
     可能需要: git config --global --add --bool push.autoSetupRemote true
 
@@ -212,17 +218,19 @@ git remote add upstream https://github.com/larksuite/rsmpeg.git
 # 再次 查看状态是否被添加
 git remote -v
 
-# 获取上游的更新, 会被存储到本地分支 upstream/master
+# 获取上游的更新, 会被存储到本地分支 upstream/main
 git fetch upstream
 
-# 切换到本地要merge的分支 master
-git checkout master
+# 切换到本地要 merge 的分支 main
+git checkout main
 
-# 把 upstream/master 分支 merge 到本地 master
-git merge upstream/master
+# 把 upstream/main 分支 merge 到本地 main
+git merge upstream/main
 
 # 提交
-git push origin master
+git push origin main
+
+# 如果上游仓库仍然使用 master, 则把上面的 main 替换为 master
 ```
 
 ## 更新子模块
@@ -246,9 +254,9 @@ git config --global --get https.proxy
 
 ## 修复 "Not possible to fast-forward, aborting"
 
-<!-- master指的是当前修改的分支，一定要是当前修改的分支！！！ -->
+当前示例默认当前分支为 main. 如果目标仓库使用的是 master 或其它分支, 请替换为实际分支名.
 
-git pull origin master --rebase
+git pull origin main --rebase
 
 修复冲突后,
 

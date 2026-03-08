@@ -1,3 +1,10 @@
+# TensorFlow Lite Micro
+
+## 说明
+
+- 本页记录在 STM32 平台上搭建 TensorFlow Lite Micro 示例环境的过程.
+- 内容偏向旧版 mbed + GCC_ARM 工具链, 实际使用时需结合当前官方仓库与板卡支持情况校对.
+
 ## 搭建环境
 
     TensorFlow Lite: https://www.tensorflow.org/lite/microcontrollers

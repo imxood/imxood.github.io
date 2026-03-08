@@ -1,12 +1,20 @@
+# vcpkg
+
+1. 设置 vcpkg
+
 git clone https://github.com/microsoft/vcpkg
 
-.\vcpkg\bootstrap-vcpkg.bat -disableMetrics
+cd vcpkg
 
-添加 .\vcpkg 到环境变量中.
+.\bootstrap-vcpkg.bat -disableMetrics
 
-.\vcpkg\vcpkg integrate install
+2. 设置项目
 
-.\vcpkg\vcpkg search [search term]
+添加 当前路径 到环境变量中.
+
+.\vcpkg integrate install
+
+.\vcpkg search [search term]
 
 vcpkg list 查看已经安装的库
 
@@ -17,3 +25,10 @@ vcpkg help triplet
 ## 安装 ffmpeg
 
 vcpkg install ffmpeg:x64-windows
+
+## rust opengl-sys
+
+vcpkg install openssl:x64-windows-static-md --debug
+
+--debug 参数, 用于查看编译过程
+

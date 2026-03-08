@@ -1,4 +1,9 @@
-# openocd笔记
+# OpenOCD 与 GDB
+
+## 说明
+
+- 本页汇总 `OpenOCD` 的安装配置, 常用命令和与 `GDB` 联动的调试记录.
+- 适用于嵌入式烧录, 远程调试和板级 Bring-up 场景.
 
 ## openocd 编译 安装
 

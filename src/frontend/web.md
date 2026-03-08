@@ -1,5 +1,10 @@
 # web
 
+## 文档整理说明
+
+- 本页保留 Web 通用笔记.
+- 历史 Web 总页中与 Node.js / Yarn 环境相关的内容已合并到 [Node.js 笔记](./nodejs.md).
+
 ## 使用 flex 中间元素铺满
 
 

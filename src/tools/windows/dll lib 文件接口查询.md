@@ -1,24 +1,47 @@
 # 查看 dll 或 lib 文件函数定义
 
-## dll文件
+## 说明
 
-打开 powershell for vs 2022, 执行:
+- 本页记录 Windows 下查看动态库和静态库导出符号的常用方式.
+- 对排查 ABI, 位数不匹配和缺失依赖很有帮助.
 
-dumpbin /exports dll名文件名 > output.txt
+## 查看 DLL 导出函数
 
-dumpbin /headers dll名文件名, 查看库的位数, 在开头: machine (x86)
+打开 `Developer PowerShell for VS 2022` 或带有 `dumpbin` 的开发者命令行:
 
-dumpbin /dependents exe程序, 查看 exe程序需要哪些dll依赖 (如果exe程序 缺失一些 dll时, 打开时 弹框提示 dll确实 或者 是直接闪退)
+```powershell
+dumpbin /exports demo.dll > output.txt
+```
 
-## c# 动态库?
+查看库的位数:
 
-使用 visual studio 2022 中自带的 ildasm工具, 运行它 会打开一个窗口, 在其中打开 c# dll 文件, 可以看到 dll中导出的接口.
+```powershell
+dumpbin /headers demo.dll
+```
 
-## lib文件
+输出开头常能看到 `machine (x86)` 或 `machine (x64)`.
 
-dumpbin /LINKERMEMBER Test.lib > output.txt
+## 查看 EXE 依赖的 DLL
 
-## 查看位数
+```powershell
+dumpbin /dependents app.exe
+```
 
-dumpbin /HEADERS 库文件 | findstr machine
+- 当程序启动时提示缺少 DLL 或直接闪退时, 这条命令很实用.
 
+## 查看 C# DLL
+
+- 可使用 Visual Studio 自带的 `ildasm` 打开 .NET 程序集.
+- 适合查看托管 DLL 中的类型, 方法和元数据结构.
+
+## 查看 LIB 导出成员
+
+```powershell
+dumpbin /linkermember Test.lib > output.txt
+```
+
+## 快速查看位数
+
+```powershell
+dumpbin /headers Test.lib | findstr machine
+```

@@ -1,193 +1,119 @@
+# Windows 笔记
+
+## 说明
+
+- 本页整理 Windows 系统清理, 常见排障, 环境变量, 端口与系统设置的高频记录.
+- 当前内容更偏系统维护与问题排查, 适合作为 Windows 运维速查页.
+
 ## 系统清理
 
-AppData\Local\Yarn\Cache 6 个多 G
-清理: yarn cache clean
+### 常见缓存目录
 
-AppData\Local\Temp 6 个 G
-删除目录
+- `AppData\Local\Yarn\Cache`: Yarn 缓存目录, 可用 `yarn cache clean` 清理.
+- `AppData\Local\Temp`: 临时文件目录, 可按需清理.
+- `AppData\Roaming\Tencent`: 某些软件缓存目录, 清理前先确认无业务依赖.
 
-AppData\Roaming\Tencent 2.02G
-删除目录
+## 程序依赖与运行错误
 
-```bat
-@echo off
-color 0a
-echo ★☆ ★☆ ★☆ ★☆ ★☆★☆★☆ ★☆ ★☆ ★☆ ★☆★
-echo ★☆ ★☆ ★☆ ★☆ ★☆★☆★☆ ★☆ ★☆ ★☆ ★☆★
-echo.★☆ ☆★
-echo.★☆ ☆★
-echo.★☆ 小海清理系统垃圾文件，请稍等...... ☆★
-echo ★☆ ☆★
-echo.★☆  ☆★
-echo ★☆ ★☆ ★☆ ★☆ ★☆★☆★☆ ★☆ ★☆ ★☆ ★☆★
-echo ★☆ ★☆ ★☆ ★☆ ★☆★☆★☆ ★☆ ★☆ ★☆ ★☆★
+### `0xc000007b`
 
-echo 正在清除系统临时文件 *.tmp *._tmp *.log *.chk *.old ，请稍等...
-del /f /s /q %systemdrive%\*.tmp
-del /f /s /q %systemdrive%\*._mp
-del /f /s /q %systemdrive%\*.log
-del /f /s /q %systemdrive%\*.gid
-del /f /s /q %systemdrive%\*.chk
-del /f /s /q %systemdrive%\*.old
+- 这类错误常和运行库位数不匹配, 缺失 DLL 或运行时环境异常有关.
+- 典型排查方向:
+  - 目标程序是 `32` 位还是 `64` 位.
+  - 依赖 DLL 位数是否一致.
+  - VC 运行库是否完整.
 
-echo 清空垃圾箱，备份文件和预缓存脚本...
-del /f /s /q %systemdrive%\recycled\*.*
-del /f /s /q %windir%\*.bak
-del /f /s /q %windir%\prefetch\*.*
-rd /s /q %windir%\temp & md %windir%\temp
+### 查看程序依赖
 
-echo 删除补丁备份目录
-RD %windir%\$hf_mig$ /Q /S
-
-echo 把补丁卸载文件夹的名字保存成2950800.txt
-dir %windir%\$NtUninstall* /a:d /b >%windir%\2950800.txt
-
-echo 从2950800.txt中读取文件夹列表并且删除文件夹
-for /f %%i in (%windir%\2950800.txt) do rd %windir%\%%i /s /q
-
-echo 删除2950800.txt
-del %windir%\2950800.txt /f /q
-
-echo 删除补丁安装记录内容（下面的del /f /s /q %systemdrive%\*.log已经包含删除此类文件）
-del %windir%\KB*.log /f /q
-
-echo 清理系统盘无用文件...
-%windir%\system32\sfc.exe /purgecache
-
-echo 优化预读信息...
-%windir%\system32\defrag.exe %systemdrive% -b
-
-echo ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-echo ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-echo ★☆ ☆★
-echo.★☆ ☆★
-echo.★☆ ☆★
-echo ★☆  ☆★
-echo ★☆ 恭喜您！小海已为你清理系统垃圾！ ☆★
-echo.★☆ ☆★
-echo ★☆ ☆★
-echo.★☆  ☆★
-echo ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-echo ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★
-
-echo. & pause
-```
-
-## 中控机报错: 应用程序无法正常启动 0xc000007b
-
-[参考: How To Fix Error 0xc000007b in Windows 10](https://www.youtube.com/watch?v=kzYbDPxdMbo)
-
-http://www.mediafire.com/file/97erhoox4d3zabq/aio210.zip/file
-
-### 查看可执行程序依赖库
-
-http://dependencywalker.com/
-
-###
-
-https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
-
-上面的办法都没什么用, 我遇到的问题, 64 位 dll 与 32 位 dll
+- `Dependency Walker`: <http://dependencywalker.com/>
+- `Procmon`: <https://docs.microsoft.com/en-us/sysinternals/downloads/procmon>
 
 ## 环境变量
 
-### cmd
+### `cmd`
 
-设置临时环境变量
+```bat
+set A=a/b/c
+set A=a/b/c;%A%
+```
 
-    set A=a/b/c
-    set A=a/b/c;%A%
+### `PowerShell`
 
-### PowerShell
+```powershell
+ls env:
+$env:PATH
+$env:A="a/b/c"
+$env:A="a/b/c;$env:A"
+```
 
-查看 环境变量列表
+- 临时环境变量只对当前会话有效.
+- 长期环境变量建议通过系统设置统一配置.
 
-    ls env:
+## 端口与进程排查
 
-    $env:PATH
+### 查看进程占用端口
 
-设置临时环境变量
+```bat
+netstat -ano | findstr 6220
+```
 
-    $env:A="a/b/c"
-    $env:A="a/b/c;$env:A"
-
-## 清除端口
-
-打开 regedit
-输入: 计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\COM Name Arbiter\Devices
-删除 你不想要的所有用过的 COM 端口
-
-![](images/windows/2023-07-24-10-55-06.png)
-
-## 删除 virtual box 网卡
-
-启用需要删除的 virtual box 网卡, 在 virtual box 的虚拟网卡中(不启用的话, 这个列表中看不到), 删除
-
-## 关闭防火墙后 禁用通知
-
-https://www.disktool.cn/content-center/win11-turn-off-firewall-2111.html
-
-## windows 彻底关闭 实时保护
-
-https://blog.csdn.net/COCO56/article/details/128613164
-
-### windows11 威胁防护 "此设置由管理员进行管理"
-
-关闭该功能:
-
-计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender
-
-把这一项删除
-
-
-## 性能优化
-
-游戏模式 / 关闭
-
-建议我如何设置 / 关闭
-
-实时防护 / 关闭
-
-## 桌面图标变得特别宽
-
-1. 打开注册表
-2. 找到 HKEY_CURRENT_USER\HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics
-3. 把 IconSpacing 和 IconVerticalSpacing 改成 -1130, 保存后重启电脑
-
-## windows 虚拟串口
-
-https://github.com/microsoft/windows-driver-samples/tree/main/serial/VirtualSerial2
-
-[com0com](https://github.com/tanvir-ahmed-m4/com0com)
-
-## edge 浏览器
-
-禁止 http 重定向到 https
-
-edge://net-internals/#hsts
-
-Delete domain security policies
-
-### 批量修改文件后缀
-
-Get-ChildItem -Filter \*.ino | Rename-Item -NewName { $\_.BaseName + ".cpp" }
-
-### 查看进程占用网络端口
-
-netstat -ano | grep 6220, 6220 为进程 pid
+- `6220` 为端口号.
+- 查到 PID 后, 再结合任务管理器或 `taskkill` 继续处理.
 
 ### 进程异常退出排查
 
-打开 eventvwr.msc
+- 打开 `eventvwr.msc`.
+- 路径: `Windows 日志 -> 应用程序`.
+- 可按时间和事件来源筛选 `Application Error`, `Windows Error Reporting`.
 
-左侧选择: Windows 日志 -> 应用程序
+## 串口与设备
 
-右边的 "操作" -> 筛选当前日志... ->
+### 清除 COM 端口占用记录
 
-    设置记录时间: 近7天
+- 打开 `regedit`.
+- 路径: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\COM Name Arbiter\Devices`.
+- 删除不再需要的历史 COM 端口映射前, 建议先备份注册表.
 
-    事件级别: 错误
+### 删除 VirtualBox 虚拟网卡
 
-    事件来源: Application Error, Windows Error Reporting
+- 先启用目标虚拟网卡, 让其出现在列表中.
+- 再在 VirtualBox 的虚拟网卡管理界面中删除.
 
-可以找到 目标进程 异常退出
+## 安全与系统设置
+
+### 关闭防火墙后禁用通知
+
+- 参考: <https://www.disktool.cn/content-center/win11-turn-off-firewall-2111.html>
+
+### 关闭实时保护
+
+- 参考: <https://blog.csdn.net/COCO56/article/details/128613164>
+- 若提示“此设置由管理员进行管理”, 还要检查相关组策略与注册表项.
+
+## 界面与桌面问题
+
+### 桌面图标间距异常
+
+- 注册表路径: `HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics`.
+- 可调整 `IconSpacing` 与 `IconVerticalSpacing`.
+- 修改前建议先导出备份.
+
+## 网络与浏览器
+
+### Edge 禁止 HTTP 自动重定向到 HTTPS
+
+- 打开 `edge://net-internals/#hsts`.
+- 在 `Delete domain security policies` 中删除对应域名策略.
+
+## 版本与授权问题
+
+### Windows 10 LTSC 授权异常记录
+
+- 可通过调整 `SoftwareProtectionPlatform` 下的 `SkipRearm` 等配置后结合 `slmgr -REARM` 处理.
+- 这类操作涉及系统授权机制, 修改前建议备份并确认版本适用性.
+
+## 使用建议
+
+- 本页优先记录高频系统维护与排障线索, 不宜继续无节制堆积零散命令.
+- 若某个主题已经形成稳定专题, 应拆分到独立页面.
+- 与包管理和服务部署相关的内容, 可继续看 `Chocolatey`, `NSSM`, `OpenSSH Server` 等专题页.

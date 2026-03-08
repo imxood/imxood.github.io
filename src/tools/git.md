@@ -4,7 +4,7 @@
 
 ### 添加
 
-git submodule add -b <BranchName> <Url>
+`git submodule add -b <BranchName> <Url>`
 
 ### 同步
 
@@ -18,9 +18,9 @@ vi .gitmodules 删除相关子模块条目
 
 vi .git/config 删除相关子模块条目
 
-rm .git/module/<Sub Module Dir> 删除子模块目录
+`rm .git/module/<Sub Module Dir>` 删除子模块目录
 
-git rm --cached <Sub Module Name>
+`git rm --cached <Sub Module Name>`
 
 ## 分支
 
@@ -28,7 +28,7 @@ git rm --cached <Sub Module Name>
 
 ### 创建 Tag
 
-git tag <TagName>
+`git tag <TagName>`
 
 ## 推送 Tag
 
@@ -43,6 +43,10 @@ git fetch
 
 git push origin --delete $(git tag -l)
 ```
+
+### 切换到 远程 tag
+
+`git checkout tags/v2.6.3` 这里远程 TAG 是 v2.6.3
 
 ## 可用的国内镜像
 
@@ -141,6 +145,12 @@ git push --set-upstream origin main
         git merge origin/master
 
     可能需要: git config --global --add --bool push.autoSetupRemote true
+
+## 查看历史记录,不删除最新提交
+
+`git log` 找到需要的历史提交
+`git checkout f35575193daaec87b40af180654ee4e6c844d71c` 切换到指定的提交记录, 通过 `git status` 可以看出当前已切换
+`git checkout -` 切换到最新的代码
 
 ## git remote
 
@@ -312,10 +322,22 @@ linux 中似乎是明文, 位于 ~/.git-credentials
 
 mac 和 windows 不是?
 
-## 在 git中 使用 ssh 代理
+## 在 git 中 使用 ssh 代理
+
+参考: https://gist.github.com/chenshengzhi/07e5177b1d97587d5ca0acc0487ad677
 
 ### windows
 
-在 ~/.ssh/config 文件的开头 添加
+在 ~/.ssh/config 文件的开头 添加一行 就可以了:
 
-ProxyCommand connect -S 127.0.0.1:1080 %h %p
+ProxyCommand connect -H 127.0.0.1:1080 %h %p
+
+##
+
+我发现 crates/thirds/egui-toast 未被 git 管理, 执行: `git submodule status` 报错:
+
+`fatal: no submodule mapping found in .gitmodules for path 'crates/thirds/egui-toast'`
+
+解决办法:
+
+`git rm --cached crates/thirds/egui-toast -r`

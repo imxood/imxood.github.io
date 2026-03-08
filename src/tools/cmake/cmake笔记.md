@@ -1,3 +1,10 @@
+# CMake 笔记
+
+## 说明
+
+- 本页汇总 `CMake` 常用命令, 语法片段, 变量与属性排查方式.
+- 适合作为写 `CMakeLists.txt` 或调试构建脚本时的速查页.
+
 ## cmake 命令
 
 cmake -B build                                                          配置 编译目录

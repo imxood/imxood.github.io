@@ -1,4 +1,9 @@
-# nanoESP32-C3 开发板
+# nanoESP32-C3 OpenOCD 调试
+
+## 说明
+
+- 本页记录 nanoESP32-C3 开发板上使用 `openocd-esp32` 和 CMSIS-DAP 进行调试的过程.
+- 重点包括 `hidapi` 编译, `openocd-esp32` 构建, efuse 设置和实际调试体验问题.
 
 ## 使用 openocd 调试 esp32c3
 

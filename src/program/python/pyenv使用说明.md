@@ -1,61 +1,60 @@
-## 自动安装 pyenv 环境
+# pyenv 使用说明
 
-curl https://pyenv.run | bash
+## 说明
 
-根据 中断的提示, 添加命令到 ~/.bashrc
+- `pyenv` 用于在同一台机器上管理多个 Python 版本.
+- 适合做项目隔离, 老项目兼容和测试不同解释器版本的场景.
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+## 自动安装 pyenv
 
 ```sh
-# Load pyenv automatically by appending
-# the following to ~/.bash_profile if it exists, otherwise ~/.profile (for login shells) and ~/.bashrc (for interactive shells) :
+curl https://pyenv.run | bash
+```
 
+根据终端提示, 将下面的命令添加到 `~/.bashrc`:
+
+```sh
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+```
 
-# Restart your shell for the changes to take effect.
+如果需要 `pyenv-virtualenv`, 继续追加:
 
-# Load pyenv-virtualenv automatically by adding
-# the following to ~/.bashrc:
-
+```sh
 eval "$(pyenv virtualenv-init -)"
 ```
 
-## ubuntu使用pyenv管理多个python版本 (手动安装)
+## Ubuntu 手动安装
 
-	git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```sh
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```
 
-	添加环境:
+## 常见使用流程
 
-		export PATH="~/.pyenv/bin:$PATH"
-		eval "$(pyenv init -)"
+### 查看可安装版本
 
-	由于 pyenv 是下载python源码 编译, 所以安装会用到的库:
-		sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
-		libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-		libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+```sh
+pyenv install --list
+```
 
-		参考: https://github.com/pyenv/pyenv/wiki/Common-build-problems
+### 安装指定版本
 
-## pyenv常用的命令
+```sh
+pyenv install 3.11.9
+```
 
-    查看支持的python版本:
-        pyenv install -l
+### 设置全局或局部版本
 
-    安装python3.5版本:
-        pyenv install 3.5.10
+```sh
+pyenv global 3.11.9
+pyenv local 3.10.14
+```
 
-    查看已管理的所有版本:
-        pyenv versions
+## 使用建议
 
-    对特定应用指定python版本, 会在当前目录下生成'.python-version':
-        pyenv local 3.5.10
-
-    全局使用:
-        pyenv global 3.5.10
-
-tips:
-    pyenv对tab键非常友好 (for ubuntu)
+- 新项目优先用 `pyenv local` 在项目目录内固定版本.
+- 多项目并存时, 不要只依赖系统自带 Python.
+- 若命令未生效, 优先检查 shell 初始化脚本是否已重新加载.
+- 若后续继续整理, 可补 `pyenv-virtualenv`, 构建依赖和 Windows 替代方案说明.

@@ -1,133 +1,146 @@
 # Flutter 学习笔记
 
-    export PUB_HOSTED_URL=https://pub.flutter-io.cn
-    export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+## 说明
 
-    安装环境
+- 本页记录 Flutter 环境初始化, 桌面开发, Android 开发和常见代理配置.
+- 内容横跨 Windows 与 Linux 场景, 更适合作为综合备忘录.
 
-        https://flutter.cn/docs/get-started/install
+## 基础环境
 
-        解压后, 添加bin目录到环境变量, 就有了 dart 和 flutter 命令了
+国内镜像环境变量示例:
 
-    flutter config --no-analytics
+```sh
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+```
 
-    flutter --disable-telemetry
+安装说明:
 
-     dart --disable-analytics
+- https://flutter.cn/docs/get-started/install
 
-    flutter doctor
+常用初始化命令:
+
+```sh
+flutter config --no-analytics
+flutter --disable-telemetry
+dart --disable-analytics
+flutter doctor
+```
 
 ## 桌面开发
 
-参考[`flutter 官方教程`](https://flutter.cn/desktop)
+参考:
 
-    设置国内源:
-        export PUB_HOSTED_URL=https://mirrors.tuna.tsinghua.edu.cn/dart-pub
-        export FLUTTER_STORAGE_BASE_URL=https://mirrors.tuna.tsinghua.edu.cn/flutter
+- [Flutter 官方桌面教程](https://flutter.cn/desktop)
 
-    <!-- flutter channel dev -->
-    flutter upgrade
+国内镜像可切换为:
 
-    flutter config --enable-<platform>-desktop
+```sh
+export PUB_HOSTED_URL=https://mirrors.tuna.tsinghua.edu.cn/dart-pub
+export FLUTTER_STORAGE_BASE_URL=https://mirrors.tuna.tsinghua.edu.cn/flutter
+```
 
-    // flutter config --enable-linux-desktop
-    // flutter config --enable-macos-desktop
-    // flutter config --enable-windows-desktop
-    // flutter config --enable-web
-    // flutter config --enable-android
-    // flutter create .
+启用桌面能力:
 
-    linux 桌面开发 配置:
-        sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev liblzma-dev
+```sh
+flutter upgrade
+flutter config --enable-<platform>-desktop
+```
 
+常见平台选项:
 
-    flutter devices
-    flutter doctor
+- `flutter config --enable-linux-desktop`
+- `flutter config --enable-macos-desktop`
+- `flutter config --enable-windows-desktop`
+- `flutter config --enable-web`
+- `flutter config --enable-android`
 
-    创建一个应用
-        flutter create flutter_desktop
-        cd flutter_desktop
+Linux 桌面开发常见依赖:
 
-    运行:
-        flutter run -d windows
-        flutter run -d macos
-        flutter run -d linux
+```sh
+sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev liblzma-dev
+```
 
-    编译 release app:
-        flutter build windows
-        flutter build macos
-        flutter build linux
+创建与运行应用:
 
-    性能调试:
-        flutter run -d linux --trace-skia --profile
+```sh
+flutter create flutter_desktop
+cd flutter_desktop
+flutter run -d windows
+flutter run -d macos
+flutter run -d linux
+```
 
-        flutter screenshot -d linux --type=skia --observatory-uri=<Observatory-URI>
+构建 release:
 
-        打开https://debugger.skia.org/ (被墙了), 上传 上一个命令 到这个网站, 分析
+```sh
+flutter build windows
+flutter build macos
+flutter build linux
+```
 
-## 安卓环境
+性能调试:
 
-### 下载 并安装 android studio
+```sh
+flutter run -d linux --trace-skia --profile
+flutter screenshot -d linux --type=skia --observatory-uri=<Observatory-URI>
+```
 
-https://developer.android.com/studio
+## Android 环境
 
-### 添加到 PATH 环境变量
+Android Studio 下载:
 
-安装 SDK / NDK / Command line tools
+- https://developer.android.com/studio
 
+常见环境变量:
+
+```text
 D:\programs\Android\Sdk\platform-tools
-<!-- D:\programs\Android\Sdk\tools\bin -->
-
 ANDROID_SDK_ROOT=D:\programs\Android\Sdk
 ANDROID_NDK_ROOT=%ANDROID_SDK_ROOT%\ndk\26.3.11579264
+```
 
-### 设置 flutter for android 环境
+初始化 Android 开发环境:
 
+```sh
 flutter doctor --android-licenses
-
-### 创建项目
-
 flutter create start_flutter_android
-
-### 编译项目
-
 flutter build apk
-
 flutter build apk --debug
+```
 
-### 网络不好的话, 需要配置代理
+## 网络不好的话配置代理
 
-编辑 gradle.properties 文件, 追加内容:
+在 `gradle.properties` 中追加:
 
 ```conf
 systemProp.socks.proxyHost=127.0.0.1
 systemProp.socks.proxyPort=1080
-
 systemProp.http.proxyHost=127.0.0.1
 systemProp.http.proxyPort=1080
-
 systemProp.https.proxyHost=127.0.0.1
 systemProp.https.proxyPort=1080
 ```
 
-### gradle 下载失败
+## Gradle 下载失败
 
-https://github.com/whichow/Notebook/blob/master/Development/Android/Build/%E8%A7%A3%E5%86%B3Gradle%E4%B8%8B%E8%BD%BD%E8%B6%85%E6%97%B6%E9%97%AE%E9%A2%98.md
+参考:
 
-gradle/wrapper/gradle-wrapper.properties
+- https://github.com/whichow/Notebook/blob/master/Development/Android/Build/%E8%A7%A3%E5%86%B3Gradle%E4%B8%8B%E8%BD%BD%E8%B6%85%E6%97%B6%E9%97%AE%E9%A2%98.md
 
-找到: `distributionUrl=https\://services.gradle.org/distributions/gradle-2.4-all.zip`
+可在 `gradle/wrapper/gradle-wrapper.properties` 中把远程 `distributionUrl` 改成本地文件路径, 例如:
 
-下载到本地, 并设置成本地文件: `distributionUrl=file:///D:/programs/gradle/gradle-7.6.3-all.zip`
+```text
+distributionUrl=file:///D:/programs/gradle/gradle-7.6.3-all.zip
+```
+
+然后执行:
 
 ```sh
 ./gradlew build
 ```
 
-## IOS
+## 其他
 
-flutter build ios
-
-## flutter 升级
-
-flutter upgrade
+- iOS 构建: `flutter build ios`
+- Flutter 升级: `flutter upgrade`

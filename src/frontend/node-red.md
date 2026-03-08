@@ -1,12 +1,35 @@
+# Node-RED
+
+## 说明
+
+- `Node-RED` 是面向流程编排和可视化节点连接的低代码工具.
+- 本页当前以源码编译和二次开发场景为主, 普通使用者通常不必自己从源码构建.
+
+## 适用场景
+
+- 快速拼装 IoT, API, 消息流和自动化任务流程.
+- 需要通过可视化节点方式整合设备, HTTP 接口和消息中间件.
+- 需要调试或定制 `Node-RED` 自身源码实现.
+
 ## 源码编译
 
+```sh
 git clone https://github.com/node-red/node-red.git
 cd node-red
-
-<!-- 使用 yarn 进行 install 会失败 -->
-
-npm --registry=https://registry.npm.taobao.org install
-
+npm --registry=https://registry.npmmirror.com install
 npm run build
-
 npm start
+```
+
+## 常见理解方式
+
+- 普通用户: 更关注节点编排, 部署和运行方式.
+- 开发者: 更关注自定义节点, 插件结构和源码构建流程.
+- 运维场景: 更关注进程托管, 日志, 数据持久化和端口暴露方式.
+
+## 使用建议
+
+- 使用 `yarn` 安装依赖时可能失败, 当前记录优先使用 `npm`.
+- 若只是使用现成发行版, 不一定需要走源码编译流程.
+- 源码编译更适合做二次开发或排查内部实现.
+- 普通使用场景可优先安装官方发布版本.

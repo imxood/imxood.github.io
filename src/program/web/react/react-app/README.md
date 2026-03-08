@@ -1,70 +1,34 @@
-# Getting Started with Create React App
+# CRA React 示例归档
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 说明
 
-## Available Scripts
+- 本目录是一个基于 `Create React App` 生成的历史示例项目.
+- 与 [React my-app 示例说明](../my-app/README.md) 同属 `CRA` 时代样例, 更适合做旧项目对照而不是新项目起点.
+- 若目标是理解 React 语法或组件模型, 应优先回到 [前端 React 笔记](../../../../frontend/react/react.md).
 
-In the project directory, you can run:
+## 适用场景
 
-### `yarn start`
+- 回看 `CRA` 时代项目默认命令与结构.
+- 对比旧项目和现代 `Vite` / `Next.js` 工程在目录与构建链上的差异.
+- 在迁移旧项目时快速确认历史脚本命名方式.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 当前治理结论
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- 当前目录已列为第一批低优先级迁出候选.
+- 本轮继续保留最小归档说明, 便于与 `my-app` 做同代脚手架对照.
+- 若后续只保留一个 `CRA` 对照样本, 本目录可优先继续降级或迁出.
 
-### `yarn test`
+## 常用命令
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```sh
+npm install
+npm start
+npm test
+npm run build
+```
 
-### `yarn build`
+## 使用建议
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 如果只是查 React 笔记, 优先看主文档.
+- 如果需要运行示例, 再进入本目录执行命令.
+- 若要沉淀知识点, 应把可复用内容回收至 `frontend/` 文档体系.

@@ -1,3 +1,10 @@
+# Windows 11 安卓子系统
+
+## 说明
+
+- 本页记录在 Windows 11 中启用安卓子系统与安装 APK 工具的基本过程.
+- 适合作为 WSA 环境开启与测试安装链路的简要参考.
+
 ## Windows11 安装安卓子系统
 
 参考: https://blog.csdn.net/m0_63834988/article/details/132116092

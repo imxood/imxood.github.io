@@ -1,4 +1,9 @@
-# Deepin 系统 编译 OpenRA 系统
+# OpenRA 构建记录
+
+## 说明
+
+- 本页记录在 Deepin 系统上编译 OpenRA 的依赖准备与构建流程.
+- 虽然项目本体偏 C# / .NET, 但当前归档在 Rust 目录中作为游戏方向的历史构建记录保留.
 
 参考: https://github.com/OpenRA/OpenRA/blob/bleed/INSTALL.md
 

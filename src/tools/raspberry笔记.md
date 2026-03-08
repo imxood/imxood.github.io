@@ -1,4 +1,9 @@
-# raspberry笔记
+# Raspberry Pi 笔记
+
+## 说明
+
+- 本页记录 Raspberry Pi OS 烧写, 首次启用 SSH, 换源和常见运维操作.
+- 适合作为树莓派上手配置和家庭服务折腾的基础入口.
 
 ## 使用 imager 烧写TF卡
 

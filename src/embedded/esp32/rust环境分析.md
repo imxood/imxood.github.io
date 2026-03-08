@@ -1,3 +1,10 @@
+# esp-rs Rust 环境分析
+
+## 说明
+
+- 本页从 `esp-idf-sys` 与 `embuild` 角度说明 `esp-rs` 项目的底层构建链路.
+- 适合在排查 `sdkconfig`, `build.rs` 和 Rust feature 配置传递问题时快速建立整体认知.
+
 esp-rs项目的编译 关键在于 esp-idf-sys库的编译, 这是 esp-idf 源码 的编译, 编译工具是 embuild, 底层是官方编译链 cmake编译, 这会编译所有的 components,  所有的 sdkconfig 中定义的功能使能的选项, 最终应该会合并成一个, 这应该可以通过 kconfig 工具实现, 可以通过解析这个合并的后的config, 把所有=y的选项解析出来, 以 cargo:rustc-cfg=... 的形式, 输出到rust的编译环境, 这样 esp32的组件库 和 rust库 就可以共享同一套配置了.
 
 ![](images/rust环境分析/20221004131018.png)

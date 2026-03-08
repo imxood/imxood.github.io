@@ -1,46 +1,46 @@
-# create-svelte
+# Svelte Web + Tauri 示例归档
 
-## svelte kit
+## 说明
 
+- 本目录是一个 `SvelteKit` + `Tauri` 的混合实验项目.
+- 目录中同时包含前端工程和 `src-tauri/` 桌面端壳层.
+- 当前更适合作为技术组合实验档案, 而不是正式知识入口.
+
+## 当前结构
+
+- `src/`: Svelte 前端代码.
+- `src-tauri/`: Tauri 桌面端壳层.
+- `static/`: 静态资源.
+
+## 当前治理结论
+
+- 当前目录已列为第一批低优先级迁出候选.
+- `Svelte` 相关知识应回到 [frontend/svelte.md](../../../../frontend/svelte.md).
+- `Tauri` 相关知识应回到 [program/rust/tauri.md](../../tauri.md).
+- 本轮继续保留样例工程上下文, 但不再提升其导航权重.
+
+## 初始化记录
+
+```sh
 npm create svelte@latest svelte-web
-
-## 安装 daisyui
-
 yarn add -D tailwindcss postcss autoprefixer daisyui
-
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
 ```
 
-## Developing
+## 常用命令
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```sh
+yarn
+yarn dev
+yarn build
 ```
 
-## Building
+## 适合如何使用
 
-To create a production version of your app:
+- 回看 `SvelteKit + Tauri` 的混合工程结构.
+- 对照前端工程与桌面壳层之间的目录边界.
+- 回忆 `tailwindcss` 和 `daisyui` 的接入顺序.
 
-```bash
-npm run build
-```
+## 后续动作
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- 若后续只保留结构参考价值, 可整体迁出主知识树.
+- 若其中有稳定结论, 应回收至正式知识页, 不再继续在样例目录 README 中扩写.

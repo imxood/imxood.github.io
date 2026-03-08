@@ -1,6 +1,34 @@
-# 阿里云 OSS Bucket
+# 阿里云服务
 
-[OSS简介](https://help.aliyun.com/document_detail/31947.html?spm=a2c4g.11186623.6.1603.47db55acvmevIS)
+## 说明
 
-[API参考](https://help.aliyun.com/document_detail/31948.html?spm=a2c4g.11186623.2.3.2e0a2635L6PAR0)
+- 本页当前作为阿里云常用服务记录的轻量入口, 重点先放在 `OSS Bucket`.
+- 适合作为后续继续整理对象存储, 上传下载, 权限控制和 SDK 使用记录的占位页.
+- 如果后续内容增多, 建议继续拆成 `OSS`, `ECS`, `CDN`, `函数计算` 等专题页.
 
+## 当前主题
+
+### OSS Bucket
+
+- [OSS 简介](https://help.aliyun.com/document_detail/31947.html?spm=a2c4g.11186623.6.1603.47db55acvmevIS)
+- [API 参考](https://help.aliyun.com/document_detail/31948.html?spm=a2c4g.11186623.2.3.2e0a2635L6PAR0)
+
+## 常见关注点
+
+- Bucket 创建与地域选择.
+- 访问权限控制, 例如公网读写, 私有读写和 STS 临时授权.
+- SDK 与签名上传.
+- 生命周期规则和静态资源托管.
+
+## 建议整理方向
+
+- `ossutil` / SDK 常用命令.
+- 浏览器直传与回调配置.
+- CDN 和自定义域名绑定.
+- 跨地域访问延迟和成本控制.
+
+## 使用建议
+
+- 先明确当前需求是“对象存储”, “静态资源托管”, 还是“临时上传下载授权”.
+- 涉及权限问题时, 优先区分 Bucket 权限, RAM 权限和临时令牌三层配置.
+- 真正进入实现阶段后, 建议补具体命令和 SDK 示例, 不要只保留官方链接入口.

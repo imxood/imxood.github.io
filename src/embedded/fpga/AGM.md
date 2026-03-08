@@ -1,55 +1,65 @@
-## 安装 与 破解 Quartus II, USB Blaster 驱动, 连接 Modelsim
+# AGM 平台与工具链
 
-https://blog.csdn.net/m0_52869979/article/details/123433202
+## 说明
 
-先安装 Quartus II 13.1 官方的安装包
+- 本文记录 `AGM` 平台相关的 FPGA 开发环境搭建与项目编译流程.
+- 当前重点包括 `Quartus II`, `ModelSim`, `verilog-format` 和项目烧写流程.
 
-再下载破解程序 并执行
+## 环境准备
 
-## modelsim-win64-10.4-se 安装 与 破解
+### Quartus II 与 USB Blaster
 
-https://blog.csdn.net/ssj925319/article/details/115353790
+- 安装 `Quartus II 13.1` 官方安装包.
+- 安装 `USB Blaster` 驱动.
+- 如有历史环境需求, 再按项目要求处理兼容性或授权问题.
 
-先安装 modelsim-win64-10.4-se 官方安装包
+### ModelSim
 
-再下载破解程序 并执行
+- 安装 `modelsim-win64-10.4-se`.
+- 具体版本需与项目环境保持一致.
 
-## vscode 编辑 verilog
+## VSCode 中编辑 Verilog
 
-### 安装 verilog-format
+### verilog-format
 
-https://github.com/ericsonj/verilog-format
+- 项目地址: https://github.com/ericsonj/verilog-format
+- 若直接使用存在问题, 需要按项目说明修改后重新编译.
 
-需要修改并编译:
+常见步骤:
 
-![](images/AGM/2023-06-04-15-36-03.png)
-
+```sh
 mvn clean package
+```
 
-执行 target\verilog-format.exe 时, 需要确保 有jdk环境
+执行 `target/verilog-format.exe` 前, 需要确保本机存在 `JDK` 环境.
 
-## 安装 ierilog
+## 其他工具
 
-下载地址 for windows: https://bleyer.org/icarus/
+### iverilog
 
-插件安装教程: https://www.youtube.com/watch?v=vN1wzM0NO4c
+- Windows 下载地址: https://bleyer.org/icarus/
+- 插件安装说明: https://www.youtube.com/watch?v=vN1wzM0NO4c
 
-## AGM项目编译与配置
+## AGM 项目流程
 
-1. 使用 pio unlock flash
+典型流程示例:
+
+1. 使用 `pio unlock flash`
 2. 进入烧写模式
-3. 在 PlatformIO 中 serial/Custom/Upload LOGIC, 下载 logic 和 bin
+3. 在 `PlatformIO` 中执行 `Upload LOGIC` 等自定义流程
 4. 进入正常模式
 
 ### CustomIP
 
-在 platformio.ini 中:
+在 `platformio.ini` 中可配置:
 
+```ini
 ip_name = custom_ip
 logic_dir = logic
+```
 
-PlatformIO -> serial/Custom/Prepare LOGIC, 会生成 logic目录.
+常见流程:
 
-使用 QuartusII 编译 logic\example_board.qpf 项目. (打开, 运行 logic\af_quartus.tcl)
-
-使用 Supra 编译 logic\example_board.proj 项目.
+- 执行 `Prepare LOGIC` 生成 `logic` 目录.
+- 使用 `QuartusII` 打开 `logic/example_board.qpf` 编译.
+- 或使用 `Supra` 编译 `logic/example_board.proj`.

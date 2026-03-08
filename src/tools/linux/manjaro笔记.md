@@ -1,91 +1,98 @@
-# manjaro笔记
+# Manjaro 笔记
 
-## 下载系统镜像
+## 说明
 
-    https://mirrors.tuna.tsinghua.edu.cn/osdn/storage/g/m/ma/manjaro/xfce/19.0.2/manjaro-xfce-19.0.2-200311-linux54.iso
+- 本页记录 `Manjaro` 初始化安装, 国内源, 输入法, 开发环境和常用软件配置.
+- 大多数命令来自历史版本实测, 使用前请结合当前系统版本确认.
 
-## 写到U盘
+## 系统镜像与启动盘
 
-    dd if=manjaro-xfce-19.0.2-200311-linux54.iso of=/Dev/sdb bs=16M
+下载镜像:
 
-## 从U盘启动
+- <https://mirrors.tuna.tsinghua.edu.cn/osdn/storage/g/m/ma/manjaro/xfce/19.0.2/manjaro-xfce-19.0.2-200311-linux54.iso>
 
-    # 设置国内源
+写入 U 盘:
 
-    sudo pacman-mirrors -c China
-    sudo pacman -Syyu
+```sh
+dd if=manjaro-xfce-19.0.2-200311-linux54.iso of=/dev/sdb bs=16M
+```
 
-    # 添加源
+## 基础初始化
 
-    sudo pacman -S vim
-    sudo vim /etc/pacman.conf
+```sh
+sudo pacman-mirrors -c China
+sudo pacman -Syyu
+sudo pacman -S vim
+```
 
-    [archlinuxcn]
-    SigLevel = Optional TrustedOnly
-    Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+添加 `archlinuxcn` 源:
 
-    sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
+```conf
+[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+```
 
-    # 中文字体
-    sudo pacman -S wqy-bitmapfont wqy-microhei wqy-microhei-lite wqy-zenhei
+```sh
+sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
+```
 
-    # google输入法
-    sudo pacman -S kcm-fcitx fcitx-googlepinyin
+## 中文与输入法
 
-    # 搜狗输入法
-    sudo pacman -S fcitx-lilydjwg-git fcitx-configtool fcitx-sogoupinyin
+安装中文字体:
 
-    ~/.xprofile
-    export LC_ALL=zh_CN.UTF-8
-    export GTK_IM_MODULE=fcitx
-    export QT_IM_MODULE=fcitx
-    export XMODIFIERS="@im=fcitx"
+```sh
+sudo pacman -S wqy-bitmapfont wqy-microhei wqy-microhei-lite wqy-zenhei
+```
 
-    # 如果搜狗有问题，卸载搜狗输入法
-    sudo pacman -Rs fcitx-lilydjwg-git fcitx-configtool fcitx-sogoupinyin
-    cd ~/.config
-    rm -rf SogouPY SogouPY.users sogou-qimpanel fcitx
+安装输入法:
 
-    # 安装zsh
+```sh
+sudo pacman -S kcm-fcitx fcitx-googlepinyin
+sudo pacman -S fcitx-lilydjwg-git fcitx-configtool fcitx-sogoupinyin
+```
 
-    sudo pacman -S zsh
-    sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    # chsh -s /bin/zsha
-    sudo usermod -s /bin/zsh USERNAME
+`~/.xprofile` 示例:
 
-    theme: mortalscumbag afowler gentoo gallois
+```sh
+export LC_ALL=zh_CN.UTF-8
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+```
 
+如果搜狗输入法异常, 可先卸载并清理配置:
 
-    # 必要软件
+```sh
+sudo pacman -Rs fcitx-lilydjwg-git fcitx-configtool fcitx-sogoupinyin
+cd ~/.config
+rm -rf SogouPY SogouPY.users sogou-qimpanel fcitx
+```
 
-    sudo pacman -S visual-studio-code-bin
-    sudo pacman -S screenfetch
-    sudo pacman -S clang gdb
-    sudo pacman -S deepin-screenshot
-    sudo pacman -S wps-office ttf-wps-fonts
-    sudo pacman -S netease-cloud-music
+## Shell 与开发环境
 
+安装 `zsh` 与 `oh-my-zsh`:
 
-    # docker
-    sudo pacman -S docker docker-compose
+```sh
+sudo pacman -S zsh
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sudo usermod -s /bin/zsh USERNAME
+```
 
-    docker镜像加速器:
-        https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors
-        https://www.daocloud.io/mirror
+可选主题记录: `mortalscumbag`, `afowler`, `gentoo`, `gallois`.
 
-    # stm32开发环境
-    sudo pacman -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib
+## 常用软件
 
-    # jdk8
-    sudo pacman -S jdk8-openjdk
+```sh
+sudo pacman -S visual-studio-code-bin
+sudo pacman -S screenfetch
+sudo pacman -S clang gdb
+sudo pacman -S deepin-screenshot
+```
 
-    sudo pacman -S yay
+## 使用建议
 
-    AUR库:
-    yay -Syy
-    yay -S stm32cubemx
-    yay -S deepin.com.qq.office
-    yay -S deepin-wine-wechat
-
-    https://github.com/countstarlight/deepin-wine-wechat-arch/releases
-
+- 新系统初始化时, 先完成镜像源, 系统更新和基础编辑器安装.
+- 输入法异常通常优先检查 `fcitx` 配置和 `~/.xprofile` 环境变量.
+- AUR 或第三方源包较多时, 更新前应先确认依赖关系和兼容风险.
+- 若后续继续整理, 可补驱动安装, Docker, 虚拟化和开发机备份策略.

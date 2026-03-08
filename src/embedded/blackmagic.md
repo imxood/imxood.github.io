@@ -1,6 +1,11 @@
-# blackmagic
+# Black Magic Probe
 
-可以参考: https://paramaggarwal.medium.com/converting-an-stm32f103-board-to-a-black-magic-probe-c013cf2cc38c
+## 说明
+
+- 本页记录把 `STM32F103` 板子改造成 `Black Magic Probe` 的最小流程.
+- 适合回看编译, 烧录 bootloader 和刷入 BMP 固件的关键步骤.
+
+参考: https://paramaggarwal.medium.com/converting-an-stm32f103-board-to-a-black-magic-probe-c013cf2cc38c
 
 ## 编译 blackmagic
 

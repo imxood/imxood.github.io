@@ -1,4 +1,9 @@
-# risc-v 芯片 esp32c3
+# ESP32-C3 Rust 学习笔记
+
+## 说明
+
+- 本页重点记录 `esp-idf-sys` 在 `ESP32-C3` 上的 native 构建流程与中间产物分析.
+- 适合在排查 `esp-idf`, `bindgen`, `sdkconfig` 与 `build.rs` 之间关系时做深入参考.
 
 ## esp-idf-sys native方式编译 分析
 

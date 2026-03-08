@@ -1,3 +1,5 @@
+# MySQL
+
 ## 安装开源版本
 
     sudo apt install mariadb-server
@@ -41,3 +43,6 @@
     查询默认端口号:
         show global variables like 'port';
 
+## 创建数据库
+
+字符集: utf8mb4, 排序规则: utf8mb4_general_ci

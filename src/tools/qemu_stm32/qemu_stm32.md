@@ -1,4 +1,9 @@
-# 使用qemu_stm32
+# qemu_stm32
+
+## 说明
+
+- 本页记录 `qemu_stm32` 的依赖安装, 源码获取和本地编译过程.
+- 适合作为 STM32 模拟运行环境的快速上手入口.
 
 ## 安装依赖
 
@@ -14,4 +19,3 @@
     ../configure --disable-werror --enable-debug --target-list="arm-softmmu" --extra-cflags=-DSTM32_UART_NO_BAUD_DELAY --extra-cflags=-DSTM32_UART_ENABLE_OVERRUN --disable-gtk
     make -j4
     sudo make install
-

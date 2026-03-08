@@ -97,30 +97,65 @@ nameserver 172.19.0.1
 
 修改
 
+## 查询 wsl 已分配的 ip 列表
+
+wsl hostname -I
+
 ##
 
+wsl --list --running
 wsl --list --online
+
+## 终止指定版本
+
+wsl --terminate Ubuntu-24.04
+
+##
+
 wsl --install -d ubuntu
 
 wsl --list --all -v
 
 删除 ubuntu
-wsl --unregister ubuntu
-wsl --install -d Ubuntu-22.04
+wsl --unregister ubuntu-24.04
+
+安装 ubuntu
+wsl --install -d ubuntu-24.04
 
 设置默认用户
 
 wsl --shutdown
-ubuntu2204.exe config --default-user root
+ubuntu2404.exe config --default-user root
 
-设置默认 Ubuntu-22.04
-wsl --setdefault Ubuntu-22.04
+设置默认 Ubuntu-24.04
+wsl --setdefault Ubuntu-24.04
+
+关机
+
+wsl --shutdown
 
 /setdefaultuser
 
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
 sudo sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
 sudo sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+
+## 指定用户登录
+
+wsl -u xxx
+
+# 20241222
+
+wsl --list --online
+wsl --install -d ubuntu
+
+wsl --list --all -v
+
+<!-- 移除 -->
+
+wsl --unregister Ubuntu-18.04
+
+wsl --install -d Ubuntu-18.04
 
 ## 设置自动补全
 
@@ -223,23 +258,6 @@ networkingMode = mirrored
             umask 0022
         fi
     fi
-
-## 指定用户登录
-
-wsl -u xxx
-
-# 20241222
-
-wsl --list --online
-wsl --install -d ubuntu
-
-wsl --list --all -v
-
-<!-- 移除 -->
-
-wsl --unregister Ubuntu-18.04
-
-wsl --install -d Ubuntu-18.04
 
 ## wsl 使用代理
 
@@ -365,3 +383,14 @@ git checkout 24.3
 meson setup build
 ninja -C build/
 sudo ninja -C build/ install
+
+## ubuntu 系统
+
+## windows docker desktop 无法 设置 proxy
+
+移除 "networkingMode = mirrored"
+
+```
+[wsl2]
+networkingMode = mirrored
+```

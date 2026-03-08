@@ -1,3 +1,5 @@
+# Rust 要点
+
 ## 关于泛型
 
 item: &impl Summary, 就是泛型, 等效于 item: T where T: Summary

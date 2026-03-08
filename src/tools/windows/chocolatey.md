@@ -1,3 +1,5 @@
+# Chocolatey
+
 ## 使用管理员权限
 
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -16,11 +18,15 @@ choco feature enable -n allowGlobalConfirmation
 
 ChocolateyInstall: D:\ChocolateyInstall
 
-设置 安装包(bin路径之类) 安装的路径 (这个似乎没啥用?) (默认好像在 C:\Program Files):
+设置 安装包(bin 路径之类) 安装的路径 (这个似乎没啥用?) (默认好像在 C:\Program Files):
 
 ChocolateyToolsLocation: D:\choco-pkgs
 
 ## 安装软件
+
+### chocolatey 查看软件包
+
+choco list
 
 ### 基本环境
 
@@ -32,13 +38,13 @@ choco install make openocd gcc-arm-embedded
 
 ## 缩小任务栏图标
 
-执行 https://github.com/valinet/ExplorerPatcher Release中的小工具 (具体使用没细究), 再设置:
+执行 https://github.com/valinet/ExplorerPatcher Release 中的小工具 (具体使用没细究), 再设置:
 
 注册表: 计算机\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
 
 TaskbarSmallIcons 为 1 就可以了
 
-## 恢复Win10右键菜单
+## 恢复 Win10 右键菜单
 
 使用 cmd, 普通权限:
 
@@ -52,6 +58,6 @@ reg.exe delete "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a
 
 ## alt+tab 快捷键
 
-禁止切换浏览器标签: 设置 -> 多任务处理 -> 对齐或按Alt+Tab时显示应用中的标签页
+禁止切换浏览器标签: 设置 -> 多任务处理 -> 对齐或按 Alt+Tab 时显示应用中的标签页
 
 不显示选项卡

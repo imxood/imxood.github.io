@@ -1,18 +1,79 @@
+# Rust 宏
 
-## syn
+## 说明
 
-用于把 rust 代码 转化成 rust 语法树
+- 本页整理 Rust 宏相关的基础概念, 常见工具链和使用注意点.
+- 适合在阅读过程宏, 声明宏或绑定生成代码时做快速定位.
+- 若问题更偏代码生成生态, 常与 `syn`, `quote`, `proc-macro2` 一起出现.
 
-## quote
+## 宏的常见分类
 
-用于将 macro 中 的模板代码转换成 rust 的 TokenStream
+### 声明宏
 
-## 把 ident 转换成 字符串
+- 以 `macro_rules!` 为主.
+- 适合做语法样板消除, 批量生成实现和简单 DSL.
 
-stringify!(#ident), 实际为 std::stringify! 宏.
+### 过程宏
 
-## 如果是通过 bindgen 生成的代码, 存在 snake case warning
+- 需要单独的 `proc-macro` crate.
+- 常见类型包括 `derive`, `attribute-like`, `function-like` 宏.
+- 适合做结构化代码生成和语法树级改写.
 
-可以在 lib.rs 中禁用这些警告
+## 常见工具库
 
+### `syn`
+
+- 用于把 Rust 代码解析成 Rust 语法树.
+- 过程宏里最常见的解析库之一.
+
+### `quote`
+
+- 用于把模板代码生成 `TokenStream`.
+- 常和 `syn` 配合, 实现“解析 -> 变换 -> 生成”流程.
+
+### `proc-macro2`
+
+- 为过程宏生态提供更通用的 `TokenStream` 类型.
+- 便于在非 `proc-macro` 上下文中共享逻辑.
+
+## 常见技巧
+
+### 把 `ident` 转换成字符串
+
+```rust
+stringify!(ident)
+```
+
+- 常用于调试, 日志输出和生成说明文本.
+- 注意它返回的是源代码层面的字面内容, 不是运行时变量值.
+
+### `bindgen` 生成代码的命名警告
+
+如果是通过 `bindgen` 生成的代码, 常会遇到 snake case 或命名风格警告.
+
+可在 `lib.rs` 中局部禁用:
+
+```rust
 #[allow(nonstandard_style)]
+mod bindings;
+```
+
+- 更推荐把这类豁免限制在自动生成模块内, 不要扩大到整个 crate.
+
+## 使用建议
+
+- 简单代码复用优先用函数和 trait, 不要一开始就上宏.
+- 宏一旦复杂, 应优先保证错误信息可读, 不要只追求炫技式写法.
+- 过程宏调试时, 常配合 `cargo expand` 查看展开结果.
+
+## 常见问题
+
+- 宏报错但定位不清时, 先看展开后的代码.
+- 过程宏的输入和输出都应尽量保持结构稳定, 否则很难维护.
+- 若只是为了减少几行重复代码, 未必值得引入宏复杂度.
+
+## 相关文档
+
+- [Rust 工具](./rust工具.md)
+- [bindgen](./bindgen.md)
+- [Rust 代码集锦](./rust代码集锦.md)

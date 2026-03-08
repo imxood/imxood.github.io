@@ -1,4 +1,26 @@
-# Rust in action
+# Rust 总览
+
+## 文档整理说明
+
+- 本文档作为 Rust 语言与常用开发流程的总览入口.
+- 旧版零散 Rust 记录中关于 `Pin` / `Unpin` 的内容已并入本文.
+- 更偏概念速记的内容可参考 [Rust 要点](./rust要点.md), 工具类内容可参考 [Rust 工具](./rust工具.md), 调试排错可参考 [Rust 调试技巧](./rust调试技巧.md).
+
+## 专题入口
+
+- [Rust 迭代器技巧](./rust_iter_迭代器.md)
+- [Rust 宏](./rust宏.md)
+- [Servo 构建记录](./servo.md)
+- [Rust crate 工具集](./rust crate 工具集.md)
+- [guillotiere](./guillotiere.md)
+- [OpenRA 构建记录](./openra.md)
+- [Rust for Windows 7](./windows7.md)
+
+## 代码示例归档
+
+- 运行型实验工程可参考 [Rust 代码示例归档](./code/README.md).
+- 其中网络方向可继续看 [libp2p relay 示例运行记录](./code/libp2p-learn/Readmd.md).
+- USB 方向可继续看 [rusb](./library_usage/rusb.md) 和 [test_usb 实验目录说明](./test_usb/README.md).
 
 ## 在 .config/config.toml 中设置默认编译目标
 
@@ -117,6 +139,54 @@ rustup completions bash >> ~/.local/share/bash-completion/completions/rustup
     第二条规则是如果只有一个输入生命周期参数, 那么它被赋予所有输出生命周期参数
 
     第三条规则是如果方法有多个输入生命周期参数并且其中一个参数是 &self 或 &mut self, 那么所有输出生命周期参数被赋予 self 的生命周期
+
+## Pin 与 Unpin
+
+参考: https://folyd.com/blog/rust-pin-unpin/
+
+`Pin` 自身是一个智能指针包装器, 因为它实现了 `Deref` 和受约束的 `DerefMut`.
+
+`Pin` 包裹的内容通常应该是某种指针类型, 而不是普通值类型, 例如 `Pin<u32>` 一般没有意义.
+
+`Pin` 的核心语义是“钉住”被包裹对象, 防止其在内存中移动. 这个语义是否真正生效, 取决于目标类型是否实现了 `Unpin`.
+
+- 如果 `T: Unpin`, 那么 `Pin<P<T>>` 基本等价于 `P<T>`, “钉住”语义不会真正限制移动.
+- 如果 `T: !Unpin`, 那么从被 `Pin` 包裹到被销毁期间, 必须保证它保持在固定位置.
+
+`Unpin` 是一个 `auto trait`, 编译器默认会为大多数类型自动实现它. 常见例外包括:
+
+- `PhantomPinned`
+- `async/await` 降糖后生成的某些 `Future` 状态机
+
+```rust
+pub struct Pin<P> {
+    pointer: P,
+}
+
+impl<P: Deref> Deref for Pin<P> {
+    ...
+}
+
+impl<P: DerefMut<Target: Unpin>> DerefMut for Pin<P> {
+    ...
+}
+```
+
+一个典型的 `!Unpin` 例子:
+
+```rust
+struct Test {
+   a: String,
+   b: *const String,
+   _marker: PhantomPinned,
+}
+```
+
+### 如何理解 `Pin<P<T>>`
+
+- 如果 `P<T>` 符合 `Unpin`, 那么 `Pin<P<T>>` 不会真正把它“钉住”.
+- 如果 `P<T>` 不符合 `Unpin`, 那么从被 `Pin` 包裹到销毁期间, 都要保证它不发生移动.
+
 
 ## Rust 的 安装与卸载
 
@@ -457,14 +527,14 @@ static_vcruntime = "2.0"
 
 ```toml
 [toolchain]
-channel = "1.77.2-x86_64-pc-windows-msvc"
+channel = "1.77.2"
 ```
 
 windows 系统编译报错, `#![cfg_attr(feature = "stdsimd", feature(stdsimd))]`
 
 ```toml
 [toolchain]
-channel = "nightly-2024-02-04"
+channel = "nightly-2024-02-05"
 ```
 
 ## 打印配置

@@ -1,56 +1,60 @@
+# Tauri for Android
 
-安装 Android Studio.
+## 说明
 
-Windows 设置环境变量:
+- 记录 `Tauri` 项目接入 Android 的初始化步骤和 Gradle 代理配置.
+- 当前内容以 Windows 环境为主, 命令更接近早期 `Tauri v2 alpha` 记录.
 
+## 前置环境
+
+安装 Android Studio, 并设置环境变量:
+
+```powershell
 ANDROID_HOME=E:\Android\Sdk
 NDK_HOME=%ANDROID_HOME%\ndk\23.2.8568313
-
 PATH=%PATH%;C:\Program Files\Android\Android Studio\jre\bin;%ANDROID_HOME%\platform-tools
+```
 
-## 命令
+## 初始化命令
 
+```sh
 yarn create tauri-app --alpha
-
-进入项目路径后:
-
+cd <project>
 yarn
-
 yarn tauri android init
+yarn tauri android dev
+```
 
-yarn tauri android dev (最好先设置代理, 不然速度特别慢)
+- 如果下载速度较慢, 最好先配置代理.
 
-## 设置 android项目 代理
+## Android 项目代理
 
 ### 项目内生效
 
-修改 src-tauri\gen\android\test_tauri_v2\gradle.properties, 添加:
+修改 `src-tauri\gen\android\test_tauri_v2\gradle.properties`, 添加:
 
+```conf
 systemProp.socks.proxyHost=127.0.0.1
 systemProp.socks.proxyPort=1080
-
 systemProp.http.proxyHost=127.0.0.1
 systemProp.http.proxyPort=1080
-
 systemProp.https.proxyHost=127.0.0.1
 systemProp.https.proxyPort=1080
+```
 
 ### 全局生效
 
-用户目录下 .gradle文件夹 中 gradle.properties, 或新建, 或打开, 添加:
+在用户目录下 `.gradle\gradle.properties` 中添加:
 
+```conf
 systemProp.socks.proxyHost=127.0.0.1
 systemProp.socks.proxyPort=7890
-
 systemProp.http.proxyHost=127.0.0.1
 systemProp.http.proxyPort=7890
-
 systemProp.https.proxyHost=127.0.0.1
 systemProp.https.proxyPort=7890
+```
 
-## 编译问题
+## 问题记录
 
-windows 10, See https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
-
-
-
+- Windows 10 设备调试相关设置可参考: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development

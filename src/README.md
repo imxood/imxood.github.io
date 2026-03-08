@@ -1,15 +1,42 @@
 # 学而时习之
 
-## 学习计划
+## 说明
 
-- 学习 egui 源码
-- async wake unpin 分析: https://github.com/zesterer/pollster
-- 学习 wgpu
-- 解读 rustdesk 源码
+- 这是当前知识库的首页入口, 用于快速进入主要技术专题.
+- 内容以 `mdBook` 组织, 覆盖硬件, 嵌入式, 编程语言, 前端和开发工具等方向.
 
-### 常读书, 读好书
+## 推荐阅读路径
+
+- 查硬件与器件, 优先进入 `硬件` 和 `嵌入式`.
+- 查语言与框架, 优先进入 `编程语言` 和 `前端`.
+- 查环境搭建, 部署和系统问题, 优先进入 `工具`.
+- 若要全量巡检文档, 直接看 `知识库总索引` 与 `知识库整理清单`.
+
+## 当前关注主题
+
+- 学习 `egui` 源码.
+- 分析 `async`, `wake`, `unpin` 与相关实现.
+- 学习 `wgpu`.
+- 解读 `rustdesk` 源码.
+
+相关线索:
+
+- `pollster`: <https://github.com/zesterer/pollster>
+
+## 知识库结构
+
+- `硬件`: 元器件, 设备与基础电路记录.
+- `嵌入式`: 芯片平台, 协议, 工具链和板级开发.
+- `编程语言`: Rust, Python, Dart, C#, C/C++, Java 与机器人相关笔记.
+- `前端`: Web 框架, 构建工具, 图表和样式系统.
+- `工具`: Linux, Windows, Docker, AI 工具, 远程协作和环境搭建.
+- `其他`: 总索引和整理清单等治理文档.
+
+## 常读书, 读好书
 
 <img width="70%" src="./images/读书.jpg">
 
+## 构建说明
 
-本笔记由 [mdbook](https://github.com/rust-lang/mdBook) 构建
+- 本笔记由 [mdBook](https://github.com/rust-lang/mdBook) 构建.
+- 若本地预览, 可执行 `mdbook serve` 或 `mdbook build`.

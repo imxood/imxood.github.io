@@ -1,4 +1,9 @@
-# AT&T汇编基础
+# AT&T 汇编基础
+
+## 说明
+
+- 本页整理 `AT&T` 汇编语法中的寄存器, 立即数和寻址方式等基础概念.
+- 适合作为阅读 Linux 下汇编资料和反汇编输出时的入门速记页.
 
 [非常实用的AT&T教程](https://www.jianshu.com/p/4481c2aeac6b)
 [Assembly_In_Linux](http://www.kerneltravel.net/newbie/Assembly_In_Linux.pdf)

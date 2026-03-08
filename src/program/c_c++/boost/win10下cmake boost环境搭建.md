@@ -1,4 +1,9 @@
-# windows 10 下 cmake boost mingw-w64环境搭建
+# Windows 10 下 CMake + Boost + MinGW-w64 环境搭建
+
+## 说明
+
+- 本页记录在 Windows 10 下搭建 `CMake + Boost + MinGW-w64` 开发环境的过程.
+- 适合作为旧版 C/C++ 构建环境准备与 Boost 编译链配置的参考页.
 
 ## 下载mingw-w64
 

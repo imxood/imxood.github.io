@@ -1,3 +1,23 @@
-## iverilog 教程
+# iverilog
 
-https://zhuanlan.zhihu.com/p/148795858
+## 说明
+
+- `iverilog` 是轻量级 `Verilog` 仿真工具, 很适合做语法验证和小型实验.
+- 在正式上板前, 可先用它快速验证模块行为是否符合预期.
+
+## 典型用途
+
+- 编译 `Verilog` 源码与 testbench.
+- 结合 `vvp` 执行仿真.
+- 配合波形文件查看时序行为.
+
+## 使用建议
+
+- 先写最小可复现的 testbench.
+- 重点验证状态机切换, 计数器边界和接口时序.
+- 若项目复杂度提升, 再切换到更完整的仿真工具链.
+
+## 参考
+
+- 教程: https://zhuanlan.zhihu.com/p/148795858
+- 相关文档: [FPGA 总览](./README.md)

@@ -1,3 +1,10 @@
+# PlatformIO
+
+## 说明
+
+- 本页记录在 VSCode 中使用 PlatformIO 搭建 Arduino / ESP32 工程的要点.
+- 重点包括库管理, ESP-IDF 版本切换和串口监视器参数配置.
+
 ## vscode platformio arduino 环境
 
 vscode 插件中安装 platformio

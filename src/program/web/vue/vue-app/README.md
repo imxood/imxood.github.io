@@ -1,24 +1,34 @@
-# vue-app
+# Vue 示例项目说明
 
-## Project setup
-```
+## 说明
+
+- 本目录是基于 `vue-cli` 生成的历史示例项目.
+- 默认模板 README 已精简, 避免与主知识文档重复.
+- 若只是查 Vue 知识点, 应优先查看 [前端 Vue 笔记](../../../../frontend/vue/vue.md).
+
+## 适用场景
+
+- 回看旧版 `vue-cli` 项目结构.
+- 对照现代工具链理解脚手架演进.
+- 验证老项目命令与目录布局是否仍可迁移.
+
+## 常用命令
+
+```sh
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
-```
-
-### Compiles and minifies for production
-```
 npm run build
-```
-
-### Lints and fixes files
-```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 归档特征
+
+- 这是历史脚手架样例, 不是推荐模板.
+- 目录中保留的是结构参考价值, 而不是持续维护的最佳实践.
+- 老依赖在新环境中可能出现安装失败或构建告警.
+
+## 使用建议
+
+- 若只是查阅 Vue 笔记, 优先看主文档.
+- 若需要运行旧版脚手架示例, 再进入本目录执行命令.
+- 若准备新建工程, 建议直接使用当前主流模板重新初始化.

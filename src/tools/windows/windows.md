@@ -25,7 +25,7 @@
 
 ### 查看程序依赖
 
-- `Dependency Walker`: <http://dependencywalker.com/>
+- `Dependency Walker`: <https://dependencywalker.com/>
 - `Procmon`: <https://docs.microsoft.com/en-us/sysinternals/downloads/procmon>
 
 ## 环境变量

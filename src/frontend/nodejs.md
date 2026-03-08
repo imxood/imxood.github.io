@@ -2,7 +2,7 @@
 
 ## 国内源
 
-npm config set registry http://registry.npmmirror.com
+npm config set registry https://registry.npmmirror.com
 
 ## Linux 环境安装
 

@@ -14,7 +14,7 @@ sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
 
 Qt Creator 下载地址:
 
-- <http://download.qt.io/archive/qt/5.14/5.14.0>
+- <https://download.qt.io/archive/qt/5.14/5.14.0>
 
 设置环境变量:
 
@@ -33,7 +33,7 @@ cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforminputcontexts ~/programs/Qt5.14
 
 下载源码:
 
-- <http://download.qt.io/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz>
+- <https://download.qt.io/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz>
 
 准备依赖:
 

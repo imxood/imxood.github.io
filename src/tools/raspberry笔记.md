@@ -63,7 +63,7 @@
 
     1. 系统镜像
 
-        http://mirrors.ustc.edu.cn/raspberry-pi-os-images/raspios_armhf/images/raspios_armhf-2021-11-08/
+        https://mirrors.ustc.edu.cn/raspberry-pi-os-images/raspios_armhf/images/raspios_armhf-2021-11-08/
 
         基本桌面环境
 

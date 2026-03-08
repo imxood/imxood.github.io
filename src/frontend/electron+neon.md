@@ -299,7 +299,7 @@ module.exports = {
 
 ## dplayer
 
-[用于测试的视频](http://samples.mplayerhq.hu/)
+[用于测试的视频](https://samples.mplayerhq.hu/)
 
 ## ffmpeg 使用
 

@@ -7,7 +7,7 @@
 
 ## 获取源码
 
-- 最新源码快照: <http://sdcc.sourceforge.net/snap.php>
+- 最新源码快照: <https://sdcc.sourceforge.net/snap.php>
 
 ## 最小编译流程
 

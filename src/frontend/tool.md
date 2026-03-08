@@ -9,7 +9,7 @@
 
 ### moment.js
 
-- 官网: <http://momentjs.cn/>
+- 官网: <https://momentjs.cn/>
 
 ```ts
 yarn add moment

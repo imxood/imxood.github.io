@@ -94,11 +94,11 @@ sudo apt install -y gnome-shell-extensions gnome-tweak-tool
 
 	下载地址:https://www.virtualbox.org/wiki/Downloads
 	看不到usb3设备?下载下面的插件:
-	http://download.virtualbox.org/virtualbox
+	https://download.virtualbox.org/virtualbox
 	【管理】->【全局设定】->【扩展】,选择扩展文件后,就安装成功了
 	还要在【usb设备】中选择usb3.0控制器
 
-	下载了usb3的驱动(不知道是否真的需要):http://www.displaylink.com/downloads/ubuntu
+	下载了usb3的驱动(不知道是否真的需要):https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu
 	下面三个需要测一测是否需要,我是添加了:
 	sudo groupadd usbfs
 	sudo adduser maxu vboxusers
